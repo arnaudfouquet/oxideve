@@ -4,7 +4,7 @@ const { createBackendApp } = require("./backend/createApp");
 
 const port = Number.parseInt(process.env.PORT || "3000", 10);
 const host = "0.0.0.0";
-const dev = process.env.NODE_ENV !== "production";
+const dev = process.env.NODE_ENV === "development";
 const frontendDir = path.join(__dirname, "frontend");
 
 async function start() {
