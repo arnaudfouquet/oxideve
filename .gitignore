@@ -1,0 +1,7 @@
+node_modules/
+.next/
+.env
+.env.local
+frontend/.next/
+frontend/next-env.d.ts
+prisma/dev.db

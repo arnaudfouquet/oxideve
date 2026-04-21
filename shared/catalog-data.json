@@ -1,0 +1,151 @@
+{
+  "formations": [
+    {
+      "id": "qualipv",
+      "slug": "formation-qualipv",
+      "title": "Formation QualiPV",
+      "shortTitle": "QualiPV",
+      "category": "Photovoltaïque",
+      "duration": "3 jours",
+      "location": "Rouen et distanciel tutoré",
+      "audience": "Installateurs photovoltaïques et responsables techniques",
+      "summary": "Maîtrisez l'installation photovoltaïque résidentielle et tertiaire pour répondre aux exigences QualiPV.",
+      "description": "Un parcours intensif pour dimensionner, sécuriser et raccorder des installations photovoltaïques conformes aux attentes terrain et aux exigences de qualification.",
+      "benefits": [
+        "Préparation à la qualification QualiPV",
+        "Mises en situation chantiers et étude de cas",
+        "Supports orientés conversion commerciale et conformité"
+      ],
+      "price": "1290 EUR",
+      "seoTitle": "Formation QualiPV certifiante pour installateurs photovoltaïques",
+      "seoDescription": "Développez votre activité solaire avec une formation QualiPV opérationnelle, finançable et pensée pour la conversion terrain.",
+      "objectives": [
+        "Dimensionner une installation solaire adaptée au besoin client",
+        "Sécuriser le chantier et le raccordement",
+        "Constituer un dossier de qualification exploitable"
+      ]
+    },
+    {
+      "id": "qualipac",
+      "slug": "formation-qualipac",
+      "title": "Formation QualiPAC",
+      "shortTitle": "QualiPAC",
+      "category": "Pompes à chaleur",
+      "duration": "4 jours",
+      "location": "Rouen",
+      "audience": "Installateurs CVC et conducteurs de travaux",
+      "summary": "Déployez des chantiers PAC performants et conformes aux exigences QualiPAC.",
+      "description": "Programme orienté diagnostic, dimensionnement, mise en service et maintenance des pompes à chaleur air/eau et air/air.",
+      "benefits": [
+        "Approche réglementaire et terrain",
+        "Cas pratiques dimensionnement PAC",
+        "Argumentaires pour aides et conformité client"
+      ],
+      "price": "1490 EUR",
+      "seoTitle": "Formation QualiPAC professionnelle pour installateurs PAC",
+      "seoDescription": "Montez en compétence sur les pompes à chaleur avec une formation QualiPAC concrète, finançable et orientée chantier.",
+      "objectives": [
+        "Analyser le besoin thermique du bâtiment",
+        "Dimensionner une pompe à chaleur adaptée",
+        "Sécuriser la mise en service et la maintenance"
+      ]
+    },
+    {
+      "id": "irve",
+      "slug": "formation-irve",
+      "title": "Formation IRVE",
+      "shortTitle": "IRVE",
+      "category": "Bornes de recharge",
+      "duration": "2 jours",
+      "location": "Rouen et intra-entreprise",
+      "audience": "Electriciens et chargés d'affaires mobilité",
+      "summary": "Concevez et posez des infrastructures de recharge sécurisées et rentables.",
+      "description": "Formation opérationnelle pour maîtriser le cadre normatif IRVE, le dimensionnement et la mise en service des bornes de recharge.",
+      "benefits": [
+        "Préparation à la mention IRVE",
+        "Études de cas habitat collectif et tertiaire",
+        "Focalisation sécurité électrique et exploitation"
+      ],
+      "price": "990 EUR",
+      "seoTitle": "Formation IRVE pour installateurs de bornes de recharge",
+      "seoDescription": "Développez votre activité IRVE avec une formation pratique sur les bornes de recharge, la norme et la mise en service.",
+      "objectives": [
+        "Identifier les architectures de recharge adaptées",
+        "Concevoir une installation conforme",
+        "Superviser la mise en service et le contrôle"
+      ]
+    },
+    {
+      "id": "climatisation",
+      "slug": "formation-climatisation",
+      "title": "Formation Climatisation",
+      "shortTitle": "Climatisation",
+      "category": "Traitement d'air",
+      "duration": "3 jours",
+      "location": "Rouen",
+      "audience": "Techniciens frigoristes et installateurs CVC",
+      "summary": "Optimisez la pose, le réglage et la maintenance des systèmes de climatisation modernes.",
+      "description": "Parcours complet orienté performance énergétique, qualité d'air, réglementation fluides et pilotage des installations.",
+      "benefits": [
+        "Approche terrain et efficacité énergétique",
+        "Mise au point et diagnostic avancé",
+        "Vision maintenance et satisfaction client"
+      ],
+      "price": "1190 EUR",
+      "seoTitle": "Formation climatisation pour techniciens CVC",
+      "seoDescription": "Renforcez votre expertise en climatisation avec une formation pratique sur la pose, la mise au point et la maintenance.",
+      "objectives": [
+        "Sélectionner une solution de climatisation adaptée",
+        "Réaliser les réglages de mise en service",
+        "Diagnostiquer les défauts et prévenir les pannes"
+      ]
+    }
+  ],
+  "sessions": [
+    {
+      "id": "sess-qpv-1",
+      "formationSlug": "formation-qualipv",
+      "city": "Rouen",
+      "startDate": "2026-05-12",
+      "endDate": "2026-05-14",
+      "seatsLeft": 7,
+      "mode": "Présentiel"
+    },
+    {
+      "id": "sess-qpv-2",
+      "formationSlug": "formation-qualipv",
+      "city": "Distanciel tutoré",
+      "startDate": "2026-06-16",
+      "endDate": "2026-06-18",
+      "seatsLeft": 12,
+      "mode": "Hybride"
+    },
+    {
+      "id": "sess-qpac-1",
+      "formationSlug": "formation-qualipac",
+      "city": "Rouen",
+      "startDate": "2026-05-26",
+      "endDate": "2026-05-29",
+      "seatsLeft": 5,
+      "mode": "Présentiel"
+    },
+    {
+      "id": "sess-irve-1",
+      "formationSlug": "formation-irve",
+      "city": "Rouen",
+      "startDate": "2026-06-09",
+      "endDate": "2026-06-10",
+      "seatsLeft": 9,
+      "mode": "Présentiel"
+    },
+    {
+      "id": "sess-clim-1",
+      "formationSlug": "formation-climatisation",
+      "city": "Rouen",
+      "startDate": "2026-06-23",
+      "endDate": "2026-06-25",
+      "seatsLeft": 8,
+      "mode": "Présentiel"
+    }
+  ]
+}

@@ -1,0 +1,63 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Formation {
+  id             String        @id @default(cuid())
+  slug           String        @unique
+  title          String
+  category       String
+  duration       String
+  location       String
+  audience       String
+  summary        String        @db.Text
+  description    String        @db.Text
+  price          String
+  seoTitle       String
+  seoDescription String        @db.Text
+  createdAt      DateTime      @default(now())
+  updatedAt      DateTime      @updatedAt
+  sessions       Session[]
+}
+
+model Session {
+  id            String        @id @default(cuid())
+  formationSlug String
+  city          String
+  startDate     DateTime
+  endDate       DateTime
+  seatsLeft     Int
+  mode          String
+  createdAt     DateTime      @default(now())
+  updatedAt     DateTime      @updatedAt
+  formation     Formation     @relation(fields: [formationSlug], references: [slug], onDelete: Cascade)
+  inscriptions  Inscription[]
+}
+
+model Inscription {
+  id            String      @id @default(cuid())
+  company       String
+  contactName   String
+  email         String
+  phone         String
+  formationSlug String
+  sessionId     String
+  message       String?     @db.Text
+  createdAt     DateTime    @default(now())
+  session       Session     @relation(fields: [sessionId], references: [id], onDelete: Cascade)
+  emailLogs     EmailLog[]
+}
+
+model EmailLog {
+  id            String       @id @default(cuid())
+  inscriptionId String
+  email         String
+  status        String
+  createdAt     DateTime     @default(now())
+  inscription   Inscription  @relation(fields: [inscriptionId], references: [id], onDelete: Cascade)
+}

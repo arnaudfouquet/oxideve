@@ -1,0 +1,23 @@
+name: Deploy Infomaniak
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Deploy over SSH
+        uses: appleboy/ssh-action@v1.2.0
+        with:
+          host: ${{ secrets.INFOMANIAK_HOST }}
+          username: ${{ secrets.INFOMANIAK_USERNAME }}
+          key: ${{ secrets.INFOMANIAK_SSH_KEY }}
+          port: ${{ secrets.INFOMANIAK_PORT || '22' }}
+          script: |
+            cd "${{ secrets.INFOMANIAK_APP_PATH }}"
+            chmod +x deploy.sh
+            APP_DIR="${{ secrets.INFOMANIAK_APP_PATH }}" INFOMANIAK_RESTART_COMMAND="${{ secrets.INFOMANIAK_RESTART_COMMAND }}" ./deploy.sh
