@@ -1,5 +1,5 @@
 const { randomUUID } = require("crypto");
-const { blogArticles } = require("../../frontend/lib/editorial");
+const blogArticles = require("../../shared/editorial-data.json");
 const { getPrismaClient } = require("./prismaClient");
 
 const inMemoryArticles = blogArticles.map((article) => ({ ...article }));
