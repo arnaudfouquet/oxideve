@@ -4,6 +4,10 @@ const { getPrismaClient } = require("./prismaClient");
 
 const inMemoryArticles = blogArticles.map((article) => ({ ...article }));
 
+function listFallbackArticles() {
+  return [...inMemoryArticles].sort((left, right) => right.publishedAt.localeCompare(left.publishedAt)).map(normalizeArticle);
+}
+
 function normalizeArticle(article) {
   return {
     id: article.id,
@@ -22,12 +26,16 @@ async function listArticles() {
   const prisma = getPrismaClient();
 
   if (!prisma) {
-    return [...inMemoryArticles].sort((left, right) => right.publishedAt.localeCompare(left.publishedAt)).map(normalizeArticle);
+    return listFallbackArticles();
   }
 
   const articles = await prisma.article.findMany({
     orderBy: [{ publishedAt: "desc" }, { title: "asc" }],
   });
+
+  if (articles.length === 0) {
+    return listFallbackArticles();
+  }
 
   return articles.map(normalizeArticle);
 }
@@ -41,7 +49,13 @@ async function getArticleBySlug(slug) {
   }
 
   const article = await prisma.article.findUnique({ where: { slug } });
-  return article ? normalizeArticle(article) : null;
+
+  if (article) {
+    return normalizeArticle(article);
+  }
+
+  const fallbackArticle = inMemoryArticles.find((item) => item.slug === slug);
+  return fallbackArticle ? normalizeArticle(fallbackArticle) : null;
 }
 
 async function createArticle(payload) {
