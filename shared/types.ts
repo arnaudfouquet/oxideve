@@ -26,6 +26,19 @@ export type Session = {
   mode: string;
 };
 
+export type Registration = {
+  id: string;
+  company: string;
+  contactName: string;
+  email: string;
+  phone: string;
+  formationSlug: string;
+  sessionId: string;
+  message?: string | null;
+  createdAt: string;
+  source?: string;
+};
+
 export type CatalogData = {
   formations: Formation[];
   sessions: Session[];

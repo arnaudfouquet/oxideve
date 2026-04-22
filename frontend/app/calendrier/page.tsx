@@ -1,5 +1,7 @@
 import type { Metadata } from "next";
-import { formatDateRange, getFormations, getSessions } from "@/lib/content";
+import Link from "next/link";
+import { TrainingCalendar } from "@/components/TrainingCalendar";
+import { getFormations, getSessions } from "@/lib/content";
 
 export const revalidate = 3600;
 
@@ -8,9 +10,9 @@ export const metadata: Metadata = {
   description: "Visualisez les prochaines sessions de formation Oxideve et les places disponibles.",
 };
 
-export default function CalendrierPage() {
-  const sessions = getSessions();
-  const formations = getFormations();
+export default async function CalendrierPage() {
+  const sessions = await getSessions();
+  const formations = await getFormations();
 
   return (
     <section className="section">
@@ -18,36 +20,25 @@ export default function CalendrierPage() {
         <div className="page-title">
           <span className="eyebrow">Planning</span>
           <h1>Calendrier des prochaines sessions</h1>
-          <p>Vue claire des sessions commercialisables pour accélérer le remplissage et simplifier l'arbitrage équipe formation / équipe vente.</p>
+          <p>Visualisez rapidement les prochaines dates, le format de formation et les places encore disponibles pour orienter vos inscriptions.</p>
         </div>
 
-        <div className="data-table">
-          <table>
-            <thead>
-              <tr>
-                <th>Formation</th>
-                <th>Dates</th>
-                <th>Ville</th>
-                <th>Mode</th>
-                <th>Places</th>
-              </tr>
-            </thead>
-            <tbody>
-              {sessions.map((session) => {
-                const formation = formations.find((item) => item.slug === session.formationSlug);
+        <TrainingCalendar formations={formations} sessions={sessions} />
 
-                return (
-                  <tr key={session.id}>
-                    <td>{formation?.shortTitle}</td>
-                    <td>{formatDateRange(session.startDate, session.endDate)}</td>
-                    <td>{session.city}</td>
-                    <td>{session.mode}</td>
-                    <td>{session.seatsLeft}</td>
-                  </tr>
-                );
-              })}
-            </tbody>
-          </table>
+        <div className="section grid-2">
+          <article className="card card-highlight">
+            <h2>Besoin d'un créneau intra-entreprise ?</h2>
+            <p>Si aucune date ne correspond à votre charge, l'équipe peut ouvrir une session dédiée en entreprise ou en distanciel tutoré.</p>
+          </article>
+          <article className="card">
+            <h2>Prêt à réserver ?</h2>
+            <p>La page d'inscription centralise les coordonnées, le choix de session et les besoins de financement ou d'organisation.</p>
+            <div className="cta-row">
+              <Link href="/inscriptions" className="button button-primary">
+                Aller à l'inscription
+              </Link>
+            </div>
+          </article>
         </div>
       </div>
     </section>

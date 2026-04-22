@@ -10,12 +10,13 @@ type Props = {
 };
 
 export async function generateStaticParams() {
-  return getFormations().map((formation) => ({ slug: formation.slug }));
+  const formations = await getFormations();
+  return formations.map((formation) => ({ slug: formation.slug }));
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
-  const formation = getFormationBySlug(slug);
+  const formation = await getFormationBySlug(slug);
 
   if (!formation) {
     return {
@@ -34,13 +35,13 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
 export default async function FormationDetailPage({ params }: Props) {
   const { slug } = await params;
-  const formation = getFormationBySlug(slug);
+  const formation = await getFormationBySlug(slug);
 
   if (!formation) {
     notFound();
   }
 
-  const sessions = getSessionsForFormation(slug);
+  const sessions = await getSessionsForFormation(slug);
   const siteUrl = getSiteUrl();
   const jsonLd = {
     "@context": "https://schema.org",

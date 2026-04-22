@@ -3,6 +3,24 @@ const { getPrismaClient } = require("./prismaClient");
 
 const inMemoryRegistrations = [];
 
+function normalizeRegistration(registration) {
+  return {
+    id: registration.id,
+    company: registration.company,
+    contactName: registration.contactName,
+    email: registration.email,
+    phone: registration.phone,
+    formationSlug: registration.formationSlug,
+    sessionId: registration.sessionId,
+    message: registration.message,
+    createdAt:
+      typeof registration.createdAt === "string"
+        ? registration.createdAt
+        : new Date(registration.createdAt).toISOString(),
+    source: registration.source,
+  };
+}
+
 async function createRegistration(payload) {
   const prisma = getPrismaClient();
   const now = new Date().toISOString();
@@ -28,7 +46,7 @@ async function createRegistration(payload) {
       },
     });
 
-    return created;
+    return normalizeRegistration(created);
   }
 
   const fallbackRegistration = {
@@ -39,9 +57,25 @@ async function createRegistration(payload) {
   };
 
   inMemoryRegistrations.push(fallbackRegistration);
-  return fallbackRegistration;
+  return normalizeRegistration(fallbackRegistration);
+}
+
+async function listRegistrations() {
+  const prisma = getPrismaClient();
+
+  if (prisma) {
+    const registrations = await prisma.inscription.findMany({
+      orderBy: { createdAt: "desc" },
+      take: 50,
+    });
+
+    return registrations.map(normalizeRegistration);
+  }
+
+  return [...inMemoryRegistrations].reverse().map(normalizeRegistration);
 }
 
 module.exports = {
   createRegistration,
+  listRegistrations,
 };

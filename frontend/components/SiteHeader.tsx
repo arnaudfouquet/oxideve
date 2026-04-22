@@ -13,11 +13,14 @@ export function SiteHeader() {
         </Link>
 
         <nav className="main-nav" aria-label="Navigation principale">
-          <Link href="/formations">Formations</Link>
+          <Link href="/">Accueil</Link>
+          <Link href="/qui-sommes-nous">Qui sommes-nous</Link>
+          <Link href="/formations">Nos formations</Link>
           <Link href="/calendrier">Calendrier</Link>
+          <Link href="/inscriptions">Inscrivez-vous</Link>
           <Link href="/admin">Admin</Link>
           <Link href="/contact" className="button button-primary">
-            Demander un rappel
+            Nous contacter
           </Link>
         </nav>
       </div>

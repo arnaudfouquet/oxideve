@@ -9,16 +9,16 @@ export const metadata: Metadata = {
   description: "Découvrez les formations Oxideve en photovoltaïque, pompes à chaleur, IRVE et climatisation.",
 };
 
-export default function FormationsPage() {
-  const formations = getFormations();
+export default async function FormationsPage() {
+  const formations = await getFormations();
 
   return (
     <section className="section">
       <div className="container">
         <div className="page-title">
-          <span className="eyebrow">SEO formation</span>
+          <span className="eyebrow">Nos formations</span>
           <h1>Catalogue des formations Oxideve</h1>
-          <p>Chaque formation dispose de sa propre page optimisée pour la recherche organique, la qualification commerciale et l'inscription.</p>
+          <p>Des parcours conçus pour des équipes terrain qui doivent sécuriser la conformité, réussir la mise en service et monter en compétence vite.</p>
         </div>
 
         <div className="grid-2">

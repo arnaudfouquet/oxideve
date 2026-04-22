@@ -7,12 +7,12 @@ export function SiteFooter() {
           <p>Centre de formation orienté terrain pour les métiers de l'énergie, du CVC et de la mobilité électrique.</p>
         </div>
         <div>
-          <h3>Expertises</h3>
-          <p>QualiPV, QualiPAC, IRVE, climatisation et accompagnement certification.</p>
+          <h3>Parcours</h3>
+          <p>QualiPV, QualiPAC, IRVE, climatisation et accompagnement sur la montée en compétence des équipes.</p>
         </div>
         <div>
-          <h3>Déploiement</h3>
-          <p>Application SSR Next.js, API Express et déploiement Infomaniak automatisé.</p>
+          <h3>Navigation</h3>
+          <p>Accueil, Qui sommes-nous, Nos formations, calendrier, inscription globale et administration du catalogue.</p>
         </div>
       </div>
     </footer>

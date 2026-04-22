@@ -14,7 +14,7 @@ export default function ContactPage() {
         <div className="contact-card">
           <span className="eyebrow">Contact</span>
           <h1>Parler à un responsable formation</h1>
-          <p>Oxideve accompagne les entreprises et les professionnels sur la planification, le financement et la mise en place des sessions techniques.</p>
+          <p>Cette page reste disponible pour les demandes générales, les partenariats et les besoins hors catalogue standard.</p>
           <div className="detail-list">
             <p>Téléphone: {contactPhone}</p>
             <p>Email: {contactEmail}</p>
@@ -22,7 +22,7 @@ export default function ContactPage() {
           </div>
         </div>
         <div className="contact-card">
-          <ContactForm />
+          <ContactForm submitLabel="Envoyer la demande" />
         </div>
       </div>
     </section>

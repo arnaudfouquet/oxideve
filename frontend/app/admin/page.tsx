@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
-import { getFormations, getSessions } from "@/lib/content";
+import { AdminConsole } from "@/components/AdminConsole";
+import { getFormations, getRegistrations, getSessions } from "@/lib/content";
 
 export const revalidate = 3600;
 
@@ -8,9 +9,8 @@ export const metadata: Metadata = {
   description: "Vue simple back-office pour suivre formations, sessions et inscriptions.",
 };
 
-export default function AdminPage() {
-  const formations = getFormations();
-  const sessions = getSessions();
+export default async function AdminPage() {
+  const [formations, sessions, registrations] = await Promise.all([getFormations(), getSessions(), getRegistrations()]);
   const totalSeatsLeft = sessions.reduce((total, session) => total + session.seatsLeft, 0);
 
   return (
@@ -18,8 +18,8 @@ export default function AdminPage() {
       <div className="container">
         <div className="page-title">
           <span className="eyebrow">Back-office</span>
-          <h1>Dashboard opérationnel</h1>
-          <p>Base simple pour piloter catalogue, sessions et flux d'inscriptions avant un enrichissement complet du back-office.</p>
+          <h1>Administration du catalogue et des inscriptions</h1>
+          <p>Modifiez les textes clés des formations, créez de nouvelles offres et gardez un oeil sur les inscriptions récentes depuis une seule interface.</p>
         </div>
 
         <div className="admin-grid">
@@ -33,32 +33,11 @@ export default function AdminPage() {
           </section>
           <section className="admin-shell">
             <h2>Actions prioritaires</h2>
-            <p>Créer une session supplémentaire sur QualiPAC, vérifier le taux de remplissage IRVE et relancer les leads entrants sur QualiPV.</p>
+            <p>Le back-office permet maintenant de créer une formation et d'ajuster les textes publiés. Les sessions et les inscriptions restent visibles pour arbitrer l'activité.</p>
           </section>
         </div>
 
-        <div className="data-table">
-          <table>
-            <thead>
-              <tr>
-                <th>Formation</th>
-                <th>Catégorie</th>
-                <th>Durée</th>
-                <th>Positionnement</th>
-              </tr>
-            </thead>
-            <tbody>
-              {formations.map((formation) => (
-                <tr key={formation.slug}>
-                  <td>{formation.shortTitle}</td>
-                  <td>{formation.category}</td>
-                  <td>{formation.duration}</td>
-                  <td>{formation.audience}</td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
+        <AdminConsole initialFormations={formations} initialSessions={sessions} initialRegistrations={registrations} />
       </div>
     </section>
   );
