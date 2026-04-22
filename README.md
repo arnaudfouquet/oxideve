@@ -24,7 +24,7 @@ Créer un fichier `.env` avec au minimum:
 ```bash
 PORT=3000
 SITE_URL=https://oxideve.fr
-DATABASE_URL=postgresql://USER:PASSWORD@HOST:5432/oxideve
+DATABASE_URL=mysql://USER:PASSWORD@HOST:3306/DATABASE
 ```
 
 ## Développement
