@@ -1,6 +1,9 @@
 const catalog = require("../../shared/catalog-data.json");
 const { getPrismaClient } = require("./prismaClient");
 
+const inMemoryFormations = catalog.formations.map((formation) => normalizeFormation(formation));
+const inMemorySessions = catalog.sessions.map((session) => normalizeSession(session));
+
 function normalizeFormation(formation) {
   return {
     id: formation.id,
@@ -59,7 +62,7 @@ async function listFormations() {
   const prisma = getPrismaClient();
 
   if (!prisma) {
-    return catalog.formations.map(normalizeFormation);
+    return [...inMemoryFormations].sort((left, right) => left.title.localeCompare(right.title, "fr"));
   }
 
   const formations = await prisma.formation.findMany({
@@ -73,7 +76,7 @@ async function getFormationBySlug(slug) {
   const prisma = getPrismaClient();
 
   if (!prisma) {
-    const formation = catalog.formations.find((item) => item.slug === slug);
+    const formation = inMemoryFormations.find((item) => item.slug === slug);
     return formation ? normalizeFormation(formation) : null;
   }
 
@@ -85,7 +88,7 @@ async function listSessions() {
   const prisma = getPrismaClient();
 
   if (!prisma) {
-    return catalog.sessions.map(normalizeSession);
+    return [...inMemorySessions].sort((left, right) => left.startDate.localeCompare(right.startDate));
   }
 
   const sessions = await prisma.session.findMany({
@@ -99,7 +102,9 @@ async function createFormation(payload) {
   const prisma = getPrismaClient();
 
   if (!prisma) {
-    throw new Error("Database connection required to create a formation");
+    const formation = normalizeFormation({ id: payload.slug, ...payload });
+    inMemoryFormations.push(formation);
+    return formation;
   }
 
   const formation = await prisma.formation.create({
@@ -136,7 +141,20 @@ async function updateFormation(slug, payload) {
   const prisma = getPrismaClient();
 
   if (!prisma) {
-    throw new Error("Database connection required to update a formation");
+    const index = inMemoryFormations.findIndex((item) => item.slug === slug);
+
+    if (index === -1) {
+      throw new Error("Formation not found");
+    }
+
+    const formation = normalizeFormation({
+      ...inMemoryFormations[index],
+      ...payload,
+      slug,
+    });
+
+    inMemoryFormations[index] = formation;
+    return formation;
   }
 
   const formation = await prisma.formation.update({
@@ -169,9 +187,88 @@ async function updateFormation(slug, payload) {
   return normalizeFormation(formation);
 }
 
+async function createSession(payload) {
+  const prisma = getPrismaClient();
+
+  if (!prisma) {
+    const session = normalizeSession({ id: payload.id, ...payload });
+    inMemorySessions.push(session);
+    return session;
+  }
+
+  const session = await prisma.session.create({
+    data: {
+      formationSlug: payload.formationSlug,
+      city: payload.city,
+      startDate: new Date(payload.startDate),
+      endDate: new Date(payload.endDate),
+      seatsLeft: payload.seatsLeft,
+      mode: payload.mode,
+    },
+  });
+
+  return normalizeSession(session);
+}
+
+async function updateSession(id, payload) {
+  const prisma = getPrismaClient();
+
+  if (!prisma) {
+    const index = inMemorySessions.findIndex((item) => item.id === id);
+
+    if (index === -1) {
+      throw new Error("Session not found");
+    }
+
+    const session = normalizeSession({
+      ...inMemorySessions[index],
+      ...payload,
+      id,
+    });
+
+    inMemorySessions[index] = session;
+    return session;
+  }
+
+  const session = await prisma.session.update({
+    where: { id },
+    data: {
+      formationSlug: payload.formationSlug,
+      city: payload.city,
+      startDate: new Date(payload.startDate),
+      endDate: new Date(payload.endDate),
+      seatsLeft: payload.seatsLeft,
+      mode: payload.mode,
+    },
+  });
+
+  return normalizeSession(session);
+}
+
+async function deleteSession(id) {
+  const prisma = getPrismaClient();
+
+  if (!prisma) {
+    const index = inMemorySessions.findIndex((item) => item.id === id);
+
+    if (index === -1) {
+      throw new Error("Session not found");
+    }
+
+    const [session] = inMemorySessions.splice(index, 1);
+    return normalizeSession(session);
+  }
+
+  const session = await prisma.session.delete({ where: { id } });
+  return normalizeSession(session);
+}
+
 module.exports = {
   createFormation,
+  createSession,
+  deleteSession,
   updateFormation,
+  updateSession,
   listFormations,
   getFormationBySlug,
   listSessions,

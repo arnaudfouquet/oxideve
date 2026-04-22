@@ -6,8 +6,12 @@ const {
   getFormationBySlug,
   listSessions,
   createFormation,
+  createSession,
+  deleteSession,
   updateFormation,
+  updateSession,
 } = require("../services/catalogService");
+const { createArticle, deleteArticle, getArticleBySlug, listArticles, updateArticle } = require("../services/editorialService");
 const { createRegistration, listRegistrations } = require("../services/registrationService");
 
 const inscriptionSchema = z.object({
@@ -41,6 +45,26 @@ const formationSchema = z.object({
   priceDetails: z.string().min(10).max(1000),
   successRate: z.string().min(2).max(120),
   handicapPolicy: z.string().min(10).max(1200),
+});
+
+const sessionSchema = z.object({
+  formationSlug: z.string().min(3).max(120),
+  city: z.string().min(2).max(120),
+  startDate: z.string().min(10).max(10),
+  endDate: z.string().min(10).max(10),
+  seatsLeft: z.coerce.number().int().min(0).max(999),
+  mode: z.string().min(2).max(40),
+});
+
+const articleSchema = z.object({
+  slug: z.string().min(3).max(160).regex(/^[a-z0-9-]+$/),
+  title: z.string().min(5).max(220),
+  category: z.string().min(2).max(80),
+  excerpt: z.string().min(20).max(600),
+  body: z.array(z.string().min(20).max(4000)).min(1).max(20),
+  readingTime: z.string().min(2).max(40),
+  publishedAt: z.string().min(10).max(10),
+  featuredFormationSlug: z.string().max(120).optional().default(""),
 });
 
 function asyncHandler(handler) {
@@ -81,6 +105,27 @@ function createApiRouter() {
     })
   );
 
+  router.get(
+    "/articles",
+    asyncHandler(async (_req, res) => {
+      const articles = await listArticles();
+      res.json({ data: articles });
+    })
+  );
+
+  router.get(
+    "/articles/:slug",
+    asyncHandler(async (req, res) => {
+      const article = await getArticleBySlug(req.params.slug);
+
+      if (!article) {
+        return res.status(404).json({ error: "Article not found" });
+      }
+
+      return res.json({ data: article });
+    })
+  );
+
   router.post(
     "/inscription",
     formLimiter,
@@ -94,13 +139,14 @@ function createApiRouter() {
   router.get(
     "/admin/overview",
     asyncHandler(async (_req, res) => {
-      const [formations, sessions, registrations] = await Promise.all([
+      const [formations, sessions, registrations, articles] = await Promise.all([
         listFormations(),
         listSessions(),
         listRegistrations(),
+        listArticles(),
       ]);
 
-      res.json({ data: { formations, sessions, registrations } });
+      res.json({ data: { formations, sessions, registrations, articles } });
     })
   );
 
@@ -119,6 +165,58 @@ function createApiRouter() {
       const payload = formationSchema.omit({ slug: true }).parse(req.body);
       const formation = await updateFormation(req.params.slug, payload);
       res.json({ data: formation, message: "Formation mise à jour" });
+    })
+  );
+
+  router.post(
+    "/admin/sessions",
+    asyncHandler(async (req, res) => {
+      const payload = sessionSchema.parse(req.body);
+      const session = await createSession({ ...payload, id: `session-${Date.now()}` });
+      res.status(201).json({ data: session, message: "Session créée" });
+    })
+  );
+
+  router.patch(
+    "/admin/sessions/:id",
+    asyncHandler(async (req, res) => {
+      const payload = sessionSchema.parse(req.body);
+      const session = await updateSession(req.params.id, payload);
+      res.json({ data: session, message: "Session mise à jour" });
+    })
+  );
+
+  router.delete(
+    "/admin/sessions/:id",
+    asyncHandler(async (req, res) => {
+      const session = await deleteSession(req.params.id);
+      res.json({ data: session, message: "Session supprimée" });
+    })
+  );
+
+  router.post(
+    "/admin/articles",
+    asyncHandler(async (req, res) => {
+      const payload = articleSchema.parse(req.body);
+      const article = await createArticle(payload);
+      res.status(201).json({ data: article, message: "Article créé" });
+    })
+  );
+
+  router.patch(
+    "/admin/articles/:slug",
+    asyncHandler(async (req, res) => {
+      const payload = articleSchema.omit({ slug: true }).parse(req.body);
+      const article = await updateArticle(req.params.slug, payload);
+      res.json({ data: article, message: "Article mis à jour" });
+    })
+  );
+
+  router.delete(
+    "/admin/articles/:slug",
+    asyncHandler(async (req, res) => {
+      const article = await deleteArticle(req.params.slug);
+      res.json({ data: article, message: "Article supprimé" });
     })
   );
 

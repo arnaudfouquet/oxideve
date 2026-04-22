@@ -1,6 +1,9 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { ContactForm } from "@/components/ContactForm";
+import { FormationCard } from "@/components/FormationCard";
+import { SessionCard } from "@/components/SessionCard";
+import { Badge, ButtonLink, Container, Section, Text, Title } from "@/components/ui";
 import { formatDateRange, getFormationBySlug, getFormations, getSessionsForFormation, getSiteUrl } from "@/lib/content";
 
 export const dynamic = "force-dynamic";
@@ -37,6 +40,8 @@ export default async function FormationDetailPage({ params }: Props) {
   }
 
   const sessions = await getSessionsForFormation(slug);
+  const allFormations = await getFormations();
+  const similarFormations = allFormations.filter((item) => item.slug !== slug && item.category === formation.category).slice(0, 3);
   const siteUrl = getSiteUrl();
   const jsonLd = {
     "@context": "https://schema.org",
@@ -65,119 +70,143 @@ export default async function FormationDetailPage({ params }: Props) {
   };
 
   return (
-    <section className="section">
-      <div className="container">
+    <>
+      <Section>
+        <Container>
         <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
-        <div className="page-title">
-          <span className="eyebrow">{formation.category}</span>
-          <h1>{formation.title}</h1>
-          <p>{formation.summary}</p>
-        </div>
-
-        <div className="detail-layout">
-          <article className="card formation-overview">
-            <div className="meta-row">
-              <span className="meta-pill">{formation.duration}</span>
-              <span className="meta-pill">{formation.location}</span>
-              <span className="meta-pill">{formation.price}</span>
-            </div>
-            <p>{formation.description}</p>
-            <h2>Finalité</h2>
-            <p>{formation.certification}</p>
-            <h2>Objectifs</h2>
-            <ul className="detail-list">
-              {formation.objectives.map((objective) => (
-                <li key={objective}>{objective}</li>
-              ))}
-            </ul>
-            <h2>Points clés</h2>
-            <ul className="detail-list">
-              {formation.benefits.map((benefit) => (
-                <li key={benefit}>{benefit}</li>
-              ))}
-            </ul>
-          </article>
-
-          <aside className="card">
-            <h2>Sessions disponibles</h2>
-            <div className="form-grid">
-              {sessions.map((session) => (
-                <article key={session.id} className="card card-highlight">
-                  <div className="meta-row">
-                    <span className="meta-pill">{session.city}</span>
-                    <span className="meta-pill">{session.mode}</span>
-                  </div>
-                  <p>{formatDateRange(session.startDate, session.endDate)}</p>
-                  <p>{session.seatsLeft} places restantes</p>
-                </article>
-              ))}
-            </div>
-          </aside>
-        </div>
-
-        <div className="section-grid-3 formation-facts">
-          <article className="card">
-            <h2>Prérequis</h2>
-            <ul className="detail-list">
-              {formation.prerequisites.map((item) => (
-                <li key={item}>{item}</li>
-              ))}
-            </ul>
-          </article>
-          <article className="card">
-            <h2>Modalités</h2>
-            <ul className="detail-list">
-              {formation.modalities.map((item) => (
-                <li key={item}>{item}</li>
-              ))}
-            </ul>
-          </article>
-          <article className="card card-highlight">
-            <h2>Informations pratiques</h2>
-            <p><strong>Durée :</strong> {formation.durationDetails}</p>
-            <p><strong>Tarif :</strong> {formation.priceDetails}</p>
-            <p><strong>Taux de réussite :</strong> {formation.successRate}</p>
-          </article>
-        </div>
-
-        <section className="section">
-          <div className="section-heading">
+          <div className="formation-hero">
             <div>
-              <span className="eyebrow">Programme</span>
-              <h2>Déroulé de la formation</h2>
+              <Badge tone="soft">{formation.category}</Badge>
+              <Title as="h1" title={formation.title} description={formation.summary} />
+              <div className="formation-hero-actions">
+                <ButtonLink href="/inscriptions" variant="primary">Je m'inscris</ButtonLink>
+                <ButtonLink href="/contact" variant="secondary">Parler a l'equipe</ButtonLink>
+              </div>
             </div>
+            <aside className="sticky-cta-card">
+              <strong>Prochaine session</strong>
+              <p>{sessions[0] ? formatDateRange(sessions[0].startDate, sessions[0].endDate) : "Calendrier en preparation"}</p>
+              <span>{sessions[0]?.city || formation.location}</span>
+              <ButtonLink href="/inscriptions" variant="primary">Reserver une place</ButtonLink>
+            </aside>
           </div>
-          <div className="programme-list">
+
+          <div className="info-bar">
+            <div><span>Duree</span><strong>{formation.duration}</strong></div>
+            <div><span>Lieu</span><strong>{formation.location}</strong></div>
+            <div><span>Tarif</span><strong>{formation.price}</strong></div>
+            <div><span>Public</span><strong>{formation.audience}</strong></div>
+          </div>
+
+          <div className="detail-layout-modern">
+            <article className="detail-main-card">
+              <Title eyebrow="Description" title="Ce que couvre le parcours" />
+              <Text size="lg">{formation.description}</Text>
+              <div className="detail-block-grid">
+                <div>
+                  <h2>Objectifs pedagogiques</h2>
+                  <ul className="detail-list">
+                    {formation.objectives.map((objective) => (
+                      <li key={objective}>{objective}</li>
+                    ))}
+                  </ul>
+                </div>
+                <div>
+                  <h2>Points forts</h2>
+                  <ul className="detail-list">
+                    {formation.benefits.map((benefit) => (
+                      <li key={benefit}>{benefit}</li>
+                    ))}
+                  </ul>
+                </div>
+              </div>
+            </article>
+
+            <aside className="detail-sidebar-stack">
+              <div className="detail-side-card">
+                <h2>Prérequis</h2>
+                <ul className="detail-list">
+                  {formation.prerequisites.map((item) => (
+                    <li key={item}>{item}</li>
+                  ))}
+                </ul>
+              </div>
+              <div className="detail-side-card">
+                <h2>Modalites</h2>
+                <ul className="detail-list">
+                  {formation.modalities.map((item) => (
+                    <li key={item}>{item}</li>
+                  ))}
+                </ul>
+              </div>
+              <div className="detail-side-card detail-side-card-accent">
+                <h2>Informations pratiques</h2>
+                <p><strong>Duree detaillee :</strong> {formation.durationDetails}</p>
+                <p><strong>Tarif :</strong> {formation.priceDetails}</p>
+                <p><strong>Reussite :</strong> {formation.successRate}</p>
+              </div>
+            </aside>
+          </div>
+        </Container>
+      </Section>
+
+      <Section surface="muted">
+        <Container>
+          <Title eyebrow="Programme" title="Deroule jour par jour" />
+          <div className="programme-list programme-list-modern">
             {formation.programme.map((item, index) => (
-              <article className="card card-highlight" key={item}>
-                <span className="programme-step">0{index + 1}</span>
+              <article className="programme-card" key={item}>
+                <span className="programme-step">{String(index + 1).padStart(2, "0")}</span>
+                <h3>Jour {index + 1}</h3>
                 <p>{item}</p>
               </article>
             ))}
           </div>
-        </section>
+        </Container>
+      </Section>
 
-        <section className="section-grid-2">
-          <article className="card">
-            <h2>Accessibilité</h2>
-            <p>{formation.handicapPolicy}</p>
-          </article>
-          <article className="card card-highlight">
-            <h2>Organisation des inscriptions</h2>
-            <p>Choisissez une session ouverte, indiquez votre contexte et nous revenons vers vous pour confirmer les modalités, les prérequis et la logistique.</p>
-          </article>
-        </section>
-
-        <div className="section contact-layout">
-          <div className="contact-card">
-            <h2>Inscription et renseignements</h2>
-            <p>Le formulaire ci-contre permet de rattacher directement votre demande à cette formation et à la prochaine session disponible.</p>
+      <Section>
+        <Container>
+          <div className="session-detail-grid">
+            <div>
+              <Title eyebrow="Sessions" title="Sessions disponibles" />
+              <div className="session-grid">
+                {sessions.map((session) => (
+                  <SessionCard key={session.id} formation={formation} session={session} />
+                ))}
+              </div>
+            </div>
+            <div className="detail-side-card">
+              <h2>Accessibilite</h2>
+              <p>{formation.handicapPolicy}</p>
+              <h2>Finalite</h2>
+              <p>{formation.certification}</p>
+            </div>
           </div>
-          <div className="contact-card">
+        </Container>
+      </Section>
+
+      <Section surface="contrast">
+        <Container className="detail-cta-band">
+          <div>
+            <Title eyebrow="Inscription" title="Un CTA final clair, relie a la session et au besoin terrain" description="Le formulaire ci-contre rattache directement la demande a cette formation et a la prochaine session visible." />
+          </div>
+          <div className="contact-card contact-card-form">
             <ContactForm defaultFormationSlug={formation.slug} defaultSessionId={sessions[0]?.id} />
           </div>
-        </div>
-      </div>
-    </section>
+        </Container>
+      </Section>
+
+      <Section>
+        <Container>
+          <Title eyebrow="Formations similaires" title="Autres parcours de la meme famille" />
+          <div className="training-showcase-grid">
+            {similarFormations.map((item) => (
+              <FormationCard formation={item} key={item.slug} />
+            ))}
+          </div>
+        </Container>
+      </Section>
+    </>
   );
 }

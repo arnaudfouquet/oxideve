@@ -8,32 +8,32 @@ datasource db {
 }
 
 model Formation {
-  id             String        @id @default(cuid())
-  slug           String        @unique
-  title          String
-  shortTitle     String
-  category       String
-  duration       String
+  id              String        @id @default(cuid())
+  slug            String        @unique
+  title           String
+  shortTitle      String
+  category        String
+  duration        String
   durationDetails String?      @db.Text
-  location       String
-  audience       String
-  summary        String        @db.Text
-  description    String        @db.Text
-  benefits       Json
-  objectives     Json
-  prerequisites  Json?
-  modalities     Json?
-  programme      Json?
-  certification  String?       @db.Text
-  price          String
-  priceDetails   String?       @db.Text
-  successRate    String?
-  handicapPolicy String?       @db.Text
-  seoTitle       String
-  seoDescription String        @db.Text
-  createdAt      DateTime      @default(now())
-  updatedAt      DateTime      @updatedAt
-  sessions       Session[]
+  location        String
+  audience        String
+  summary         String        @db.Text
+  description     String        @db.Text
+  benefits        Json
+  objectives      Json
+  prerequisites   Json?
+  modalities      Json?
+  programme       Json?
+  certification   String?       @db.Text
+  price           String
+  priceDetails    String?       @db.Text
+  successRate     String?
+  handicapPolicy  String?       @db.Text
+  seoTitle        String
+  seoDescription  String        @db.Text
+  createdAt       DateTime      @default(now())
+  updatedAt       DateTime      @updatedAt
+  sessions        Session[]
 }
 
 model Session {
@@ -71,4 +71,18 @@ model EmailLog {
   status        String
   createdAt     DateTime     @default(now())
   inscription   Inscription  @relation(fields: [inscriptionId], references: [id], onDelete: Cascade)
+}
+
+model Article {
+  id                   String    @id @default(cuid())
+  slug                 String    @unique
+  title                String
+  category             String
+  excerpt              String    @db.Text
+  body                 Json
+  readingTime          String
+  publishedAt          DateTime
+  featuredFormationSlug String?
+  createdAt            DateTime  @default(now())
+  updatedAt            DateTime  @updatedAt
 }

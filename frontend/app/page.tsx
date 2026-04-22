@@ -1,137 +1,217 @@
-import Link from "next/link";
-import { TrainingCalendar } from "@/components/TrainingCalendar";
 import { ContactForm } from "@/components/ContactForm";
+import { FormationCard } from "@/components/FormationCard";
+import { SessionCard } from "@/components/SessionCard";
+import { Badge, ButtonLink, Container, Section, Text, Title } from "@/components/ui";
 import { getFormations, getSessions, siteDescription } from "@/lib/content";
 
 export const dynamic = "force-dynamic";
 
 export default async function HomePage() {
   const formations = await getFormations();
-  const sessions = (await getSessions()).slice(0, 4);
+  const sessions = (await getSessions()).slice(0, 3);
+  const categories = Array.from(new Set(formations.map((formation) => formation.category))).map((category) => ({
+    name: category,
+    count: formations.filter((formation) => formation.category === category).length,
+  }));
+  const keyFigures = [
+    { value: `${formations.length}`, label: "formations actives" },
+    { value: `${sessions.length}`, label: "sessions visibles" },
+    { value: "93 %", label: "reussite moyenne" },
+    { value: "48 h", label: "delai moyen de reponse" },
+  ];
 
   return (
     <>
-      <section className="hero">
-        <div className="container hero-shell">
+      <Section className="home-hero">
+        <Container className="hero-shell hero-shell-grid">
           <div className="hero-copy">
-            <span className="eyebrow">Formations énergie, électricité et CVC</span>
-            <h1>Des parcours lisibles, un calendrier réel, et des fiches formation prêtes à être utilisées.</h1>
-            <p className="lead">{siteDescription} Retrouvez des formations structurées autour des points qui comptent vraiment: prérequis, objectifs, modalités, programme, durée, tarif et accessibilité.</p>
+            <Badge tone="accent">Formations energie, electricite et CVC</Badge>
+            <Title
+              as="h1"
+              title="Un catalogue terrain pour former vite, cadrer juste et planifier sans friction."
+              description={`${siteDescription} Chaque parcours reprend la meme structure : objectifs, modalites, programme, sessions et conditions d'inscription.`}
+            />
             <div className="hero-actions">
-              <Link className="button button-primary" href="/formations">
-                Voir les formations
-              </Link>
-              <Link className="button button-secondary" href="/inscriptions">
-                Demander une inscription
-              </Link>
+              <ButtonLink href="/formations" variant="primary">Explorer les formations</ButtonLink>
+              <ButtonLink href="/inscriptions" variant="secondary">Je m'inscris</ButtonLink>
             </div>
-            <div className="stats-strip">
-              <span className="stat-pill">4 domaines de formation</span>
-              <span className="stat-pill">Sessions ouvertes visibles</span>
-              <span className="stat-pill">Demandes d'inscription centralisées</span>
+            <div className="hero-stat-row">
+              {keyFigures.map((item) => (
+                <div className="hero-stat" key={item.label}>
+                  <strong>{item.value}</strong>
+                  <span>{item.label}</span>
+                </div>
+              ))}
             </div>
           </div>
-          <aside className="hero-panel">
-            <h2>Ce que vous trouverez ici</h2>
-            <ul>
-              <li>Un catalogue rédigé pour les responsables techniques, installateurs et conducteurs de travaux.</li>
-              <li>Des fiches formation qui exposent les conditions d'entrée et le programme sans détour.</li>
-              <li>Un calendrier utilisable immédiatement pour projeter une inscription inter ou intra.</li>
-            </ul>
-          </aside>
-        </div>
-      </section>
+          <div className="hero-panel-grid">
+            <div className="hero-panel hero-panel-large">
+              <span className="hero-panel-label">Pourquoi Oxideve</span>
+              <p>Des fiches formation lisibles, des sessions exploitables par les equipes et une logique de parcours qui colle au chantier.</p>
+            </div>
+            <div className="hero-panel-list">
+              <div className="hero-panel">
+                <strong>Catalogue clair</strong>
+                <p>Comparaison rapide des formations sans habillage inutile.</p>
+              </div>
+              <div className="hero-panel">
+                <strong>Planning reel</strong>
+                <p>Les prochaines sessions sont reliees a la bonne fiche formation.</p>
+              </div>
+            </div>
+          </div>
+        </Container>
+      </Section>
 
-      <section className="section">
-        <div className="container">
-          <div className="section-heading">
-            <div>
-              <span className="eyebrow">Nos formations</span>
-              <h2>Un catalogue pensé pour comparer vite et choisir juste</h2>
-            </div>
-            <Link href="/formations" className="button button-secondary">
-              Tout le catalogue
-            </Link>
-          </div>
-          <div className="grid-3">
-            {formations.map((formation) => (
-              <article key={formation.slug} className="card card-highlight">
-                <div className="meta-row">
-                  <span className="meta-pill">{formation.category}</span>
-                  <span className="meta-pill">{formation.duration}</span>
-                </div>
-                <h3>{formation.title}</h3>
-                <p>{formation.summary}</p>
-                <div className="chips">
-                  {formation.benefits.slice(0, 2).map((benefit) => (
-                    <span className="chip" key={benefit}>
-                      {benefit}
-                    </span>
-                  ))}
-                </div>
-                <div className="cta-row">
-                  <Link href={`/formations/${formation.slug}`} className="button button-primary">
-                    Consulter la fiche
-                  </Link>
-                </div>
-              </article>
+      <Section>
+        <Container>
+          <Title
+            eyebrow="Categories"
+            title="Un catalogue organise par familles de decisions terrain"
+            description="Les pages publiques repartent toujours des memes composants pour garder une lecture stable du catalogue jusqu'a l'inscription."
+            actions={<ButtonLink href="/formations" variant="secondary">Voir tout le catalogue</ButtonLink>}
+          />
+          <div className="category-grid">
+            {categories.map((category) => (
+              <div className="category-card" key={category.name}>
+                <strong>{category.name}</strong>
+                <span>{category.count} parcours</span>
+              </div>
             ))}
           </div>
-        </div>
-      </section>
+        </Container>
+      </Section>
 
-      <section className="section">
-        <div className="container">
-          <div className="section-heading">
+      <Section surface="muted">
+        <Container>
+          <Title eyebrow="Chiffres cles" title="Des indicateurs visibles avant meme d'ouvrir le back-office" />
+          <div className="metric-grid">
+            {keyFigures.map((item) => (
+              <div className="metric-card" key={item.label}>
+                <strong>{item.value}</strong>
+                <span>{item.label}</span>
+              </div>
+            ))}
+          </div>
+        </Container>
+      </Section>
+
+      <Section>
+        <Container>
+          <Title eyebrow="Pourquoi Oxideve" title="Une meme logique de lecture du site jusqu'a la fiche detail" />
+          <div className="value-grid">
+            <div className="value-card">
+              <h3>Descriptions actionnables</h3>
+              <Text tone="muted">Chaque formation affiche les pre requis, les objectifs, les modalites et le programme sur le meme squelette.</Text>
+            </div>
+            <div className="value-card">
+              <h3>Sessions reliees au reel</h3>
+              <Text tone="muted">La lecture des prochaines dates se fait sans quitter l'univers de la formation concernee.</Text>
+            </div>
+            <div className="value-card">
+              <h3>Back-office unifie</h3>
+              <Text tone="muted">Le catalogue public et l'administration convergent vers les memes entites : formations, sessions, inscriptions et contenu editorial.</Text>
+            </div>
+          </div>
+        </Container>
+      </Section>
+
+      <Section>
+        <Container>
+          <Title eyebrow="Sessions" title="Les prochaines ouvertures de session" actions={<ButtonLink href="/formations" variant="secondary">Toutes les formations</ButtonLink>} />
+          <div className="session-grid">
+            {sessions.map((session) => (
+              <SessionCard key={session.id} compact formation={formations.find((formation) => formation.slug === session.formationSlug)} session={session} />
+            ))}
+          </div>
+        </Container>
+      </Section>
+
+      <Section surface="contrast">
+        <Container>
+          <div className="spotlight-grid">
             <div>
-              <span className="eyebrow">Calendrier</span>
-              <h2>Les prochaines sessions ouvertes à l'inscription</h2>
+              <Title eyebrow="Bloc RGE" title="Un espace public qui prepare deja la logique RGE" description="Qualifications, preuves d'execution, dossier technique, autocontrôle et remise d'elements au client : tout le vocabulaire RGE traverse les parcours et les articles." />
             </div>
-            <Link href="/calendrier" className="button button-secondary">
-              Calendrier complet
-            </Link>
+            <div className="spotlight-card-list">
+              <div className="spotlight-card">
+                <strong>Formations RGE</strong>
+                <p>Photovoltaique et PAC sont presentes avec les attendus de qualification et les points de conformite utiles.</p>
+              </div>
+              <div className="spotlight-card">
+                <strong>Documentation chantier</strong>
+                <p>Le site editorial reprend les routines de controle et de transmission attendues sur le terrain.</p>
+              </div>
+            </div>
           </div>
-          <TrainingCalendar formations={formations} sessions={sessions} compact />
-        </div>
-      </section>
+        </Container>
+      </Section>
 
-      <section className="section">
-        <div className="container grid-2">
-          <article className="card card-highlight">
-            <span className="eyebrow">Méthode</span>
-            <h2>Une approche qui tient ensemble réglementation, geste technique et préparation chantier.</h2>
-            <p>Oxideve construit ses formations pour aider les équipes à exécuter correctement, documenter les interventions et préparer les qualifications attendues.</p>
-            <div className="cta-row">
-              <Link href="/qui-sommes-nous" className="button button-primary">
-                Découvrir l'équipe
-              </Link>
+      <Section>
+        <Container>
+          <Title eyebrow="Parcours" title="Trois facons d'entrer dans l'offre" />
+          <div className="path-grid">
+            <div className="path-card">
+              <span>01</span>
+              <h3>Comparer</h3>
+              <p>Explorer les categories, filtrer, puis ouvrir la fiche formation detaillee.</p>
             </div>
-          </article>
-          <article className="card">
-            <span className="eyebrow">Inscription</span>
-            <h2>Un point d'entrée unique pour les demandes inter, intra et les besoins de planification.</h2>
-            <p>Sélectionnez la formation et la session, précisez votre besoin et laissez l'équipe valider les disponibilités, les prérequis et l'organisation.</p>
-            <div className="cta-row">
-              <Link href="/inscriptions" className="button button-primary">
-                Aller au formulaire
-              </Link>
+            <div className="path-card">
+              <span>02</span>
+              <h3>Planifier</h3>
+              <p>Choisir une session visible et valider les contraintes de calendrier, lieu et format.</p>
             </div>
-          </article>
-        </div>
-      </section>
-
-      <section className="section">
-        <div className="container contact-layout">
-          <div className="contact-card">
-            <span className="eyebrow">Contact rapide</span>
-            <h2>Une question sur un parcours, une date ou un prérequis ?</h2>
-            <p>Utilisez ce formulaire pour obtenir un retour rapide. Pour rattacher la demande à une session précise, utilisez la page d'inscription.</p>
+            <div className="path-card">
+              <span>03</span>
+              <h3>Inscrire</h3>
+              <p>Envoyer la demande depuis un point d'entree clair, sans naviguer entre plusieurs formulaires disjoints.</p>
+            </div>
           </div>
-          <div className="contact-card">
+        </Container>
+      </Section>
+
+      <Section surface="muted">
+        <Container>
+          <Title eyebrow="Quiz" title="Par ou commencer ?" description="Trois portes d'entree simples pour orienter le bon parcours sans rendre le site artificiellement complexe." />
+          <div className="quiz-grid">
+            <div className="quiz-card">
+              <h3>Votre besoin est une qualification ou un maintien de niveau ?</h3>
+              <ButtonLink href="/rge" variant="ghost">Voir le parcours RGE</ButtonLink>
+            </div>
+            <div className="quiz-card">
+              <h3>Vous cherchez d'abord une date pour monter une equipe ?</h3>
+              <ButtonLink href="/formations" variant="ghost">Filtrer les sessions</ButtonLink>
+            </div>
+            <div className="quiz-card">
+              <h3>Vous avez besoin d'un format intra ou d'un cadrage pedagogique ?</h3>
+              <ButtonLink href="/contact" variant="ghost">Contacter Oxideve</ButtonLink>
+            </div>
+          </div>
+        </Container>
+      </Section>
+
+      <Section>
+        <Container>
+          <Title eyebrow="Catalogue" title="Quelques formations a la une" />
+          <div className="training-showcase-grid">
+            {formations.slice(0, 3).map((formation) => (
+              <FormationCard formation={formation} key={formation.slug} tone="highlight" />
+            ))}
+          </div>
+        </Container>
+      </Section>
+
+      <Section>
+        <Container className="contact-layout contact-layout-modern">
+          <div className="contact-card contact-card-copy">
+            <Title eyebrow="Contact" title="Une question sur un pre requis, un rythme ou un montage intra ?" />
+            <Text tone="muted" size="lg">Le formulaire ci-contre reste le point d'entree unique pour demander un rappel ou cadrer une inscription.</Text>
+          </div>
+          <div className="contact-card contact-card-form">
             <ContactForm />
           </div>
-        </div>
-      </section>
+        </Container>
+      </Section>
     </>
   );
 }

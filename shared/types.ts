@@ -45,7 +45,20 @@ export type Registration = {
   source?: string;
 };
 
+export type Article = {
+  id: string;
+  slug: string;
+  title: string;
+  category: string;
+  excerpt: string;
+  body: string[];
+  readingTime: string;
+  publishedAt: string;
+  featuredFormationSlug?: string;
+};
+
 export type CatalogData = {
   formations: Formation[];
   sessions: Session[];
+  articles?: Article[];
 };

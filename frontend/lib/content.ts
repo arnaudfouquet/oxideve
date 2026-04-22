@@ -1,6 +1,7 @@
 import "server-only";
 import catalogData from "../../shared/catalog-data.json";
-import type { CatalogData, Formation, Registration, Session } from "../../shared/types";
+import type { Article, CatalogData, Formation, Registration, Session } from "../../shared/types";
+import { blogArticles } from "./editorial";
 
 const catalog = catalogData as CatalogData;
 
@@ -12,6 +13,11 @@ type CatalogServiceModule = {
 
 type RegistrationServiceModule = {
   listRegistrations: () => Promise<Registration[]>;
+};
+
+type EditorialServiceModule = {
+  listArticles: () => Promise<Article[]>;
+  getArticleBySlug: (slug: string) => Promise<Article | null>;
 };
 
 export const siteName = "Oxideve";
@@ -30,6 +36,10 @@ function getCatalogService(): CatalogServiceModule {
 
 function getRegistrationService(): RegistrationServiceModule {
   return require("../../backend/services/registrationService.js") as RegistrationServiceModule;
+}
+
+function getEditorialService(): EditorialServiceModule {
+  return require("../../backend/services/editorialService.js") as EditorialServiceModule;
 }
 
 export async function getFormations(): Promise<Formation[]> {
@@ -71,6 +81,25 @@ export async function getRegistrations(): Promise<Registration[]> {
     return await service.listRegistrations();
   } catch {
     return [];
+  }
+}
+
+export async function getArticles(): Promise<Article[]> {
+  try {
+    const service = getEditorialService();
+    return await service.listArticles();
+  } catch {
+    return blogArticles;
+  }
+}
+
+export async function getArticleBySlug(slug: string): Promise<Article | undefined> {
+  try {
+    const service = getEditorialService();
+    const article = await service.getArticleBySlug(slug);
+    return article ?? undefined;
+  } catch {
+    return blogArticles.find((article) => article.slug === slug);
   }
 }
 

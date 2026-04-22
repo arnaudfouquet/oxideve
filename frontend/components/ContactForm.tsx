@@ -79,19 +79,19 @@ export function ContactForm({
       <div className="form-grid">
         <label>
           Société
-          <input name="company" type="text" required placeholder="Nom de l'entreprise" />
+          <input className="ui-field" name="company" type="text" required placeholder="Nom de l'entreprise" />
         </label>
         <label>
           Contact
-          <input name="contactName" type="text" required placeholder="Nom et prénom" />
+          <input className="ui-field" name="contactName" type="text" required placeholder="Nom et prénom" />
         </label>
         <label>
           Email
-          <input name="email" type="email" required placeholder="contact@entreprise.fr" />
+          <input className="ui-field" name="email" type="email" required placeholder="contact@entreprise.fr" />
         </label>
         <label>
           Téléphone
-          <input name="phone" type="tel" required placeholder="06 00 00 00 00" />
+          <input className="ui-field" name="phone" type="tel" required placeholder="06 00 00 00 00" />
         </label>
       </div>
       {showSelectors ? (
@@ -99,6 +99,7 @@ export function ContactForm({
           <label>
             Formation
             <select
+              className="ui-field"
               name="formationSlug"
               value={selectedFormationSlug}
               onChange={(event) => setSelectedFormationSlug(event.target.value)}
@@ -113,7 +114,7 @@ export function ContactForm({
           </label>
           <label>
             Session
-            <select name="sessionId" value={selectedSessionId} onChange={(event) => setSelectedSessionId(event.target.value)} required>
+            <select className="ui-field" name="sessionId" value={selectedSessionId} onChange={(event) => setSelectedSessionId(event.target.value)} required>
               {availableSessions.map((session) => (
                 <option key={session.id} value={session.id}>
                   {session.city} - {new Intl.DateTimeFormat("fr-FR", { day: "2-digit", month: "2-digit", year: "numeric" }).format(new Date(session.startDate))}
@@ -130,9 +131,9 @@ export function ContactForm({
       )}
       <label>
         Besoin
-        <textarea name="message" rows={5} placeholder="Objectif, nombre de stagiaires, besoin de financement, délais..." />
+        <textarea className="ui-field contact-form-textarea" name="message" rows={5} placeholder="Objectif, nombre de stagiaires, besoin de financement, délais..." />
       </label>
-      <button className="button button-primary" type="submit" disabled={status === "loading"}>
+      <button className="ui-button ui-button-primary" type="submit" disabled={status === "loading"}>
         {status === "loading" ? "Envoi..." : submitLabel}
       </button>
       {message ? <p className={`form-status ${status}`}>{message}</p> : null}
