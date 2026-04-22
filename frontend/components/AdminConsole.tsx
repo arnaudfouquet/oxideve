@@ -71,6 +71,16 @@ function splitLines(value: string) {
     .filter(Boolean);
 }
 
+function formatRegistrationDate(value: string) {
+  const date = new Date(value);
+  const day = String(date.getUTCDate()).padStart(2, "0");
+  const month = String(date.getUTCMonth() + 1).padStart(2, "0");
+  const year = date.getUTCFullYear();
+  const hours = String(date.getUTCHours()).padStart(2, "0");
+  const minutes = String(date.getUTCMinutes()).padStart(2, "0");
+  return `${day}/${month}/${year} ${hours}:${minutes} UTC`;
+}
+
 export function AdminConsole({ initialFormations, initialSessions, initialRegistrations }: Props) {
   const [formations, setFormations] = useState(initialFormations);
   const [draft, setDraft] = useState<Draft>(toDraft(initialFormations[0]));
@@ -286,7 +296,7 @@ export function AdminConsole({ initialFormations, initialSessions, initialRegist
             <tbody>
               {initialRegistrations.map((registration) => (
                 <tr key={registration.id}>
-                  <td>{new Intl.DateTimeFormat("fr-FR", { dateStyle: "short", timeStyle: "short" }).format(new Date(registration.createdAt))}</td>
+                  <td>{formatRegistrationDate(registration.createdAt)}</td>
                   <td>{registration.company}</td>
                   <td>
                     {registration.contactName}
