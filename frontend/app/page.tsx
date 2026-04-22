@@ -14,29 +14,29 @@ export default async function HomePage() {
       <section className="hero">
         <div className="container hero-shell">
           <div className="hero-copy">
-            <span className="eyebrow">Organisme terrain pour les métiers techniques</span>
-            <h1>Des formations concrètes, planifiées, et prêtes à être réservées.</h1>
-            <p className="lead">{siteDescription} Consultez les prochaines sessions, découvrez l'équipe Oxideve et inscrivez vos collaborateurs depuis une seule plateforme.</p>
+            <span className="eyebrow">Formations énergie, électricité et CVC</span>
+            <h1>Des parcours lisibles, un calendrier réel, et des fiches formation prêtes à être utilisées.</h1>
+            <p className="lead">{siteDescription} Retrouvez des formations structurées autour des points qui comptent vraiment: prérequis, objectifs, modalités, programme, durée, tarif et accessibilité.</p>
             <div className="hero-actions">
-              <Link className="button button-primary" href="/inscriptions">
-                Inscrire une équipe
+              <Link className="button button-primary" href="/formations">
+                Voir les formations
               </Link>
-              <Link className="button button-secondary" href="/qui-sommes-nous">
-                Découvrir Oxideve
+              <Link className="button button-secondary" href="/inscriptions">
+                Demander une inscription
               </Link>
             </div>
             <div className="stats-strip">
-              <span className="stat-pill">4 expertises certifiantes</span>
-              <span className="stat-pill">Calendrier de sessions réel</span>
-              <span className="stat-pill">Inscriptions centralisées</span>
+              <span className="stat-pill">4 domaines de formation</span>
+              <span className="stat-pill">Sessions ouvertes visibles</span>
+              <span className="stat-pill">Demandes d'inscription centralisées</span>
             </div>
           </div>
           <aside className="hero-panel">
-            <h2>Pourquoi les équipes reviennent</h2>
+            <h2>Ce que vous trouverez ici</h2>
             <ul>
-              <li>Planning lisible par formation, par ville et par mode de présence.</li>
-              <li>Contenus rédigés pour expliquer le terrain, pas pour remplir une plaquette.</li>
-              <li>Back-office prêt pour ajuster le catalogue, les textes et le pilotage commercial.</li>
+              <li>Un catalogue rédigé pour les responsables techniques, installateurs et conducteurs de travaux.</li>
+              <li>Des fiches formation qui exposent les conditions d'entrée et le programme sans détour.</li>
+              <li>Un calendrier utilisable immédiatement pour projeter une inscription inter ou intra.</li>
             </ul>
           </aside>
         </div>
@@ -47,7 +47,7 @@ export default async function HomePage() {
           <div className="section-heading">
             <div>
               <span className="eyebrow">Nos formations</span>
-              <h2>Un catalogue clair, orienté résultats et conformité</h2>
+              <h2>Un catalogue pensé pour comparer vite et choisir juste</h2>
             </div>
             <Link href="/formations" className="button button-secondary">
               Tout le catalogue
@@ -71,7 +71,7 @@ export default async function HomePage() {
                 </div>
                 <div className="cta-row">
                   <Link href={`/formations/${formation.slug}`} className="button button-primary">
-                    Voir le détail
+                    Consulter la fiche
                   </Link>
                 </div>
               </article>
@@ -98,22 +98,22 @@ export default async function HomePage() {
       <section className="section">
         <div className="container grid-2">
           <article className="card card-highlight">
-            <span className="eyebrow">Qui sommes-nous</span>
-            <h2>Une équipe formation qui parle chantiers, qualification et rentabilité.</h2>
-            <p>Oxideve construit ses parcours avec un angle simple: rendre les responsables techniques et les installateurs immédiatement opérationnels sur leurs prochains dossiers.</p>
+            <span className="eyebrow">Méthode</span>
+            <h2>Une approche qui tient ensemble réglementation, geste technique et préparation chantier.</h2>
+            <p>Oxideve construit ses formations pour aider les équipes à exécuter correctement, documenter les interventions et préparer les qualifications attendues.</p>
             <div className="cta-row">
               <Link href="/qui-sommes-nous" className="button button-primary">
-                Lire notre approche
+                Découvrir l'équipe
               </Link>
             </div>
           </article>
           <article className="card">
             <span className="eyebrow">Inscription</span>
-            <h2>Un point d'entrée unique pour vos inscriptions inter et intra.</h2>
-            <p>Sélectionnez la formation et la session adaptées, décrivez votre contexte et laissez l'équipe confirmer les modalités de prise en charge.</p>
+            <h2>Un point d'entrée unique pour les demandes inter, intra et les besoins de planification.</h2>
+            <p>Sélectionnez la formation et la session, précisez votre besoin et laissez l'équipe valider les disponibilités, les prérequis et l'organisation.</p>
             <div className="cta-row">
               <Link href="/inscriptions" className="button button-primary">
-                Ouvrir la page d'inscription
+                Aller au formulaire
               </Link>
             </div>
           </article>
@@ -123,9 +123,9 @@ export default async function HomePage() {
       <section className="section">
         <div className="container contact-layout">
           <div className="contact-card">
-            <span className="eyebrow">Pré-inscription rapide</span>
-            <h2>Un besoin urgent ou un arbitrage à faire cette semaine ?</h2>
-            <p>Utilisez ce formulaire pour déclencher un rappel rapide. Pour une inscription complète avec choix de formation et de session, utilisez la page dédiée.</p>
+            <span className="eyebrow">Contact rapide</span>
+            <h2>Une question sur un parcours, une date ou un prérequis ?</h2>
+            <p>Utilisez ce formulaire pour obtenir un retour rapide. Pour rattacher la demande à une session précise, utilisez la page d'inscription.</p>
           </div>
           <div className="contact-card">
             <ContactForm />

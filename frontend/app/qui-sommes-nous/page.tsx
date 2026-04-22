@@ -12,7 +12,7 @@ export default function QuiSommesNousPage() {
         <div className="page-title">
           <span className="eyebrow">Qui sommes-nous</span>
           <h1>Oxideve forme les équipes qui doivent livrer juste, vite et conforme.</h1>
-          <p>Nous concevons des parcours pour les métiers de l'énergie et du BTP avec une obsession simple: relier réglementation, gestes terrain et performance commerciale.</p>
+          <p>Nous concevons des parcours pour les métiers de l'énergie et du BTP avec une ligne claire: relier réglementation, geste terrain et qualité d'exécution.</p>
         </div>
 
         <div className="grid-2">
@@ -21,7 +21,7 @@ export default function QuiSommesNousPage() {
             <ul className="detail-list">
               <li>Des formats courts et directement actionnables sur les prochains chantiers.</li>
               <li>Des contenus rédigés pour les installateurs, conducteurs de travaux et responsables techniques.</li>
-              <li>Un accompagnement qui relie compétences, qualification et argumentaire client.</li>
+              <li>Un accompagnement qui relie compétences, qualification et exigences documentaires.</li>
             </ul>
           </article>
           <article className="card">

@@ -15,15 +15,21 @@ type Draft = {
   shortTitle: string;
   category: string;
   duration: string;
+  durationDetails: string;
   location: string;
   audience: string;
   summary: string;
   description: string;
   benefits: string;
   objectives: string;
+  prerequisites: string;
+  modalities: string;
+  programme: string;
+  certification: string;
   price: string;
-  seoTitle: string;
-  seoDescription: string;
+  priceDetails: string;
+  successRate: string;
+  handicapPolicy: string;
 };
 
 function toDraft(formation?: Formation): Draft {
@@ -34,15 +40,21 @@ function toDraft(formation?: Formation): Draft {
       shortTitle: "",
       category: "",
       duration: "",
+      durationDetails: "",
       location: "",
       audience: "",
       summary: "",
       description: "",
       benefits: "",
       objectives: "",
+      prerequisites: "",
+      modalities: "",
+      programme: "",
+      certification: "",
       price: "",
-      seoTitle: "",
-      seoDescription: "",
+      priceDetails: "",
+      successRate: "",
+      handicapPolicy: "",
     };
   }
 
@@ -52,15 +64,21 @@ function toDraft(formation?: Formation): Draft {
     shortTitle: formation.shortTitle,
     category: formation.category,
     duration: formation.duration,
+    durationDetails: formation.durationDetails,
     location: formation.location,
     audience: formation.audience,
     summary: formation.summary,
     description: formation.description,
     benefits: formation.benefits.join("\n"),
     objectives: formation.objectives.join("\n"),
+    prerequisites: formation.prerequisites.join("\n"),
+    modalities: formation.modalities.join("\n"),
+    programme: formation.programme.join("\n"),
+    certification: formation.certification,
     price: formation.price,
-    seoTitle: formation.seoTitle,
-    seoDescription: formation.seoDescription,
+    priceDetails: formation.priceDetails,
+    successRate: formation.successRate,
+    handicapPolicy: formation.handicapPolicy,
   };
 }
 
@@ -118,15 +136,21 @@ export function AdminConsole({ initialFormations, initialSessions, initialRegist
       shortTitle: draft.shortTitle.trim(),
       category: draft.category.trim(),
       duration: draft.duration.trim(),
+      durationDetails: draft.durationDetails.trim(),
       location: draft.location.trim(),
       audience: draft.audience.trim(),
       summary: draft.summary.trim(),
       description: draft.description.trim(),
       benefits: splitLines(draft.benefits),
       objectives: splitLines(draft.objectives),
+      prerequisites: splitLines(draft.prerequisites),
+      modalities: splitLines(draft.modalities),
+      programme: splitLines(draft.programme),
+      certification: draft.certification.trim(),
       price: draft.price.trim(),
-      seoTitle: draft.seoTitle.trim(),
-      seoDescription: draft.seoDescription.trim(),
+      priceDetails: draft.priceDetails.trim(),
+      successRate: draft.successRate.trim(),
+      handicapPolicy: draft.handicapPolicy.trim(),
     };
 
     const isEditing = Boolean(editingSlug);
@@ -207,67 +231,110 @@ export function AdminConsole({ initialFormations, initialSessions, initialRegist
         </div>
 
         <form className="contact-form" onSubmit={handleSubmit}>
-          <div className="form-grid">
+          <div className="admin-form-section">
+            <h3>Identité de la formation</h3>
+            <div className="form-grid">
+              <label>
+                Slug
+                <input value={draft.slug} onChange={(event) => handleChange("slug", event.target.value)} disabled={Boolean(editingSlug)} required />
+              </label>
+              <label>
+                Nom complet
+                <input value={draft.title} onChange={(event) => handleChange("title", event.target.value)} required />
+              </label>
+              <label>
+                Nom court
+                <input value={draft.shortTitle} onChange={(event) => handleChange("shortTitle", event.target.value)} required />
+              </label>
+              <label>
+                Catégorie
+                <input value={draft.category} onChange={(event) => handleChange("category", event.target.value)} required />
+              </label>
+              <label>
+                Durée affichée
+                <input value={draft.duration} onChange={(event) => handleChange("duration", event.target.value)} required />
+              </label>
+              <label>
+                Lieu
+                <input value={draft.location} onChange={(event) => handleChange("location", event.target.value)} required />
+              </label>
+              <label>
+                Public visé
+                <input value={draft.audience} onChange={(event) => handleChange("audience", event.target.value)} required />
+              </label>
+              <label>
+                Tarif affiché
+                <input value={draft.price} onChange={(event) => handleChange("price", event.target.value)} required />
+              </label>
+            </div>
+          </div>
+
+          <div className="admin-form-section">
+            <h3>Présentation</h3>
             <label>
-              Slug
-              <input value={draft.slug} onChange={(event) => handleChange("slug", event.target.value)} disabled={Boolean(editingSlug)} required />
+              Résumé court
+              <textarea rows={3} value={draft.summary} onChange={(event) => handleChange("summary", event.target.value)} required />
             </label>
             <label>
-              Nom complet
-              <input value={draft.title} onChange={(event) => handleChange("title", event.target.value)} required />
+              Présentation détaillée
+              <textarea rows={5} value={draft.description} onChange={(event) => handleChange("description", event.target.value)} required />
             </label>
             <label>
-              Nom court
-              <input value={draft.shortTitle} onChange={(event) => handleChange("shortTitle", event.target.value)} required />
-            </label>
-            <label>
-              Catégorie
-              <input value={draft.category} onChange={(event) => handleChange("category", event.target.value)} required />
-            </label>
-            <label>
-              Durée
-              <input value={draft.duration} onChange={(event) => handleChange("duration", event.target.value)} required />
-            </label>
-            <label>
-              Lieu
-              <input value={draft.location} onChange={(event) => handleChange("location", event.target.value)} required />
-            </label>
-            <label>
-              Audience
-              <input value={draft.audience} onChange={(event) => handleChange("audience", event.target.value)} required />
-            </label>
-            <label>
-              Tarif
-              <input value={draft.price} onChange={(event) => handleChange("price", event.target.value)} required />
+              Certification ou finalité
+              <textarea rows={3} value={draft.certification} onChange={(event) => handleChange("certification", event.target.value)} required />
             </label>
           </div>
 
-          <label>
-            Résumé court
-            <textarea rows={3} value={draft.summary} onChange={(event) => handleChange("summary", event.target.value)} required />
-          </label>
-          <label>
-            Description
-            <textarea rows={6} value={draft.description} onChange={(event) => handleChange("description", event.target.value)} required />
-          </label>
-          <div className="form-grid">
+          <div className="admin-form-section">
+            <h3>Contenu pédagogique</h3>
+            <div className="form-grid">
+              <label>
+                Points forts, une ligne par item
+                <textarea rows={6} value={draft.benefits} onChange={(event) => handleChange("benefits", event.target.value)} required />
+              </label>
+              <label>
+                Objectifs, une ligne par item
+                <textarea rows={6} value={draft.objectives} onChange={(event) => handleChange("objectives", event.target.value)} required />
+              </label>
+              <label>
+                Prérequis, une ligne par item
+                <textarea rows={6} value={draft.prerequisites} onChange={(event) => handleChange("prerequisites", event.target.value)} required />
+              </label>
+              <label>
+                Modalités, une ligne par item
+                <textarea rows={6} value={draft.modalities} onChange={(event) => handleChange("modalities", event.target.value)} required />
+              </label>
+            </div>
             <label>
-              Bénéfices, une ligne par item
-              <textarea rows={6} value={draft.benefits} onChange={(event) => handleChange("benefits", event.target.value)} required />
-            </label>
-            <label>
-              Objectifs, une ligne par item
-              <textarea rows={6} value={draft.objectives} onChange={(event) => handleChange("objectives", event.target.value)} required />
+              Programme, une ligne par étape ou module
+              <textarea rows={8} value={draft.programme} onChange={(event) => handleChange("programme", event.target.value)} required />
             </label>
           </div>
-          <label>
-            SEO title
-            <input value={draft.seoTitle} onChange={(event) => handleChange("seoTitle", event.target.value)} required />
-          </label>
-          <label>
-            SEO description
-            <textarea rows={3} value={draft.seoDescription} onChange={(event) => handleChange("seoDescription", event.target.value)} required />
-          </label>
+
+          <div className="admin-form-section">
+            <h3>Conditions et informations pratiques</h3>
+            <div className="form-grid">
+              <label>
+                Détails de durée
+                <textarea rows={4} value={draft.durationDetails} onChange={(event) => handleChange("durationDetails", event.target.value)} required />
+              </label>
+              <label>
+                Détails tarifaires
+                <textarea rows={4} value={draft.priceDetails} onChange={(event) => handleChange("priceDetails", event.target.value)} required />
+              </label>
+            </div>
+            <div className="form-grid">
+              <label>
+                Taux de réussite
+                <input value={draft.successRate} onChange={(event) => handleChange("successRate", event.target.value)} required />
+              </label>
+              <label>
+                Accueil du public en situation de handicap
+                <textarea rows={4} value={draft.handicapPolicy} onChange={(event) => handleChange("handicapPolicy", event.target.value)} required />
+              </label>
+            </div>
+          </div>
+
           <button className="button button-primary" type="submit" disabled={saving}>
             {saving ? "Enregistrement..." : editingSlug ? "Mettre à jour" : "Créer la formation"}
           </button>

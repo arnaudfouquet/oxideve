@@ -37,7 +37,7 @@ export default async function InscriptionsPage() {
           </article>
           <article className="contact-card">
             <h2>Sessions disponibles</h2>
-            <p>Voici les créneaux actuellement commercialisables pour accélérer votre choix.</p>
+            <p>Voici les créneaux actuellement ouverts pour vous aider à choisir une date et un format adaptés.</p>
             <TrainingCalendar formations={formations} sessions={sessions.slice(0, 5)} compact />
           </article>
         </div>

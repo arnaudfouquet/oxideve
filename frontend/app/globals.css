@@ -452,6 +452,66 @@ main {
   background: transparent;
 }
 
+.section-grid-2,
+.section-grid-3 {
+  display: grid;
+  gap: 22px;
+}
+
+.section-grid-2 {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  margin-top: 24px;
+}
+
+.section-grid-3 {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  margin: 24px 0;
+}
+
+.training-grid {
+  margin-top: 24px;
+}
+
+.formation-card h2,
+.formation-overview h2,
+.admin-form-section h3 {
+  font-family: var(--font-display), sans-serif;
+}
+
+.formation-facts {
+  margin-top: 24px;
+}
+
+.programme-list {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 18px;
+}
+
+.programme-step {
+  display: inline-grid;
+  place-items: center;
+  width: 52px;
+  height: 52px;
+  border-radius: 18px;
+  margin-bottom: 12px;
+  font-weight: 800;
+  color: var(--color-navy);
+  background: rgba(0, 156, 220, 0.12);
+}
+
+.admin-form-section {
+  display: grid;
+  gap: 16px;
+  padding: 18px;
+  border-radius: 20px;
+  background: rgba(0, 77, 109, 0.04);
+}
+
+.admin-form-section h3 {
+  margin: 0;
+}
+
 .footer-grid {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
@@ -465,6 +525,9 @@ main {
   .calendar-grid,
   .contact-layout,
   .detail-layout,
+  .section-grid-2,
+  .section-grid-3,
+  .programme-list,
   .footer-grid,
   .admin-grid {
     grid-template-columns: 1fr;

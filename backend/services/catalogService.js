@@ -9,16 +9,30 @@ function normalizeFormation(formation) {
     shortTitle: formation.shortTitle,
     category: formation.category,
     duration: formation.duration,
+    durationDetails: formation.durationDetails || "",
     location: formation.location,
     audience: formation.audience,
     summary: formation.summary,
     description: formation.description,
     benefits: Array.isArray(formation.benefits) ? formation.benefits : [],
     objectives: Array.isArray(formation.objectives) ? formation.objectives : [],
+    prerequisites: Array.isArray(formation.prerequisites) ? formation.prerequisites : [],
+    modalities: Array.isArray(formation.modalities) ? formation.modalities : [],
+    programme: Array.isArray(formation.programme) ? formation.programme : [],
+    certification: formation.certification || "",
     price: formation.price,
-    seoTitle: formation.seoTitle,
-    seoDescription: formation.seoDescription,
+    priceDetails: formation.priceDetails || "",
+    successRate: formation.successRate || "",
+    handicapPolicy: formation.handicapPolicy || "",
   };
+}
+
+function buildSeoTitle(payload) {
+  return `${payload.title} | Oxideve`;
+}
+
+function buildSeoDescription(payload) {
+  return payload.summary;
 }
 
 function normalizeSession(session) {
@@ -95,15 +109,23 @@ async function createFormation(payload) {
       shortTitle: payload.shortTitle,
       category: payload.category,
       duration: payload.duration,
+      durationDetails: payload.durationDetails,
       location: payload.location,
       audience: payload.audience,
       summary: payload.summary,
       description: payload.description,
       benefits: payload.benefits,
       objectives: payload.objectives,
+      prerequisites: payload.prerequisites,
+      modalities: payload.modalities,
+      programme: payload.programme,
+      certification: payload.certification,
       price: payload.price,
-      seoTitle: payload.seoTitle,
-      seoDescription: payload.seoDescription,
+      priceDetails: payload.priceDetails,
+      successRate: payload.successRate,
+      handicapPolicy: payload.handicapPolicy,
+      seoTitle: buildSeoTitle(payload),
+      seoDescription: buildSeoDescription(payload),
     },
   });
 
@@ -124,15 +146,23 @@ async function updateFormation(slug, payload) {
       shortTitle: payload.shortTitle,
       category: payload.category,
       duration: payload.duration,
+      durationDetails: payload.durationDetails,
       location: payload.location,
       audience: payload.audience,
       summary: payload.summary,
       description: payload.description,
       benefits: payload.benefits,
       objectives: payload.objectives,
+      prerequisites: payload.prerequisites,
+      modalities: payload.modalities,
+      programme: payload.programme,
+      certification: payload.certification,
       price: payload.price,
-      seoTitle: payload.seoTitle,
-      seoDescription: payload.seoDescription,
+      priceDetails: payload.priceDetails,
+      successRate: payload.successRate,
+      handicapPolicy: payload.handicapPolicy,
+      seoTitle: buildSeoTitle(payload),
+      seoDescription: buildSeoDescription(payload),
     },
   });
 

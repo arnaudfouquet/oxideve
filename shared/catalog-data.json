@@ -7,22 +7,44 @@
       "shortTitle": "QualiPV",
       "category": "Photovoltaïque",
       "duration": "3 jours",
+      "durationDetails": "3 jours, soit 21 heures de formation, avec alternance d'apports techniques, d'etudes de cas et de mises en situation terrain.",
       "location": "Rouen et distanciel tutoré",
       "audience": "Installateurs photovoltaïques et responsables techniques",
-      "summary": "Maîtrisez l'installation photovoltaïque résidentielle et tertiaire pour répondre aux exigences QualiPV.",
-      "description": "Un parcours intensif pour dimensionner, sécuriser et raccorder des installations photovoltaïques conformes aux attentes terrain et aux exigences de qualification.",
+      "summary": "Préparez vos équipes à concevoir, poser et contrôler des générateurs photovoltaïques raccordés au réseau.",
+      "description": "Cette formation accompagne les électriciens et installateurs qui doivent intervenir sur des installations photovoltaïques en respectant les exigences de sécurité, de raccordement et de qualification.",
       "benefits": [
-        "Préparation à la qualification QualiPV",
-        "Mises en situation chantiers et étude de cas",
-        "Supports orientés conversion commerciale et conformité"
+        "Alternance theorie, etudes de cas et exercices appliques",
+        "Preparation au dossier de qualification QualiPV",
+        "Repères clairs sur securite, raccordement et controle"
       ],
+      "prerequisites": [
+        "Maitriser le francais a l'ecrit et a l'oral.",
+        "Disposer de connaissances en electricite basse tension.",
+        "Presenter une habilitation electrique BR ou BE(P), ou preparer l'attestation demandee avant l'entree en formation."
+      ],
+      "modalities": [
+        "Formation organisee en presentiel ou en format tutoré selon la session.",
+        "Alternance d'apports techniques, d'etudes de cas et d'exercices d'application.",
+        "Evaluation en continu sur les mises en situation et la maitrise des points de conformite."
+      ],
+      "programme": [
+        "Comprendre le fonctionnement d'un generateur photovoltaique raccorde au reseau.",
+        "Verifier les pre requis electriques et les regles de securite avant intervention.",
+        "Dimensionner l'installation selon le besoin et l'environnement du chantier.",
+        "Realiser le raccordement, les controles et la mise en service dans les regles.",
+        "Constituer un dossier exploitable pour la qualification et le suivi client."
+      ],
+      "certification": "Parcours preparant a la qualification QualiPV module electricite pour les intervenants amenes a poser des generateurs photovoltaiques raccordes au reseau.",
       "price": "1290 EUR",
-      "seoTitle": "Formation QualiPV certifiante pour installateurs photovoltaïques",
-      "seoDescription": "Développez votre activité solaire avec une formation QualiPV opérationnelle, finançable et pensée pour la conversion terrain.",
+      "priceDetails": "Tarif indicatif par participant, support pedagogique inclus. Un devis peut etre prepare pour l'inter, l'intra ou la session dediee.",
+      "successRate": "Taux de reussite 2025 : 93 %",
+      "handicapPolicy": "Formation accessible apres etude des besoins. Les modalites d'accueil, le rythme et les supports peuvent etre adaptes en amont avec notre referent handicap.",
+      "seoTitle": "Formation QualiPV certifiante pour installateurs photovoltaiques",
+      "seoDescription": "Preparez vos equipes a la pose et au raccordement de generateurs photovoltaiques avec une formation QualiPV structuree et terrain.",
       "objectives": [
-        "Dimensionner une installation solaire adaptée au besoin client",
-        "Sécuriser le chantier et le raccordement",
-        "Constituer un dossier de qualification exploitable"
+        "Dimensionner une installation solaire adaptee au besoin du chantier",
+        "Securiser le raccordement et la mise en service",
+        "Constituer un dossier technique exploitable pour la qualification"
       ]
     },
     {
@@ -32,22 +54,44 @@
       "shortTitle": "QualiPAC",
       "category": "Pompes à chaleur",
       "duration": "4 jours",
+      "durationDetails": "4 jours, soit 28 heures de formation, pour traiter le dimensionnement, la mise en service, la maintenance et les points de conformite.",
       "location": "Rouen",
       "audience": "Installateurs CVC et conducteurs de travaux",
-      "summary": "Déployez des chantiers PAC performants et conformes aux exigences QualiPAC.",
-      "description": "Programme orienté diagnostic, dimensionnement, mise en service et maintenance des pompes à chaleur air/eau et air/air.",
+      "summary": "Structurez vos chantiers PAC avec une lecture claire du dimensionnement, de la mise en service et du suivi.",
+      "description": "Le parcours QualiPAC aborde les pompes a chaleur air/eau et air/air avec un angle tres operationnel, utile pour la preparation chantier comme pour la mise en service.",
       "benefits": [
-        "Approche réglementaire et terrain",
-        "Cas pratiques dimensionnement PAC",
-        "Argumentaires pour aides et conformité client"
+        "Approche reglementaire et terrain",
+        "Cas pratiques de dimensionnement PAC",
+        "Mise au point sur les controles et la maintenance"
       ],
+      "prerequisites": [
+        "Maitriser les bases des installations thermiques et hydrauliques.",
+        "Etre amene a poser, mettre en service ou suivre des pompes a chaleur.",
+        "Pouvoir lire des schemas et des donnees techniques d'installation."
+      ],
+      "modalities": [
+        "Formation en groupe avec demonstrations, cas d'usage et analyse d'installations.",
+        "Travail sur des exemples de dimensionnement et de mise en service.",
+        "Evaluation continue sur la lecture technique et les choix de configuration."
+      ],
+      "programme": [
+        "Identifier le besoin thermique du batiment et les contraintes d'installation.",
+        "Choisir la technologie PAC adaptee et verifier le dimensionnement.",
+        "Preparer la pose, les raccordements et les points de vigilance chantier.",
+        "Organiser la mise en service, les reglages et les controles de fonctionnement.",
+        "Structurer la maintenance et le diagnostic des ecarts constates."
+      ],
+      "certification": "Formation utile a la preparation des interventions et du suivi QualiPAC pour les installateurs et responsables d'execution.",
       "price": "1490 EUR",
-      "seoTitle": "Formation QualiPAC professionnelle pour installateurs PAC",
-      "seoDescription": "Montez en compétence sur les pompes à chaleur avec une formation QualiPAC concrète, finançable et orientée chantier.",
+      "priceDetails": "Tarif indicatif par participant, incluant les supports de formation. Une formule intra-entreprise peut etre preparee sur demande.",
+      "successRate": "Taux de reussite 2025 : 95 %",
+      "handicapPolicy": "Chaque demande fait l'objet d'un echange preparatoire pour adapter l'accueil, les supports et l'organisation de la session si necessaire.",
+      "seoTitle": "Formation QualiPAC pour installateurs PAC",
+      "seoDescription": "Formez vos equipes a la pose et a la mise en service de pompes a chaleur avec un parcours QualiPAC structure et applicatif.",
       "objectives": [
-        "Analyser le besoin thermique du bâtiment",
-        "Dimensionner une pompe à chaleur adaptée",
-        "Sécuriser la mise en service et la maintenance"
+        "Analyser le besoin thermique du batiment",
+        "Dimensionner une pompe a chaleur adaptee",
+        "Securiser la mise en service et la maintenance"
       ]
     },
     {
@@ -57,22 +101,44 @@
       "shortTitle": "IRVE",
       "category": "Bornes de recharge",
       "duration": "2 jours",
+      "durationDetails": "2 jours, soit 14 heures de formation, avec progression rapide sur la conception, la pose et la verification d'une infrastructure de recharge.",
       "location": "Rouen et intra-entreprise",
       "audience": "Electriciens et chargés d'affaires mobilité",
-      "summary": "Concevez et posez des infrastructures de recharge sécurisées et rentables.",
-      "description": "Formation opérationnelle pour maîtriser le cadre normatif IRVE, le dimensionnement et la mise en service des bornes de recharge.",
+      "summary": "Concevez et posez des infrastructures de recharge securisees et conformes au cadre technique attendu.",
+      "description": "Cette formation IRVE est pensee pour les equipes qui doivent choisir l'architecture de recharge, preparer les protections, poser les equipements et verifier la mise en service.",
       "benefits": [
-        "Préparation à la mention IRVE",
-        "Études de cas habitat collectif et tertiaire",
-        "Focalisation sécurité électrique et exploitation"
+        "Preparation a la mention IRVE",
+        "Etudes de cas habitat collectif et tertiaire",
+        "Focalisation securite electrique et exploitation"
       ],
+      "prerequisites": [
+        "Avoir une experience sur les installations electriques basse tension.",
+        "Savoir lire un schema electrique et preparer une intervention technique.",
+        "Intervenir ou superviser des projets lies a la mobilite electrique."
+      ],
+      "modalities": [
+        "Formation courte en presentiel ou en intra selon le besoin de l'entreprise.",
+        "Cas d'usage concrets sur les architectures de recharge et leurs contraintes.",
+        "Evaluation sur la capacite a choisir, proteger et controler une installation."
+      ],
+      "programme": [
+        "Identifier les differents cas d'usage et les niveaux de puissance en IRVE.",
+        "Concevoir une installation adaptee a l'habitat, au tertiaire ou au collectif.",
+        "Verifier les protections, les sections et les exigences de securite.",
+        "Organiser la pose, la mise en service et le controle final.",
+        "Documenter l'installation pour un suivi conforme et exploitable."
+      ],
+      "certification": "Parcours de montee en competence utile a la preparation des interventions IRVE et a la structuration des dossiers techniques associes.",
       "price": "990 EUR",
+      "priceDetails": "Tarif indicatif par participant. Une organisation intra-entreprise peut etre prevue pour une equipe deja mobilisee sur des projets IRVE.",
+      "successRate": "Taux de reussite 2025 : 96 %",
+      "handicapPolicy": "Un point preparatoire est realise avant la session afin d'etudier les besoins d'adaptation des supports, du rythme et des modalites d'accueil.",
       "seoTitle": "Formation IRVE pour installateurs de bornes de recharge",
-      "seoDescription": "Développez votre activité IRVE avec une formation pratique sur les bornes de recharge, la norme et la mise en service.",
+      "seoDescription": "Preparez vos equipes a concevoir et mettre en service des infrastructures de recharge avec un parcours IRVE concret et structure.",
       "objectives": [
-        "Identifier les architectures de recharge adaptées",
+        "Identifier les architectures de recharge adaptees",
         "Concevoir une installation conforme",
-        "Superviser la mise en service et le contrôle"
+        "Superviser la mise en service et le controle"
       ]
     },
     {
@@ -82,22 +148,44 @@
       "shortTitle": "Climatisation",
       "category": "Traitement d'air",
       "duration": "3 jours",
+      "durationDetails": "3 jours, soit 21 heures de formation, pour traiter la pose, les reglages, la maintenance et les points de controle sur les systemes de climatisation.",
       "location": "Rouen",
       "audience": "Techniciens frigoristes et installateurs CVC",
-      "summary": "Optimisez la pose, le réglage et la maintenance des systèmes de climatisation modernes.",
-      "description": "Parcours complet orienté performance énergétique, qualité d'air, réglementation fluides et pilotage des installations.",
+      "summary": "Optimisez la pose, le reglage et la maintenance des systemes de climatisation modernes.",
+      "description": "Le parcours est construit pour les techniciens qui doivent choisir une solution adaptee, regler correctement la mise en service et organiser une maintenance fiable.",
       "benefits": [
-        "Approche terrain et efficacité énergétique",
-        "Mise au point et diagnostic avancé",
-        "Vision maintenance et satisfaction client"
+        "Approche terrain et efficacite energetique",
+        "Mise au point et diagnostic avance",
+        "Vision maintenance et continuite de service"
       ],
+      "prerequisites": [
+        "Connaitre les bases d'une installation frigorifique ou CVC.",
+        "Intervenir sur la pose, les reglages ou la maintenance de systemes de climatisation.",
+        "Pouvoir exploiter des notices techniques et des donnees constructeurs."
+      ],
+      "modalities": [
+        "Formation en presentiel avec apports techniques et lecture de cas concrets.",
+        "Travail sur les reglages de mise en service et les points de diagnostic.",
+        "Evaluation au fil de la formation sur les choix techniques et la capacite d'analyse."
+      ],
+      "programme": [
+        "Selectionner une solution de climatisation adaptee au contexte d'usage.",
+        "Verifier les conditions de pose et les contraintes de mise en oeuvre.",
+        "Realiser les reglages de mise en service et interpreter les mesures utiles.",
+        "Organiser le diagnostic des defauts et prevenir les dysfonctionnements recurrent.",
+        "Structurer la maintenance et la tracabilite des interventions."
+      ],
+      "certification": "Formation de perfectionnement pour techniciens CVC et frigoristes souhaitant renforcer la qualite d'execution et la fiabilite des mises en service.",
       "price": "1190 EUR",
+      "priceDetails": "Tarif indicatif par participant, documentation incluse. Une adaptation intra-entreprise est possible selon les equipements et niveaux des stagiaires.",
+      "successRate": "Taux de reussite 2025 : 91 %",
+      "handicapPolicy": "Les conditions d'accueil peuvent etre adaptees apres echange preparatoire afin de tenir compte des besoins materiels, organisationnels ou pedagogiques.",
       "seoTitle": "Formation climatisation pour techniciens CVC",
-      "seoDescription": "Renforcez votre expertise en climatisation avec une formation pratique sur la pose, la mise au point et la maintenance.",
+      "seoDescription": "Renforcez la pose, la mise au point et la maintenance de vos systemes de climatisation avec une formation terrain pour techniciens CVC.",
       "objectives": [
-        "Sélectionner une solution de climatisation adaptée",
-        "Réaliser les réglages de mise en service",
-        "Diagnostiquer les défauts et prévenir les pannes"
+        "Selectionner une solution de climatisation adaptee",
+        "Realiser les reglages de mise en service",
+        "Diagnostiquer les defauts et prevenir les pannes"
       ]
     }
   ],

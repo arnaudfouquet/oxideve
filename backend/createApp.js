@@ -1,6 +1,7 @@
 const express = require("express");
 const helmet = require("helmet");
 const { apiLimiter, sanitizeInputs } = require("./middleware/security");
+const { adminAuth } = require("./middleware/adminAuth");
 const { requestLogger } = require("./middleware/requestLogger");
 const { createApiRouter } = require("./routes/api");
 const { errorHandler, notFoundHandler } = require("./middleware/errorHandler");
@@ -22,6 +23,8 @@ function createBackendApp({ handle }) {
   app.use(express.urlencoded({ extended: false }));
   app.use(sanitizeInputs);
   app.use("/api", apiLimiter);
+  app.use("/api/admin", adminAuth);
+  app.use("/admin", adminAuth);
 
   app.get("/health", async (_req, res) => {
     res.status(200).json({

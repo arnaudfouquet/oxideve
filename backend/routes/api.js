@@ -26,15 +26,21 @@ const formationSchema = z.object({
   shortTitle: z.string().min(2).max(80),
   category: z.string().min(2).max(100),
   duration: z.string().min(2).max(60),
+  durationDetails: z.string().min(10).max(1000),
   location: z.string().min(2).max(160),
   audience: z.string().min(2).max(240),
   summary: z.string().min(10).max(500),
   description: z.string().min(20).max(4000),
   benefits: z.array(z.string().min(2).max(200)).min(1).max(10),
   objectives: z.array(z.string().min(2).max(200)).min(1).max(10),
+  prerequisites: z.array(z.string().min(2).max(240)).min(1).max(12),
+  modalities: z.array(z.string().min(2).max(240)).min(1).max(12),
+  programme: z.array(z.string().min(2).max(500)).min(1).max(20),
+  certification: z.string().min(10).max(1000),
   price: z.string().min(2).max(60),
-  seoTitle: z.string().min(10).max(160),
-  seoDescription: z.string().min(10).max(320),
+  priceDetails: z.string().min(10).max(1000),
+  successRate: z.string().min(2).max(120),
+  handicapPolicy: z.string().min(10).max(1200),
 });
 
 function asyncHandler(handler) {

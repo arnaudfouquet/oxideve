@@ -6,7 +6,7 @@ export const dynamic = "force-dynamic";
 
 export const metadata: Metadata = {
   title: "Admin",
-  description: "Vue simple back-office pour suivre formations, sessions et inscriptions.",
+  description: "Administration du catalogue de formations et des inscriptions.",
 };
 
 export default async function AdminPage() {
@@ -19,7 +19,7 @@ export default async function AdminPage() {
         <div className="page-title">
           <span className="eyebrow">Back-office</span>
           <h1>Administration du catalogue et des inscriptions</h1>
-          <p>Modifiez les textes clés des formations, créez de nouvelles offres et gardez un oeil sur les inscriptions récentes depuis une seule interface.</p>
+          <p>Accès protégé pour créer une formation, mettre à jour les contenus métier et suivre les inscriptions récentes.</p>
         </div>
 
         <div className="admin-grid">
@@ -33,7 +33,7 @@ export default async function AdminPage() {
           </section>
           <section className="admin-shell">
             <h2>Actions prioritaires</h2>
-            <p>Le back-office permet maintenant de créer une formation et d'ajuster les textes publiés. Les sessions et les inscriptions restent visibles pour arbitrer l'activité.</p>
+            <p>Utilisez cet espace pour mettre à jour les fiches formation, compléter les sections pédagogiques et contrôler les demandes entrantes.</p>
           </section>
         </div>
 

@@ -5,15 +5,21 @@ export type Formation = {
   shortTitle: string;
   category: string;
   duration: string;
+  durationDetails: string;
   location: string;
   audience: string;
   summary: string;
   description: string;
   benefits: string[];
   objectives: string[];
+  prerequisites: string[];
+  modalities: string[];
+  programme: string[];
+  certification: string;
   price: string;
-  seoTitle: string;
-  seoDescription: string;
+  priceDetails: string;
+  successRate: string;
+  handicapPolicy: string;
 };
 
 export type Session = {
