@@ -3,7 +3,7 @@ import { TrainingCalendar } from "@/components/TrainingCalendar";
 import { ContactForm } from "@/components/ContactForm";
 import { getFormations, getSessions, siteDescription } from "@/lib/content";
 
-export const revalidate = 3600;
+export const dynamic = "force-dynamic";
 
 export default async function HomePage() {
   const formations = await getFormations();

@@ -3,7 +3,7 @@ import Link from "next/link";
 import { TrainingCalendar } from "@/components/TrainingCalendar";
 import { getFormations, getSessions } from "@/lib/content";
 
-export const revalidate = 3600;
+export const dynamic = "force-dynamic";
 
 export const metadata: Metadata = {
   title: "Calendrier des sessions",

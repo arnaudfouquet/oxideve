@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { AdminConsole } from "@/components/AdminConsole";
 import { getFormations, getRegistrations, getSessions } from "@/lib/content";
 
-export const revalidate = 3600;
+export const dynamic = "force-dynamic";
 
 export const metadata: Metadata = {
   title: "Admin",

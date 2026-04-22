@@ -3,16 +3,11 @@ import { notFound } from "next/navigation";
 import { ContactForm } from "@/components/ContactForm";
 import { formatDateRange, getFormationBySlug, getFormations, getSessionsForFormation, getSiteUrl } from "@/lib/content";
 
-export const revalidate = 3600;
+export const dynamic = "force-dynamic";
 
 type Props = {
   params: Promise<{ slug: string }>;
 };
-
-export async function generateStaticParams() {
-  const formations = await getFormations();
-  return formations.map((formation) => ({ slug: formation.slug }));
-}
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;

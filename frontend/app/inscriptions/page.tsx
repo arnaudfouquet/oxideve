@@ -3,6 +3,8 @@ import { ContactForm } from "@/components/ContactForm";
 import { TrainingCalendar } from "@/components/TrainingCalendar";
 import { getFormations, getSessions } from "@/lib/content";
 
+export const dynamic = "force-dynamic";
+
 export const metadata: Metadata = {
   title: "Inscrivez-vous",
   description: "Sélectionnez une formation et une session Oxideve, puis envoyez votre demande d'inscription globale.",
