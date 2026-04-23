@@ -399,6 +399,26 @@ main {
   color: var(--color-white);
 }
 
+.landing-hero-kicker,
+.section-kicker {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 34px;
+  padding: 0 16px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.14);
+  color: var(--color-white);
+  font-weight: 600;
+  letter-spacing: 0.02em;
+}
+
+.section-kicker {
+  background: rgba(0, 156, 220, 0.12);
+  color: var(--color-blue);
+  margin-bottom: 12px;
+}
+
 .landing-hero-play {
   display: inline-grid;
   place-items: center;
@@ -798,6 +818,34 @@ main {
   background: var(--color-navy);
   color: var(--color-white);
   font-weight: 700;
+}
+
+.quiz-band {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 28px;
+  margin-top: 48px;
+  padding: 32px;
+  border-radius: 24px;
+  background: linear-gradient(135deg, rgba(0, 77, 109, 0.08), rgba(0, 156, 220, 0.12));
+  align-items: center;
+}
+
+.quiz-band-copy h2 {
+  margin: 0 0 12px;
+  color: var(--color-blue);
+  font-family: var(--font-display), sans-serif;
+  font-size: clamp(1.8rem, 3vw, 2.5rem);
+}
+
+.quiz-band-copy p {
+  margin: 0;
+  color: var(--color-navy);
+  line-height: 1.7;
+}
+
+.quiz-band-copy p + p {
+  margin-top: 10px;
 }
 
 .rge-highlight-card {
@@ -1322,6 +1370,7 @@ main {
    .identity-panel,
     .funding-card,
    .day-type-card,
+  .quiz-band,
    .about-intro-grid,
    .rge-highlight-card {
     grid-template-columns: 1fr;

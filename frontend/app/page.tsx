@@ -9,8 +9,8 @@ const homeCategories = [
   { title: "Formations photovoltaïques", href: "/formations?category=Photovolta%C3%AFque" },
   { title: "Formations pompe à chaleur", href: "/formations?category=Pompes%20%C3%A0%20chaleur" },
   { title: "Formations bornes de recharge", href: "/formations?category=Bornes%20de%20recharge" },
-  { title: "Formations sécurité au travail", href: "/formations" },
-  { title: "Formations Excel", href: "/formations" },
+  { title: "Formations sécurité au travail", href: "/formations?category=S%C3%A9curit%C3%A9%20au%20travail" },
+  { title: "Formations Excel", href: "/formations?category=Bureautique" },
   { title: "Découvrir toutes nos formations", href: "/formations", accent: true },
 ];
 
@@ -37,6 +37,7 @@ export default async function HomePage() {
     <>
       <section className="landing-hero" style={{ backgroundImage: `linear-gradient(rgba(0, 77, 109, 0.72), rgba(0, 77, 109, 0.72)), url(${heroImage})` }}>
         <Container className="landing-hero-inner">
+          <span className="landing-hero-kicker">Formation bâtiment</span>
           <div className="landing-hero-play" aria-hidden="true">▶</div>
           <h1>Centre de formation professionnelle</h1>
           <ButtonLink href="/formations" variant="primary">Nos formations</ButtonLink>
@@ -46,7 +47,8 @@ export default async function HomePage() {
       <Section className="landing-section landing-categories">
         <Container>
           <div className="landing-heading center">
-            <h2>Formation aux énergies renouvelables avec Oxideve</h2>
+            <span className="section-kicker">Formation bâtiment</span>
+            <h2>Votre centre de formation professionnelle avec Oxideve</h2>
           </div>
           <div className="landing-category-grid">
             {homeCategories.map((item) => (
@@ -100,7 +102,8 @@ export default async function HomePage() {
           </div>
 
           <div className="landing-heading center stats-heading">
-            <h2>Centre de formation professionnelle - Nos chiffres clés 2024</h2>
+            <span className="section-kicker">Formation dans le bâtiment</span>
+            <h2>Nos chiffres clés 2024</h2>
           </div>
           <div className="landing-stats">
             <article>
@@ -130,7 +133,7 @@ export default async function HomePage() {
       <Section className="landing-section landing-sessions-block">
         <Container>
           <div className="landing-heading">
-            <h2>Nos prochaines sessions de formation dans les énergies renouvelables</h2>
+            <h2>Nos prochaines sessions de formation BTP</h2>
             <p>Inscrivez-vous à nos formations rapides et techniques pour les professionnels du bâtiment.</p>
           </div>
 
@@ -213,7 +216,7 @@ export default async function HomePage() {
             <span>▶</span>
           </div>
           <div className="landing-center-cta">
-            <a className="review-button" href="https://oxideve.com" rel="noreferrer" target="_blank">Donnez votre avis G</a>
+            <a className="review-button" href="https://oxideve.com" rel="noreferrer" target="_blank">Donnez votre avis</a>
           </div>
 
           <div className="rge-highlight-card">
@@ -232,7 +235,7 @@ export default async function HomePage() {
 
           <div className="day-type-card">
             <div className="day-type-copy">
-              <h2>Votre journée type avec les formateurs Oxideve</h2>
+              <h2>Votre journée type chez Oxideve</h2>
               <p>Chaque programme est structuré pour combiner théorie essentielle et pratique sur nos plateaux techniques.</p>
               <p>Nos formations énergies renouvelables sont conçues pour enrichir vos compétences et vous préparer aux défis actuels du secteur du bâtiment. Que ce soit en photovoltaïque, pompes à chaleur, sécurité, bureautique ou véhicules électriques, nos parcours répondent à vos besoins.</p>
               <p>Explorez le déroulé de chaque formation et trouvez celle qui correspond le mieux à vos ambitions. Faites le premier pas vers une qualification reconnue et un apprentissage de qualité.</p>
@@ -254,6 +257,15 @@ export default async function HomePage() {
               </div>
               <ButtonLink href="/inscriptions" variant="secondary">Je me projette</ButtonLink>
             </div>
+          </div>
+
+          <div className="quiz-band">
+            <div className="quiz-band-copy">
+              <h2>Quizz rapide pour orienter votre parcours de formation</h2>
+              <p>Avant de vous lancer dans l&apos;une de nos formations professionnelles, découvrez votre niveau actuel avec notre quizz d&apos;auto-évaluation.</p>
+              <p>Cet outil vous permet d&apos;identifier vos points forts et les domaines où une formation peut vous aider à progresser.</p>
+            </div>
+            <ButtonLink href="/contact" variant="primary">J&apos;évalue mes compétences</ButtonLink>
           </div>
         </Container>
       </Section>

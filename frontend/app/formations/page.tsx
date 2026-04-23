@@ -7,7 +7,7 @@ export const dynamic = "force-dynamic";
 
 export const metadata: Metadata = {
   title: "Catalogue des formations",
-  description: "Découvrez les formations Oxideve en photovoltaïque, pompes à chaleur, IRVE et climatisation.",
+  description: "Découvrez les formations Oxideve en photovoltaïque, pompe à chaleur, IRVE, sécurité au travail et bureautique.",
 };
 
 type Props = {
@@ -39,8 +39,8 @@ export default async function FormationsPage({ searchParams }: Props) {
         <Title
           as="h1"
           eyebrow="Catalogue"
-          title="Toutes les formations utilisent maintenant la meme structure de lecture."
-          description="Filtrez par famille ou par besoin terrain, puis ouvrez chaque fiche detail pour retrouver la meme organisation : objectifs, programme, sessions, informations pratiques et CTA d'inscription."
+          title="Découvrez nos formations bâtiment"
+          description="Filtrez par famille de métier ou par besoin, puis ouvrez chaque fiche pour retrouver le programme, les objectifs, les sessions disponibles et les informations pratiques."
         />
 
         <form className="catalog-filter-bar" method="get">
