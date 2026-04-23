@@ -42,29 +42,42 @@ function getEditorialService(): EditorialServiceModule {
   return require("../../backend/services/editorialService.js") as EditorialServiceModule;
 }
 
+function mergeByKey<T>(primary: T[], fallback: T[], getKey: (item: T) => string) {
+  const merged = new Map<string, T>();
+
+  for (const item of fallback) {
+    merged.set(getKey(item), item);
+  }
+
+  for (const item of primary) {
+    merged.set(getKey(item), item);
+  }
+
+  return [...merged.values()];
+}
+
 export async function getFormations(): Promise<Formation[]> {
   try {
     const service = getCatalogService();
-    return await service.listFormations();
+    return mergeByKey(await service.listFormations(), catalog.formations, (formation) => formation.slug).sort(
+      (left, right) => left.title.localeCompare(right.title, "fr"),
+    );
   } catch {
     return catalog.formations;
   }
 }
 
 export async function getFormationBySlug(slug: string): Promise<Formation | undefined> {
-  try {
-    const service = getCatalogService();
-    const formation = await service.getFormationBySlug(slug);
-    return formation ?? undefined;
-  } catch {
-    return catalog.formations.find((formation) => formation.slug === slug);
-  }
+  const formations = await getFormations();
+  return formations.find((formation) => formation.slug === slug);
 }
 
 export async function getSessions(): Promise<Session[]> {
   try {
     const service = getCatalogService();
-    return await service.listSessions();
+    return mergeByKey(await service.listSessions(), catalog.sessions, (session) => session.id).sort(
+      (left, right) => left.startDate.localeCompare(right.startDate),
+    );
   } catch {
     return catalog.sessions;
   }
