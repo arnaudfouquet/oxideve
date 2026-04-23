@@ -34,6 +34,7 @@ export type Session = {
 
 export type Registration = {
   id: string;
+  companyId?: string | null;
   company: string;
   contactName: string;
   email: string;
@@ -43,6 +44,22 @@ export type Registration = {
   message?: string | null;
   createdAt: string;
   source?: string;
+};
+
+export type Company = {
+  id: string;
+  name: string;
+  contactName: string;
+  email: string;
+  phone: string;
+  status: string;
+  source: string;
+  priority: string;
+  notes: string;
+  nextFollowUpAt?: string;
+  lastContactAt?: string;
+  createdAt: string;
+  updatedAt: string;
 };
 
 export type Article = {

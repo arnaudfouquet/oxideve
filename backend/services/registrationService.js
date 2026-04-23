@@ -1,11 +1,13 @@
 const { randomUUID } = require("crypto");
 const { getPrismaClient } = require("./prismaClient");
+const { findOrCreateCompanyFromRegistration } = require("./companyService");
 
 const inMemoryRegistrations = [];
 
 function normalizeRegistration(registration) {
   return {
     id: registration.id,
+    companyId: registration.companyId,
     company: registration.company,
     contactName: registration.contactName,
     email: registration.email,
@@ -26,8 +28,10 @@ async function createRegistration(payload) {
   const now = new Date().toISOString();
 
   if (prisma) {
+    const company = await findOrCreateCompanyFromRegistration(payload);
     const created = await prisma.inscription.create({
       data: {
+        companyId: company.id,
         company: payload.company,
         contactName: payload.contactName,
         email: payload.email,

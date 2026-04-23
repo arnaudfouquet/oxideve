@@ -1,6 +1,6 @@
 import "server-only";
 import catalogData from "../../shared/catalog-data.json";
-import type { Article, CatalogData, Formation, Registration, Session } from "../../shared/types";
+import type { Article, CatalogData, Company, Formation, Registration, Session } from "../../shared/types";
 import { blogArticles } from "./editorial";
 
 const catalog = catalogData as CatalogData;
@@ -13,6 +13,10 @@ type CatalogServiceModule = {
 
 type RegistrationServiceModule = {
   listRegistrations: () => Promise<Registration[]>;
+};
+
+type CompanyServiceModule = {
+  listCompanies: () => Promise<Company[]>;
 };
 
 type EditorialServiceModule = {
@@ -36,6 +40,10 @@ function getCatalogService(): CatalogServiceModule {
 
 function getRegistrationService(): RegistrationServiceModule {
   return require("../../backend/services/registrationService.js") as RegistrationServiceModule;
+}
+
+function getCompanyService(): CompanyServiceModule {
+  return require("../../backend/services/companyService.js") as CompanyServiceModule;
 }
 
 function getEditorialService(): EditorialServiceModule {
@@ -92,6 +100,15 @@ export async function getRegistrations(): Promise<Registration[]> {
   try {
     const service = getRegistrationService();
     return await service.listRegistrations();
+  } catch {
+    return [];
+  }
+}
+
+export async function getCompanies(): Promise<Company[]> {
+  try {
+    const service = getCompanyService();
+    return await service.listCompanies();
   } catch {
     return [];
   }

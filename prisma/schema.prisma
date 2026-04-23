@@ -52,6 +52,7 @@ model Session {
 
 model Inscription {
   id            String      @id @default(cuid())
+  companyId     String?
   company       String
   contactName   String
   email         String
@@ -60,6 +61,7 @@ model Inscription {
   sessionId     String
   message       String?     @db.Text
   createdAt     DateTime    @default(now())
+  companyRef    Company?    @relation(fields: [companyId], references: [id], onDelete: SetNull)
   session       Session     @relation(fields: [sessionId], references: [id], onDelete: Cascade)
   emailLogs     EmailLog[]
 }
@@ -85,4 +87,23 @@ model Article {
   featuredFormationSlug String?
   createdAt            DateTime  @default(now())
   updatedAt            DateTime  @updatedAt
+}
+
+model Company {
+  id                 String        @id @default(cuid())
+  name               String
+  contactName        String
+  email              String
+  phone              String
+  status             String        @default("Prospect")
+  source             String        @default("Inbound")
+  priority           String        @default("Normale")
+  notes              String?       @db.Text
+  nextFollowUpAt     DateTime?
+  lastContactAt      DateTime?
+  createdAt          DateTime      @default(now())
+  updatedAt          DateTime      @updatedAt
+  registrations      Inscription[]
+
+  @@unique([name, email])
 }

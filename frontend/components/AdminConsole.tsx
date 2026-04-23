@@ -1,10 +1,11 @@
 "use client";
 
 import { useMemo, useState } from "react";
-import type { Article, Formation, Registration, Session } from "../../shared/types";
+import type { Article, Company, Formation, Registration, Session } from "../../shared/types";
 
 type Props = {
   initialArticles: Article[];
+  initialCompanies: Company[];
   initialFormations: Formation[];
   initialSessions: Session[];
   initialRegistrations: Registration[];
@@ -56,6 +57,20 @@ type ArticleDraft = {
   featuredFormationSlug: string;
 };
 
+type CompanyDraft = {
+  id: string;
+  name: string;
+  contactName: string;
+  email: string;
+  phone: string;
+  status: string;
+  source: string;
+  priority: string;
+  nextFollowUpAt: string;
+  lastContactAt: string;
+  notes: string;
+};
+
 type RegistrationDetail = {
   registration: Registration;
   formation?: Formation;
@@ -63,6 +78,7 @@ type RegistrationDetail = {
 };
 
 type CompanySummary = {
+  id: string;
   key: string;
   company: string;
   contactName: string;
@@ -75,7 +91,11 @@ type CompanySummary = {
   lastContact: string;
   nextSessionDate?: string;
   nextSessionLabel: string;
-  status: "Prospect" | "Client";
+  nextFollowUpLabel: string;
+  status: string;
+  source: string;
+  priority: string;
+  notes: string;
 };
 
 function toDraft(formation?: Formation): Draft {
@@ -153,6 +173,22 @@ function toArticleDraft(article?: Article): ArticleDraft {
   };
 }
 
+function toCompanyDraft(company?: Company): CompanyDraft {
+  return {
+    id: company?.id || "",
+    name: company?.name || "",
+    contactName: company?.contactName || "",
+    email: company?.email || "",
+    phone: company?.phone || "",
+    status: company?.status || "Prospect",
+    source: company?.source || "Inbound",
+    priority: company?.priority || "Normale",
+    nextFollowUpAt: company?.nextFollowUpAt?.slice(0, 10) || "",
+    lastContactAt: company?.lastContactAt?.slice(0, 10) || "",
+    notes: company?.notes || "",
+  };
+}
+
 function splitLines(value: string) {
   return value
     .split(/\r?\n/)
@@ -194,6 +230,14 @@ function compareDate(left?: string, right?: string) {
   return (left || "9999-12-31").localeCompare(right || "9999-12-31");
 }
 
+function compareDateDesc(left?: string, right?: string) {
+  return (right || "").localeCompare(left || "");
+}
+
+function sortCompanies(list: Company[]) {
+  return [...list].sort((left, right) => compareDateDesc(left.lastContactAt || left.updatedAt, right.lastContactAt || right.updatedAt));
+}
+
 function isUpcoming(session?: Session) {
   if (!session) {
     return false;
@@ -219,17 +263,20 @@ function getSessionState(session: Session) {
   return "Passée";
 }
 
-export function AdminConsole({ initialArticles, initialFormations, initialSessions, initialRegistrations }: Props) {
+export function AdminConsole({ initialArticles, initialCompanies, initialFormations, initialSessions, initialRegistrations }: Props) {
   const [panel, setPanel] = useState<Panel>("dashboard");
   const [articles, setArticles] = useState(initialArticles);
+  const [companies, setCompanies] = useState(sortCompanies(initialCompanies));
   const [formations, setFormations] = useState(initialFormations);
   const [sessions, setSessions] = useState(initialSessions);
   const [draft, setDraft] = useState<Draft>(toDraft(initialFormations[0]));
   const [sessionDraft, setSessionDraft] = useState<SessionDraft>(toSessionDraft(initialSessions[0]));
   const [articleDraft, setArticleDraft] = useState<ArticleDraft>(toArticleDraft(initialArticles[0]));
+  const [companyDraft, setCompanyDraft] = useState<CompanyDraft>(toCompanyDraft(initialCompanies[0]));
   const [editingSlug, setEditingSlug] = useState(initialFormations[0]?.slug || "");
   const [editingSessionId, setEditingSessionId] = useState(initialSessions[0]?.id || "");
   const [editingArticleSlug, setEditingArticleSlug] = useState(initialArticles[0]?.slug || "");
+  const [editingCompanyId, setEditingCompanyId] = useState(initialCompanies[0]?.id || "");
   const [status, setStatus] = useState<string>("");
   const [statusTone, setStatusTone] = useState<"success" | "error">("success");
   const [saving, setSaving] = useState(false);
@@ -276,9 +323,32 @@ export function AdminConsole({ initialArticles, initialFormations, initialSessio
   const companySummaries = useMemo<CompanySummary[]>(() => {
     const companyMap = new Map<string, CompanySummary>();
 
+    for (const company of companies) {
+      companyMap.set(company.id, {
+        id: company.id,
+        key: company.id,
+        company: company.name,
+        contactName: company.contactName,
+        email: company.email,
+        phone: company.phone,
+        registrations: 0,
+        upcomingRegistrations: 0,
+        completedRegistrations: 0,
+        formations: [],
+        lastContact: company.lastContactAt || company.updatedAt,
+        nextSessionDate: undefined,
+        nextSessionLabel: "Aucune session future",
+        nextFollowUpLabel: company.nextFollowUpAt ? formatDateLabel(company.nextFollowUpAt) : "Non planifiée",
+        status: company.status,
+        source: company.source,
+        priority: company.priority,
+        notes: company.notes,
+      });
+    }
+
     for (const detail of registrationDetails) {
       const { registration, formation, session } = detail;
-      const key = `${registration.company.toLowerCase()}::${registration.email.toLowerCase()}`;
+      const key = registration.companyId || `${registration.company.toLowerCase()}::${registration.email.toLowerCase()}`;
       const current = companyMap.get(key);
       const upcoming = isUpcoming(session);
       const nextSessionDate = upcoming ? session?.startDate : undefined;
@@ -286,6 +356,7 @@ export function AdminConsole({ initialArticles, initialFormations, initialSessio
 
       if (!current) {
         companyMap.set(key, {
+          id: registration.companyId || key,
           key,
           company: registration.company,
           contactName: registration.contactName,
@@ -298,7 +369,11 @@ export function AdminConsole({ initialArticles, initialFormations, initialSessio
           lastContact: registration.createdAt,
           nextSessionDate,
           nextSessionLabel: nextSessionDate ? formatDateLabel(nextSessionDate) : "Aucune session future",
+          nextFollowUpLabel: "Non planifiée",
           status: upcoming ? "Prospect" : "Client",
+          source: registration.source || "Inbound",
+          priority: "Normale",
+          notes: "",
         });
         continue;
       }
@@ -314,13 +389,12 @@ export function AdminConsole({ initialArticles, initialFormations, initialSessio
         current.nextSessionLabel = formatDateLabel(nextSessionDate);
       }
 
-      current.status = current.completedRegistrations > 0 ? "Client" : "Prospect";
     }
 
-    return [...companyMap.values()].sort((left, right) => right.lastContact.localeCompare(left.lastContact));
-  }, [registrationDetails]);
+    return [...companyMap.values()].sort((left, right) => compareDateDesc(left.lastContact, right.lastContact));
+  }, [companies, registrationDetails]);
 
-  const prospects = useMemo(() => companySummaries.filter((company) => company.status === "Prospect"), [companySummaries]);
+  const prospects = useMemo(() => companySummaries.filter((company) => ["Prospect", "Qualifié"].includes(company.status)), [companySummaries]);
   const clients = useMemo(() => companySummaries.filter((company) => company.status === "Client"), [companySummaries]);
 
   const categorySnapshots = useMemo(() => {
@@ -364,6 +438,13 @@ export function AdminConsole({ initialArticles, initialFormations, initialSessio
     setStatus("");
   }
 
+  function selectCompany(id: string) {
+    const company = companies.find((item) => item.id === id);
+    setEditingCompanyId(id);
+    setCompanyDraft(toCompanyDraft(company));
+    setStatus("");
+  }
+
   function handleChange(field: keyof Draft, value: string) {
     setDraft((current) => ({ ...current, [field]: value }));
   }
@@ -374,6 +455,10 @@ export function AdminConsole({ initialArticles, initialFormations, initialSessio
 
   function handleArticleChange(field: keyof ArticleDraft, value: string) {
     setArticleDraft((current) => ({ ...current, [field]: value }));
+  }
+
+  function handleCompanyChange(field: keyof CompanyDraft, value: string) {
+    setCompanyDraft((current) => ({ ...current, [field]: value }));
   }
 
   async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
@@ -575,6 +660,51 @@ export function AdminConsole({ initialArticles, initialFormations, initialSessio
     setStatus(result?.message || "Article supprimé.");
   }
 
+  async function handleCompanySubmit(event: React.FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    setSaving(true);
+    setStatus("");
+
+    const payload = {
+      name: companyDraft.name.trim(),
+      contactName: companyDraft.contactName.trim(),
+      email: companyDraft.email.trim(),
+      phone: companyDraft.phone.trim(),
+      status: companyDraft.status.trim(),
+      source: companyDraft.source.trim(),
+      priority: companyDraft.priority.trim(),
+      notes: companyDraft.notes.trim(),
+      nextFollowUpAt: companyDraft.nextFollowUpAt,
+      lastContactAt: companyDraft.lastContactAt,
+    };
+
+    const isEditing = Boolean(editingCompanyId);
+    const response = await fetch(isEditing ? `/api/admin/companies/${editingCompanyId}` : "/api/admin/companies", {
+      method: isEditing ? "PATCH" : "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(payload),
+    });
+
+    const result = (await response.json().catch(() => null)) as { data?: Company; error?: string; message?: string } | null;
+
+    if (!response.ok || !result?.data) {
+      setSaving(false);
+      setStatusTone("error");
+      setStatus(result?.error || "La fiche entreprise n'a pas pu être enregistrée.");
+      return;
+    }
+
+    const savedCompany = result.data;
+    setCompanies((current) => sortCompanies([...current.filter((company) => company.id !== savedCompany.id), savedCompany]));
+    setEditingCompanyId(savedCompany.id);
+    setCompanyDraft(toCompanyDraft(savedCompany));
+    setSaving(false);
+    setStatusTone("success");
+    setStatus(result.message || "Fiche entreprise enregistrée.");
+  }
+
   return (
     <div className="cms-shell cms-shell-enhanced">
       <aside className="cms-sidebar cms-sidebar-enhanced">
@@ -598,7 +728,7 @@ export function AdminConsole({ initialArticles, initialFormations, initialSessio
         </button>
         <button className={`cms-nav-item${panel === "contacts" ? " active" : ""}`} onClick={() => setPanel("contacts")} type="button">
           <strong>Contacts & CRM</strong>
-          <span>{companySummaries.length} entreprises</span>
+          <span>{companies.length} entreprises</span>
         </button>
         <button className={`cms-nav-item${panel === "blog" ? " active" : ""}`} onClick={() => setPanel("blog")} type="button">
           <strong>Editorial</strong>
@@ -683,7 +813,7 @@ export function AdminConsole({ initialArticles, initialFormations, initialSessio
                   <div>
                     <span className="eyebrow">CRM</span>
                     <h2>Prospects et clients</h2>
-                    <p>Le statut est déduit des inscriptions et des dates de session.</p>
+                    <p>Fiches entreprises persistées, relances à planifier et suivi du portefeuille commercial.</p>
                   </div>
                 </div>
 
@@ -697,21 +827,24 @@ export function AdminConsole({ initialArticles, initialFormations, initialSessio
                     <span>Clients</span>
                   </div>
                   <div>
-                    <strong>{companySummaries.length}</strong>
+                    <strong>{companies.length}</strong>
                     <span>Entreprises</span>
                   </div>
                 </div>
 
                 <div className="admin-contact-stack">
                   {companySummaries.slice(0, 5).map((company) => (
-                    <button className="admin-contact-card" key={company.key} onClick={() => setPanel("contacts")} type="button">
+                    <button className="admin-contact-card" key={company.key} onClick={() => {
+                      setPanel("contacts");
+                      selectCompany(company.id);
+                    }} type="button">
                       <div>
                         <strong>{company.company}</strong>
                         <span>{company.contactName}</span>
                       </div>
                       <div className="admin-contact-meta">
                         <span className={`admin-status-pill admin-status-${company.status === "Client" ? "client" : "prospect"}`}>{company.status}</span>
-                        <span>{company.nextSessionLabel}</span>
+                        <span>{company.nextFollowUpLabel}</span>
                       </div>
                     </button>
                   ))}
@@ -1052,20 +1185,25 @@ export function AdminConsole({ initialArticles, initialFormations, initialSessio
                 <div>
                   <span className="eyebrow">CRM</span>
                   <h2>Entreprises, clients et prospects</h2>
-                  <p>Vue consolidée à partir des inscriptions déjà reçues et de leurs sessions associées.</p>
+                  <p>Fiches entreprises persistées, pilotage commercial et historique des demandes reliés au catalogue.</p>
                 </div>
+                <button className="ui-button ui-button-secondary" onClick={() => {
+                  setEditingCompanyId("");
+                  setCompanyDraft(toCompanyDraft());
+                  setStatus("");
+                }} type="button">Nouvelle fiche</button>
               </div>
 
               <div className="admin-metric-grid admin-metric-grid-compact">
                 <article className="admin-metric-card">
                   <span>Entreprises</span>
-                  <strong>{companySummaries.length}</strong>
+                  <strong>{companies.length}</strong>
                   <small>suivies</small>
                 </article>
                 <article className="admin-metric-card">
                   <span>Prospects</span>
                   <strong>{prospects.length}</strong>
-                  <small>avec session à venir</small>
+                  <small>à activer ou qualifier</small>
                 </article>
                 <article className="admin-metric-card">
                   <span>Clients</span>
@@ -1080,7 +1218,7 @@ export function AdminConsole({ initialArticles, initialFormations, initialSessio
               </div>
             </section>
 
-            <div className="admin-grid admin-grid-wide">
+            <div className="cms-panel-grid cms-panel-grid-wide">
               <section className="admin-shell">
                 <div className="section-heading section-heading-tight">
                   <div>
@@ -1088,50 +1226,139 @@ export function AdminConsole({ initialArticles, initialFormations, initialSessio
                     <h2>Entreprises suivies</h2>
                   </div>
                 </div>
-                <div className="data-table admin-table-shell admin-table-shell-solid">
-                  <table>
-                    <thead>
-                      <tr>
-                        <th>Entreprise</th>
-                        <th>Contact</th>
-                        <th>Statut</th>
-                        <th>Parcours</th>
-                        <th>Prochaine date</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {companySummaries.map((company) => (
-                        <tr key={company.key}>
-                          <td>
-                            <strong>{company.company}</strong>
-                            <br />
-                            {company.registrations} demande(s)
-                          </td>
-                          <td>
-                            {company.contactName}
-                            <br />
-                            {company.email}
-                          </td>
-                          <td>
-                            <span className={`admin-status-pill admin-status-${company.status === "Client" ? "client" : "prospect"}`}>{company.status}</span>
-                          </td>
-                          <td>{company.formations.join(", ")}</td>
-                          <td>{company.nextSessionLabel}</td>
-                        </tr>
-                      ))}
-                    </tbody>
-                  </table>
+                <div className="admin-list admin-list-dense">
+                  {companySummaries.map((company) => (
+                    <button className={`admin-list-item${editingCompanyId === company.id ? " active" : ""}`} key={company.key} onClick={() => selectCompany(company.id)} type="button">
+                      <strong>{company.company}</strong>
+                      <span>{company.contactName} · {company.status} · {company.priority}</span>
+                      <span>{company.registrations} demande(s) · {company.formations.join(", ") || "Aucun parcours rattaché"}</span>
+                      <span>Prochaine session : {company.nextSessionLabel} · Relance : {company.nextFollowUpLabel}</span>
+                    </button>
+                  ))}
                 </div>
               </section>
 
               <section className="admin-shell">
                 <div className="section-heading section-heading-tight">
                   <div>
-                    <span className="eyebrow">Entrées</span>
-                    <h2>Dernières demandes</h2>
+                    <span className="eyebrow">Edition</span>
+                    <h2>{editingCompanyId ? "Modifier une fiche entreprise" : "Créer une fiche entreprise"}</h2>
                   </div>
                 </div>
-                <div className="data-table admin-table-shell admin-table-shell-solid">
+
+                <form className="contact-form" onSubmit={handleCompanySubmit}>
+                  <div className="admin-form-section">
+                    <h3>Coordonnées</h3>
+                    <div className="form-grid">
+                      <label>
+                        Entreprise
+                        <input className="ui-field" onChange={(event) => handleCompanyChange("name", event.target.value)} required value={companyDraft.name} />
+                      </label>
+                      <label>
+                        Contact principal
+                        <input className="ui-field" onChange={(event) => handleCompanyChange("contactName", event.target.value)} required value={companyDraft.contactName} />
+                      </label>
+                      <label>
+                        Email
+                        <input className="ui-field" onChange={(event) => handleCompanyChange("email", event.target.value)} required type="email" value={companyDraft.email} />
+                      </label>
+                      <label>
+                        Téléphone
+                        <input className="ui-field" onChange={(event) => handleCompanyChange("phone", event.target.value)} required value={companyDraft.phone} />
+                      </label>
+                    </div>
+                  </div>
+
+                  <div className="admin-form-section">
+                    <h3>Pilotage commercial</h3>
+                    <div className="form-grid">
+                      <label>
+                        Statut
+                        <select className="ui-field" onChange={(event) => handleCompanyChange("status", event.target.value)} value={companyDraft.status}>
+                          <option value="Prospect">Prospect</option>
+                          <option value="Qualifié">Qualifié</option>
+                          <option value="Client">Client</option>
+                          <option value="Perdu">Perdu</option>
+                        </select>
+                      </label>
+                      <label>
+                        Source
+                        <select className="ui-field" onChange={(event) => handleCompanyChange("source", event.target.value)} value={companyDraft.source}>
+                          <option value="Inbound">Inbound</option>
+                          <option value="Relance">Relance</option>
+                          <option value="Partenaire">Partenaire</option>
+                          <option value="Réseau">Réseau</option>
+                          <option value="Manuel">Manuel</option>
+                        </select>
+                      </label>
+                      <label>
+                        Priorité
+                        <select className="ui-field" onChange={(event) => handleCompanyChange("priority", event.target.value)} value={companyDraft.priority}>
+                          <option value="Basse">Basse</option>
+                          <option value="Normale">Normale</option>
+                          <option value="Haute">Haute</option>
+                        </select>
+                      </label>
+                      <label>
+                        Dernier contact
+                        <input className="ui-field" onChange={(event) => handleCompanyChange("lastContactAt", event.target.value)} type="date" value={companyDraft.lastContactAt} />
+                      </label>
+                      <label>
+                        Prochaine relance
+                        <input className="ui-field" onChange={(event) => handleCompanyChange("nextFollowUpAt", event.target.value)} type="date" value={companyDraft.nextFollowUpAt} />
+                      </label>
+                    </div>
+                    <label>
+                      Notes CRM
+                      <textarea className="ui-field contact-form-textarea" onChange={(event) => handleCompanyChange("notes", event.target.value)} rows={8} value={companyDraft.notes} />
+                    </label>
+                  </div>
+
+                  {editingCompanyId ? (
+                    <div className="admin-session-overview">
+                      {(() => {
+                        const summary = companySummaries.find((company) => company.id === editingCompanyId);
+
+                        if (!summary) {
+                          return null;
+                        }
+
+                        return (
+                          <>
+                            <div>
+                              <span>Demandes</span>
+                              <strong>{summary.registrations}</strong>
+                            </div>
+                            <div>
+                              <span>Parcours</span>
+                              <strong>{summary.formations.length}</strong>
+                            </div>
+                            <div>
+                              <span>Prochaine session</span>
+                              <strong>{summary.nextSessionLabel}</strong>
+                            </div>
+                          </>
+                        );
+                      })()}
+                    </div>
+                  ) : null}
+
+                  <button className="ui-button ui-button-primary" disabled={saving} type="submit">
+                    {saving ? "Enregistrement..." : editingCompanyId ? "Mettre à jour la fiche" : "Créer la fiche"}
+                  </button>
+                  {status ? <p className={`form-status ${statusTone}`}>{status}</p> : null}
+                </form>
+              </section>
+            </div>
+
+            <section className="admin-shell">
+              <div className="section-heading section-heading-tight">
+                <div>
+                  <span className="eyebrow">Entrées</span>
+                  <h2>Dernières demandes</h2>
+                </div>
+              </div>
+              <div className="data-table admin-table-shell admin-table-shell-solid">
                   <table>
                     <thead>
                       <tr>
@@ -1158,9 +1385,8 @@ export function AdminConsole({ initialArticles, initialFormations, initialSessio
                       ))}
                     </tbody>
                   </table>
-                </div>
-              </section>
-            </div>
+              </div>
+            </section>
           </div>
         ) : null}
 

@@ -12,6 +12,7 @@ const {
   updateSession,
 } = require("../services/catalogService");
 const { createArticle, deleteArticle, getArticleBySlug, listArticles, updateArticle } = require("../services/editorialService");
+const { createCompany, listCompanies, updateCompany } = require("../services/companyService");
 const { createRegistration, listRegistrations } = require("../services/registrationService");
 
 const inscriptionSchema = z.object({
@@ -65,6 +66,19 @@ const articleSchema = z.object({
   readingTime: z.string().min(2).max(40),
   publishedAt: z.string().min(10).max(10),
   featuredFormationSlug: z.string().max(120).optional().default(""),
+});
+
+const companySchema = z.object({
+  name: z.string().min(2).max(160),
+  contactName: z.string().min(2).max(160),
+  email: z.string().email(),
+  phone: z.string().min(8).max(40),
+  status: z.string().min(2).max(40),
+  source: z.string().min(2).max(60),
+  priority: z.string().min(2).max(40),
+  notes: z.string().max(4000).optional().default(""),
+  nextFollowUpAt: z.string().max(10).optional().or(z.literal("")),
+  lastContactAt: z.string().max(10).optional().or(z.literal("")),
 });
 
 function asyncHandler(handler) {
@@ -139,14 +153,41 @@ function createApiRouter() {
   router.get(
     "/admin/overview",
     asyncHandler(async (_req, res) => {
-      const [formations, sessions, registrations, articles] = await Promise.all([
+      const [formations, sessions, registrations, articles, companies] = await Promise.all([
         listFormations(),
         listSessions(),
         listRegistrations(),
         listArticles(),
+        listCompanies(),
       ]);
 
-      res.json({ data: { formations, sessions, registrations, articles } });
+      res.json({ data: { formations, sessions, registrations, articles, companies } });
+    })
+  );
+
+  router.get(
+    "/admin/companies",
+    asyncHandler(async (_req, res) => {
+      const companies = await listCompanies();
+      res.json({ data: companies });
+    })
+  );
+
+  router.post(
+    "/admin/companies",
+    asyncHandler(async (req, res) => {
+      const payload = companySchema.parse(req.body);
+      const company = await createCompany(payload);
+      res.status(201).json({ data: company, message: "Fiche entreprise créée" });
+    })
+  );
+
+  router.patch(
+    "/admin/companies/:id",
+    asyncHandler(async (req, res) => {
+      const payload = companySchema.parse(req.body);
+      const company = await updateCompany(req.params.id, payload);
+      res.json({ data: company, message: "Fiche entreprise mise à jour" });
     })
   );
 
