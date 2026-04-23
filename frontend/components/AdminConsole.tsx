@@ -10,6 +10,8 @@ type Props = {
   initialRegistrations: Registration[];
 };
 
+type Panel = "dashboard" | "formations" | "sessions" | "contacts" | "blog";
+
 type Draft = {
   slug: string;
   title: string;
@@ -31,6 +33,49 @@ type Draft = {
   priceDetails: string;
   successRate: string;
   handicapPolicy: string;
+};
+
+type SessionDraft = {
+  id: string;
+  formationSlug: string;
+  city: string;
+  startDate: string;
+  endDate: string;
+  seatsLeft: string;
+  mode: string;
+};
+
+type ArticleDraft = {
+  slug: string;
+  title: string;
+  category: string;
+  excerpt: string;
+  body: string;
+  readingTime: string;
+  publishedAt: string;
+  featuredFormationSlug: string;
+};
+
+type RegistrationDetail = {
+  registration: Registration;
+  formation?: Formation;
+  session?: Session;
+};
+
+type CompanySummary = {
+  key: string;
+  company: string;
+  contactName: string;
+  email: string;
+  phone: string;
+  registrations: number;
+  upcomingRegistrations: number;
+  completedRegistrations: number;
+  formations: string[];
+  lastContact: string;
+  nextSessionDate?: string;
+  nextSessionLabel: string;
+  status: "Prospect" | "Client";
 };
 
 function toDraft(formation?: Formation): Draft {
@@ -83,44 +128,6 @@ function toDraft(formation?: Formation): Draft {
   };
 }
 
-function splitLines(value: string) {
-  return value
-    .split(/\r?\n/)
-    .map((item) => item.trim())
-    .filter(Boolean);
-}
-
-function formatRegistrationDate(value: string) {
-  const date = new Date(value);
-  const day = String(date.getUTCDate()).padStart(2, "0");
-  const month = String(date.getUTCMonth() + 1).padStart(2, "0");
-  const year = date.getUTCFullYear();
-  const hours = String(date.getUTCHours()).padStart(2, "0");
-  const minutes = String(date.getUTCMinutes()).padStart(2, "0");
-  return `${day}/${month}/${year} ${hours}:${minutes} UTC`;
-}
-
-type SessionDraft = {
-  id: string;
-  formationSlug: string;
-  city: string;
-  startDate: string;
-  endDate: string;
-  seatsLeft: string;
-  mode: string;
-};
-
-type ArticleDraft = {
-  slug: string;
-  title: string;
-  category: string;
-  excerpt: string;
-  body: string;
-  readingTime: string;
-  publishedAt: string;
-  featuredFormationSlug: string;
-};
-
 function toSessionDraft(session?: Session): SessionDraft {
   return {
     id: session?.id || "",
@@ -146,8 +153,74 @@ function toArticleDraft(article?: Article): ArticleDraft {
   };
 }
 
+function splitLines(value: string) {
+  return value
+    .split(/\r?\n/)
+    .map((item) => item.trim())
+    .filter(Boolean);
+}
+
+function formatRegistrationDate(value: string) {
+  const date = new Date(value);
+  const day = String(date.getUTCDate()).padStart(2, "0");
+  const month = String(date.getUTCMonth() + 1).padStart(2, "0");
+  const year = date.getUTCFullYear();
+  const hours = String(date.getUTCHours()).padStart(2, "0");
+  const minutes = String(date.getUTCMinutes()).padStart(2, "0");
+  return `${day}/${month}/${year} ${hours}:${minutes} UTC`;
+}
+
+function formatDateLabel(value?: string) {
+  if (!value) {
+    return "Non planifiée";
+  }
+
+  return new Intl.DateTimeFormat("fr-FR", {
+    day: "2-digit",
+    month: "short",
+    year: "numeric",
+  }).format(new Date(value));
+}
+
+function formatSessionRange(startDate?: string, endDate?: string) {
+  if (!startDate || !endDate) {
+    return "Session à planifier";
+  }
+
+  return `${formatDateLabel(startDate)} au ${formatDateLabel(endDate)}`;
+}
+
+function compareDate(left?: string, right?: string) {
+  return (left || "9999-12-31").localeCompare(right || "9999-12-31");
+}
+
+function isUpcoming(session?: Session) {
+  if (!session) {
+    return false;
+  }
+
+  const today = new Date().toISOString().slice(0, 10);
+  return session.endDate >= today;
+}
+
+function getSessionState(session: Session) {
+  if (session.seatsLeft === 0) {
+    return "Complet";
+  }
+
+  if (session.seatsLeft <= 2) {
+    return "Dernières places";
+  }
+
+  if (isUpcoming(session)) {
+    return "À venir";
+  }
+
+  return "Passée";
+}
+
 export function AdminConsole({ initialArticles, initialFormations, initialSessions, initialRegistrations }: Props) {
-  const [panel, setPanel] = useState<"formations" | "sessions" | "registrations" | "blog">("formations");
+  const [panel, setPanel] = useState<Panel>("dashboard");
   const [articles, setArticles] = useState(initialArticles);
   const [formations, setFormations] = useState(initialFormations);
   const [sessions, setSessions] = useState(initialSessions);
@@ -167,6 +240,108 @@ export function AdminConsole({ initialArticles, initialFormations, initialSessio
       return accumulator;
     }, {});
   }, [initialRegistrations]);
+
+  const registrationsBySession = useMemo(() => {
+    return initialRegistrations.reduce<Record<string, number>>((accumulator, registration) => {
+      accumulator[registration.sessionId] = (accumulator[registration.sessionId] || 0) + 1;
+      return accumulator;
+    }, {});
+  }, [initialRegistrations]);
+
+  const registrationDetails = useMemo<RegistrationDetail[]>(() => {
+    return initialRegistrations.map((registration) => ({
+      registration,
+      formation: formations.find((formation) => formation.slug === registration.formationSlug),
+      session: sessions.find((session) => session.id === registration.sessionId),
+    }));
+  }, [formations, initialRegistrations, sessions]);
+
+  const upcomingSessions = useMemo(() => {
+    return sessions
+      .filter((session) => isUpcoming(session))
+      .sort((left, right) => compareDate(left.startDate, right.startDate));
+  }, [sessions]);
+
+  const operationalAlerts = useMemo(() => {
+    const lowSeats = upcomingSessions.filter((session) => session.seatsLeft <= 2);
+    const noRegistrations = upcomingSessions.filter((session) => !registrationsBySession[session.id]);
+    const categoriesWithoutUpcoming = Array.from(new Set(formations.map((formation) => formation.category))).filter((category) => {
+      const categorySlugs = formations.filter((formation) => formation.category === category).map((formation) => formation.slug);
+      return !upcomingSessions.some((session) => categorySlugs.includes(session.formationSlug));
+    });
+
+    return { lowSeats, noRegistrations, categoriesWithoutUpcoming };
+  }, [formations, registrationsBySession, upcomingSessions]);
+
+  const companySummaries = useMemo<CompanySummary[]>(() => {
+    const companyMap = new Map<string, CompanySummary>();
+
+    for (const detail of registrationDetails) {
+      const { registration, formation, session } = detail;
+      const key = `${registration.company.toLowerCase()}::${registration.email.toLowerCase()}`;
+      const current = companyMap.get(key);
+      const upcoming = isUpcoming(session);
+      const nextSessionDate = upcoming ? session?.startDate : undefined;
+      const formationLabel = formation?.shortTitle || registration.formationSlug;
+
+      if (!current) {
+        companyMap.set(key, {
+          key,
+          company: registration.company,
+          contactName: registration.contactName,
+          email: registration.email,
+          phone: registration.phone,
+          registrations: 1,
+          upcomingRegistrations: upcoming ? 1 : 0,
+          completedRegistrations: upcoming ? 0 : 1,
+          formations: [formationLabel],
+          lastContact: registration.createdAt,
+          nextSessionDate,
+          nextSessionLabel: nextSessionDate ? formatDateLabel(nextSessionDate) : "Aucune session future",
+          status: upcoming ? "Prospect" : "Client",
+        });
+        continue;
+      }
+
+      current.registrations += 1;
+      current.upcomingRegistrations += upcoming ? 1 : 0;
+      current.completedRegistrations += upcoming ? 0 : 1;
+      current.lastContact = current.lastContact > registration.createdAt ? current.lastContact : registration.createdAt;
+      current.formations = Array.from(new Set([...current.formations, formationLabel]));
+
+      if (nextSessionDate && (!current.nextSessionDate || nextSessionDate < current.nextSessionDate)) {
+        current.nextSessionDate = nextSessionDate;
+        current.nextSessionLabel = formatDateLabel(nextSessionDate);
+      }
+
+      current.status = current.completedRegistrations > 0 ? "Client" : "Prospect";
+    }
+
+    return [...companyMap.values()].sort((left, right) => right.lastContact.localeCompare(left.lastContact));
+  }, [registrationDetails]);
+
+  const prospects = useMemo(() => companySummaries.filter((company) => company.status === "Prospect"), [companySummaries]);
+  const clients = useMemo(() => companySummaries.filter((company) => company.status === "Client"), [companySummaries]);
+
+  const categorySnapshots = useMemo(() => {
+    return Array.from(new Set(formations.map((formation) => formation.category)))
+      .sort((left, right) => left.localeCompare(right, "fr"))
+      .map((category) => {
+        const categoryFormations = formations.filter((formation) => formation.category === category);
+        const categorySlugs = categoryFormations.map((formation) => formation.slug);
+        const categorySessions = upcomingSessions.filter((session) => categorySlugs.includes(session.formationSlug));
+        const categoryRegistrations = initialRegistrations.filter((registration) => categorySlugs.includes(registration.formationSlug));
+
+        return {
+          category,
+          formations: categoryFormations.length,
+          sessions: categorySessions.length,
+          registrations: categoryRegistrations.length,
+        };
+      });
+  }, [formations, initialRegistrations, upcomingSessions]);
+
+  const totalSeatsLeft = sessions.reduce((total, session) => total + session.seatsLeft, 0);
 
   function selectFormation(slug: string) {
     const formation = formations.find((item) => item.slug === slug);
@@ -401,22 +576,206 @@ export function AdminConsole({ initialArticles, initialFormations, initialSessio
   }
 
   return (
-    <div className="cms-shell">
-      <aside className="cms-sidebar">
-        <button className={`cms-nav-item${panel === "formations" ? " active" : ""}`} onClick={() => setPanel("formations")} type="button">Formations</button>
-        <button className={`cms-nav-item${panel === "sessions" ? " active" : ""}`} onClick={() => setPanel("sessions")} type="button">Sessions</button>
-        <button className={`cms-nav-item${panel === "registrations" ? " active" : ""}`} onClick={() => setPanel("registrations")} type="button">Inscriptions</button>
-        <button className={`cms-nav-item${panel === "blog" ? " active" : ""}`} onClick={() => setPanel("blog")} type="button">Blog</button>
+    <div className="cms-shell cms-shell-enhanced">
+      <aside className="cms-sidebar cms-sidebar-enhanced">
+        <div className="cms-brand-card">
+          <span className="eyebrow">Pilotage</span>
+          <h2>Admin Oxideve</h2>
+          <p>Un dashboard de pilotage pour le catalogue, les sessions, le suivi commercial et l'éditorial.</p>
+        </div>
+
+        <button className={`cms-nav-item${panel === "dashboard" ? " active" : ""}`} onClick={() => setPanel("dashboard")} type="button">
+          <strong>Dashboard</strong>
+          <span>Vue globale</span>
+        </button>
+        <button className={`cms-nav-item${panel === "formations" ? " active" : ""}`} onClick={() => setPanel("formations")} type="button">
+          <strong>Catalogue</strong>
+          <span>{formations.length} formations</span>
+        </button>
+        <button className={`cms-nav-item${panel === "sessions" ? " active" : ""}`} onClick={() => setPanel("sessions")} type="button">
+          <strong>Sessions</strong>
+          <span>{upcomingSessions.length} à venir</span>
+        </button>
+        <button className={`cms-nav-item${panel === "contacts" ? " active" : ""}`} onClick={() => setPanel("contacts")} type="button">
+          <strong>Contacts & CRM</strong>
+          <span>{companySummaries.length} entreprises</span>
+        </button>
+        <button className={`cms-nav-item${panel === "blog" ? " active" : ""}`} onClick={() => setPanel("blog")} type="button">
+          <strong>Editorial</strong>
+          <span>{articles.length} contenus</span>
+        </button>
       </aside>
 
       <div className="cms-content">
+        {panel === "dashboard" ? (
+          <div className="cms-content-stack">
+            <section className="admin-shell admin-shell-hero">
+              <div className="section-heading section-heading-tight">
+                <div>
+                  <span className="eyebrow">Vue d'ensemble</span>
+                  <h2>Tableau de bord opérationnel</h2>
+                  <p>Vue synthétique du catalogue, du planning, des inscriptions et du portefeuille entreprises.</p>
+                </div>
+              </div>
+
+              <div className="admin-metric-grid">
+                <article className="admin-metric-card">
+                  <span>Catalogue</span>
+                  <strong>{formations.length}</strong>
+                  <small>formations actives</small>
+                </article>
+                <article className="admin-metric-card">
+                  <span>Sessions</span>
+                  <strong>{upcomingSessions.length}</strong>
+                  <small>à venir</small>
+                </article>
+                <article className="admin-metric-card">
+                  <span>Pipeline</span>
+                  <strong>{prospects.length}</strong>
+                  <small>prospects suivis</small>
+                </article>
+                <article className="admin-metric-card">
+                  <span>Clients</span>
+                  <strong>{clients.length}</strong>
+                  <small>entreprises déjà formées</small>
+                </article>
+                <article className="admin-metric-card">
+                  <span>Places</span>
+                  <strong>{totalSeatsLeft}</strong>
+                  <small>encore disponibles</small>
+                </article>
+              </div>
+            </section>
+
+            <div className="admin-grid admin-grid-wide">
+              <section className="admin-shell">
+                <div className="section-heading section-heading-tight">
+                  <div>
+                    <span className="eyebrow">Planning</span>
+                    <h2>Prochaines sessions</h2>
+                  </div>
+                </div>
+                <div className="admin-agenda-list">
+                  {upcomingSessions.slice(0, 6).map((session) => {
+                    const formation = formations.find((item) => item.slug === session.formationSlug);
+                    return (
+                      <button className="admin-agenda-item" key={session.id} onClick={() => {
+                        setPanel("sessions");
+                        selectSession(session.id);
+                      }} type="button">
+                        <div>
+                          <strong>{formation?.title || session.formationSlug}</strong>
+                          <span>{formatSessionRange(session.startDate, session.endDate)}</span>
+                        </div>
+                        <div className="admin-agenda-meta">
+                          <span>{session.city}</span>
+                          <span>{registrationsBySession[session.id] || 0} inscrits</span>
+                          <strong>{getSessionState(session)}</strong>
+                        </div>
+                      </button>
+                    );
+                  })}
+                </div>
+              </section>
+
+              <section className="admin-shell">
+                <div className="section-heading section-heading-tight">
+                  <div>
+                    <span className="eyebrow">CRM</span>
+                    <h2>Prospects et clients</h2>
+                    <p>Le statut est déduit des inscriptions et des dates de session.</p>
+                  </div>
+                </div>
+
+                <div className="admin-mini-stats">
+                  <div>
+                    <strong>{prospects.length}</strong>
+                    <span>Prospects</span>
+                  </div>
+                  <div>
+                    <strong>{clients.length}</strong>
+                    <span>Clients</span>
+                  </div>
+                  <div>
+                    <strong>{companySummaries.length}</strong>
+                    <span>Entreprises</span>
+                  </div>
+                </div>
+
+                <div className="admin-contact-stack">
+                  {companySummaries.slice(0, 5).map((company) => (
+                    <button className="admin-contact-card" key={company.key} onClick={() => setPanel("contacts")} type="button">
+                      <div>
+                        <strong>{company.company}</strong>
+                        <span>{company.contactName}</span>
+                      </div>
+                      <div className="admin-contact-meta">
+                        <span className={`admin-status-pill admin-status-${company.status === "Client" ? "client" : "prospect"}`}>{company.status}</span>
+                        <span>{company.nextSessionLabel}</span>
+                      </div>
+                    </button>
+                  ))}
+                </div>
+              </section>
+            </div>
+
+            <div className="admin-grid admin-grid-wide">
+              <section className="admin-shell">
+                <div className="section-heading section-heading-tight">
+                  <div>
+                    <span className="eyebrow">Alertes</span>
+                    <h2>Points de vigilance</h2>
+                  </div>
+                </div>
+                <div className="admin-alert-grid">
+                  <article className="admin-alert-card">
+                    <strong>{operationalAlerts.lowSeats.length}</strong>
+                    <h3>Sessions presque complètes</h3>
+                    <p>Priorité aux relances et à la création de sessions complémentaires.</p>
+                  </article>
+                  <article className="admin-alert-card">
+                    <strong>{operationalAlerts.noRegistrations.length}</strong>
+                    <h3>Sessions sans inscrit</h3>
+                    <p>À relancer commercialement ou à regrouper avec d'autres dates.</p>
+                  </article>
+                  <article className="admin-alert-card">
+                    <strong>{operationalAlerts.categoriesWithoutUpcoming.length}</strong>
+                    <h3>Catégories sans date planifiée</h3>
+                    <p>Le catalogue est visible mais sans session future sur ces familles.</p>
+                  </article>
+                </div>
+              </section>
+
+              <section className="admin-shell">
+                <div className="section-heading section-heading-tight">
+                  <div>
+                    <span className="eyebrow">Répartition</span>
+                    <h2>Activité par famille</h2>
+                  </div>
+                </div>
+                <div className="admin-category-grid">
+                  {categorySnapshots.map((snapshot) => (
+                    <article className="admin-category-card" key={snapshot.category}>
+                      <strong>{snapshot.category}</strong>
+                      <span>{snapshot.formations} formations</span>
+                      <span>{snapshot.sessions} sessions à venir</span>
+                      <span>{snapshot.registrations} inscriptions</span>
+                    </article>
+                  ))}
+                </div>
+              </section>
+            </div>
+          </div>
+        ) : null}
+
         {panel === "formations" ? (
-          <div className="cms-panel-grid">
+          <div className="cms-panel-grid cms-panel-grid-wide">
             <section className="admin-shell">
               <div className="section-heading section-heading-tight">
                 <div>
                   <span className="eyebrow">Catalogue</span>
                   <h2>Formations</h2>
+                  <p>Modifiez le contenu, les objectifs et les informations pratiques de chaque parcours.</p>
                 </div>
                 <button
                   className="ui-button ui-button-secondary"
@@ -431,9 +790,14 @@ export function AdminConsole({ initialArticles, initialFormations, initialSessio
                 </button>
               </div>
 
-              <div className="admin-list">
+              <div className="admin-list admin-list-dense">
                 {formations.map((formation) => (
-                  <button key={formation.slug} type="button" className="admin-list-item" onClick={() => selectFormation(formation.slug)}>
+                  <button
+                    key={formation.slug}
+                    type="button"
+                    className={`admin-list-item${editingSlug === formation.slug ? " active" : ""}`}
+                    onClick={() => selectFormation(formation.slug)}
+                  >
                     <strong>{formation.title}</strong>
                     <span>{formation.category}</span>
                     <span>{registrationsByFormation[formation.slug] || 0} inscriptions</span>
@@ -451,126 +815,127 @@ export function AdminConsole({ initialArticles, initialFormations, initialSessio
               </div>
 
               <form className="contact-form" onSubmit={handleSubmit}>
-          <div className="admin-form-section">
-            <h3>Identité de la formation</h3>
-            <div className="form-grid">
-              <label>
-                Slug
-                <input value={draft.slug} onChange={(event) => handleChange("slug", event.target.value)} disabled={Boolean(editingSlug)} required />
-              </label>
-              <label>
-                Nom complet
-                <input value={draft.title} onChange={(event) => handleChange("title", event.target.value)} required />
-              </label>
-              <label>
-                Nom court
-                <input value={draft.shortTitle} onChange={(event) => handleChange("shortTitle", event.target.value)} required />
-              </label>
-              <label>
-                Catégorie
-                <input value={draft.category} onChange={(event) => handleChange("category", event.target.value)} required />
-              </label>
-              <label>
-                Durée affichée
-                <input value={draft.duration} onChange={(event) => handleChange("duration", event.target.value)} required />
-              </label>
-              <label>
-                Lieu
-                <input value={draft.location} onChange={(event) => handleChange("location", event.target.value)} required />
-              </label>
-              <label>
-                Public visé
-                <input value={draft.audience} onChange={(event) => handleChange("audience", event.target.value)} required />
-              </label>
-              <label>
-                Tarif affiché
-                <input value={draft.price} onChange={(event) => handleChange("price", event.target.value)} required />
-              </label>
-            </div>
-          </div>
+                <div className="admin-form-section">
+                  <h3>Identité de la formation</h3>
+                  <div className="form-grid">
+                    <label>
+                      Slug
+                      <input value={draft.slug} onChange={(event) => handleChange("slug", event.target.value)} disabled={Boolean(editingSlug)} required />
+                    </label>
+                    <label>
+                      Nom complet
+                      <input value={draft.title} onChange={(event) => handleChange("title", event.target.value)} required />
+                    </label>
+                    <label>
+                      Nom court
+                      <input value={draft.shortTitle} onChange={(event) => handleChange("shortTitle", event.target.value)} required />
+                    </label>
+                    <label>
+                      Catégorie
+                      <input value={draft.category} onChange={(event) => handleChange("category", event.target.value)} required />
+                    </label>
+                    <label>
+                      Durée affichée
+                      <input value={draft.duration} onChange={(event) => handleChange("duration", event.target.value)} required />
+                    </label>
+                    <label>
+                      Lieu
+                      <input value={draft.location} onChange={(event) => handleChange("location", event.target.value)} required />
+                    </label>
+                    <label>
+                      Public visé
+                      <input value={draft.audience} onChange={(event) => handleChange("audience", event.target.value)} required />
+                    </label>
+                    <label>
+                      Tarif affiché
+                      <input value={draft.price} onChange={(event) => handleChange("price", event.target.value)} required />
+                    </label>
+                  </div>
+                </div>
 
-          <div className="admin-form-section">
-            <h3>Présentation</h3>
-            <label>
-              Résumé court
-              <textarea rows={3} value={draft.summary} onChange={(event) => handleChange("summary", event.target.value)} required />
-            </label>
-            <label>
-              Présentation détaillée
-              <textarea rows={5} value={draft.description} onChange={(event) => handleChange("description", event.target.value)} required />
-            </label>
-            <label>
-              Certification ou finalité
-              <textarea rows={3} value={draft.certification} onChange={(event) => handleChange("certification", event.target.value)} required />
-            </label>
-          </div>
+                <div className="admin-form-section">
+                  <h3>Présentation</h3>
+                  <label>
+                    Résumé court
+                    <textarea rows={3} value={draft.summary} onChange={(event) => handleChange("summary", event.target.value)} required />
+                  </label>
+                  <label>
+                    Présentation détaillée
+                    <textarea rows={5} value={draft.description} onChange={(event) => handleChange("description", event.target.value)} required />
+                  </label>
+                  <label>
+                    Certification ou finalité
+                    <textarea rows={3} value={draft.certification} onChange={(event) => handleChange("certification", event.target.value)} required />
+                  </label>
+                </div>
 
-          <div className="admin-form-section">
-            <h3>Contenu pédagogique</h3>
-            <div className="form-grid">
-              <label>
-                Points forts, une ligne par item
-                <textarea rows={6} value={draft.benefits} onChange={(event) => handleChange("benefits", event.target.value)} required />
-              </label>
-              <label>
-                Objectifs, une ligne par item
-                <textarea rows={6} value={draft.objectives} onChange={(event) => handleChange("objectives", event.target.value)} required />
-              </label>
-              <label>
-                Prérequis, une ligne par item
-                <textarea rows={6} value={draft.prerequisites} onChange={(event) => handleChange("prerequisites", event.target.value)} required />
-              </label>
-              <label>
-                Modalités, une ligne par item
-                <textarea rows={6} value={draft.modalities} onChange={(event) => handleChange("modalities", event.target.value)} required />
-              </label>
-            </div>
-            <label>
-              Programme, une ligne par étape ou module
-              <textarea rows={8} value={draft.programme} onChange={(event) => handleChange("programme", event.target.value)} required />
-            </label>
-          </div>
+                <div className="admin-form-section">
+                  <h3>Contenu pédagogique</h3>
+                  <div className="form-grid">
+                    <label>
+                      Points forts, une ligne par item
+                      <textarea rows={6} value={draft.benefits} onChange={(event) => handleChange("benefits", event.target.value)} required />
+                    </label>
+                    <label>
+                      Objectifs, une ligne par item
+                      <textarea rows={6} value={draft.objectives} onChange={(event) => handleChange("objectives", event.target.value)} required />
+                    </label>
+                    <label>
+                      Prérequis, une ligne par item
+                      <textarea rows={6} value={draft.prerequisites} onChange={(event) => handleChange("prerequisites", event.target.value)} required />
+                    </label>
+                    <label>
+                      Modalités, une ligne par item
+                      <textarea rows={6} value={draft.modalities} onChange={(event) => handleChange("modalities", event.target.value)} required />
+                    </label>
+                  </div>
+                  <label>
+                    Programme, une ligne par étape ou module
+                    <textarea rows={8} value={draft.programme} onChange={(event) => handleChange("programme", event.target.value)} required />
+                  </label>
+                </div>
 
-          <div className="admin-form-section">
-            <h3>Conditions et informations pratiques</h3>
-            <div className="form-grid">
-              <label>
-                Détails de durée
-                <textarea rows={4} value={draft.durationDetails} onChange={(event) => handleChange("durationDetails", event.target.value)} required />
-              </label>
-              <label>
-                Détails tarifaires
-                <textarea rows={4} value={draft.priceDetails} onChange={(event) => handleChange("priceDetails", event.target.value)} required />
-              </label>
-            </div>
-            <div className="form-grid">
-              <label>
-                Taux de réussite
-                <input value={draft.successRate} onChange={(event) => handleChange("successRate", event.target.value)} required />
-              </label>
-              <label>
-                Accueil du public en situation de handicap
-                <textarea rows={4} value={draft.handicapPolicy} onChange={(event) => handleChange("handicapPolicy", event.target.value)} required />
-              </label>
-            </div>
-          </div>
+                <div className="admin-form-section">
+                  <h3>Conditions et informations pratiques</h3>
+                  <div className="form-grid">
+                    <label>
+                      Détails de durée
+                      <textarea rows={4} value={draft.durationDetails} onChange={(event) => handleChange("durationDetails", event.target.value)} required />
+                    </label>
+                    <label>
+                      Détails tarifaires
+                      <textarea rows={4} value={draft.priceDetails} onChange={(event) => handleChange("priceDetails", event.target.value)} required />
+                    </label>
+                  </div>
+                  <div className="form-grid">
+                    <label>
+                      Taux de réussite
+                      <input value={draft.successRate} onChange={(event) => handleChange("successRate", event.target.value)} required />
+                    </label>
+                    <label>
+                      Accueil du public en situation de handicap
+                      <textarea rows={4} value={draft.handicapPolicy} onChange={(event) => handleChange("handicapPolicy", event.target.value)} required />
+                    </label>
+                  </div>
+                </div>
 
-          <button className="button button-primary" type="submit" disabled={saving}>
-            {saving ? "Enregistrement..." : editingSlug ? "Mettre à jour" : "Créer la formation"}
-          </button>
-          {status ? <p className={`form-status ${statusTone}`}>{status}</p> : null}
-        </form>
+                <button className="ui-button ui-button-primary" type="submit" disabled={saving}>
+                  {saving ? "Enregistrement..." : editingSlug ? "Mettre à jour" : "Créer la formation"}
+                </button>
+                {status ? <p className={`form-status ${statusTone}`}>{status}</p> : null}
+              </form>
             </section>
           </div>
         ) : null}
 
         {panel === "sessions" ? (
-          <div className="cms-panel-grid">
+          <div className="cms-panel-grid cms-panel-grid-wide">
             <section className="admin-shell">
               <div className="section-heading section-heading-tight">
                 <div>
                   <span className="eyebrow">Planning</span>
-                  <h2>Sessions</h2>
+                  <h2>Gestion des sessions</h2>
+                  <p>Suivez les dates, les lieux, la tension commerciale et les remplissages.</p>
                 </div>
                 <button className="ui-button ui-button-secondary" onClick={() => {
                   setEditingSessionId("");
@@ -578,14 +943,33 @@ export function AdminConsole({ initialArticles, initialFormations, initialSessio
                   setStatus("");
                 }} type="button">Nouvelle session</button>
               </div>
-              <div className="admin-list">
-                {sessions.map((session) => (
-                  <button className="admin-list-item" key={session.id} onClick={() => selectSession(session.id)} type="button">
-                    <strong>{formations.find((formation) => formation.slug === session.formationSlug)?.shortTitle || session.formationSlug}</strong>
-                    <span>{session.city}</span>
-                    <span>{session.startDate}</span>
-                  </button>
-                ))}
+
+              <div className="admin-mini-stats admin-mini-stats-wide">
+                <div>
+                  <strong>{upcomingSessions.length}</strong>
+                  <span>À venir</span>
+                </div>
+                <div>
+                  <strong>{operationalAlerts.lowSeats.length}</strong>
+                  <span>Dernières places</span>
+                </div>
+                <div>
+                  <strong>{operationalAlerts.noRegistrations.length}</strong>
+                  <span>Sans inscrits</span>
+                </div>
+              </div>
+
+              <div className="admin-list admin-list-dense">
+                {sessions.map((session) => {
+                  const formation = formations.find((item) => item.slug === session.formationSlug);
+                  return (
+                    <button className={`admin-list-item${editingSessionId === session.id ? " active" : ""}`} key={session.id} onClick={() => selectSession(session.id)} type="button">
+                      <strong>{formation?.shortTitle || session.formationSlug}</strong>
+                      <span>{formatSessionRange(session.startDate, session.endDate)}</span>
+                      <span>{session.city} · {session.seatsLeft} places · {registrationsBySession[session.id] || 0} inscrits</span>
+                    </button>
+                  );
+                })}
               </div>
             </section>
 
@@ -597,6 +981,31 @@ export function AdminConsole({ initialArticles, initialFormations, initialSessio
                 </div>
                 {editingSessionId ? <button className="ui-button ui-button-ghost" disabled={saving} onClick={handleDeleteSession} type="button">Supprimer</button> : null}
               </div>
+
+              <div className="admin-session-overview">
+                {editingSessionId ? (
+                  <>
+                    <div>
+                      <span>État</span>
+                      <strong>{getSessionState(sessions.find((item) => item.id === editingSessionId) || sessions[0])}</strong>
+                    </div>
+                    <div>
+                      <span>Inscrits</span>
+                      <strong>{registrationsBySession[editingSessionId] || 0}</strong>
+                    </div>
+                    <div>
+                      <span>Places restantes</span>
+                      <strong>{sessionDraft.seatsLeft || "0"}</strong>
+                    </div>
+                  </>
+                ) : (
+                  <div>
+                    <span>Nouvelle session</span>
+                    <strong>Préparez une nouvelle date</strong>
+                  </div>
+                )}
+              </div>
+
               <form className="contact-form" onSubmit={handleSessionSubmit}>
                 <div className="form-grid">
                   <label>
@@ -636,8 +1045,127 @@ export function AdminConsole({ initialArticles, initialFormations, initialSessio
           </div>
         ) : null}
 
+        {panel === "contacts" ? (
+          <div className="cms-content-stack">
+            <section className="admin-shell">
+              <div className="section-heading section-heading-tight">
+                <div>
+                  <span className="eyebrow">CRM</span>
+                  <h2>Entreprises, clients et prospects</h2>
+                  <p>Vue consolidée à partir des inscriptions déjà reçues et de leurs sessions associées.</p>
+                </div>
+              </div>
+
+              <div className="admin-metric-grid admin-metric-grid-compact">
+                <article className="admin-metric-card">
+                  <span>Entreprises</span>
+                  <strong>{companySummaries.length}</strong>
+                  <small>suivies</small>
+                </article>
+                <article className="admin-metric-card">
+                  <span>Prospects</span>
+                  <strong>{prospects.length}</strong>
+                  <small>avec session à venir</small>
+                </article>
+                <article className="admin-metric-card">
+                  <span>Clients</span>
+                  <strong>{clients.length}</strong>
+                  <small>déjà formés</small>
+                </article>
+                <article className="admin-metric-card">
+                  <span>Contacts</span>
+                  <strong>{initialRegistrations.length}</strong>
+                  <small>entrées CRM</small>
+                </article>
+              </div>
+            </section>
+
+            <div className="admin-grid admin-grid-wide">
+              <section className="admin-shell">
+                <div className="section-heading section-heading-tight">
+                  <div>
+                    <span className="eyebrow">Portefeuille</span>
+                    <h2>Entreprises suivies</h2>
+                  </div>
+                </div>
+                <div className="data-table admin-table-shell admin-table-shell-solid">
+                  <table>
+                    <thead>
+                      <tr>
+                        <th>Entreprise</th>
+                        <th>Contact</th>
+                        <th>Statut</th>
+                        <th>Parcours</th>
+                        <th>Prochaine date</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {companySummaries.map((company) => (
+                        <tr key={company.key}>
+                          <td>
+                            <strong>{company.company}</strong>
+                            <br />
+                            {company.registrations} demande(s)
+                          </td>
+                          <td>
+                            {company.contactName}
+                            <br />
+                            {company.email}
+                          </td>
+                          <td>
+                            <span className={`admin-status-pill admin-status-${company.status === "Client" ? "client" : "prospect"}`}>{company.status}</span>
+                          </td>
+                          <td>{company.formations.join(", ")}</td>
+                          <td>{company.nextSessionLabel}</td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              </section>
+
+              <section className="admin-shell">
+                <div className="section-heading section-heading-tight">
+                  <div>
+                    <span className="eyebrow">Entrées</span>
+                    <h2>Dernières demandes</h2>
+                  </div>
+                </div>
+                <div className="data-table admin-table-shell admin-table-shell-solid">
+                  <table>
+                    <thead>
+                      <tr>
+                        <th>Date</th>
+                        <th>Entreprise</th>
+                        <th>Contact</th>
+                        <th>Formation</th>
+                        <th>Session</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {registrationDetails.map((detail) => (
+                        <tr key={detail.registration.id}>
+                          <td>{formatRegistrationDate(detail.registration.createdAt)}</td>
+                          <td>{detail.registration.company}</td>
+                          <td>
+                            {detail.registration.contactName}
+                            <br />
+                            {detail.registration.email}
+                          </td>
+                          <td>{detail.formation?.shortTitle || detail.registration.formationSlug}</td>
+                          <td>{detail.session ? formatSessionRange(detail.session.startDate, detail.session.endDate) : detail.registration.sessionId}</td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              </section>
+            </div>
+          </div>
+        ) : null}
+
         {panel === "blog" ? (
-          <div className="cms-panel-grid">
+          <div className="cms-panel-grid cms-panel-grid-wide">
             <section className="admin-shell">
               <div className="section-heading section-heading-tight">
                 <div>
@@ -650,9 +1178,9 @@ export function AdminConsole({ initialArticles, initialFormations, initialSessio
                   setStatus("");
                 }} type="button">Nouvel article</button>
               </div>
-              <div className="admin-list">
+              <div className="admin-list admin-list-dense">
                 {articles.map((article) => (
-                  <button className="admin-list-item" key={article.slug} onClick={() => selectArticle(article.slug)} type="button">
+                  <button className={`admin-list-item${editingArticleSlug === article.slug ? " active" : ""}`} key={article.slug} onClick={() => selectArticle(article.slug)} type="button">
                     <strong>{article.title}</strong>
                     <span>{article.category}</span>
                     <span>{article.publishedAt}</span>
@@ -714,45 +1242,6 @@ export function AdminConsole({ initialArticles, initialFormations, initialSessio
               </form>
             </section>
           </div>
-        ) : null}
-
-        {panel === "registrations" ? (
-          <section className="admin-shell admin-shell-full">
-            <div className="section-heading section-heading-tight">
-              <div>
-                <span className="eyebrow">Entrants</span>
-                <h2>Dernières inscriptions</h2>
-              </div>
-            </div>
-            <div className="data-table admin-table-shell">
-              <table>
-                <thead>
-                  <tr>
-                    <th>Date</th>
-                    <th>Entreprise</th>
-                    <th>Contact</th>
-                    <th>Formation</th>
-                    <th>Session</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {initialRegistrations.map((registration) => (
-                    <tr key={registration.id}>
-                      <td>{formatRegistrationDate(registration.createdAt)}</td>
-                      <td>{registration.company}</td>
-                      <td>
-                        {registration.contactName}
-                        <br />
-                        {registration.email}
-                      </td>
-                      <td>{registration.formationSlug}</td>
-                      <td>{registration.sessionId}</td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
-          </section>
         ) : null}
       </div>
     </div>

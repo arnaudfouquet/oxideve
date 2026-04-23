@@ -26,12 +26,63 @@ const advantages = [
   "Accompagnement post formation",
 ];
 
+const calendarWeekdays = ["Lun", "Mar", "Mer", "Jeu", "Ven", "Sam", "Dim"];
+
+function formatMonthLabel(date: Date) {
+  return new Intl.DateTimeFormat("fr-FR", { month: "long", year: "numeric" }).format(date);
+}
+
+function buildCalendarDays(referenceDate: Date, sessions: Awaited<ReturnType<typeof getSessions>>) {
+  const month = referenceDate.getMonth();
+  const year = referenceDate.getFullYear();
+  const firstDay = new Date(year, month, 1);
+  const lastDay = new Date(year, month + 1, 0);
+  const startOffset = (firstDay.getDay() + 6) % 7;
+  const activeDays = new Set<number>();
+
+  for (const session of sessions) {
+    const start = new Date(`${session.startDate}T00:00:00`);
+    const end = new Date(`${session.endDate}T00:00:00`);
+    const cursor = new Date(start);
+
+    while (cursor <= end) {
+      if (cursor.getMonth() === month && cursor.getFullYear() === year) {
+        activeDays.add(cursor.getDate());
+      }
+
+      cursor.setDate(cursor.getDate() + 1);
+    }
+  }
+
+  const cells: Array<{ label: string; isMuted?: boolean; isActive?: boolean }> = [];
+  const previousMonthLastDay = new Date(year, month, 0).getDate();
+
+  for (let index = startOffset; index > 0; index -= 1) {
+    cells.push({ label: String(previousMonthLastDay - index + 1), isMuted: true });
+  }
+
+  for (let day = 1; day <= lastDay.getDate(); day += 1) {
+    cells.push({ label: String(day), isActive: activeDays.has(day) });
+  }
+
+  while (cells.length % 7 !== 0 || cells.length < 35) {
+    cells.push({ label: String(cells.length - lastDay.getDate() - startOffset + 1), isMuted: true });
+  }
+
+  return cells;
+}
+
 export default async function HomePage() {
   const formations = await getFormations();
   const sessions = await getSessions();
-  const featuredSession = sessions[0];
+  const today = new Date().toISOString().slice(0, 10);
+  const upcomingSessions = sessions.filter((session) => session.endDate >= today).slice(0, 3);
+  const featuredSession = upcomingSessions[0] ?? sessions[0];
   const featuredFormation = formations.find((formation) => formation.slug === featuredSession?.formationSlug) ?? formations[0];
   const qualiopiCertificateUrl = "https://oxideve.com/wp-content/uploads/2024/10/certificat-QUA006534_0EFZRQB1N5WGT-2023-2026.pdf";
+  const referenceDate = featuredSession ? new Date(`${featuredSession.startDate}T00:00:00`) : new Date();
+  const calendarCells = buildCalendarDays(referenceDate, upcomingSessions.length ? upcomingSessions : sessions.slice(0, 3));
+  const calendarTitle = formatMonthLabel(referenceDate);
 
   return (
     <>
@@ -141,22 +192,20 @@ export default async function HomePage() {
             <div className="landing-calendar-shell">
               <div className="landing-calendar-top">
                 <span>◀</span>
-                <strong>Juin 2024</strong>
+                <strong>{calendarTitle}</strong>
                 <span>▶</span>
               </div>
               <div className="landing-calendar-days">
-                <span>Lun</span><span>Mar</span><span>Mer</span><span>Jeu</span><span>Ven</span><span>Sam</span><span>Dim</span>
+                {calendarWeekdays.map((day) => (
+                  <span key={day}>{day}</span>
+                ))}
               </div>
               <div className="landing-calendar-grid">
-                {Array.from({ length: 35 }, (_, index) => {
-                  const label = index < 5 ? `${26 + index}` : `${index - 4}`;
-                  const active = [18, 19, 20].includes(index);
-                  return (
-                    <span className={active ? "is-active" : undefined} key={`${label}-${index}`}>
-                      {label}
-                    </span>
-                  );
-                })}
+                {calendarCells.map((cell, index) => (
+                  <span className={`${cell.isActive ? "is-active" : ""}${cell.isMuted ? " is-muted" : ""}`.trim() || undefined} key={`${cell.label}-${index}`}>
+                    {cell.label}
+                  </span>
+                ))}
               </div>
             </div>
 
@@ -164,20 +213,25 @@ export default async function HomePage() {
               <div className="featured-session-main">
                 <h3>{featuredFormation?.shortTitle ?? "Formation"}</h3>
                 <p>{featuredFormation?.summary ?? "Découvrez notre prochaine session disponible."}</p>
+                <span className="featured-session-caption">Les dates du calendrier et les ouvertures ci-dessous proviennent des vraies sessions du catalogue.</span>
               </div>
-              <div className="featured-session-facts">
-                <div>
-                  <span>Date</span>
-                  <strong>{featuredSession ? formatDateRange(featuredSession.startDate, featuredSession.endDate) : "Juin 2024"}</strong>
-                </div>
-                <div>
-                  <span>Lieu</span>
-                  <strong>{featuredSession?.city ?? "Lyon"}</strong>
-                </div>
-                <div>
-                  <span>Place</span>
-                  <strong>{featuredSession?.seatsLeft ?? 12}</strong>
-                </div>
+              <div className="landing-session-list">
+                {upcomingSessions.map((session) => {
+                  const formation = formations.find((item) => item.slug === session.formationSlug);
+                  return (
+                    <article className="landing-session-item" key={session.id}>
+                      <div className="landing-session-item-head">
+                        <strong>{formation?.title || session.formationSlug}</strong>
+                        <span>{session.mode}</span>
+                      </div>
+                      <p>{formatDateRange(session.startDate, session.endDate)}</p>
+                      <div className="landing-session-item-meta">
+                        <span>{session.city}</span>
+                        <span>{session.seatsLeft} places</span>
+                      </div>
+                    </article>
+                  );
+                })}
               </div>
             </div>
           </div>

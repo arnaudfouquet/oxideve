@@ -189,7 +189,7 @@ export default async function FormationDetailPage({ params }: Props) {
       <Section surface="contrast">
         <Container className="detail-cta-band">
           <div>
-            <Title eyebrow="Inscription" title="Un CTA final clair, relie a la session et au besoin terrain" description="Le formulaire ci-contre rattache directement la demande a cette formation et a la prochaine session visible." />
+            <Title eyebrow="Inscription" title={`Préparer votre inscription à ${formation.shortTitle}`} description="Le formulaire ci-contre permet de rattacher directement votre demande à cette formation et à la prochaine session visible." />
           </div>
           <div className="contact-card contact-card-form">
             <ContactForm defaultFormationSlug={formation.slug} defaultSessionId={sessions[0]?.id} />
@@ -199,7 +199,7 @@ export default async function FormationDetailPage({ params }: Props) {
 
       <Section>
         <Container>
-          <Title eyebrow="Formations similaires" title="Autres parcours de la meme famille" />
+          <Title eyebrow="Formations similaires" title={`Autres formations ${formation.category.toLowerCase()}`} />
           <div className="training-showcase-grid">
             {similarFormations.map((item) => (
               <FormationCard formation={item} key={item.slug} />
