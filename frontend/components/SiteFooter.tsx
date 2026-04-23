@@ -3,13 +3,16 @@ import { Container, Text } from "@/components/ui";
 import { contactEmail, contactPhone } from "@/lib/content";
 
 const navLinks = [
+  { href: "/qui-sommes-nous", label: "Qui sommes-nous" },
   { href: "/formations", label: "Formations" },
   { href: "/rge", label: "RGE" },
   { href: "/actualites", label: "Actualités" },
   { href: "/contact", label: "Contact" },
 ];
 
-const formationLinks = ["Photovoltaïque", "PAC", "IRVE", "Sécurité", "Bureautique"];
+const formationLinks = ["Photovoltaïque", "Pompe à chaleur", "Sécurité", "Bureautique", "IRVE"];
+
+const logoUrl = "https://oxideve.com/wp-content/uploads/2024/11/LOGO_OXIDEVE_BLANC_WEB_SVG.svg";
 
 export function SiteFooter() {
   return (
@@ -18,13 +21,9 @@ export function SiteFooter() {
         <div className="site-footer-grid">
           <div className="site-footer-brand">
             <div className="brand-mark brand-mark-footer">
-              <span className="brand-badge">OXI</span>
-              <span className="brand-copy">
-                <strong>Oxideve</strong>
-                <small>Formation énergie & BTP</small>
-              </span>
+              <img alt="Oxideve" className="brand-logo brand-logo-footer" src={logoUrl} />
             </div>
-            <Text tone="inverse">Centre de formation pour les professionnels du bâtiment</Text>
+            <Text tone="inverse">Organisme de formation professionnelle pour les métiers de l'énergie, du bâtiment et des services.</Text>
           </div>
 
           <div>

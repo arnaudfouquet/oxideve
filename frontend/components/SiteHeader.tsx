@@ -2,15 +2,16 @@
 
 import Link from "next/link";
 import { useState } from "react";
-import { ButtonLink, Container } from "@/components/ui";
+import { Container } from "@/components/ui";
 
 const navItems = [
+  { href: "/qui-sommes-nous", label: "Qui sommes-nous" },
   { href: "/formations", label: "Formations" },
   { href: "/rge", label: "RGE" },
   { href: "/actualites", label: "Actualités" },
-  { href: "/campus", label: "Campus" },
-  { href: "/contact", label: "Contact" },
 ];
+
+const logoUrl = "https://oxideve.com/wp-content/uploads/2024/11/LOGO_OXIDEVE_BLANC_WEB_SVG.svg";
 
 export function SiteHeader() {
   const [open, setOpen] = useState(false);
@@ -19,11 +20,7 @@ export function SiteHeader() {
     <header className="site-header">
       <Container className="site-header-shell">
         <Link href="/" className="brand-mark" onClick={() => setOpen(false)}>
-          <span className="brand-badge">OXI</span>
-          <span className="brand-copy">
-            <strong>Oxideve</strong>
-            <small>Formation énergie & BTP</small>
-          </span>
+          <img alt="Oxideve" className="brand-logo" src={logoUrl} />
         </Link>
 
         <button
@@ -46,9 +43,9 @@ export function SiteHeader() {
               </Link>
             ))}
           </nav>
-          <ButtonLink className="header-cta" href="/inscriptions" variant="primary">
-            Je m&apos;inscris
-          </ButtonLink>
+          <Link className="header-contact-link" href="/contact" onClick={() => setOpen(false)}>
+            Contact
+          </Link>
         </div>
       </Container>
     </header>

@@ -1,17 +1,19 @@
 import type { Metadata } from "next";
-import { Space_Grotesk, Source_Sans_3 } from "next/font/google";
+import { Poppins } from "next/font/google";
 import { SiteFooter } from "@/components/SiteFooter";
 import { SiteHeader } from "@/components/SiteHeader";
 import { siteDescription, siteName } from "@/lib/content";
 import "./globals.css";
 
-const displayFont = Space_Grotesk({
+const displayFont = Poppins({
   subsets: ["latin"],
+  weight: ["500", "600", "700", "800"],
   variable: "--font-display",
 });
 
-const bodyFont = Source_Sans_3({
+const bodyFont = Poppins({
   subsets: ["latin"],
+  weight: ["400", "500", "600", "700"],
   variable: "--font-body",
 });
 

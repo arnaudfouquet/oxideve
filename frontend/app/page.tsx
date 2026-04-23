@@ -1,214 +1,259 @@
-import { ContactForm } from "@/components/ContactForm";
-import { FormationCard } from "@/components/FormationCard";
-import { SessionCard } from "@/components/SessionCard";
-import { Badge, ButtonLink, Container, Section, Text, Title } from "@/components/ui";
-import { getFormations, getSessions, siteDescription } from "@/lib/content";
+import { ButtonLink, Container, Section } from "@/components/ui";
+import { formatDateRange, getFormations, getSessions } from "@/lib/content";
 
 export const dynamic = "force-dynamic";
 
+const heroImage = "https://oxideve.com/wp-content/uploads/2024/10/Panneau-solaire-installateur-sur-un-toit-pose-photovoltaique-oxideve-200x300.webp";
+
+const homeCategories = [
+  { title: "Formations photovoltaïques", href: "/formations?category=Photovolta%C3%AFque" },
+  { title: "Formations pompe à chaleur", href: "/formations?category=Pompes%20%C3%A0%20chaleur" },
+  { title: "Formations bornes de recharge", href: "/formations?category=Bornes%20de%20recharge" },
+  { title: "Formations sécurité au travail", href: "/formations" },
+  { title: "Formations Excel", href: "/formations" },
+  { title: "Découvrir toutes nos formations", href: "/formations", accent: true },
+];
+
+const advantages = [
+  "Diversité de formation",
+  "Formations courtes et intenses",
+  "Plateaux techniques",
+  "Suivi de l'évolution du marché",
+  "Formateurs expérimentés",
+  "Organisme qualiopi",
+  "Elargir votre réseau",
+  "Equipement de pointe et innovant",
+  "Accompagnement post formation",
+];
+
 export default async function HomePage() {
   const formations = await getFormations();
-  const sessions = (await getSessions()).slice(0, 3);
-  const categories = Array.from(new Set(formations.map((formation) => formation.category))).map((category) => ({
-    name: category,
-    count: formations.filter((formation) => formation.category === category).length,
-  }));
-  const keyFigures = [
-    { value: `${formations.length}`, label: "formations actives" },
-    { value: `${sessions.length}`, label: "sessions visibles" },
-    { value: "93 %", label: "reussite moyenne" },
-    { value: "48 h", label: "delai moyen de reponse" },
-  ];
+  const sessions = await getSessions();
+  const featuredSession = sessions[0];
+  const featuredFormation = formations.find((formation) => formation.slug === featuredSession?.formationSlug) ?? formations[0];
+  const qualiopiCertificateUrl = "https://oxideve.com/wp-content/uploads/2024/10/certificat-QUA006534_0EFZRQB1N5WGT-2023-2026.pdf";
 
   return (
     <>
-      <Section className="home-hero">
-        <Container className="hero-shell hero-shell-grid">
-          <div className="hero-copy">
-            <Badge tone="accent">Formations energie, electricite et CVC</Badge>
-            <Title
-              as="h1"
-              title="Un catalogue terrain pour former vite, cadrer juste et planifier sans friction."
-              description={`${siteDescription} Chaque parcours reprend la meme structure : objectifs, modalites, programme, sessions et conditions d'inscription.`}
-            />
-            <div className="hero-actions">
-              <ButtonLink href="/formations" variant="primary">Explorer les formations</ButtonLink>
-              <ButtonLink href="/inscriptions" variant="secondary">Je m'inscris</ButtonLink>
+      <section className="landing-hero" style={{ backgroundImage: `linear-gradient(rgba(0, 77, 109, 0.72), rgba(0, 77, 109, 0.72)), url(${heroImage})` }}>
+        <Container className="landing-hero-inner">
+          <div className="landing-hero-play" aria-hidden="true">▶</div>
+          <h1>Centre de formation professionnelle</h1>
+          <ButtonLink href="/formations" variant="primary">Nos formations</ButtonLink>
+        </Container>
+      </section>
+
+      <Section className="landing-section landing-categories">
+        <Container>
+          <div className="landing-heading center">
+            <h2>Formation aux énergies renouvelables avec Oxideve</h2>
+          </div>
+          <div className="landing-category-grid">
+            {homeCategories.map((item) => (
+              <article className={`landing-category-card${item.accent ? " is-accent" : ""}`} key={item.title}>
+                <h3>{item.title}</h3>
+                <ButtonLink href={item.href} variant="primary">Découvrir</ButtonLink>
+              </article>
+            ))}
+          </div>
+        </Container>
+      </Section>
+
+      <Section className="landing-section">
+        <Container>
+          <div className="funding-card">
+            <div>
+              <h2>Aide financière formation</h2>
+              <p>Notre centre de formation professionnelle certifié Qualiopi vous permet d'accéder à des organismes de financement formation comme le CPF, les OPCO et d'autres dispositifs.</p>
+              <p>Notre objectif est de rendre nos formations en énergies renouvelables accessibles à tous et de soutenir votre montée en compétences face aux attentes du marché.</p>
             </div>
-            <div className="hero-stat-row">
-              {keyFigures.map((item) => (
-                <div className="hero-stat" key={item.label}>
-                  <strong>{item.value}</strong>
-                  <span>{item.label}</span>
+            <ButtonLink href="/actualites" variant="secondary">Découvrir notre article</ButtonLink>
+          </div>
+
+          <div className="identity-panel">
+            <div>
+              <h2>OXIDEVE C&apos;EST QUOI ?</h2>
+              <div className="identity-tabs" aria-hidden="true">
+                <span className="is-active">1</span>
+                <span>2</span>
+                <span>3</span>
+              </div>
+              <div className="identity-copy">
+                <span className="identity-index">1</span>
+                <h3>Notre vision</h3>
+                <p>Former et préparer les professionnels du BTP aux réglementations actuelles et à subsister face à la concurrence accrue grâce à nos formations en énergies renouvelables.</p>
+              </div>
+            </div>
+            <div>
+              <div className="identity-note">
+                <strong>Notre objectif</strong>
+                <p>Vous faire acquérir rapidement des compétences spécifiques et répondre aux exigences de votre marché. Nos formations courtes sont conçues pour transmettre des connaissances théoriques et permettre aux participants de manipuler les équipements sur des plateaux techniques.</p>
+                <strong>Notre organisme</strong>
+                <p>La certification Qualiopi est un gage de qualité pour aborder une diversité de formations BTP comme le photovoltaïque, les pompes à chaleur, la sécurité au travail, la bureautique et les véhicules électriques.</p>
+              </div>
+              <div className="identity-photo" style={{ backgroundImage: `linear-gradient(rgba(0, 77, 109, 0.2), rgba(0, 77, 109, 0.2)), url(${heroImage})` }} />
+            </div>
+          </div>
+
+          <div className="landing-center-cta">
+            <a className="review-button" href={qualiopiCertificateUrl} rel="noreferrer" target="_blank">Certif Qualiopi</a>
+          </div>
+
+          <div className="landing-heading center stats-heading">
+            <h2>Centre de formation professionnelle - Nos chiffres clés 2024</h2>
+          </div>
+          <div className="landing-stats">
+            <article>
+              <strong>843</strong>
+              <span>Personnes formées<br />1er trimestre 2024</span>
+            </article>
+            <article>
+              <strong>166</strong>
+              <span>Journée de formation<br />1er trimestre 2024</span>
+            </article>
+            <article>
+              <strong>3,78/4</strong>
+              <span>Taux de satisfaction client<br />1er trimestre 2024</span>
+            </article>
+            <article>
+              <strong>14</strong>
+              <span>Années<br />d&apos;expérience</span>
+            </article>
+          </div>
+
+          <div className="landing-center-cta">
+            <ButtonLink href="/inscriptions" variant="secondary">Vous aussi, formez-vous avec Oxideve</ButtonLink>
+          </div>
+        </Container>
+      </Section>
+
+      <Section className="landing-section landing-sessions-block">
+        <Container>
+          <div className="landing-heading">
+            <h2>Nos prochaines sessions de formation dans les énergies renouvelables</h2>
+            <p>Inscrivez-vous à nos formations rapides et techniques pour les professionnels du bâtiment.</p>
+          </div>
+
+          <div className="landing-session-card">
+            <div className="landing-calendar-shell">
+              <div className="landing-calendar-top">
+                <span>◀</span>
+                <strong>Juin 2024</strong>
+                <span>▶</span>
+              </div>
+              <div className="landing-calendar-days">
+                <span>Lun</span><span>Mar</span><span>Mer</span><span>Jeu</span><span>Ven</span><span>Sam</span><span>Dim</span>
+              </div>
+              <div className="landing-calendar-grid">
+                {Array.from({ length: 35 }, (_, index) => {
+                  const label = index < 5 ? `${26 + index}` : `${index - 4}`;
+                  const active = [18, 19, 20].includes(index);
+                  return (
+                    <span className={active ? "is-active" : undefined} key={`${label}-${index}`}>
+                      {label}
+                    </span>
+                  );
+                })}
+              </div>
+            </div>
+
+            <div className="landing-featured-session">
+              <div className="featured-session-main">
+                <h3>{featuredFormation?.shortTitle ?? "Formation"}</h3>
+                <p>{featuredFormation?.summary ?? "Découvrez notre prochaine session disponible."}</p>
+              </div>
+              <div className="featured-session-facts">
+                <div>
+                  <span>Date</span>
+                  <strong>{featuredSession ? formatDateRange(featuredSession.startDate, featuredSession.endDate) : "Juin 2024"}</strong>
                 </div>
+                <div>
+                  <span>Lieu</span>
+                  <strong>{featuredSession?.city ?? "Lyon"}</strong>
+                </div>
+                <div>
+                  <span>Place</span>
+                  <strong>{featuredSession?.seatsLeft ?? 12}</strong>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div className="landing-center-cta">
+            <ButtonLink href="/calendrier" variant="primary">Je consulte les sessions</ButtonLink>
+          </div>
+        </Container>
+      </Section>
+
+      <Section className="landing-section landing-benefits-shell">
+        <Container>
+          <div className="benefits-board">
+            <h2>POURQUOI VOUS FORMER AVEC OXIDEVE ?</h2>
+            <div className="benefits-grid-home">
+              {advantages.map((item) => (
+                <article className="benefit-pill" key={item}>{item}</article>
               ))}
             </div>
           </div>
-          <div className="hero-panel-grid">
-            <div className="hero-panel hero-panel-large">
-              <span className="hero-panel-label">Pourquoi Oxideve</span>
-              <p>Des fiches formation lisibles, des sessions exploitables par les equipes et une logique de parcours qui colle au chantier.</p>
-            </div>
-            <div className="hero-panel-list">
-              <div className="hero-panel">
-                <strong>Catalogue clair</strong>
-                <p>Comparaison rapide des formations sans habillage inutile.</p>
-              </div>
-              <div className="hero-panel">
-                <strong>Planning reel</strong>
-                <p>Les prochaines sessions sont reliees a la bonne fiche formation.</p>
-              </div>
-            </div>
-          </div>
         </Container>
       </Section>
 
-      <Section>
+      <Section className="landing-section">
         <Container>
-          <Title
-            eyebrow="Categories"
-            title="Un catalogue organise par familles de decisions terrain"
-            description="Les pages publiques repartent toujours des memes composants pour garder une lecture stable du catalogue jusqu'a l'inscription."
-            actions={<ButtonLink href="/formations" variant="secondary">Voir tout le catalogue</ButtonLink>}
-          />
-          <div className="category-grid">
-            {categories.map((category) => (
-              <div className="category-card" key={category.name}>
-                <strong>{category.name}</strong>
-                <span>{category.count} parcours</span>
-              </div>
-            ))}
+          <div className="landing-heading center">
+            <h2>Ils nous font confiance</h2>
           </div>
-        </Container>
-      </Section>
-
-      <Section surface="muted">
-        <Container>
-          <Title eyebrow="Chiffres cles" title="Des indicateurs visibles avant meme d'ouvrir le back-office" />
-          <div className="metric-grid">
-            {keyFigures.map((item) => (
-              <div className="metric-card" key={item.label}>
-                <strong>{item.value}</strong>
-                <span>{item.label}</span>
-              </div>
-            ))}
-          </div>
-        </Container>
-      </Section>
-
-      <Section>
-        <Container>
-          <Title eyebrow="Pourquoi Oxideve" title="Une meme logique de lecture du site jusqu'a la fiche detail" />
-          <div className="value-grid">
-            <div className="value-card">
-              <h3>Descriptions actionnables</h3>
-              <Text tone="muted">Chaque formation affiche les pre requis, les objectifs, les modalites et le programme sur le meme squelette.</Text>
+          <div className="trust-row" aria-hidden="true">
+            <span>◀</span>
+            <div className="trust-bubbles">
+              {Array.from({ length: 5 }, (_, index) => (
+                <span key={index} />
+              ))}
             </div>
-            <div className="value-card">
-              <h3>Sessions reliees au reel</h3>
-              <Text tone="muted">La lecture des prochaines dates se fait sans quitter l'univers de la formation concernee.</Text>
-            </div>
-            <div className="value-card">
-              <h3>Back-office unifie</h3>
-              <Text tone="muted">Le catalogue public et l'administration convergent vers les memes entites : formations, sessions, inscriptions et contenu editorial.</Text>
-            </div>
+            <span>▶</span>
           </div>
-        </Container>
-      </Section>
-
-      <Section>
-        <Container>
-          <Title eyebrow="Sessions" title="Les prochaines ouvertures de session" actions={<ButtonLink href="/formations" variant="secondary">Toutes les formations</ButtonLink>} />
-          <div className="session-grid">
-            {sessions.map((session) => (
-              <SessionCard key={session.id} compact formation={formations.find((formation) => formation.slug === session.formationSlug)} session={session} />
-            ))}
+          <div className="landing-center-cta">
+            <a className="review-button" href="https://oxideve.com" rel="noreferrer" target="_blank">Donnez votre avis G</a>
           </div>
-        </Container>
-      </Section>
 
-      <Section surface="contrast">
-        <Container>
-          <div className="spotlight-grid">
+          <div className="rge-highlight-card">
             <div>
-              <Title eyebrow="Bloc RGE" title="Un espace public qui prepare deja la logique RGE" description="Qualifications, preuves d'execution, dossier technique, autocontrôle et remise d'elements au client : tout le vocabulaire RGE traverse les parcours et les articles." />
+              <h2>TOUT SAVOIR SUR LES CERTIFICATIONS RGE</h2>
+              <h3>Une expertise reconnaissable grâce à votre certification</h3>
+              <p>Découvrez l&apos;importance d&apos;être artisan RGE grâce à nos formations QualiPV, QualiPAC et IRVE.</p>
+              <ButtonLink href="/rge" variant="primary">Devenir artisan RGE</ButtonLink>
             </div>
-            <div className="spotlight-card-list">
-              <div className="spotlight-card">
-                <strong>Formations RGE</strong>
-                <p>Photovoltaique et PAC sont presentes avec les attendus de qualification et les points de conformite utiles.</p>
+            <div className="rge-badges">
+              <span>Recharge Elec+</span>
+              <span>QualiPV</span>
+              <span>QualiPAC</span>
+            </div>
+          </div>
+
+          <div className="day-type-card">
+            <div className="day-type-copy">
+              <h2>Votre journée type avec les formateurs Oxideve</h2>
+              <p>Chaque programme est structuré pour combiner théorie essentielle et pratique sur nos plateaux techniques.</p>
+              <p>Nos formations énergies renouvelables sont conçues pour enrichir vos compétences et vous préparer aux défis actuels du secteur du bâtiment. Que ce soit en photovoltaïque, pompes à chaleur, sécurité, bureautique ou véhicules électriques, nos parcours répondent à vos besoins.</p>
+              <p>Explorez le déroulé de chaque formation et trouvez celle qui correspond le mieux à vos ambitions. Faites le premier pas vers une qualification reconnue et un apprentissage de qualité.</p>
+              <ul>
+                <li>Photovoltaïque</li>
+                <li>Pompe à chaleur</li>
+                <li>Sécurité</li>
+                <li>Bureautique</li>
+                <li>Véhicules électriques</li>
+              </ul>
+            </div>
+            <div className="day-type-visual">
+              <div className="day-type-wheel">
+                <span>☀</span>
+                <span>🔥</span>
+                <span>⛑</span>
+                <span>🔌</span>
+                <strong>?</strong>
               </div>
-              <div className="spotlight-card">
-                <strong>Documentation chantier</strong>
-                <p>Le site editorial reprend les routines de controle et de transmission attendues sur le terrain.</p>
-              </div>
+              <ButtonLink href="/inscriptions" variant="secondary">Je me projette</ButtonLink>
             </div>
-          </div>
-        </Container>
-      </Section>
-
-      <Section>
-        <Container>
-          <Title eyebrow="Parcours" title="Trois facons d'entrer dans l'offre" />
-          <div className="path-grid">
-            <div className="path-card">
-              <span>01</span>
-              <h3>Comparer</h3>
-              <p>Explorer les categories, filtrer, puis ouvrir la fiche formation detaillee.</p>
-            </div>
-            <div className="path-card">
-              <span>02</span>
-              <h3>Planifier</h3>
-              <p>Choisir une session visible et valider les contraintes de calendrier, lieu et format.</p>
-            </div>
-            <div className="path-card">
-              <span>03</span>
-              <h3>Inscrire</h3>
-              <p>Envoyer la demande depuis un point d'entree clair, sans naviguer entre plusieurs formulaires disjoints.</p>
-            </div>
-          </div>
-        </Container>
-      </Section>
-
-      <Section surface="muted">
-        <Container>
-          <Title eyebrow="Quiz" title="Par ou commencer ?" description="Trois portes d'entree simples pour orienter le bon parcours sans rendre le site artificiellement complexe." />
-          <div className="quiz-grid">
-            <div className="quiz-card">
-              <h3>Votre besoin est une qualification ou un maintien de niveau ?</h3>
-              <ButtonLink href="/rge" variant="ghost">Voir le parcours RGE</ButtonLink>
-            </div>
-            <div className="quiz-card">
-              <h3>Vous cherchez d'abord une date pour monter une equipe ?</h3>
-              <ButtonLink href="/formations" variant="ghost">Filtrer les sessions</ButtonLink>
-            </div>
-            <div className="quiz-card">
-              <h3>Vous avez besoin d'un format intra ou d'un cadrage pedagogique ?</h3>
-              <ButtonLink href="/contact" variant="ghost">Contacter Oxideve</ButtonLink>
-            </div>
-          </div>
-        </Container>
-      </Section>
-
-      <Section>
-        <Container>
-          <Title eyebrow="Catalogue" title="Quelques formations a la une" />
-          <div className="training-showcase-grid">
-            {formations.slice(0, 3).map((formation) => (
-              <FormationCard formation={formation} key={formation.slug} tone="highlight" />
-            ))}
-          </div>
-        </Container>
-      </Section>
-
-      <Section>
-        <Container className="contact-layout contact-layout-modern">
-          <div className="contact-card contact-card-copy">
-            <Title eyebrow="Contact" title="Une question sur un pre requis, un rythme ou un montage intra ?" />
-            <Text tone="muted" size="lg">Le formulaire ci-contre reste le point d'entree unique pour demander un rappel ou cadrer une inscription.</Text>
-          </div>
-          <div className="contact-card contact-card-form">
-            <ContactForm />
           </div>
         </Container>
       </Section>

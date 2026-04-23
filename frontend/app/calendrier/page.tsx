@@ -20,19 +20,19 @@ export default async function CalendrierPage() {
         <div className="page-title">
           <span className="eyebrow">Planning</span>
           <h1>Calendrier des prochaines sessions</h1>
-          <p>Visualisez rapidement les prochaines dates, le format de formation et les places encore disponibles pour orienter vos inscriptions.</p>
+          <p>Visualisez rapidement les prochaines dates, le format de formation et les places encore disponibles.</p>
         </div>
 
         <TrainingCalendar formations={formations} sessions={sessions} />
 
         <div className="section grid-2">
           <article className="card card-highlight">
-            <h2>Besoin d'un créneau intra-entreprise ?</h2>
-            <p>Si aucune date ne correspond à votre charge, l'équipe peut ouvrir une session dédiée en entreprise ou en distanciel tutoré.</p>
+            <h2>Besoin d'une autre date ?</h2>
+            <p>Si aucune session ne correspond à votre agenda, contactez Oxideve pour étudier une nouvelle ouverture.</p>
           </article>
           <article className="card">
             <h2>Prêt à réserver ?</h2>
-            <p>La page d'inscription centralise les coordonnées, le choix de session et les besoins de financement ou d'organisation.</p>
+            <p>La page d'inscription vous permet d'envoyer votre demande en quelques étapes.</p>
             <div className="cta-row">
               <Link href="/inscriptions" className="button button-primary">
                 Aller à l'inscription

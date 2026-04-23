@@ -4,7 +4,7 @@ import { contactEmail, contactPhone } from "@/lib/content";
 
 export const metadata: Metadata = {
   title: "Contact et inscription",
-  description: "Contactez Oxideve pour planifier une session, qualifier un besoin entreprise ou réserver une formation.",
+  description: "Contactez Oxideve pour obtenir des informations ou réserver une formation.",
 };
 
 export default function ContactPage() {
@@ -13,12 +13,12 @@ export default function ContactPage() {
       <div className="container contact-layout">
         <div className="contact-card">
           <span className="eyebrow">Contact</span>
-          <h1>Parler à un responsable formation</h1>
-          <p>Cette page reste disponible pour les demandes générales, les partenariats et les besoins hors catalogue standard.</p>
+          <h1>Contactez Oxideve</h1>
+          <p>Utilisez cette page pour poser une question, demander des informations ou préparer votre inscription.</p>
           <div className="detail-list">
             <p>Téléphone: {contactPhone}</p>
             <p>Email: {contactEmail}</p>
-            <p>Adresse: Rouen, interventions intra-entreprise possibles.</p>
+            <p>Adresse: Rouen.</p>
           </div>
         </div>
         <div className="contact-card">

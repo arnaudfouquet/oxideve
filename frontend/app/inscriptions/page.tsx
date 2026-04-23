@@ -18,14 +18,14 @@ export default async function InscriptionsPage() {
       <div className="container">
         <div className="page-title">
           <span className="eyebrow">Inscrivez-vous</span>
-          <h1>Centralisez vos inscriptions inter, intra et vos demandes de planification.</h1>
-          <p>Choisissez la formation, la prochaine session disponible et indiquez vos contraintes. L'équipe Oxideve valide ensuite la place, le financement et l'organisation.</p>
+          <h1>Inscrivez-vous à une formation Oxideve</h1>
+          <p>Choisissez une formation, une session disponible et transmettez votre demande. L'équipe Oxideve vous recontacte ensuite pour confirmer l'organisation.</p>
         </div>
 
         <div className="contact-layout">
           <article className="contact-card">
-            <h2>Formulaire global d'inscription</h2>
-            <p>Le formulaire est rattaché directement au catalogue et aux sessions ouvertes. Il peut être utilisé pour une personne ou pour une équipe complète.</p>
+            <h2>Formulaire d'inscription</h2>
+            <p>Utilisez ce formulaire pour réserver une place ou demander des informations complémentaires sur une session.</p>
             <ContactForm
               formations={formations}
               sessions={sessions}
@@ -37,7 +37,7 @@ export default async function InscriptionsPage() {
           </article>
           <article className="contact-card">
             <h2>Sessions disponibles</h2>
-            <p>Voici les créneaux actuellement ouverts pour vous aider à choisir une date et un format adaptés.</p>
+            <p>Voici les créneaux actuellement ouverts pour vous aider à choisir une date adaptée.</p>
             <TrainingCalendar formations={formations} sessions={sessions.slice(0, 5)} compact />
           </article>
         </div>
