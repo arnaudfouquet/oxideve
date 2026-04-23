@@ -1,6 +1,6 @@
 const { randomUUID } = require("crypto");
 const { getPrismaClient } = require("./prismaClient");
-const { findOrCreateCompanyFromRegistration } = require("./companyService");
+const { findOrCreateCompanyFromRegistration, listCompanies } = require("./companyService");
 
 const inMemoryRegistrations = [];
 
@@ -68,6 +68,8 @@ async function listRegistrations() {
   const prisma = getPrismaClient();
 
   if (prisma) {
+    await listCompanies();
+
     const registrations = await prisma.inscription.findMany({
       orderBy: { createdAt: "desc" },
       take: 50,
