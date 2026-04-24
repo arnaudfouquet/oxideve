@@ -11,7 +11,7 @@ export function FormationCard({ formation, tone = "default" }: Props) {
   return (
     <Card className="formation-card" tone={tone}>
       <div className="formation-card-head">
-        <Badge tone="soft">{formation.category}</Badge>
+        <Badge tone="accent">{formation.category}</Badge>
         <Badge>{formation.duration}</Badge>
       </div>
       <h3>{formation.title}</h3>

@@ -13,14 +13,14 @@ export function SessionCard({ session, formation, compact = false }: Props) {
   return (
     <Card className={`session-card${compact ? " session-card-compact" : ""}`}>
       <div className="session-card-head">
-        <Badge tone="accent">{session.mode}</Badge>
         <Badge>{session.city}</Badge>
+        <Badge tone="accent">{formatDateRange(session.startDate, session.endDate)}</Badge>
       </div>
       <h3>{formation?.title || session.formationSlug}</h3>
-      <Text tone="muted">{formatDateRange(session.startDate, session.endDate)}</Text>
+      <Text tone="muted">Session organisée à {session.city}</Text>
       <div className="session-card-meta">
         <span>{session.seatsLeft} places disponibles</span>
-        {formation ? <span>{formation.duration}</span> : null}
+        <span>{session.mode}</span>
       </div>
       <ButtonLink href={`/inscriptions?formationSlug=${session.formationSlug}&sessionId=${session.id}`} variant="secondary">
         Choisir cette session

@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="101" height="100" viewBox="0 0 101 100">
+  <g id="Groupe_2285" data-name="Groupe 2285" transform="translate(-630 -5992)">
+    <g id="Groupe_2168" data-name="Groupe 2168" transform="translate(-3 2880)">
+      <ellipse id="Ellipse_23" data-name="Ellipse 23" cx="50.5" cy="50" rx="50.5" ry="50" transform="translate(633 3112)" fill="#fff"/>
+    </g>
+    <path id="Icon_map-fullscreen" data-name="Icon map-fullscreen" d="M1.44,15.8V1.44H16.361l5.491,4.174H12.7L22.31,15.8l-5.949,5.47-9.7-9.129v9.15ZM34.572,1.44H49.44V15.849l-4.174,5.49V12.19L34.828,21.8l-5.6-5.693,9-9.448h-9.15ZM49.44,34.572V49.44H34.519l-5.491-4.174h9.15L28.57,34.828l5.949-5.6,9.7,9v-9.15ZM16.307,49.44H1.44V34.519l4.174-5.491v9.15L16.052,28.57l5.6,5.949-9,9.7H21.8Z" transform="translate(655.559 6016.56)" fill="#09cf65"/>
+  </g>
+</svg>

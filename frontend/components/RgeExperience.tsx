@@ -136,7 +136,7 @@ export function RgeExperience() {
         <div className="rge-info-box">
           <p>La certification RGE est un label officiel valable 4 ans destiné aux professionnels du bâtiment et des énergies renouvelables.</p>
           <p>Obtenir un label RGE nécessite une formation spécifique, comme celles proposées chez Oxideve, où vous serez évalué pour garantir les compétences et la conformité du professionnel.</p>
-          <span className="home-info-badge">i</span>
+          <span className="home-info-badge"><img alt="" src="/assets/info-icon.svg" /></span>
         </div>
       </section>
 

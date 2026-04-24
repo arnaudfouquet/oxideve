@@ -18,7 +18,7 @@ const identitySteps = [
       "Nos formations courtes sont conçues pour transmettre des connaissances théoriques et permettre aux participants de manipuler les équipements sur des plateaux techniques.",
     description:
       "Former et préparer les professionnels du BTP aux réglementations actuelles, à subsister face à la concurrence accrue grâce à nos formations en bâtiment.",
-    image: "https://images.unsplash.com/photo-1541888946425-d81bb19240f5?auto=format&fit=crop&w=1200&q=80",
+    image: encodeURI("/assets/accueil/Notre visio.webp"),
   },
   {
     id: "2",
@@ -119,7 +119,7 @@ export function HomeIdentitySection() {
         <h2>OXIDEVE C&apos;EST QUOI ?</h2>
         <div className="home-identity-note">
           <p>{activeIdentityStep.note}</p>
-          <span className="home-info-badge">i</span>
+          <span className="home-info-badge"><img alt="" src="/assets/info-icon.svg" /></span>
         </div>
       </div>
 
@@ -153,7 +153,6 @@ export function HomeIdentitySection() {
 }
 
 export function HomeCalendarSection({ formations, sessions }: Props) {
-  const [categoryFilter, setCategoryFilter] = useState("Toutes");
   const [activeMonth, setActiveMonth] = useState("");
   const [selectedDate, setSelectedDate] = useState("");
 
@@ -172,15 +171,12 @@ export function HomeCalendarSection({ formations, sessions }: Props) {
       .filter(Boolean) as Array<Session & { category: string; formationTitle: string }>;
   }, [formations, sessions]);
 
-  const categories = useMemo(() => ["Toutes", ...Array.from(new Set(enrichedSessions.map((session) => session.category))).sort((a, b) => a.localeCompare(b, "fr"))], [enrichedSessions]);
-
   const visibleSessions = useMemo(() => {
     const today = new Date().toISOString().slice(0, 10);
     return enrichedSessions
       .filter((session) => session.endDate >= today)
-      .filter((session) => categoryFilter === "Toutes" || session.category === categoryFilter)
       .sort((left, right) => left.startDate.localeCompare(right.startDate));
-  }, [categoryFilter, enrichedSessions]);
+  }, [enrichedSessions]);
 
   const months = useMemo(() => Array.from(new Set(visibleSessions.map((session) => monthKey(session.startDate)))), [visibleSessions]);
 
@@ -269,22 +265,6 @@ export function HomeCalendarSection({ formations, sessions }: Props) {
           </div>
 
           <div className="home-calendar-side">
-            <div className="home-calendar-filters">
-              {categories.map((category) => (
-                <button className={`landing-filter-pill${categoryFilter === category ? " active" : ""}`} key={category} onClick={() => setCategoryFilter(category)} type="button">
-                  {category}
-                </button>
-              ))}
-            </div>
-
-            <div className="home-calendar-months">
-              {months.map((month) => (
-                <button className={`landing-month-pill${activeMonth === month ? " active" : ""}`} key={month} onClick={() => setActiveMonth(month)} type="button">
-                  {monthLabel(month)}
-                </button>
-              ))}
-            </div>
-
             <div className="home-calendar-session-box">
               {selectedDaySessions[0] ? (
                 <>

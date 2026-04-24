@@ -75,8 +75,8 @@ export default async function FormationDetailPage({ params }: Props) {
         <Container>
         <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
           <div className="formation-hero">
-            <div>
-              <Badge tone="soft">{formation.category}</Badge>
+            <div className="formation-hero-main">
+              <Badge tone="accent">{formation.category}</Badge>
               <Title as="h1" title={formation.title} description={formation.summary} />
               <div className="formation-hero-actions">
                 <ButtonLink href={`/inscriptions?formationSlug=${formation.slug}&sessionId=${sessions[0]?.id || ""}`} variant="primary">Je m'inscris</ButtonLink>

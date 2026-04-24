@@ -4,28 +4,41 @@ import { getFormations, getSessions } from "@/lib/content";
 
 export const dynamic = "force-dynamic";
 
-const heroImage = "https://oxideve.com/wp-content/uploads/2024/10/Panneau-solaire-installateur-sur-un-toit-pose-photovoltaique-oxideve-200x300.webp";
+const heroImage = encodeURI("/assets/accueil/formation oxideve hero.webp");
 const whiteLogoUrl = "https://oxideve.com/wp-content/uploads/2024/11/LOGO_OXIDEVE_BLANC_WEB_SVG.svg";
+const infoIconUrl = "/assets/info-icon.svg";
+const trustIconUrl = encodeURI("/assets/accueil/icone google avis oxideve.svg");
+const rgeHighlightImage = encodeURI("/assets/accueil/formation qualipv qualipac recharge elec oxideve.svg");
+const dayTypeImage = encodeURI("/assets/accueil/journée type formation oxideve.svg");
+
+function categoryAnchor(category: string) {
+  return `/formations#category-${category
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-+|-+$/g, "")}`;
+}
 
 const homeCategories = [
-  { title: "Formations photovoltaïques", href: "/formations?category=Photovolta%C3%AFque" },
-  { title: "Formations pompe à chaleur", href: "/formations?category=Pompes%20%C3%A0%20chaleur" },
-  { title: "Formations bornes de recharge", href: "/formations?category=Bornes%20de%20recharge" },
-  { title: "Formations sécurité au travail", href: "/formations?category=S%C3%A9curit%C3%A9%20au%20travail" },
-  { title: "Formations Excel", href: "/formations?category=Bureautique" },
+  { title: ["Formation", "photovoltaïque"], href: categoryAnchor("Photovoltaïque") },
+  { title: ["Formation", "pompe à chaleur"], href: categoryAnchor("Pompes à chaleur") },
+  { title: ["Formation", "bornes de recharge"], href: categoryAnchor("Bornes de recharge") },
+  { title: ["Formation", "sécurité au travail"], href: categoryAnchor("Sécurité au travail") },
+  { title: ["Formation", "Excel"], href: categoryAnchor("Bureautique") },
   { title: "Logo", href: "/formations", accent: true, logo: true },
 ];
 
 const advantages = [
-  { title: "Diversité de formation", icon: "✣" },
-  { title: "Formations courtes et intenses", icon: "▷" },
-  { title: "Plateaux techniques", icon: "✦" },
-  { title: "Suivi de l'évolution du marché", icon: "↗" },
-  { title: "Formateurs expérimentés", icon: "◎" },
-  { title: "Organisme Qualiopi", icon: "★" },
-  { title: "Elargir votre réseau", icon: "⌘" },
-  { title: "Equipement de pointe et innovant", icon: "▣" },
-  { title: "Accompagnement post formation", icon: "⚑" },
+  { title: "Diversité de formation", icon: encodeURI("/assets/accueil/diversite formation oxideve.svg") },
+  { title: "Formations courtes et intenses", icon: encodeURI("/assets/accueil/formation courte intense oxideve.svg") },
+  { title: "Plateaux techniques", icon: encodeURI("/assets/accueil/plateaux techniques oxideve.svg") },
+  { title: "Suivi de l'évolution du marché", icon: encodeURI("/assets/accueil/formation evolution marche oxideve.svg") },
+  { title: "Formateurs expérimentés", icon: encodeURI("/assets/accueil/formateurs experimentés oxideve.svg") },
+  { title: "Organisme Qualiopi", icon: encodeURI("/assets/accueil/qualipio oxideve formation.svg") },
+  { title: "Elargir votre réseau", icon: encodeURI("/assets/accueil/reseau oxideve formation.svg") },
+  { title: "Equipement de pointe et innovant", icon: encodeURI("/assets/accueil/equipement formation.svg") },
+  { title: "Accompagnement post formation", icon: encodeURI("/assets/accueil/accompagenement formation qualipv.svg") },
 ];
 
 const keyStats = [
@@ -43,7 +56,13 @@ export default async function HomePage() {
     <>
       <section className="landing-hero" style={{ backgroundImage: `linear-gradient(rgba(0, 77, 109, 0.72), rgba(0, 77, 109, 0.72)), url(${heroImage})` }}>
         <Container className="landing-hero-inner">
-          <h1>Centre de formation professionnelle</h1>
+          <h1>
+            Votre centre de formation
+            <br />
+            professionnelle
+            <br />
+            <span className="title-accent">avec Oxideve</span>
+          </h1>
           <ButtonLink href="/formations" variant="primary">Nos formations</ButtonLink>
         </Container>
       </section>
@@ -55,7 +74,7 @@ export default async function HomePage() {
           </div>
           <div className="landing-category-grid">
             {homeCategories.map((item) => (
-              <article className={`landing-category-card${item.accent ? " is-accent" : ""}`} key={item.title}>
+              <article className={`landing-category-card${item.accent ? " is-accent" : ""}`} key={item.href}>
                 {item.logo ? (
                   <>
                     <img alt="Oxideve" className="landing-category-logo" src={whiteLogoUrl} />
@@ -63,7 +82,11 @@ export default async function HomePage() {
                   </>
                 ) : (
                   <>
-                    <h3>{item.title}</h3>
+                    <h3>
+                      {item.title[0]}
+                      <br />
+                      {item.title[1]}
+                    </h3>
                     <ButtonLink className="ui-button-card" href={item.href} variant="secondary">Découvrir</ButtonLink>
                   </>
                 )}
@@ -108,10 +131,21 @@ export default async function HomePage() {
             <div className="benefits-grid-home">
               {advantages.map((item) => (
                 <article className="benefit-pill" key={item.title}>
-                  <span className="benefit-pill-icon">{item.icon}</span>
+                  <span className="benefit-pill-icon"><img alt="" src={item.icon} /></span>
                   <strong>{item.title}</strong>
                 </article>
               ))}
+            </div>
+          </div>
+
+          <div className="trust-strip">
+            <div className="trust-strip-copy">
+              <h3>Ils nous font confiance</h3>
+              <p>Des professionnels du terrain choisissent Oxideve pour des formations concrètes, rapides et directement applicables.</p>
+            </div>
+            <div className="trust-strip-card">
+              <img alt="Avis Google Oxideve" src={trustIconUrl} />
+              <strong>4,7/5 sur les avis stagiaires</strong>
             </div>
           </div>
         </Container>
@@ -127,9 +161,9 @@ export default async function HomePage() {
               <ButtonLink className="ui-button-blue" href="/rge" variant="primary">Devenir artisan RGE</ButtonLink>
             </div>
             <div className="rge-badges">
-              <span>Recharge Elec+</span>
-              <span>QualiPV 2024</span>
-              <span>QualiPAC 2024</span>
+              <div className="rge-highlight-media">
+                <img alt="Formations QualiPV, QualiPAC et Recharge Elec+" src={rgeHighlightImage} />
+              </div>
             </div>
           </div>
 
@@ -148,13 +182,7 @@ export default async function HomePage() {
               </ul>
             </div>
             <div className="day-type-visual">
-              <div className="day-type-wheel">
-                <span>☀</span>
-                <span>🔥</span>
-                <span>⛑</span>
-                <span>🔌</span>
-                <strong>?</strong>
-              </div>
+              <img alt="Journée type de formation Oxideve" src={dayTypeImage} />
               <ButtonLink className="ui-button-card" href="/inscriptions" variant="secondary">Je me projette</ButtonLink>
             </div>
           </div>
@@ -162,13 +190,13 @@ export default async function HomePage() {
           <div className="quiz-band">
             <div className="quiz-band-copy">
               <h2>Quizz rapide pour orienter votre parcours de formation</h2>
-              <p>Avant de vous lancer dans l&apos;une de nos formations professionnelles, pourquoi ne pas découvrir votre niveau actuel avec notre quizz d&apos;auto-évaluation ?</p>
+              <p>Avant de vous lancer dans l&apos;une de nos formations professionnelles, pourquoi ne pas découvrir votre niveau actuel avec notre <strong>quizz d&apos;auto-évaluation</strong> ?</p>
             </div>
             <div className="quiz-band-side">
               <ButtonLink className="ui-button-green" href="/diagnostic-parcours" variant="primary">J&apos;évalue mes compétences</ButtonLink>
               <div className="quiz-band-note">
                 <p>Cet outil vous permet d&apos;identifier vos points forts et les domaines où une formation peut vous aider à progresser.</p>
-                <span className="home-info-badge">i</span>
+                <span className="home-info-badge"><img alt="" src={infoIconUrl} /></span>
               </div>
             </div>
           </div>

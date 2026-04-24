@@ -4,7 +4,7 @@ import { Container, Section, Text, Title } from "@/components/ui";
 import { getArticles } from "@/lib/content";
 
 export const metadata: Metadata = {
-  title: "Actualites",
+  title: "Actus sur la formation",
   description: "Notes Oxideve sur les pratiques chantier, les qualifications RGE et l'organisation des parcours de formation.",
 };
 
@@ -16,7 +16,7 @@ export default async function ActualitesPage() {
   return (
     <Section>
       <Container>
-        <Title as="h1" eyebrow="Actualites" title="Articles, notes terrain et reperes RGE" description="Le blog relie le discours public au vocabulaire operationnel travaille dans les parcours de formation." />
+        <Title as="h1" title="Actus sur la formation" />
         <div className="article-grid">
           {articles.map((article) => (
             <article className="article-card" key={article.slug}>

@@ -23,7 +23,7 @@ export function SiteFooter() {
             <div className="brand-mark brand-mark-footer">
               <img alt="Oxideve" className="brand-logo brand-logo-footer" src={logoUrl} />
             </div>
-            <Text tone="inverse">Organisme de formation professionnelle pour les métiers de l'énergie, du bâtiment et des services.</Text>
+            <Text className="site-footer-tagline" tone="inverse">Organisme de formation professionnelle pour les métiers de l'énergie, du bâtiment et des services.</Text>
           </div>
 
           <div>
