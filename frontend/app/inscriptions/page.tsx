@@ -10,8 +10,16 @@ export const metadata: Metadata = {
   description: "Sélectionnez une formation et une session Oxideve, puis envoyez votre demande d'inscription globale.",
 };
 
-export default async function InscriptionsPage() {
+type Props = {
+  searchParams?: Promise<{ formationSlug?: string; sessionId?: string }>;
+};
+
+export default async function InscriptionsPage({ searchParams }: Props) {
   const [formations, sessions] = await Promise.all([getFormations(), getSessions()]);
+  const params = searchParams ? await searchParams : {};
+  const defaultFormationSlug = params?.formationSlug && formations.some((formation) => formation.slug === params.formationSlug) ? params.formationSlug : formations[0]?.slug;
+  const scopedSessions = sessions.filter((session) => session.formationSlug === defaultFormationSlug);
+  const defaultSessionId = params?.sessionId && sessions.some((session) => session.id === params.sessionId) ? params.sessionId : scopedSessions[0]?.id || sessions[0]?.id;
 
   return (
     <section className="section">
@@ -30,8 +38,8 @@ export default async function InscriptionsPage() {
               formations={formations}
               sessions={sessions}
               showSelectors
-              defaultFormationSlug={formations[0]?.slug}
-              defaultSessionId={sessions[0]?.id}
+              defaultFormationSlug={defaultFormationSlug}
+              defaultSessionId={defaultSessionId}
               submitLabel="Envoyer l'inscription"
             />
           </article>

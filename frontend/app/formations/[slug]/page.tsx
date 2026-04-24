@@ -79,7 +79,7 @@ export default async function FormationDetailPage({ params }: Props) {
               <Badge tone="soft">{formation.category}</Badge>
               <Title as="h1" title={formation.title} description={formation.summary} />
               <div className="formation-hero-actions">
-                <ButtonLink href="/inscriptions" variant="primary">Je m'inscris</ButtonLink>
+                <ButtonLink href={`/inscriptions?formationSlug=${formation.slug}&sessionId=${sessions[0]?.id || ""}`} variant="primary">Je m'inscris</ButtonLink>
                 <ButtonLink href="/contact" variant="secondary">Parler a l'equipe</ButtonLink>
               </div>
             </div>
@@ -87,7 +87,7 @@ export default async function FormationDetailPage({ params }: Props) {
               <strong>Prochaine session</strong>
               <p>{sessions[0] ? formatDateRange(sessions[0].startDate, sessions[0].endDate) : "Calendrier en preparation"}</p>
               <span>{sessions[0]?.city || formation.location}</span>
-              <ButtonLink href="/inscriptions" variant="primary">Reserver une place</ButtonLink>
+              <ButtonLink href={`/inscriptions?formationSlug=${formation.slug}&sessionId=${sessions[0]?.id || ""}`} variant="primary">Choisir cette session</ButtonLink>
             </aside>
           </div>
 
@@ -186,8 +186,8 @@ export default async function FormationDetailPage({ params }: Props) {
         </Container>
       </Section>
 
-      <Section surface="contrast">
-        <Container className="detail-cta-band">
+      <Section className="detail-cta-section">
+        <Container className="detail-cta-band detail-cta-band-green">
           <div>
             <Title eyebrow="Inscription" title={`Préparer votre inscription à ${formation.shortTitle}`} description="Le formulaire ci-contre permet de rattacher directement votre demande à cette formation et à la prochaine session visible." />
           </div>

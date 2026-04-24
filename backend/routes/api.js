@@ -13,6 +13,7 @@ const {
 } = require("../services/catalogService");
 const { createArticle, deleteArticle, getArticleBySlug, listArticles, updateArticle } = require("../services/editorialService");
 const { createCompany, listCompanies, updateCompany } = require("../services/companyService");
+const { createCrmInteraction, createCrmTask, listCrmInteractions, listCrmTasks, updateCrmTask } = require("../services/crmService");
 const { createRegistration, listRegistrations } = require("../services/registrationService");
 
 const inscriptionSchema = z.object({
@@ -76,9 +77,28 @@ const companySchema = z.object({
   status: z.string().min(2).max(40),
   source: z.string().min(2).max(60),
   priority: z.string().min(2).max(40),
+  owner: z.string().max(120).optional().default(""),
   notes: z.string().max(4000).optional().default(""),
   nextFollowUpAt: z.string().max(10).optional().or(z.literal("")),
   lastContactAt: z.string().max(10).optional().or(z.literal("")),
+});
+
+const crmTaskSchema = z.object({
+  companyId: z.string().min(2),
+  title: z.string().min(2).max(180),
+  description: z.string().max(2000).optional().default(""),
+  status: z.string().min(2).max(40),
+  dueDate: z.string().max(10).optional().or(z.literal("")),
+  owner: z.string().max(120).optional().default(""),
+});
+
+const crmInteractionSchema = z.object({
+  companyId: z.string().min(2),
+  type: z.string().min(2).max(80),
+  channel: z.string().max(80).optional().default(""),
+  summary: z.string().min(4).max(4000),
+  owner: z.string().max(120).optional().default(""),
+  occurredAt: z.string().max(10).optional().or(z.literal("")),
 });
 
 function asyncHandler(handler) {
@@ -153,15 +173,17 @@ function createApiRouter() {
   router.get(
     "/admin/overview",
     asyncHandler(async (_req, res) => {
-      const [formations, sessions, registrations, articles, companies] = await Promise.all([
+      const [formations, sessions, registrations, articles, companies, crmTasks, crmInteractions] = await Promise.all([
         listFormations(),
         listSessions(),
         listRegistrations(),
         listArticles(),
         listCompanies(),
+        listCrmTasks(),
+        listCrmInteractions(),
       ]);
 
-      res.json({ data: { formations, sessions, registrations, articles, companies } });
+      res.json({ data: { formations, sessions, registrations, articles, companies, crmTasks, crmInteractions } });
     })
   );
 
@@ -188,6 +210,49 @@ function createApiRouter() {
       const payload = companySchema.parse(req.body);
       const company = await updateCompany(req.params.id, payload);
       res.json({ data: company, message: "Fiche entreprise mise à jour" });
+    })
+  );
+
+  router.get(
+    "/admin/crm/tasks",
+    asyncHandler(async (_req, res) => {
+      const tasks = await listCrmTasks();
+      res.json({ data: tasks });
+    })
+  );
+
+  router.post(
+    "/admin/crm/tasks",
+    asyncHandler(async (req, res) => {
+      const payload = crmTaskSchema.parse(req.body);
+      const task = await createCrmTask(payload);
+      res.status(201).json({ data: task, message: "Tâche créée" });
+    })
+  );
+
+  router.patch(
+    "/admin/crm/tasks/:id",
+    asyncHandler(async (req, res) => {
+      const payload = crmTaskSchema.parse(req.body);
+      const task = await updateCrmTask(req.params.id, payload);
+      res.json({ data: task, message: "Tâche mise à jour" });
+    })
+  );
+
+  router.get(
+    "/admin/crm/interactions",
+    asyncHandler(async (_req, res) => {
+      const interactions = await listCrmInteractions();
+      res.json({ data: interactions });
+    })
+  );
+
+  router.post(
+    "/admin/crm/interactions",
+    asyncHandler(async (req, res) => {
+      const payload = crmInteractionSchema.parse(req.body);
+      const interaction = await createCrmInteraction(payload);
+      res.status(201).json({ data: interaction, message: "Échange enregistré" });
     })
   );
 

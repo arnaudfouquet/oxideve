@@ -22,8 +22,8 @@ export function SessionCard({ session, formation, compact = false }: Props) {
         <span>{session.seatsLeft} places disponibles</span>
         {formation ? <span>{formation.duration}</span> : null}
       </div>
-      <ButtonLink href={`/formations/${session.formationSlug}`} variant="secondary">
-        Consulter la fiche
+      <ButtonLink href={`/inscriptions?formationSlug=${session.formationSlug}&sessionId=${session.id}`} variant="secondary">
+        Choisir cette session
       </ButtonLink>
     </Card>
   );

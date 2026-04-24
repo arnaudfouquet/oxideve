@@ -98,12 +98,40 @@ model Company {
   status             String        @default("Prospect")
   source             String        @default("Inbound")
   priority           String        @default("Normale")
+  owner              String?
   notes              String?       @db.Text
   nextFollowUpAt     DateTime?
   lastContactAt      DateTime?
   createdAt          DateTime      @default(now())
   updatedAt          DateTime      @updatedAt
   registrations      Inscription[]
+  tasks              CompanyTask[]
+  interactions       CompanyInteraction[]
 
   @@unique([name, email])
+}
+
+model CompanyTask {
+  id          String    @id @default(cuid())
+  companyId   String
+  title       String
+  description String?   @db.Text
+  status      String    @default("A faire")
+  dueDate     DateTime?
+  owner       String?
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  company     Company   @relation(fields: [companyId], references: [id], onDelete: Cascade)
+}
+
+model CompanyInteraction {
+  id         String    @id @default(cuid())
+  companyId  String
+  type       String
+  channel    String?
+  summary    String    @db.Text
+  owner      String?
+  occurredAt DateTime  @default(now())
+  createdAt  DateTime  @default(now())
+  company    Company   @relation(fields: [companyId], references: [id], onDelete: Cascade)
 }

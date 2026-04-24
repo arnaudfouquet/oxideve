@@ -55,11 +55,35 @@ export type Company = {
   status: string;
   source: string;
   priority: string;
+  owner?: string;
   notes: string;
   nextFollowUpAt?: string;
   lastContactAt?: string;
   createdAt: string;
   updatedAt: string;
+};
+
+export type CrmTask = {
+  id: string;
+  companyId: string;
+  title: string;
+  description?: string;
+  status: string;
+  dueDate?: string;
+  owner?: string;
+  createdAt: string;
+  updatedAt: string;
+};
+
+export type CrmInteraction = {
+  id: string;
+  companyId: string;
+  type: string;
+  channel?: string;
+  summary: string;
+  owner?: string;
+  occurredAt: string;
+  createdAt: string;
 };
 
 export type Article = {

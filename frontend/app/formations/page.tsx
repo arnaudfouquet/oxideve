@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Link from "next/link";
 import { FormationCard } from "@/components/FormationCard";
 import { formatDateRange, getSessions } from "@/lib/content";
 import { Container, Input, Section, Select, Title } from "@/components/ui";
@@ -143,10 +144,10 @@ export default async function FormationsPage({ searchParams }: Props) {
 
         <div className="catalog-summary-row">
           {categories.map((item) => (
-            <div className="catalog-summary-card" key={item}>
+            <Link className={`catalog-summary-card catalog-summary-card-link${category === item ? " active" : ""}`} href={`/formations?category=${encodeURIComponent(item)}`} key={item}>
               <strong>{item}</strong>
               <span>{formations.filter((formation) => formation.category === item).length} parcours</span>
-            </div>
+            </Link>
           ))}
         </div>
 

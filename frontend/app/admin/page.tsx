@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
-import { AdminConsole } from "@/components/AdminConsole";
-import { getArticles, getCompanies, getFormations, getRegistrations, getSessions } from "@/lib/content";
+import { AdminWorkspace } from "@/components/AdminWorkspace";
+import { getArticles, getCompanies, getCrmInteractions, getCrmTasks, getFormations, getRegistrations, getSessions } from "@/lib/content";
 
 export const dynamic = "force-dynamic";
 
@@ -10,12 +10,14 @@ export const metadata: Metadata = {
 };
 
 export default async function AdminPage() {
-  const [formations, sessions, registrations, articles, companies] = await Promise.all([
+  const [formations, sessions, registrations, articles, companies, crmTasks, crmInteractions] = await Promise.all([
     getFormations(),
     getSessions(),
     getRegistrations(),
     getArticles(),
     getCompanies(),
+    getCrmTasks(),
+    getCrmInteractions(),
   ]);
   const totalSeatsLeft = sessions.reduce((total, session) => total + session.seatsLeft, 0);
 
@@ -36,9 +38,11 @@ export default async function AdminPage() {
           <span className="stat-pill">{totalSeatsLeft} places restantes</span>
         </div>
 
-        <AdminConsole
+        <AdminWorkspace
           initialArticles={articles}
           initialCompanies={companies}
+          initialCrmInteractions={crmInteractions}
+          initialCrmTasks={crmTasks}
           initialFormations={formations}
           initialSessions={sessions}
           initialRegistrations={registrations}

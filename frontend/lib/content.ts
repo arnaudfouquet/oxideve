@@ -1,6 +1,6 @@
 import "server-only";
 import catalogData from "../../shared/catalog-data.json";
-import type { Article, CatalogData, Company, Formation, Registration, Session } from "../../shared/types";
+import type { Article, CatalogData, Company, CrmInteraction, CrmTask, Formation, Registration, Session } from "../../shared/types";
 import { blogArticles } from "./editorial";
 
 const catalog = catalogData as CatalogData;
@@ -17,6 +17,11 @@ type RegistrationServiceModule = {
 
 type CompanyServiceModule = {
   listCompanies: () => Promise<Company[]>;
+};
+
+type CrmServiceModule = {
+  listCrmTasks: () => Promise<CrmTask[]>;
+  listCrmInteractions: () => Promise<CrmInteraction[]>;
 };
 
 type EditorialServiceModule = {
@@ -44,6 +49,10 @@ function getRegistrationService(): RegistrationServiceModule {
 
 function getCompanyService(): CompanyServiceModule {
   return require("../../backend/services/companyService.js") as CompanyServiceModule;
+}
+
+function getCrmService(): CrmServiceModule {
+  return require("../../backend/services/crmService.js") as CrmServiceModule;
 }
 
 function getEditorialService(): EditorialServiceModule {
@@ -109,6 +118,24 @@ export async function getCompanies(): Promise<Company[]> {
   try {
     const service = getCompanyService();
     return await service.listCompanies();
+  } catch {
+    return [];
+  }
+}
+
+export async function getCrmTasks(): Promise<CrmTask[]> {
+  try {
+    const service = getCrmService();
+    return await service.listCrmTasks();
+  } catch {
+    return [];
+  }
+}
+
+export async function getCrmInteractions(): Promise<CrmInteraction[]> {
+  try {
+    const service = getCrmService();
+    return await service.listCrmInteractions();
   } catch {
     return [];
   }
