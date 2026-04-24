@@ -13,57 +13,32 @@ const identitySteps = [
   {
     id: "1",
     label: "Notre vision",
-    title: "Former le terrain sans perdre l'exigence réglementaire",
+    title: "Notre vision",
+    note:
+      "Nos formations courtes sont conçues pour transmettre des connaissances théoriques et permettre aux participants de manipuler les équipements sur des plateaux techniques.",
     description:
-      "Oxideve prépare les artisans, techniciens et encadrants BTP aux exigences marché avec des parcours qui collent aux réalités chantier.",
-    points: ["Lecture claire des besoins terrain", "Parcours courts mais concrets", "Montée en compétence orientée résultat"],
+      "Former et préparer les professionnels du BTP aux réglementations actuelles, à subsister face à la concurrence accrue grâce à nos formations en bâtiment.",
+    image: "https://images.unsplash.com/photo-1541888946425-d81bb19240f5?auto=format&fit=crop&w=1200&q=80",
   },
   {
     id: "2",
     label: "Notre objectif",
-    title: "Faire monter vite vos équipes en autonomie",
+    title: "Texte 2",
+    note:
+      "Nos parcours sont pensés pour faire gagner du temps à vos équipes avec des formats denses, pratiques et directement utiles sur le terrain.",
     description:
-      "Les formations sont pensées pour transmettre des repères techniques immédiatement utiles, avec manipulation, diagnostic et mise en service.",
-    points: ["Formats adaptés aux plannings d'entreprise", "Exercices appliqués et plateaux techniques", "Approche utile à la vente comme à l'exécution"],
+      "Faux texte de présentation pour illustrer la deuxième carte. L'idée est de montrer un contenu éditorial plus institutionnel, calibré pour l'activité et la montée en compétence.",
+    image: "https://images.unsplash.com/photo-1517048676732-d65bc937f952?auto=format&fit=crop&w=1200&q=80",
   },
   {
     id: "3",
     label: "Notre organisme",
-    title: "Un centre Qualiopi construit pour plusieurs métiers du bâtiment",
+    title: "Texte 3",
+    note:
+      "Oxideve relie qualification, pratique chantier et lecture réglementaire dans une même expérience de formation.",
     description:
-      "Photovoltaïque, PAC, IRVE, sécurité et bureautique : l'offre reste lisible, financable et pilotable avec un même niveau d'exigence.",
-    points: ["Catalogue multi-familles", "Sessions visibles et exploitables", "Accompagnement avant et après inscription"],
-  },
-];
-
-const reviewCards = [
-  {
-    name: "Mickaël R.",
-    role: "Gérant · Rouen",
-    quote: "La session QualiPAC a été utile dès la semaine suivante sur nos mises en service. Le formateur parlait vraiment chantier.",
-    highlight: "QualiPAC",
-    seed: "MickaelR",
-  },
-  {
-    name: "Sarah L.",
-    role: "Chargée d'affaires solaire",
-    quote: "Le parcours QualiPV et les modules administratifs nous ont aidés à structurer l'avant-vente et la relation client.",
-    highlight: "QualiPV",
-    seed: "SarahL",
-  },
-  {
-    name: "Nicolas D.",
-    role: "Responsable technique CVC",
-    quote: "Le format court sur la climatisation était très bien calibré. Les réglages et points de vigilance étaient directement exploitables.",
-    highlight: "Climatisation",
-    seed: "NicolasD",
-  },
-  {
-    name: "Inès B.",
-    role: "Référente formation",
-    quote: "On a pu projeter un plan de montée en compétence complet pour nos équipes avec une vision claire des sessions à venir.",
-    highlight: "Plan de formation",
-    seed: "InesB",
+      "Faux texte de présentation pour la troisième carte. Il sert à occuper la zone éditoriale prévue et à respecter le gabarit du design cible.",
+    image: "https://images.unsplash.com/photo-1520607162513-77705c0f0d4a?auto=format&fit=crop&w=1200&q=80",
   },
 ];
 
@@ -134,12 +109,53 @@ function buildCalendarCells(month: string, sessions: Array<Session & { category:
   return cells;
 }
 
-export function HomeExperience({ formations, sessions }: Props) {
+export function HomeIdentitySection() {
   const [activeStep, setActiveStep] = useState(identitySteps[0].id);
+  const activeIdentityStep = identitySteps.find((step) => step.id === activeStep) || identitySteps[0];
+
+  return (
+    <section className="home-identity-shell">
+      <div className="home-identity-head">
+        <h2>OXIDEVE C&apos;EST QUOI ?</h2>
+        <div className="home-identity-note">
+          <p>{activeIdentityStep.note}</p>
+          <span className="home-info-badge">i</span>
+        </div>
+      </div>
+
+      <div className="home-identity-tabs" role="tablist" aria-label="Présentation Oxideve">
+        {identitySteps.map((step) => (
+          <button
+            aria-selected={activeStep === step.id}
+            className={`home-identity-tab${activeStep === step.id ? " active" : ""}`}
+            key={step.id}
+            onClick={() => setActiveStep(step.id)}
+            role="tab"
+            type="button"
+          >
+            {step.id}
+          </button>
+        ))}
+      </div>
+
+      <div className="home-identity-panel">
+        <div className="home-identity-copy">
+          <span className="home-identity-index">{activeIdentityStep.id}</span>
+          <h3>{activeIdentityStep.title}</h3>
+          <p>{activeIdentityStep.description}</p>
+        </div>
+        <div className="home-identity-visual">
+          <img alt={activeIdentityStep.title} src={activeIdentityStep.image} />
+        </div>
+      </div>
+    </section>
+  );
+}
+
+export function HomeCalendarSection({ formations, sessions }: Props) {
   const [categoryFilter, setCategoryFilter] = useState("Toutes");
   const [activeMonth, setActiveMonth] = useState("");
   const [selectedDate, setSelectedDate] = useState("");
-  const [reviewIndex, setReviewIndex] = useState(0);
 
   const enrichedSessions = useMemo(() => {
     return sessions
@@ -199,9 +215,6 @@ export function HomeExperience({ formations, sessions }: Props) {
     return monthSessions.slice(0, 4);
   }, [calendarCells, monthSessions, selectedDate]);
 
-  const activeIdentityStep = identitySteps.find((step) => step.id === activeStep) || identitySteps[0];
-  const visibleReviews = [reviewCards[reviewIndex], reviewCards[(reviewIndex + 1) % reviewCards.length]];
-
   function moveMonth(direction: -1 | 1) {
     if (!months.length || !activeMonth) {
       return;
@@ -212,164 +225,90 @@ export function HomeExperience({ formations, sessions }: Props) {
     setActiveMonth(months[nextIndex]);
   }
 
-  function moveReview(direction: -1 | 1) {
-    setReviewIndex((current) => (current + direction + reviewCards.length) % reviewCards.length);
-  }
-
   return (
-    <>
-      <div className="identity-panel identity-panel-interactive">
-        <div className="identity-main-copy">
-          <h2>OXIDEVE C&apos;EST QUOI ?</h2>
-          <div className="identity-tab-strip" role="tablist" aria-label="Présentation d'Oxideve">
-            {identitySteps.map((step) => (
-              <button
-                aria-selected={activeStep === step.id}
-                className={`identity-tab-button${activeStep === step.id ? " active" : ""}`}
-                key={step.id}
-                onClick={() => setActiveStep(step.id)}
-                role="tab"
-                type="button"
-              >
-                <span>{step.id}</span>
-                <strong>{step.label}</strong>
-              </button>
-            ))}
-          </div>
-
-          <div className="identity-copy-card">
-            <span className="identity-index">{activeIdentityStep.id}</span>
-            <h3>{activeIdentityStep.title}</h3>
-            <p>{activeIdentityStep.description}</p>
-            <ul className="identity-point-list">
-              {activeIdentityStep.points.map((point) => (
-                <li key={point}>{point}</li>
-              ))}
-            </ul>
-          </div>
+    <section className="home-calendar-showcase">
+      <div className="home-calendar-frame">
+        <div className="home-calendar-heading">
+          <h2>
+            <span>Nos prochaines sessions</span>
+            <strong>de formation BTP</strong>
+          </h2>
+          <p>
+            Inscrivez-vous à nos formations courtes et techniques
+            <br />
+            pour les professionnels du bâtiment
+          </p>
         </div>
 
-        <div className="identity-note identity-note-elevated">
-          <strong>Pourquoi les entreprises reviennent</strong>
-          <p>Une même lecture catalogue, sessions et inscription, avec des parcours directement utilisables sur le terrain.</p>
-          <div className="identity-stat-grid">
-            <article><span>Formats</span><strong>courts</strong></article>
-            <article><span>Approche</span><strong>terrain</strong></article>
-            <article><span>Parcours</span><strong>finançables</strong></article>
-          </div>
-          <div className="identity-quote-card">
-            <p>"Un centre de formation qui parle autant exécution chantier que qualification et mise en service."</p>
-          </div>
-        </div>
-      </div>
-
-      <div className="landing-session-card landing-session-card-interactive">
-        <div className="landing-calendar-shell landing-calendar-shell-advanced">
-          <div className="landing-calendar-toolbar">
-            <div>
-              <span className="section-kicker">Calendrier réel</span>
-              <strong>{activeMonth ? monthLabel(activeMonth) : "Aucune session"}</strong>
-            </div>
-            <div className="landing-calendar-nav">
+        <div className="home-calendar-layout">
+          <div className="home-calendar-card">
+            <div className="landing-calendar-toolbar">
               <button disabled={!months.length || activeMonth === months[0]} onClick={() => moveMonth(-1)} type="button">◀</button>
+              <strong>{activeMonth ? monthLabel(activeMonth) : "Aucune session"}</strong>
               <button disabled={!months.length || activeMonth === months[months.length - 1]} onClick={() => moveMonth(1)} type="button">▶</button>
             </div>
-          </div>
 
-          <div className="landing-filter-pills">
-            {categories.map((category) => (
-              <button className={`landing-filter-pill${categoryFilter === category ? " active" : ""}`} key={category} onClick={() => setCategoryFilter(category)} type="button">
-                {category}
-              </button>
-            ))}
-          </div>
+            <div className="landing-calendar-days">
+              {["Lun", "Mar", "Mer", "Jeu", "Ven", "Sam", "Dim"].map((day) => <span key={day}>{day}</span>)}
+            </div>
 
-          <div className="landing-month-pills">
-            {months.map((month) => (
-              <button className={`landing-month-pill${activeMonth === month ? " active" : ""}`} key={month} onClick={() => setActiveMonth(month)} type="button">
-                {monthLabel(month)}
-              </button>
-            ))}
-          </div>
-
-          <div className="landing-calendar-days">
-            {["Lun", "Mar", "Mer", "Jeu", "Ven", "Sam", "Dim"].map((day) => <span key={day}>{day}</span>)}
-          </div>
-          <div className="landing-calendar-grid landing-calendar-grid-interactive">
-            {calendarCells.map((cell, index) => (
-              <button
-                className={`calendar-day${cell.muted ? " is-muted" : ""}${selectedDate === cell.date ? " is-selected" : ""}${cell.sessions.length ? ` tone-${cell.tone}` : ""}`}
-                disabled={!cell.date}
-                key={`${cell.label}-${index}`}
-                onClick={() => cell.date && setSelectedDate(cell.date)}
-                type="button"
-              >
-                <span>{cell.label}</span>
-                {cell.sessions.length ? <small>{cell.sessions.length}</small> : null}
-              </button>
-            ))}
-          </div>
-        </div>
-
-        <div className="landing-featured-session landing-featured-session-interactive">
-          <div className="featured-session-main featured-session-main-green">
-            <h3>Sessions visibles et filtrables</h3>
-            <p>Changez de mois, filtrez par famille et cliquez sur un jour pour voir les ouvertures réellement disponibles.</p>
-            <div className="calendar-legend-grid">
-              {Object.entries(categoryColors).map(([category, tone]) => (
-                <span className={`calendar-legend-item tone-${tone}`} key={category}>{category}</span>
+            <div className="landing-calendar-grid-interactive home-calendar-grid">
+              {calendarCells.map((cell, index) => (
+                <button
+                  className={`calendar-day home-calendar-day${cell.muted ? " is-muted" : ""}${selectedDate === cell.date ? " is-selected" : ""}${cell.sessions.length ? ` tone-${cell.tone}` : ""}`}
+                  disabled={!cell.date}
+                  key={`${cell.label}-${index}`}
+                  onClick={() => cell.date && setSelectedDate(cell.date)}
+                  type="button"
+                >
+                  <span>{cell.label}</span>
+                  {cell.sessions.length ? <small>{cell.sessions.length}</small> : null}
+                </button>
               ))}
             </div>
           </div>
 
-          <div className="landing-session-list landing-session-list-advanced">
-            {selectedDaySessions.map((session) => (
-              <article className="landing-session-item landing-session-item-advanced" key={session.id}>
-                <div className="landing-session-item-head">
-                  <strong>{session.formationTitle}</strong>
-                  <span className={`calendar-legend-item tone-${categoryColors[session.category] || "default"}`}>{session.category}</span>
-                </div>
-                <p>{formatDateRange(session.startDate, session.endDate)}</p>
-                <div className="landing-session-item-meta">
-                  <span>{session.city} · {session.mode}</span>
-                  <span>{session.seatsLeft} places</span>
-                </div>
-                <Link className="ui-button ui-button-secondary" href={`/inscriptions?formationSlug=${session.formationSlug}&sessionId=${session.id}`}>
-                  Choisir cette session
-                </Link>
-              </article>
-            ))}
-          </div>
-        </div>
-      </div>
+          <div className="home-calendar-side">
+            <div className="home-calendar-filters">
+              {categories.map((category) => (
+                <button className={`landing-filter-pill${categoryFilter === category ? " active" : ""}`} key={category} onClick={() => setCategoryFilter(category)} type="button">
+                  {category}
+                </button>
+              ))}
+            </div>
 
-      <div className="testimonials-showcase">
-        <div className="section-heading section-heading-tight">
-          <div>
-            <span className="section-kicker">Avis</span>
-            <h2>Ils nous font confiance</h2>
+            <div className="home-calendar-months">
+              {months.map((month) => (
+                <button className={`landing-month-pill${activeMonth === month ? " active" : ""}`} key={month} onClick={() => setActiveMonth(month)} type="button">
+                  {monthLabel(month)}
+                </button>
+              ))}
+            </div>
+
+            <div className="home-calendar-session-box">
+              {selectedDaySessions[0] ? (
+                <>
+                  <h3>{selectedDaySessions[0].formationTitle}</h3>
+                  <p>{formatDateRange(selectedDaySessions[0].startDate, selectedDaySessions[0].endDate)}</p>
+                  <ul>
+                    <li>{selectedDaySessions[0].category}</li>
+                    <li>{selectedDaySessions[0].city} · {selectedDaySessions[0].mode}</li>
+                    <li>{selectedDaySessions[0].seatsLeft} places disponibles</li>
+                  </ul>
+                  <Link className="ui-button ui-button-card" href={`/inscriptions?formationSlug=${selectedDaySessions[0].formationSlug}&sessionId=${selectedDaySessions[0].id}`}>
+                    Découvrir
+                  </Link>
+                </>
+              ) : (
+                <>
+                  <h3>Aucune session</h3>
+                  <p>Changez de mois ou utilisez un autre filtre pour afficher une session disponible.</p>
+                </>
+              )}
+            </div>
           </div>
-          <div className="testimonial-nav">
-            <button onClick={() => moveReview(-1)} type="button">◀</button>
-            <button onClick={() => moveReview(1)} type="button">▶</button>
-          </div>
-        </div>
-        <div className="testimonial-grid">
-          {visibleReviews.map((review) => (
-            <article className="testimonial-card" key={review.name}>
-              <div className="testimonial-head">
-                <img alt={review.name} src={`https://api.dicebear.com/9.x/personas/svg?seed=${review.seed}`} />
-                <div>
-                  <strong>{review.name}</strong>
-                  <span>{review.role}</span>
-                </div>
-              </div>
-              <p>{review.quote}</p>
-              <span className="testimonial-highlight">{review.highlight}</span>
-            </article>
-          ))}
         </div>
       </div>
-    </>
+    </section>
   );
 }

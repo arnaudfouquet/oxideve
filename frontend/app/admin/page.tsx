@@ -22,8 +22,8 @@ export default async function AdminPage() {
   const totalSeatsLeft = sessions.reduce((total, session) => total + session.seatsLeft, 0);
 
   return (
-    <section className="section">
-      <div className="container">
+    <section className="section admin-page-shell">
+      <div className="container admin-page-container">
         <div className="page-title">
           <span className="eyebrow">Back-office</span>
           <h1>CMS Oxideve</h1>

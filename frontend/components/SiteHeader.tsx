@@ -19,9 +19,11 @@ export function SiteHeader() {
   return (
     <header className="site-header">
       <Container className="site-header-shell">
-        <Link href="/" className="brand-mark" onClick={() => setOpen(false)}>
-          <img alt="Oxideve" className="brand-logo" src={logoUrl} />
-        </Link>
+        <div className="site-header-brand">
+          <Link href="/" className="brand-mark" onClick={() => setOpen(false)}>
+            <img alt="Oxideve" className="brand-logo" src={logoUrl} />
+          </Link>
+        </div>
 
         <button
           aria-expanded={open}
@@ -43,6 +45,9 @@ export function SiteHeader() {
               </Link>
             ))}
           </nav>
+        </div>
+
+        <div className="site-header-actions">
           <Link className="header-contact-link" href="/contact" onClick={() => setOpen(false)}>
             Contact
           </Link>

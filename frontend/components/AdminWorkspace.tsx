@@ -834,14 +834,14 @@ export function AdminWorkspace({
   }
 
   return (
-    <div className="admin-workspace">
-      <div className="admin-workspace-top">
-        <div>
+    <div className="admin-workspace admin-workspace-shell">
+      <aside className="admin-sidebar">
+        <div className="admin-sidebar-brand">
           <span className="eyebrow">Pilotage</span>
-          <h2>Workspace commercial et éditorial</h2>
-          <p>Une vue plus directe du business, du planning, du catalogue et de l'éditorial sans navigation latérale.</p>
+          <h2>Mini CMS Oxideve</h2>
+          <p>Dashboard, CRM, sessions, catalogue et éditorial regroupés dans une navigation fixe à gauche.</p>
         </div>
-        <div className="admin-tab-row">
+        <div className="admin-sidebar-nav">
           {[
             ["dashboard", "Dashboard"],
             ["companies", "CRM"],
@@ -849,14 +849,15 @@ export function AdminWorkspace({
             ["formations", "Catalogue"],
             ["editorial", "Editorial"],
           ].map(([value, label]) => (
-            <button className={`admin-tab-chip${section === value ? " active" : ""}`} key={value} onClick={() => setSection(value as Section)} type="button">
+            <button className={`admin-sidebar-link${section === value ? " active" : ""}`} key={value} onClick={() => setSection(value as Section)} type="button">
               {label}
             </button>
           ))}
         </div>
-      </div>
+      </aside>
 
-      {feedback ? <p className={`form-status ${feedbackTone}`}>{feedback}</p> : null}
+      <div className="admin-workspace-content">
+        {feedback ? <p className={`form-status ${feedbackTone}`}>{feedback}</p> : null}
 
       {section === "dashboard" ? (
         <div className="admin-stack-grid">
@@ -1228,6 +1229,7 @@ export function AdminWorkspace({
           </section>
         </div>
       ) : null}
+      </div>
     </div>
   );
 }

@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { headers } from "next/headers";
 import { Poppins } from "next/font/google";
 import { SiteFooter } from "@/components/SiteFooter";
 import { SiteHeader } from "@/components/SiteHeader";
@@ -26,13 +27,17 @@ export const metadata: Metadata = {
   description: siteDescription,
 };
 
-export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
+export default async function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
+  const headerStore = await headers();
+  const pathname = headerStore.get("x-next-pathname") || headerStore.get("x-invoke-path") || "";
+  const isAdminRoute = pathname.startsWith("/admin");
+
   return (
     <html lang="fr" className={`${displayFont.variable} ${bodyFont.variable}`}>
       <body>
-        <SiteHeader />
+        {isAdminRoute ? null : <SiteHeader />}
         <main>{children}</main>
-        <SiteFooter />
+        {isAdminRoute ? null : <SiteFooter />}
       </body>
     </html>
   );

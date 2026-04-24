@@ -11,6 +11,7 @@ const heroImage = "https://oxideve.com/wp-content/uploads/2024/10/Panneau-solair
 const sections = [
   {
     title: "Photovoltaïque :",
+    image: "https://images.unsplash.com/photo-1509391366360-2e959784a276?auto=format&fit=crop&w=1200&q=80",
     items: [
       ["QualiPV Electricité 36 kVA", "/formations/formation-qualipv"],
       ["QualiPV Haute Puissance 500 kVA", "/formations/formation-qualipv-haute-puissance"],
@@ -25,6 +26,7 @@ const sections = [
   },
   {
     title: "Pompe à chaleur :",
+    image: "https://images.unsplash.com/photo-1621905252507-b35492cc74b4?auto=format&fit=crop&w=1200&q=80",
     items: [
       ["QualiPAC : pompe à chaleur en habitat individuel", "/formations/formation-qualipac"],
       ["Attestation Manipulation fluides frigorigènes", "/formations/formation-fluides-frigorigenes"],
@@ -33,6 +35,7 @@ const sections = [
   },
   {
     title: "Sécurité :",
+    image: "https://images.unsplash.com/photo-1581092918056-0c4c3acd3789?auto=format&fit=crop&w=1200&q=80",
     items: [
       ["Prévention des risques liés au travail en hauteur", "/formations/formation-travail-en-hauteur"],
       ["Habilitation électrique", "/formations/formation-habilitation-electrique"],
@@ -40,6 +43,7 @@ const sections = [
   },
   {
     title: "Véhicule électrique :",
+    image: "https://images.unsplash.com/photo-1593941707882-a5bba53b3f87?auto=format&fit=crop&w=1200&q=80",
     items: [["Infrastructures de recharges pour véhicules électriques", "/formations/formation-irve"]],
   },
 ];
@@ -81,14 +85,14 @@ export default function QuiSommesNousPage() {
         <div className="container training-section-stack">
           {sections.map((section) => (
             <article className="training-section-block" key={section.title}>
-              <div className="training-section-banner" style={{ backgroundImage: `linear-gradient(rgba(0, 77, 109, 0.78), rgba(0, 77, 109, 0.78)), url(${heroImage})` }}>
+              <div className="training-section-banner" style={{ backgroundImage: `linear-gradient(rgba(0, 77, 109, 0.78), rgba(0, 77, 109, 0.78)), url(${section.image})` }}>
                 <h2>{section.title}</h2>
               </div>
               <div className="training-section-grid">
                 {section.items.map(([label, href]) => (
                   <div className="training-tile" key={label}>
                     <h3>{label}</h3>
-                    <ButtonLink href={href} variant="secondary">Découvrir</ButtonLink>
+                    <ButtonLink className="ui-button-card" href={href} variant="secondary">Découvrir</ButtonLink>
                   </div>
                 ))}
               </div>

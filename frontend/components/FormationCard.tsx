@@ -23,8 +23,8 @@ export function FormationCard({ formation, tone = "default" }: Props) {
       </div>
       <div className="formation-card-foot">
         <strong>{formation.price}</strong>
-        <ButtonLink href={`/formations/${formation.slug}`} variant={tone === "dark" ? "secondary" : "primary"}>
-          Voir la formation
+        <ButtonLink className="ui-button-card" href={`/formations/${formation.slug}`} variant={tone === "dark" ? "secondary" : "secondary"}>
+          Découvrir
         </ButtonLink>
       </div>
     </Card>
