@@ -100,7 +100,10 @@ async function fetchStagesForState(state) {
     });
 
     if (!response.ok) {
-      throw new Error(`Appel Queoval échoué (statut ${response.status}) pour l'état ${state}`);
+      const bodyText = await response.text().catch(() => "");
+      throw new Error(
+        `Appel Queoval échoué (statut ${response.status}) pour l'état ${state} : ${bodyText.slice(0, 500)}`
+      );
     }
 
     const payload = await response.json();
@@ -126,7 +129,12 @@ async function fetchStagesForState(state) {
 }
 
 async function fetchUpcomingStages() {
-  const results = await Promise.all(SYNCED_STATES.map((state) => fetchStagesForState(state)));
+  const results = [];
+
+  for (const state of SYNCED_STATES) {
+    results.push(await fetchStagesForState(state));
+  }
+
   return results.flat();
 }
 
