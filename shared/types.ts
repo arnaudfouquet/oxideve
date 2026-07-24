@@ -32,6 +32,17 @@ export type Session = {
   mode: string;
 };
 
+export type PendingSyncSession = {
+  id: string;
+  externalId: string;
+  externalTitle: string;
+  city: string | null;
+  startDate: string;
+  endDate: string;
+  seatsLeft: number;
+  externalState: string;
+};
+
 export type Registration = {
   id: string;
   companyId?: string | null;

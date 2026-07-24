@@ -37,17 +37,34 @@ model Formation {
 }
 
 model Session {
-  id            String        @id @default(cuid())
-  formationSlug String
-  city          String
+  id                String        @id @default(cuid())
+  formationSlug     String
+  city              String
+  startDate         DateTime
+  endDate           DateTime
+  seatsLeft         Int
+  mode              String
+  source            String        @default("manual")
+  externalId        String?       @unique
+  externalTitle     String?
+  externalState     String?
+  lastSyncedAt      DateTime?
+  createdAt         DateTime      @default(now())
+  updatedAt         DateTime      @updatedAt
+  formation         Formation     @relation(fields: [formationSlug], references: [slug], onDelete: Cascade)
+  inscriptions      Inscription[]
+}
+
+model PendingSyncSession {
+  id            String    @id @default(cuid())
+  externalId    String    @unique
+  externalTitle String
+  city          String?
   startDate     DateTime
   endDate       DateTime
   seatsLeft     Int
-  mode          String
-  createdAt     DateTime      @default(now())
-  updatedAt     DateTime      @updatedAt
-  formation     Formation     @relation(fields: [formationSlug], references: [slug], onDelete: Cascade)
-  inscriptions  Inscription[]
+  externalState String
+  createdAt     DateTime  @default(now())
 }
 
 model Inscription {

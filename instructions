@@ -1,0 +1,220 @@
+# RÔLE
+Tu es une équipe senior fullstack (architecte + dev backend + dev frontend + dev DevOps).
+
+Tu construis une application complète en production pour un organisme de formation.
+
+---
+
+# CONTEXTE BUSINESS
+
+Oxideve est un organisme de formation spécialisé :
+- Photovoltaïque (QualiPV)
+- Pompes à chaleur (QualiPAC)
+- IRVE
+- Climatisation
+
+Objectif :
+- SEO Google (acquisition)
+- conversion (inscriptions)
+- gestion sessions de formation
+
+---
+
+# INFRASTRUCTURE ACTUELLE
+
+Déploiement en production sur Infomaniak Node.js app.
+
+Contraintes :
+- démarrage via `node server.js`
+- port via `process.env.PORT`
+- écoute sur `0.0.0.0`
+- repo GitHub connecté (auto deploy via git pull possible)
+
+---
+
+# OBJECTIF GLOBAL
+
+Construire une application complète :
+
+## FRONTEND
+- Next.js (App Router)
+- TypeScript
+- SSR + ISR
+- SEO optimisé
+
+## BACKEND
+- Node.js (Express structuré, évolutif vers NestJS)
+- API REST
+
+## DATABASE
+- PostgreSQL
+- Prisma ORM
+
+---
+
+# CHARTE GRAPHIQUE (OBLIGATOIRE)
+
+Couleurs :
+- Bleu foncé : #004D6D
+- Bleu clair : #009CDC
+- Vert : #09CF65
+- Blanc : #FFFFFF
+- Gris clair : #EEEEEE
+
+UI :
+- mobile-first
+- design conversion (CTA visibles)
+- style moderne entreprise BTP / formation
+- composants réutilisables
+
+---
+
+# ARCHITECTURE OBLIGATOIRE
+
+/frontend (Next.js)
+/backend (Node API)
+/prisma (schema DB)
+/shared (types)
+
+Séparation stricte frontend/backend.
+
+---
+
+# FONCTIONNALITÉS
+
+## FRONTEND
+- homepage marketing SEO
+- liste formations
+- page formation dynamique /formations/[slug]
+- calendrier sessions
+- page contact
+- formulaire inscription
+
+## BACKOFFICE (/admin)
+- gestion formations
+- gestion sessions
+- gestion inscriptions
+- dashboard simple
+
+---
+
+# BACKEND API
+
+Endpoints :
+- GET /formations
+- GET /formations/:slug
+- GET /sessions
+- POST /inscription
+- GET /health
+
+Fonctions :
+- validation inputs
+- gestion erreurs
+- logs
+- sécurité basique
+
+---
+
+# SEO (CRITIQUE)
+
+- 1 page = 1 formation
+- SSR obligatoire
+- ISR (revalidate 3600)
+- meta tags dynamiques
+- JSON-LD (Course + Event)
+- sitemap.xml
+
+---
+
+# BASE DE DONNÉES
+
+Formation
+Session
+Inscription
+EmailLog
+
+---
+
+# INFRA / DEVOPS (IMPORTANT)
+
+## Objectif
+Mettre en place un déploiement automatique simple :
+
+### Stratégie :
+- GitHub = source of truth
+- Infomaniak = serveur d’exécution
+
+## Déploiement
+
+Créer une stratégie simple :
+
+Option A (simple) :
+- git pull sur serveur
+- restart Node process
+
+Option B (propre) :
+- script deploy.sh
+
+---
+
+# SCRIPT DE DÉPLOIEMENT ATTENDU
+
+Créer un fichier :
+
+deploy.sh
+
+Contenu :
+- git pull origin main
+- npm install
+- restart server
+
+---
+
+# SERVER NODE (OBLIGATOIRE)
+
+Le serveur doit :
+
+- utiliser process.env.PORT
+- écouter sur 0.0.0.0
+- être robuste
+- avoir /health endpoint
+
+---
+
+# PERFORMANCE
+
+- lazy loading images
+- ISR pages formation
+- API optimisée
+- pas de re-render inutile
+
+---
+
+# SÉCURITÉ
+
+- helmet
+- rate limiting
+- validation inputs
+- sanitization
+- httpOnly cookies (futur auth)
+
+---
+
+# IMPORTANT
+
+1. Construire toute l’application complète (frontend + backend)
+2. Respecter la charte graphique strictement
+3. Garder architecture scalable
+4. Préparer déploiement automatique dès le début
+5. Code production-ready, pas prototype
+
+---
+
+# LIVRABLE FINAL
+
+Une application complète prête production avec :
+- frontend fonctionnel
+- backend API
+- DB Prisma
+- design appliqué
+- système de déploiement Git simple

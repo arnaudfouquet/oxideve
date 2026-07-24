@@ -15,6 +15,7 @@ const { createArticle, deleteArticle, getArticleBySlug, listArticles, updateArti
 const { createCompany, listCompanies, updateCompany } = require("../services/companyService");
 const { createCrmInteraction, createCrmTask, listCrmInteractions, listCrmTasks, updateCrmTask } = require("../services/crmService");
 const { createRegistration, listRegistrations } = require("../services/registrationService");
+const { syncQueovalCalendar, listPendingSyncSessions, resolvePendingSyncSession } = require("../services/queovalService");
 
 const inscriptionSchema = z.object({
   company: z.string().min(2).max(120),
@@ -323,6 +324,34 @@ function createApiRouter() {
     asyncHandler(async (req, res) => {
       const article = await deleteArticle(req.params.slug);
       res.json({ data: article, message: "Article supprimé" });
+    })
+  );
+
+  router.post(
+    "/admin/queoval/sync",
+    asyncHandler(async (_req, res) => {
+      const summary = await syncQueovalCalendar();
+      res.json({
+        data: summary,
+        message: `Synchronisation terminée : ${summary.matched} session(s) mise(s) à jour, ${summary.pending} en attente de rattachement.`,
+      });
+    })
+  );
+
+  router.get(
+    "/admin/queoval/pending",
+    asyncHandler(async (_req, res) => {
+      const pending = await listPendingSyncSessions();
+      res.json({ data: pending });
+    })
+  );
+
+  router.post(
+    "/admin/queoval/pending/:id/resolve",
+    asyncHandler(async (req, res) => {
+      const payload = z.object({ formationSlug: z.string().min(2) }).parse(req.body);
+      const session = await resolvePendingSyncSession(req.params.id, payload.formationSlug);
+      res.status(201).json({ data: session, message: "Session rattachée au calendrier" });
     })
   );
 

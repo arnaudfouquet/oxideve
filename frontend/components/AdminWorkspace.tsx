@@ -1,8 +1,8 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { Button } from "@/components/ui";
-import type { Article, Company, CrmInteraction, CrmTask, Formation, Registration, Session } from "../../shared/types";
+import type { Article, Company, CrmInteraction, CrmTask, Formation, PendingSyncSession, Registration, Session } from "../../shared/types";
 
 type Props = {
   initialArticles: Article[];
@@ -350,6 +350,27 @@ export function AdminWorkspace({
   const [bulkSessionMode, setBulkSessionMode] = useState("");
   const [bulkSessionCity, setBulkSessionCity] = useState("");
   const [bulkSessionSeats, setBulkSessionSeats] = useState("");
+
+  const [queovalSyncing, setQueovalSyncing] = useState(false);
+  const [pendingSessions, setPendingSessions] = useState<PendingSyncSession[]>([]);
+  const [pendingFormationChoice, setPendingFormationChoice] = useState<Record<string, string>>({});
+
+  useEffect(() => {
+    if (section !== "sessions") return;
+
+    let cancelled = false;
+
+    fetch("/api/admin/queoval/pending")
+      .then((response) => response.json())
+      .then((result: { data?: PendingSyncSession[] }) => {
+        if (!cancelled && result?.data) setPendingSessions(result.data);
+      })
+      .catch(() => undefined);
+
+    return () => {
+      cancelled = true;
+    };
+  }, [section]);
 
   const [saving, setSaving] = useState(false);
   const [feedback, setFeedback] = useState("");
@@ -749,6 +770,63 @@ export function AdminWorkspace({
     }
   }
 
+  async function loadPendingSessions() {
+    const response = await fetch("/api/admin/queoval/pending");
+    const result = (await response.json().catch(() => null)) as { data?: PendingSyncSession[] } | null;
+
+    if (response.ok && result?.data) {
+      setPendingSessions(result.data);
+    }
+  }
+
+  async function handleQueovalSync() {
+    setQueovalSyncing(true);
+    setFeedback("");
+
+    const response = await fetch("/api/admin/queoval/sync", { method: "POST" });
+    const result = (await response.json().catch(() => null)) as { data?: { matched: number; pending: number; total: number }; error?: string; message?: string } | null;
+
+    setQueovalSyncing(false);
+
+    if (!response.ok || !result?.data) {
+      setError(result?.error || "La synchronisation Queoval a échoué.");
+      return;
+    }
+
+    await loadPendingSessions();
+    setSuccess(result.message || "Synchronisation Queoval terminée.");
+  }
+
+  async function handleResolvePendingSession(pendingId: string) {
+    const formationSlug = pendingFormationChoice[pendingId];
+
+    if (!formationSlug) {
+      setError("Choisissez une formation avant de rattacher cette session.");
+      return;
+    }
+
+    setSaving(true);
+    setFeedback("");
+
+    const response = await fetch(`/api/admin/queoval/pending/${pendingId}/resolve`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ formationSlug }),
+    });
+    const result = (await response.json().catch(() => null)) as { data?: Session; error?: string; message?: string } | null;
+
+    setSaving(false);
+
+    if (!response.ok || !result?.data) {
+      setError(result?.error || "Le rattachement a échoué.");
+      return;
+    }
+
+    setSessions((current) => [...current.filter((item) => item.id !== result.data?.id), result.data as Session]);
+    setPendingSessions((current) => current.filter((item) => item.id !== pendingId));
+    setSuccess(result.message || "Session rattachée.");
+  }
+
   async function handleFormationSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
     setSaving(true);
@@ -1087,6 +1165,36 @@ export function AdminWorkspace({
 
       {section === "sessions" ? (
         <div className="admin-stack-grid">
+          <section className="admin-shell">
+            <div className="section-heading section-heading-tight">
+              <div><span className="eyebrow">Queoval</span><h2>Synchronisation du calendrier</h2><p>Récupère les stages Planifiés et Confirmés depuis Queoval et les ajoute au calendrier public.</p></div>
+              <Button onClick={handleQueovalSync} disabled={queovalSyncing}>{queovalSyncing ? "Synchronisation..." : "Synchroniser Queoval"}</Button>
+            </div>
+            {pendingSessions.length ? (
+              <div className="admin-list admin-list-dense">
+                {pendingSessions.map((pending) => (
+                  <div className="admin-list-item" key={pending.id}>
+                    <strong>{pending.externalTitle}</strong>
+                    <span>{formatSessionRange(pending.startDate, pending.endDate)} · {pending.city || "À distance"}</span>
+                    <div className="admin-bulk-grid">
+                      <select
+                        className="ui-field"
+                        value={pendingFormationChoice[pending.id] || ""}
+                        onChange={(event) => setPendingFormationChoice((current) => ({ ...current, [pending.id]: event.target.value }))}
+                      >
+                        <option value="">Choisir la formation</option>
+                        {formations.map((formation) => <option key={formation.slug} value={formation.slug}>{formation.title}</option>)}
+                      </select>
+                      <Button onClick={() => handleResolvePendingSession(pending.id)} disabled={saving || !pendingFormationChoice[pending.id]}>Rattacher</Button>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            ) : (
+              <p className="admin-empty-state">Aucune session Queoval en attente de rattachement.</p>
+            )}
+          </section>
+
           <section className="admin-shell">
             <div className="section-heading section-heading-tight"><div><span className="eyebrow">Planning</span><h2>Filtres et actions de masse</h2><p>Filtrez le planning puis appliquez une modification à une sélection de sessions.</p></div></div>
             <div className="admin-filter-grid">
