@@ -65,6 +65,7 @@ function getQueovalHeaders() {
     Cookie: cookie,
     "Content-Type": "application/json",
     Accept: "application/json, text/plain, */*",
+    "Accept-Language": "fr-FR",
   };
 }
 
