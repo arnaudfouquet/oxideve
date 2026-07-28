@@ -28,6 +28,15 @@ function normalizeFormation(formation) {
     successRate: formation.successRate || "",
     handicapPolicy: formation.handicapPolicy || "",
     queovalIdentFOR: formation.queovalIdentFOR || null,
+    videoUrl: formation.videoUrl || null,
+    rgeBadge: formation.rgeBadge || null,
+    priceMemberLabel: formation.priceMemberLabel || null,
+    priceMember: formation.priceMember || null,
+    memberProgram: formation.memberProgram || null,
+    faq: Array.isArray(formation.faq) ? formation.faq : [],
+    stats: formation.stats || null,
+    gallery: Array.isArray(formation.gallery) ? formation.gallery : [],
+    relatedSlugs: Array.isArray(formation.relatedSlugs) ? formation.relatedSlugs : [],
   };
 }
 
@@ -132,6 +141,15 @@ async function createFormation(payload) {
       handicapPolicy: payload.handicapPolicy,
       seoTitle: buildSeoTitle(payload),
       seoDescription: buildSeoDescription(payload),
+      videoUrl: payload.videoUrl ?? null,
+      rgeBadge: payload.rgeBadge ?? null,
+      priceMemberLabel: payload.priceMemberLabel ?? null,
+      priceMember: payload.priceMember ?? null,
+      memberProgram: payload.memberProgram ?? null,
+      faq: payload.faq ?? null,
+      stats: payload.stats ?? null,
+      gallery: payload.gallery ?? null,
+      relatedSlugs: payload.relatedSlugs ?? null,
     },
   });
 
@@ -182,6 +200,15 @@ async function updateFormation(slug, payload) {
       handicapPolicy: payload.handicapPolicy,
       seoTitle: buildSeoTitle(payload),
       seoDescription: buildSeoDescription(payload),
+      videoUrl: payload.videoUrl ?? null,
+      rgeBadge: payload.rgeBadge ?? null,
+      priceMemberLabel: payload.priceMemberLabel ?? null,
+      priceMember: payload.priceMember ?? null,
+      memberProgram: payload.memberProgram ?? null,
+      faq: payload.faq ?? null,
+      stats: payload.stats ?? null,
+      gallery: payload.gallery ?? null,
+      relatedSlugs: payload.relatedSlugs ?? null,
     },
   });
 

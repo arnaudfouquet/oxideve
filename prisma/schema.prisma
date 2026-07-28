@@ -32,6 +32,15 @@ model Formation {
   seoTitle        String
   seoDescription  String        @db.Text
   queovalIdentFOR String?       @unique
+  videoUrl        String?
+  rgeBadge        Json?
+  priceMemberLabel String?
+  priceMember     String?
+  memberProgram   Json?
+  faq             Json?
+  stats           Json?
+  gallery         Json?
+  relatedSlugs    Json?
   createdAt       DateTime      @default(now())
   updatedAt       DateTime      @updatedAt
   sessions        Session[]

@@ -33,11 +33,69 @@
         "Évaluation en continu sur les mises en situation et la maîtrise des points de conformité."
       ],
       "programme": [
-        "Comprendre le fonctionnement d'un générateur photovoltaïque raccordé au réseau jusqu'à 36 kVA.",
-        "Vérifier les prérequis électriques et les règles de sécurité avant intervention.",
-        "Dimensionner l'installation selon le besoin et l'environnement du chantier.",
-        "Réaliser le raccordement, les contrôles et la mise en service dans les règles.",
-        "Constituer un dossier exploitable pour la qualification et le suivi client."
+        {
+          "title": "Cadre technique et sécurité électrique",
+          "sequences": [
+            {
+              "title": "Comprendre le générateur photovoltaïque raccordé au réseau",
+              "points": [
+                "Décrire le fonctionnement d'une chaîne photovoltaïque jusqu'à 36 kVA, du module à l'onduleur.",
+                "Identifier les schémas de principe et les points de raccordement au réseau public.",
+                "Repérer les exigences de la qualification QualiPV compétence électrique."
+              ]
+            },
+            {
+              "title": "Sécuriser l'intervention électrique",
+              "points": [
+                "Vérifier les habilitations BR ou BE(P) nécessaires avant intervention.",
+                "Identifier les risques électriques spécifiques au courant continu photovoltaïque.",
+                "Mettre en oeuvre les équipements de protection individuelle et collective adaptés."
+              ]
+            }
+          ]
+        },
+        {
+          "title": "Dimensionnement et étude de cas",
+          "sequences": [
+            {
+              "title": "Dimensionner l'installation selon le besoin",
+              "points": [
+                "Calculer la puissance crête adaptée au chantier et au profil de consommation.",
+                "Choisir les sections de câbles, protections DC et AC en fonction de la configuration.",
+                "Vérifier la compatibilité onduleur/modules et les contraintes de tension."
+              ]
+            },
+            {
+              "title": "Étudier des cas concrets jusqu'à 36 kVA",
+              "points": [
+                "Analyser des schémas de raccordement résidentiels et petits tertiaires.",
+                "Identifier les points de vigilance selon la configuration de toiture ou de site.",
+                "Anticiper les contraintes du gestionnaire de réseau (Enedis) pour la mise en service."
+              ]
+            }
+          ]
+        },
+        {
+          "title": "Raccordement, mise en service et dossier de qualification",
+          "sequences": [
+            {
+              "title": "Réaliser le raccordement et la mise en service",
+              "points": [
+                "Effectuer les contrôles avant mise sous tension (isolement, continuité, polarité).",
+                "Mettre en service l'installation en respectant la procédure de sécurité.",
+                "Vérifier le bon fonctionnement de l'onduleur et des protections."
+              ]
+            },
+            {
+              "title": "Constituer le dossier de qualification QualiPV",
+              "points": [
+                "Réunir les pièces techniques exigées pour le dossier de qualification module électricité.",
+                "Documenter les contrôles réalisés et les points de conformité.",
+                "Préparer le dossier client exploitable pour le suivi et la garantie."
+              ]
+            }
+          ]
+        }
       ],
       "certification": "Parcours préparant à la qualification QualiPV module électricité 36 kVA pour les intervenants amenés à poser des générateurs photovoltaïques raccordés au réseau.",
       "price": "1290 EUR",
@@ -46,7 +104,55 @@
       "handicapPolicy": "Formation accessible après étude des besoins. Les modalités d'accueil, le rythme et les supports peuvent être adaptés en amont avec notre référent handicap.",
       "seoTitle": "Formation QualiPV 36 kVA électricité pour installateurs",
       "seoDescription": "Préparez vos équipes à la pose et au raccordement de générateurs photovoltaïques 36 kVA avec une formation QualiPV structurée.",
-      "queovalIdentFOR": "QualiPV 36 3 jours"
+      "queovalIdentFOR": "QualiPV 36 3 jours",
+      "videoUrl": null,
+      "rgeBadge": {
+        "label": "RGE QualiPV 2024",
+        "imageUrl": "/assets/accueil/formation qualipv qualipac recharge elec oxideve.svg"
+      },
+      "priceMemberLabel": "Tarif adhérent Club Intellia",
+      "priceMember": "1150 EUR",
+      "memberProgram": {
+        "name": "Club Intellia",
+        "description": "Le Club Intellia regroupe les installateurs photovoltaïques partenaires et leur donne accès à des tarifs préférentiels sur les formations qualifiantes ainsi qu'à un accompagnement technique continu."
+      },
+      "faq": [
+        {
+          "question": "Cette formation permet-elle d'obtenir la qualification QualiPV ?",
+          "answer": "Elle prépare au module électricité de la qualification QualiPV jusqu'à 36 kVA. La délivrance de la qualification dépend ensuite du dossier déposé auprès de l'organisme certificateur."
+        },
+        {
+          "question": "Puis-je financer cette formation via mon OPCO ?",
+          "answer": "Oui, cette formation est éligible à une prise en charge par les OPCO du bâtiment et de l'énergie. Nous pouvons vous transmettre un devis et une convention adaptés à votre dossier de financement."
+        },
+        {
+          "question": "Dois-je déjà avoir une habilitation électrique pour suivre cette formation ?",
+          "answer": "Une habilitation BR ou BE(P), ou à défaut une attestation en cours d'obtention, est demandée à l'entrée en formation car les contenus s'appuient sur ces prérequis électriques."
+        }
+      ],
+      "stats": {
+        "participantsLastYear": 58,
+        "successCount": 54
+      },
+      "gallery": [],
+      "relatedSlugs": [
+        {
+          "label": "QualiPV Bâti",
+          "slug": "qualipv-bati-generateur-photovoltaique-competence-bati"
+        },
+        {
+          "label": "QualiPV Haute Puissance",
+          "slug": "qualipv-hp-module-haute-puissance-500kva"
+        },
+        {
+          "label": "Raccordement électrique PV résidentiel",
+          "slug": "raccordement-electrique-pv-residentiel"
+        },
+        {
+          "label": "Démarches administratives PV 36 kVA",
+          "slug": "demarches-administratives-pv-36kva-batterie"
+        }
+      ]
     },
     {
       "id": "qualipv-bati-generateur-photovoltaique-competence-bati",
@@ -81,11 +187,69 @@
         "Évaluation continue sur les choix techniques et les contrôles de pose."
       ],
       "programme": [
-        "Identifier les contraintes structurelles et d'étanchéité d'une toiture.",
-        "Choisir le système de fixation adapté au support.",
-        "Sécuriser les interfaces entre couverture et générateur photovoltaïque.",
-        "Vérifier les points de vigilance avant mise en service.",
-        "Documenter une installation exploitable pour le suivi client."
+        {
+          "title": "Contraintes de toiture et choix du système de pose",
+          "sequences": [
+            {
+              "title": "Analyser la structure et l'étanchéité du support",
+              "points": [
+                "Identifier les différents types de couverture (tuiles, ardoises, bac acier, toiture terrasse).",
+                "Évaluer la portance de la charpente et la compatibilité avec le poids du générateur.",
+                "Repérer les points sensibles d'étanchéité avant intervention."
+              ]
+            },
+            {
+              "title": "Choisir le système de pose adapté",
+              "points": [
+                "Comparer intégration au bâti et surimposition selon la qualification visée.",
+                "Sélectionner les systèmes de fixation compatibles avec chaque type de support.",
+                "Vérifier la compatibilité avec les avis techniques et DTA des fabricants."
+              ]
+            }
+          ]
+        },
+        {
+          "title": "Pose, fixation et étanchéité",
+          "sequences": [
+            {
+              "title": "Réaliser la pose en sécurité",
+              "points": [
+                "Poser les rails, crochets ou platines selon le système retenu.",
+                "Fixer les modules en respectant les préconisations constructeur.",
+                "Appliquer les règles de sécurité pour le travail en hauteur sur toiture."
+              ]
+            },
+            {
+              "title": "Sécuriser les interfaces couverture-générateur",
+              "points": [
+                "Traiter les points de pénétration et les solins d'étanchéité.",
+                "Vérifier la ventilation sous les modules pour limiter l'échauffement.",
+                "Anticiper les points de contrôle attendus par la qualification Bâti."
+              ]
+            }
+          ]
+        },
+        {
+          "title": "Contrôle qualité et dossier de réception",
+          "sequences": [
+            {
+              "title": "Vérifier les points de conformité avant réception",
+              "points": [
+                "Contrôler la fixation, l'étanchéité et l'aspect visuel de la pose.",
+                "Vérifier la continuité des masses et les liaisons équipotentielles.",
+                "Identifier les non-conformités fréquentes et leur traitement."
+              ]
+            },
+            {
+              "title": "Documenter l'installation",
+              "points": [
+                "Constituer le dossier photographique et technique de la pose.",
+                "Préparer les pièces nécessaires au dossier de qualification QualiPV Bâti.",
+                "Assurer la traçabilité pour le suivi client et la garantie décennale."
+              ]
+            }
+          ]
+        }
       ],
       "certification": "Formation préparant à la qualification QualiPV module Bâti pour les installations photovoltaïques intégrées ou surimposées.",
       "price": "1340 EUR",
@@ -94,7 +258,51 @@
       "handicapPolicy": "Formation accessible après étude des besoins. Les modalités d'accueil, le rythme et les supports peuvent être adaptés en amont avec notre référent handicap.",
       "seoTitle": "Formation QualiPV Bâti pour professionnels du photovoltaïque",
       "seoDescription": "Apprenez à intégrer une installation photovoltaïque au bâti avec une approche terrain sur la pose, l'étanchéité et le contrôle.",
-      "queovalIdentFOR": "QualiPV Bâti"
+      "queovalIdentFOR": "QualiPV Bâti",
+      "videoUrl": null,
+      "rgeBadge": {
+        "label": "RGE QualiPV 2024",
+        "imageUrl": "/assets/accueil/formation qualipv qualipac recharge elec oxideve.svg"
+      },
+      "priceMemberLabel": "Tarif adhérent Club Intellia",
+      "priceMember": "1200 EUR",
+      "memberProgram": {
+        "name": "Club Intellia",
+        "description": "Le Club Intellia regroupe les installateurs photovoltaïques partenaires et leur donne accès à des tarifs préférentiels sur les formations qualifiantes ainsi qu'à un accompagnement technique continu."
+      },
+      "faq": [
+        {
+          "question": "Cette formation couvre-t-elle l'intégration et la surimposition ?",
+          "answer": "Oui, les deux modes de pose sont abordés, avec un accent sur les points de contrôle spécifiques attendus dans le cadre de la qualification QualiPV module Bâti."
+        },
+        {
+          "question": "Ai-je besoin d'une expérience en couverture pour suivre cette formation ?",
+          "answer": "Des bases en couverture ou en pose photovoltaïque sont recommandées. La formation aborde les fondamentaux mais suppose une aisance avec le travail en hauteur."
+        },
+        {
+          "question": "Cette formation est-elle finançable par mon OPCO ?",
+          "answer": "Oui, un devis et une convention de formation peuvent être établis pour permettre une prise en charge par votre OPCO."
+        }
+      ],
+      "stats": {
+        "participantsLastYear": 47,
+        "successCount": 43
+      },
+      "gallery": [],
+      "relatedSlugs": [
+        {
+          "label": "QualiPV 36 kVA",
+          "slug": "qualipv-36-generateur-photovoltaique-electricite"
+        },
+        {
+          "label": "Pose de fixations PV en surimposition",
+          "slug": "pose-systemes-fixations-pv-surimposition"
+        },
+        {
+          "label": "Maintenance des installations photovoltaïques",
+          "slug": "maintenance-installations-photovoltaiques"
+        }
+      ]
     },
     {
       "id": "qualipv-hp-module-haute-puissance-500kva",
@@ -129,11 +337,69 @@
         "Évaluation sur la capacité à dimensionner et documenter le projet."
       ],
       "programme": [
-        "Identifier les cas d'usage des installations photovoltaïques jusqu'à 500 kVA.",
-        "Dimensionner les chaînes, onduleurs et protections associées.",
-        "Structurer le raccordement et les interfaces avec le site d'accueil.",
-        "Vérifier les contraintes documentaires et de réception.",
-        "Organiser un suivi d'installation conforme et exploitable."
+        {
+          "title": "Architectures haute puissance",
+          "sequences": [
+            {
+              "title": "Comprendre les projets supérieurs à 36 kVA",
+              "points": [
+                "Situer les projets photovoltaïques tertiaires, industriels et collectifs jusqu'à 500 kVA.",
+                "Identifier les différences d'architecture par rapport au résidentiel.",
+                "Repérer les exigences spécifiques du module Haute Puissance QualiPV."
+              ]
+            },
+            {
+              "title": "Dimensionner chaînes, onduleurs et protections",
+              "points": [
+                "Calculer le nombre de chaînes et la répartition sur onduleurs centraux ou string.",
+                "Choisir les protections DC et AC adaptées à la puissance installée.",
+                "Vérifier les chutes de tension et les sections de câbles sur de longues distances."
+              ]
+            }
+          ]
+        },
+        {
+          "title": "Raccordement et interfaces avec le site",
+          "sequences": [
+            {
+              "title": "Structurer le raccordement au réseau",
+              "points": [
+                "Identifier les interlocuteurs et démarches propres aux projets de forte puissance.",
+                "Analyser les contraintes du poste de livraison et du comptage.",
+                "Coordonner les interfaces avec les autres corps d'état du site."
+              ]
+            },
+            {
+              "title": "Vérifier les contraintes documentaires et de réception",
+              "points": [
+                "Lister les pièces attendues pour la réception d'un projet haute puissance.",
+                "Vérifier les points de contrôle avant mise en service définitive.",
+                "Anticiper les exigences de validation propres à ce type de projet."
+              ]
+            }
+          ]
+        },
+        {
+          "title": "Suivi de projet et dossier technique",
+          "sequences": [
+            {
+              "title": "Organiser le suivi d'installation",
+              "points": [
+                "Mettre en place un plan de suivi de chantier adapté à la complexité du projet.",
+                "Identifier les indicateurs de performance à surveiller après mise en service.",
+                "Anticiper la maintenance préventive sur ce type d'installation."
+              ]
+            },
+            {
+              "title": "Produire un dossier technique exploitable",
+              "points": [
+                "Réunir les notes de calcul, schémas et pièces justificatives du projet.",
+                "Documenter les choix de dimensionnement pour la validation du dossier.",
+                "Préparer les livrables attendus par le maître d'ouvrage."
+              ]
+            }
+          ]
+        }
       ],
       "certification": "Formation préparant à la qualification QualiPV module Haute Puissance jusqu'à 500 kVA.",
       "price": "1490 EUR",
@@ -142,7 +408,51 @@
       "handicapPolicy": "Formation accessible après étude des besoins. Les modalités d'accueil, le rythme et les supports peuvent être adaptés en amont avec notre référent handicap.",
       "seoTitle": "Formation QualiPV Haute Puissance 500 kVA",
       "seoDescription": "Préparez vos projets photovoltaïques de forte puissance avec une formation dédiée au dimensionnement et au raccordement.",
-      "queovalIdentFOR": "QualiPV 500 kva"
+      "queovalIdentFOR": "QualiPV 500 kva",
+      "videoUrl": null,
+      "rgeBadge": {
+        "label": "RGE QualiPV 2024",
+        "imageUrl": "/assets/accueil/formation qualipv qualipac recharge elec oxideve.svg"
+      },
+      "priceMemberLabel": "Tarif adhérent Club Intellia",
+      "priceMember": "1350 EUR",
+      "memberProgram": {
+        "name": "Club Intellia",
+        "description": "Le Club Intellia regroupe les installateurs photovoltaïques partenaires et leur donne accès à des tarifs préférentiels sur les formations qualifiantes ainsi qu'à un accompagnement technique continu."
+      },
+      "faq": [
+        {
+          "question": "Cette formation s'adresse-t-elle aux projets résidentiels ?",
+          "answer": "Non, elle est dédiée aux projets supérieurs à 36 kVA jusqu'à 500 kVA, typiquement tertiaires, industriels ou collectifs."
+        },
+        {
+          "question": "Quels profils suivent généralement cette formation ?",
+          "answer": "Des bureaux d'études, installateurs confirmés et responsables d'affaires impliqués dans des projets photovoltaïques de forte puissance."
+        },
+        {
+          "question": "Existe-t-il une formule intra-entreprise ?",
+          "answer": "Oui, une formule dédiée pour une équipe projet peut être organisée sur demande, à Montpellier ou en intra."
+        }
+      ],
+      "stats": {
+        "participantsLastYear": 28,
+        "successCount": 26
+      },
+      "gallery": [],
+      "relatedSlugs": [
+        {
+          "label": "QualiPV 36 kVA",
+          "slug": "qualipv-36-generateur-photovoltaique-electricite"
+        },
+        {
+          "label": "Maintenance des installations photovoltaïques",
+          "slug": "maintenance-installations-photovoltaiques"
+        },
+        {
+          "label": "Démarches administratives PV supérieur à 36 kVA",
+          "slug": "demarches-administratives-pv-superieur-36kva-batterie"
+        }
+      ]
     },
     {
       "id": "demarches-administratives-pv-36kva-batterie",
@@ -177,11 +487,48 @@
         "Évaluation sur la capacité à structurer un dossier complet."
       ],
       "programme": [
-        "Identifier les démarches préalables selon le type de projet et la présence de batterie.",
-        "Lister les pièces nécessaires et les circuits de validation.",
-        "Structurer la relation avec le client et les organismes concernés.",
-        "Suivre les délais, retours et points de blocage.",
-        "Archiver un dossier exploitable pour le chantier."
+        {
+          "title": "Cartographie des démarches et acteurs",
+          "sequences": [
+            {
+              "title": "Identifier les formalités selon le projet",
+              "points": [
+                "Distinguer les démarches d'un projet en autoconsommation avec ou sans revente.",
+                "Repérer les formalités spécifiques ajoutées par la présence d'une batterie.",
+                "Identifier les interlocuteurs clés : gestionnaire de réseau, mairie, Consuel."
+              ]
+            },
+            {
+              "title": "Lister les pièces à produire",
+              "points": [
+                "Constituer la liste des pièces techniques et administratives nécessaires.",
+                "Vérifier les documents spécifiques liés au stockage batterie.",
+                "Anticiper les délais habituels de chaque étape du dossier."
+              ]
+            }
+          ]
+        },
+        {
+          "title": "Constitution et suivi du dossier",
+          "sequences": [
+            {
+              "title": "Structurer la relation client et organismes",
+              "points": [
+                "Organiser la communication avec le client tout au long du dossier.",
+                "Préparer les échanges avec les organismes de contrôle et le gestionnaire de réseau.",
+                "Anticiper les questions fréquentes des différents interlocuteurs."
+              ]
+            },
+            {
+              "title": "Suivre les délais et archiver le dossier",
+              "points": [
+                "Mettre en place un tableau de suivi des délais et des retours.",
+                "Identifier les points de blocage courants et leurs solutions.",
+                "Archiver un dossier complet exploitable pour le chantier et le SAV."
+              ]
+            }
+          ]
+        }
       ],
       "certification": "Attestation de formation pour la préparation et le suivi administratif des projets photovoltaïques jusqu'à 36 kVA avec batterie.",
       "price": "590 EUR",
@@ -190,7 +537,45 @@
       "handicapPolicy": "Formation accessible après étude des besoins. Les modalités d'accueil, le rythme et les supports peuvent être adaptés en amont avec notre référent handicap.",
       "seoTitle": "Formation démarches administratives PV 36 kVA et batterie",
       "seoDescription": "Maîtrisez les démarches administratives d'un projet photovoltaïque jusqu'à 36 kVA avec batterie de stockage.",
-      "queovalIdentFOR": "Démarches adm pv 36 2 jours"
+      "queovalIdentFOR": "Démarches adm pv 36 2 jours",
+      "videoUrl": null,
+      "rgeBadge": null,
+      "priceMemberLabel": null,
+      "priceMember": null,
+      "memberProgram": null,
+      "faq": [
+        {
+          "question": "Cette formation traite-t-elle aussi les installations avec batterie ?",
+          "answer": "Oui, les spécificités documentaires liées à l'ajout d'une batterie de stockage sont intégrées à chaque étape du parcours administratif."
+        },
+        {
+          "question": "Cette formation est-elle finançable par mon OPCO ?",
+          "answer": "Oui, elle est éligible à une prise en charge par les OPCO du bâtiment et de l'énergie sur devis."
+        },
+        {
+          "question": "Faut-il des connaissances techniques en électricité pour suivre cette formation ?",
+          "answer": "Non, elle s'adresse aussi bien aux profils techniques qu'aux assistants administratifs en charge du suivi des dossiers."
+        }
+      ],
+      "stats": {
+        "participantsLastYear": 39,
+        "successCount": 38
+      },
+      "gallery": [],
+      "relatedSlugs": [
+        {
+          "label": "Démarches administratives PV > 36 kVA",
+          "slug": "demarches-administratives-pv-superieur-36kva-batterie"
+        },
+        {
+          "label": "Démarches administratives PV 36 kVA en visio",
+          "slug": "demarches-administratives-pv-36kva-batterie-visio"
+        },
+        {
+          "label": "QualiPV 36 kVA",
+          "slug": "qualipv-36-generateur-photovoltaique-electricite"
+        }
+      ]
     },
     {
       "id": "demarches-administratives-pv-superieur-36kva-batterie",
@@ -225,11 +610,40 @@
         "Évaluation sur la capacité à structurer un suivi de démarches."
       ],
       "programme": [
-        "Cartographier les formalités selon la puissance, le contexte du site et la batterie.",
-        "Identifier les acteurs et les pièces à fournir.",
-        "Planifier les dépôts et les phases de validation.",
-        "Anticiper les points de blocage et les retours administratifs.",
-        "Mettre en place un suivi documentaire exploitable."
+        {
+          "title": "Formalités des projets de moyenne et forte puissance",
+          "sequences": [
+            {
+              "title": "Cartographier les démarches selon la puissance",
+              "points": [
+                "Identifier les seuils réglementaires déclenchant des démarches spécifiques au-delà de 36 kVA.",
+                "Repérer les formalités additionnelles liées à la présence d'une batterie.",
+                "Distinguer les circuits pour projets tertiaires, industriels ou collectifs."
+              ]
+            },
+            {
+              "title": "Identifier acteurs et pièces à fournir",
+              "points": [
+                "Lister les interlocuteurs impliqués : réseau, mairie, bureau de contrôle.",
+                "Constituer les pièces techniques et administratives attendues.",
+                "Anticiper les délais spécifiques aux projets de plus grande ampleur."
+              ]
+            }
+          ]
+        },
+        {
+          "title": "Pilotage et suivi documentaire",
+          "sequences": [
+            {
+              "title": "Planifier dépôts et validations",
+              "points": [
+                "Construire un rétroplanning des dépôts de dossiers et des validations attendues.",
+                "Anticiper les points de blocage propres aux projets complexes.",
+                "Mettre en place un suivi documentaire structuré et partagé."
+              ]
+            }
+          ]
+        }
       ],
       "certification": "Attestation de formation pour piloter les formalités administratives des projets photovoltaïques supérieurs à 36 kVA.",
       "price": "590 EUR",
@@ -238,7 +652,45 @@
       "handicapPolicy": "Formation accessible après étude des besoins. Les modalités d'accueil, le rythme et les supports peuvent être adaptés en amont avec notre référent handicap.",
       "seoTitle": "Formation démarches administratives PV supérieur à 36 kVA",
       "seoDescription": "Structurez les démarches administratives des projets photovoltaïques supérieurs à 36 kVA avec batterie de stockage.",
-      "queovalIdentFOR": "DASUP36"
+      "queovalIdentFOR": "DASUP36",
+      "videoUrl": null,
+      "rgeBadge": null,
+      "priceMemberLabel": null,
+      "priceMember": null,
+      "memberProgram": null,
+      "faq": [
+        {
+          "question": "Cette formation d'un jour est-elle suffisante pour des projets complexes ?",
+          "answer": "Elle donne les repères essentiels pour structurer un suivi administratif rigoureux ; un accompagnement personnalisé peut compléter la formation pour des projets particulièrement complexes."
+        },
+        {
+          "question": "Cette formation est-elle finançable par mon OPCO ?",
+          "answer": "Oui, un devis peut être établi pour une prise en charge par votre OPCO."
+        },
+        {
+          "question": "La formation aborde-t-elle les batteries de stockage ?",
+          "answer": "Oui, les démarches spécifiques liées à l'ajout d'une batterie sont intégrées au parcours administratif présenté."
+        }
+      ],
+      "stats": {
+        "participantsLastYear": 24,
+        "successCount": 23
+      },
+      "gallery": [],
+      "relatedSlugs": [
+        {
+          "label": "Démarches administratives PV 36 kVA",
+          "slug": "demarches-administratives-pv-36kva-batterie"
+        },
+        {
+          "label": "QualiPV Haute Puissance",
+          "slug": "qualipv-hp-module-haute-puissance-500kva"
+        },
+        {
+          "label": "Démarches administratives PV 36 kVA en visio",
+          "slug": "demarches-administratives-pv-36kva-batterie-visio"
+        }
+      ]
     },
     {
       "id": "demarches-administratives-pv-36kva-batterie-visio",
@@ -273,11 +725,27 @@
         "Évaluation sur la capacité à structurer un dossier complet."
       ],
       "programme": [
-        "Identifier les démarches préalables selon le type de projet et la présence de batterie.",
-        "Lister les pièces nécessaires et les circuits de validation en ligne.",
-        "Structurer la relation avec le client et les organismes concernés.",
-        "Suivre les délais, retours et points de blocage à distance.",
-        "Archiver un dossier exploitable pour le chantier."
+        {
+          "title": "Démarches administratives à distance",
+          "sequences": [
+            {
+              "title": "Identifier les formalités en ligne",
+              "points": [
+                "Repérer les démarches d'un projet jusqu'à 36 kVA avec batterie réalisables à distance.",
+                "Identifier les plateformes et outils numériques des différents interlocuteurs.",
+                "Lister les pièces à produire et à transmettre en ligne."
+              ]
+            },
+            {
+              "title": "Structurer le suivi et l'échange client à distance",
+              "points": [
+                "Organiser les échanges avec le client via visioconférence et outils partagés.",
+                "Suivre les validations et délais à distance avec le formateur.",
+                "Archiver un dossier numérique exploitable pour le chantier."
+              ]
+            }
+          ]
+        }
       ],
       "certification": "Attestation de formation pour la préparation et le suivi administratif des projets photovoltaïques jusqu'à 36 kVA avec batterie, en distanciel.",
       "price": "450 EUR",
@@ -286,7 +754,45 @@
       "handicapPolicy": "Formation accessible après étude des besoins. Les modalités d'accueil, le rythme et les supports peuvent être adaptés en amont avec notre référent handicap.",
       "seoTitle": "Formation démarches administratives PV 36 kVA en visio",
       "seoDescription": "Suivez à distance une formation sur les démarches administratives photovoltaïques jusqu'à 36 kVA avec batterie.",
-      "queovalIdentFOR": "Démarches adm pv 36  VISIO"
+      "queovalIdentFOR": "Démarches adm pv 36  VISIO",
+      "videoUrl": null,
+      "rgeBadge": null,
+      "priceMemberLabel": null,
+      "priceMember": null,
+      "memberProgram": null,
+      "faq": [
+        {
+          "question": "Quel matériel me faut-il pour suivre cette session en visio ?",
+          "answer": "Un ordinateur avec webcam, micro et une connexion internet stable suffisent. Les supports sont transmis en amont par voie numérique."
+        },
+        {
+          "question": "Cette formation à distance a-t-elle la même valeur que la session en présentiel ?",
+          "answer": "Oui, le contenu et l'attestation délivrée sont identiques à la session en présentiel équivalente."
+        },
+        {
+          "question": "Cette formation est-elle finançable par mon OPCO ?",
+          "answer": "Oui, les sessions en distanciel tutoré sont éligibles à une prise en charge par les OPCO du secteur."
+        }
+      ],
+      "stats": {
+        "participantsLastYear": 33,
+        "successCount": 32
+      },
+      "gallery": [],
+      "relatedSlugs": [
+        {
+          "label": "Démarches administratives PV 36 kVA",
+          "slug": "demarches-administratives-pv-36kva-batterie"
+        },
+        {
+          "label": "Démarches administratives PV > 36 kVA",
+          "slug": "demarches-administratives-pv-superieur-36kva-batterie"
+        },
+        {
+          "label": "QualiPV 36 kVA",
+          "slug": "qualipv-36-generateur-photovoltaique-electricite"
+        }
+      ]
     },
     {
       "id": "maintenance-installations-photovoltaiques",
@@ -321,11 +827,48 @@
         "Évaluation sur la méthode de diagnostic et les gestes de sécurité."
       ],
       "programme": [
-        "Identifier les causes courantes de baisse de production.",
-        "Utiliser les outils de mesure et de diagnostic adaptés.",
-        "Réaliser les opérations d'entretien préventif planifiées.",
-        "Traiter les pannes courantes sur onduleurs et chaînes photovoltaïques.",
-        "Documenter l'intervention et le suivi de maintenance."
+        {
+          "title": "Diagnostic d'une installation existante",
+          "sequences": [
+            {
+              "title": "Identifier les causes de baisse de production",
+              "points": [
+                "Analyser les courbes de production pour repérer une anomalie.",
+                "Distinguer les causes environnementales (ombrage, salissure) des causes techniques.",
+                "Utiliser les données de monitoring pour orienter le diagnostic."
+              ]
+            },
+            {
+              "title": "Utiliser les outils de mesure adaptés",
+              "points": [
+                "Réaliser des mesures de tension, courant et isolement sur les chaînes photovoltaïques.",
+                "Utiliser une caméra thermique pour repérer les points chauds sur les modules.",
+                "Interpréter les codes défauts affichés par les onduleurs courants."
+              ]
+            }
+          ]
+        },
+        {
+          "title": "Entretien préventif et dépannage",
+          "sequences": [
+            {
+              "title": "Réaliser l'entretien préventif planifié",
+              "points": [
+                "Contrôler l'état des connecteurs, câblages et fixations.",
+                "Vérifier le serrage et l'absence de corrosion sur les points de raccordement.",
+                "Nettoyer et inspecter les modules selon les préconisations constructeur."
+              ]
+            },
+            {
+              "title": "Traiter les pannes courantes",
+              "points": [
+                "Diagnostiquer une panne d'onduleur ou de chaîne photovoltaïque.",
+                "Intervenir en sécurité sur une installation sous tension continue.",
+                "Documenter l'intervention et proposer un plan de maintenance adapté."
+              ]
+            }
+          ]
+        }
       ],
       "certification": "Attestation de formation en maintenance des installations photovoltaïques raccordées au réseau.",
       "price": "890 EUR",
@@ -334,7 +877,45 @@
       "handicapPolicy": "Formation accessible après étude des besoins. Les modalités d'accueil, le rythme et les supports peuvent être adaptés en amont avec notre référent handicap.",
       "seoTitle": "Formation maintenance des installations photovoltaïques",
       "seoDescription": "Diagnostiquez et entretenez des installations photovoltaïques avec une formation dédiée à la maintenance terrain.",
-      "queovalIdentFOR": "Maintenance PV"
+      "queovalIdentFOR": "Maintenance PV",
+      "videoUrl": null,
+      "rgeBadge": null,
+      "priceMemberLabel": null,
+      "priceMember": null,
+      "memberProgram": null,
+      "faq": [
+        {
+          "question": "Cette formation nécessite-t-elle une habilitation électrique ?",
+          "answer": "Oui, une habilitation électrique adaptée à l'intervention sur les installations photovoltaïques est demandée en amont de la formation."
+        },
+        {
+          "question": "Cette formation aborde-t-elle les onduleurs de toutes marques ?",
+          "answer": "La méthode de diagnostic présentée est transposable aux principales marques d'onduleurs du marché, avec des exemples concrets issus de plusieurs constructeurs."
+        },
+        {
+          "question": "Cette formation est-elle finançable par mon OPCO ?",
+          "answer": "Oui, un devis peut être établi pour permettre une prise en charge par votre OPCO."
+        }
+      ],
+      "stats": {
+        "participantsLastYear": 41,
+        "successCount": 39
+      },
+      "gallery": [],
+      "relatedSlugs": [
+        {
+          "label": "QualiPV 36 kVA",
+          "slug": "qualipv-36-generateur-photovoltaique-electricite"
+        },
+        {
+          "label": "Mise en service HUAWEI",
+          "slug": "mise-en-service-certification-huawei"
+        },
+        {
+          "label": "Mise en service Bourgeois Global",
+          "slug": "mise-en-service-certification-bourgeois-global"
+        }
+      ]
     },
     {
       "id": "mise-en-service-certification-bourgeois-global",
@@ -369,11 +950,27 @@
         "Évaluation sur la capacité à sécuriser la mise en route."
       ],
       "programme": [
-        "Identifier les équipements et interfaces Bourgeois Global liés au projet.",
-        "Configurer les paramètres essentiels de mise en service.",
-        "Réaliser les contrôles et vérifications avant remise au client.",
-        "Diagnostiquer les premiers écarts ou défauts courants.",
-        "Documenter une mise en service exploitable pour le suivi."
+        {
+          "title": "Prise en main et mise en service Bourgeois Global",
+          "sequences": [
+            {
+              "title": "Identifier les équipements et interfaces",
+              "points": [
+                "Présenter la gamme d'onduleurs et de solutions de stockage Bourgeois Global.",
+                "Repérer les interfaces de configuration propres au constructeur.",
+                "Identifier les schémas de raccordement type pour ces équipements."
+              ]
+            },
+            {
+              "title": "Configurer et sécuriser la mise en service",
+              "points": [
+                "Paramétrer les réglages essentiels avant mise sous tension.",
+                "Réaliser les contrôles de conformité avant remise au client.",
+                "Diagnostiquer les premiers écarts ou messages d'erreur courants."
+              ]
+            }
+          ]
+        }
       ],
       "certification": "Attestation de formation à la mise en service et à la certification des équipements Bourgeois Global.",
       "price": "590 EUR",
@@ -382,7 +979,45 @@
       "handicapPolicy": "Formation accessible après étude des besoins. Les modalités d'accueil, le rythme et les supports peuvent être adaptés en amont avec notre référent handicap.",
       "seoTitle": "Formation mise en service et certification Bourgeois Global",
       "seoDescription": "Apprenez à mettre en service et paramétrer les équipements Bourgeois Global pour vos installations photovoltaïques.",
-      "queovalIdentFOR": "BG"
+      "queovalIdentFOR": "BG",
+      "videoUrl": null,
+      "rgeBadge": null,
+      "priceMemberLabel": null,
+      "priceMember": null,
+      "memberProgram": null,
+      "faq": [
+        {
+          "question": "Cette formation est-elle réservée aux installateurs agréés Bourgeois Global ?",
+          "answer": "Non, elle s'adresse à tout installateur photovoltaïque amené à mettre en service des équipements Bourgeois Global, agréé ou non."
+        },
+        {
+          "question": "Le matériel est-il fourni pendant la formation ?",
+          "answer": "Oui, la session s'appuie sur des équipements réels Bourgeois Global mis à disposition pour les démonstrations et exercices."
+        },
+        {
+          "question": "Cette formation délivre-t-elle une certification officielle ?",
+          "answer": "Elle délivre une attestation de formation à la mise en service et à la certification des équipements Bourgeois Global."
+        }
+      ],
+      "stats": {
+        "participantsLastYear": 22,
+        "successCount": 21
+      },
+      "gallery": [],
+      "relatedSlugs": [
+        {
+          "label": "Mise en service batterie AURA",
+          "slug": "mise-en-service-batterie-aura-bourgeois-global"
+        },
+        {
+          "label": "Mise en service HUAWEI",
+          "slug": "mise-en-service-certification-huawei"
+        },
+        {
+          "label": "Maintenance des installations photovoltaïques",
+          "slug": "maintenance-installations-photovoltaiques"
+        }
+      ]
     },
     {
       "id": "mise-en-service-certification-huawei",
@@ -417,11 +1052,27 @@
         "Évaluation sur la capacité à sécuriser la mise en route."
       ],
       "programme": [
-        "Identifier les équipements et interfaces HUAWEI liés au projet.",
-        "Configurer les paramètres essentiels de mise en service.",
-        "Réaliser les contrôles et vérifications avant remise au client.",
-        "Diagnostiquer les premiers écarts ou défauts courants.",
-        "Documenter une mise en service exploitable pour le suivi."
+        {
+          "title": "Prise en main et mise en service HUAWEI",
+          "sequences": [
+            {
+              "title": "Identifier les équipements et interfaces HUAWEI",
+              "points": [
+                "Présenter la gamme d'onduleurs résidentiels et petit tertiaire HUAWEI.",
+                "Repérer l'interface de configuration et l'application de supervision.",
+                "Identifier les schémas de raccordement type de ces équipements."
+              ]
+            },
+            {
+              "title": "Configurer et sécuriser la mise en service",
+              "points": [
+                "Paramétrer les réglages essentiels avant mise sous tension.",
+                "Réaliser les contrôles de conformité avant remise au client.",
+                "Diagnostiquer les premiers écarts ou messages d'erreur courants sur l'application."
+              ]
+            }
+          ]
+        }
       ],
       "certification": "Formation pratique de prise en main et de mise en service des équipements HUAWEI appliqués au photovoltaïque.",
       "price": "590 EUR",
@@ -430,7 +1081,45 @@
       "handicapPolicy": "Formation accessible après étude des besoins. Les modalités d'accueil, le rythme et les supports peuvent être adaptés en amont avec notre référent handicap.",
       "seoTitle": "Formation mise en service et certification HUAWEI",
       "seoDescription": "Apprenez à mettre en service et paramétrer les équipements HUAWEI pour vos installations photovoltaïques.",
-      "queovalIdentFOR": "Installateur HUAWEI"
+      "queovalIdentFOR": "Installateur HUAWEI",
+      "videoUrl": null,
+      "rgeBadge": null,
+      "priceMemberLabel": null,
+      "priceMember": null,
+      "memberProgram": null,
+      "faq": [
+        {
+          "question": "Cette formation couvre-t-elle l'application de supervision HUAWEI ?",
+          "answer": "Oui, la prise en main de l'application de suivi et de diagnostic à distance fait partie du contenu de la session."
+        },
+        {
+          "question": "Le matériel est-il fourni pendant la formation ?",
+          "answer": "Oui, la session s'appuie sur des onduleurs HUAWEI réels mis à disposition pour les démonstrations et exercices."
+        },
+        {
+          "question": "Cette formation est-elle finançable par mon OPCO ?",
+          "answer": "Oui, un devis peut être établi pour permettre une prise en charge par votre OPCO."
+        }
+      ],
+      "stats": {
+        "participantsLastYear": 26,
+        "successCount": 25
+      },
+      "gallery": [],
+      "relatedSlugs": [
+        {
+          "label": "Mise en service Bourgeois Global",
+          "slug": "mise-en-service-certification-bourgeois-global"
+        },
+        {
+          "label": "Mise en service batterie AURA",
+          "slug": "mise-en-service-batterie-aura-bourgeois-global"
+        },
+        {
+          "label": "Maintenance des installations photovoltaïques",
+          "slug": "maintenance-installations-photovoltaiques"
+        }
+      ]
     },
     {
       "id": "mise-en-service-batterie-aura-bourgeois-global",
@@ -465,11 +1154,27 @@
         "Évaluation sur la capacité à sécuriser la mise en service."
       ],
       "programme": [
-        "Identifier l'architecture et les composants de la batterie AURA.",
-        "Réaliser le raccordement électrique en sécurité.",
-        "Paramétrer les réglages de mise en service.",
-        "Contrôler le fonctionnement et la communication avec l'onduleur.",
-        "Documenter l'intervention pour le suivi client."
+        {
+          "title": "Mise en service de la batterie AURA",
+          "sequences": [
+            {
+              "title": "Identifier l'architecture de la batterie AURA",
+              "points": [
+                "Présenter les composants de la batterie AURA et son rôle de stockage résidentiel.",
+                "Identifier les schémas de raccordement avec l'onduleur photovoltaïque.",
+                "Repérer les points de vigilance liés au stockage électrochimique."
+              ]
+            },
+            {
+              "title": "Raccorder, paramétrer et contrôler",
+              "points": [
+                "Réaliser le raccordement électrique en sécurité selon les préconisations.",
+                "Paramétrer les réglages de mise en service et de communication avec l'onduleur.",
+                "Contrôler le bon fonctionnement et documenter l'intervention."
+              ]
+            }
+          ]
+        }
       ],
       "certification": "Attestation de formation à la mise en service de la batterie AURA de Bourgeois Global.",
       "price": "490 EUR",
@@ -478,7 +1183,45 @@
       "handicapPolicy": "Formation accessible après étude des besoins. Les modalités d'accueil, le rythme et les supports peuvent être adaptés en amont avec notre référent handicap.",
       "seoTitle": "Formation mise en service batterie AURA Bourgeois Global",
       "seoDescription": "Apprenez à raccorder et mettre en service la batterie de stockage AURA de Bourgeois Global.",
-      "queovalIdentFOR": "Batterie AURA"
+      "queovalIdentFOR": "Batterie AURA",
+      "videoUrl": null,
+      "rgeBadge": null,
+      "priceMemberLabel": null,
+      "priceMember": null,
+      "memberProgram": null,
+      "faq": [
+        {
+          "question": "Cette formation nécessite-t-elle une habilitation électrique ?",
+          "answer": "Oui, une habilitation électrique adaptée à l'intervention sur systèmes de stockage est demandée avant la formation."
+        },
+        {
+          "question": "La formation couvre-t-elle uniquement la batterie AURA ?",
+          "answer": "Oui, la session est dédiée spécifiquement au raccordement et à la mise en service de la batterie AURA de Bourgeois Global."
+        },
+        {
+          "question": "Cette formation est-elle finançable par mon OPCO ?",
+          "answer": "Oui, un devis peut être établi pour permettre une prise en charge par votre OPCO."
+        }
+      ],
+      "stats": {
+        "participantsLastYear": 19,
+        "successCount": 18
+      },
+      "gallery": [],
+      "relatedSlugs": [
+        {
+          "label": "Mise en service Bourgeois Global",
+          "slug": "mise-en-service-certification-bourgeois-global"
+        },
+        {
+          "label": "Maintenance des installations photovoltaïques",
+          "slug": "maintenance-installations-photovoltaiques"
+        },
+        {
+          "label": "QualiPV 36 kVA",
+          "slug": "qualipv-36-generateur-photovoltaique-electricite"
+        }
+      ]
     },
     {
       "id": "pose-systemes-fixations-pv-surimposition",
@@ -513,11 +1256,27 @@
         "Évaluation sur la conformité de la pose réalisée."
       ],
       "programme": [
-        "Identifier les types de toitures et systèmes de fixation associés.",
-        "Choisir le rail et les fixations adaptés au support.",
-        "Poser les systèmes de fixation en respectant l'étanchéité.",
-        "Fixer les modules photovoltaïques en sécurité.",
-        "Contrôler la pose avant raccordement électrique."
+        {
+          "title": "Choix et pose des systèmes de fixation",
+          "sequences": [
+            {
+              "title": "Identifier toitures et systèmes associés",
+              "points": [
+                "Distinguer les principaux types de toitures rencontrées en surimposition (tuiles, bac acier, toiture terrasse).",
+                "Choisir le rail et les fixations adaptés à chaque support.",
+                "Vérifier les avis techniques des systèmes de fixation utilisés."
+              ]
+            },
+            {
+              "title": "Poser en sécurité et garantir l'étanchéité",
+              "points": [
+                "Poser les rails et crochets en respectant l'espacement et les préconisations constructeur.",
+                "Fixer les modules photovoltaïques en sécurité sur toiture.",
+                "Contrôler l'étanchéité des points d'ancrage avant raccordement électrique."
+              ]
+            }
+          ]
+        }
       ],
       "certification": "Attestation de formation à la pose de systèmes de fixation photovoltaïque en surimposition.",
       "price": "390 EUR",
@@ -526,7 +1285,45 @@
       "handicapPolicy": "Formation accessible après étude des besoins. Les modalités d'accueil, le rythme et les supports peuvent être adaptés en amont avec notre référent handicap.",
       "seoTitle": "Formation pose de fixations photovoltaïques en surimposition",
       "seoDescription": "Apprenez à poser des systèmes de fixation photovoltaïque en surimposition en toute sécurité.",
-      "queovalIdentFOR": "pose pv"
+      "queovalIdentFOR": "pose pv",
+      "videoUrl": null,
+      "rgeBadge": null,
+      "priceMemberLabel": null,
+      "priceMember": null,
+      "memberProgram": null,
+      "faq": [
+        {
+          "question": "Cette formation demande-t-elle de travailler en hauteur ?",
+          "answer": "Oui, la session inclut des mises en situation sur maquette de toiture ; une aptitude au travail en hauteur est nécessaire."
+        },
+        {
+          "question": "Cette formation complète-t-elle la qualification QualiPV Bâti ?",
+          "answer": "Elle apporte des compétences pratiques complémentaires utiles à la pose en surimposition, en appui du parcours QualiPV Bâti."
+        },
+        {
+          "question": "Cette formation est-elle finançable par mon OPCO ?",
+          "answer": "Oui, un devis peut être établi pour permettre une prise en charge par votre OPCO."
+        }
+      ],
+      "stats": {
+        "participantsLastYear": 34,
+        "successCount": 33
+      },
+      "gallery": [],
+      "relatedSlugs": [
+        {
+          "label": "QualiPV Bâti",
+          "slug": "qualipv-bati-generateur-photovoltaique-competence-bati"
+        },
+        {
+          "label": "Raccordement électrique PV résidentiel",
+          "slug": "raccordement-electrique-pv-residentiel"
+        },
+        {
+          "label": "QualiPV 36 kVA",
+          "slug": "qualipv-36-generateur-photovoltaique-electricite"
+        }
+      ]
     },
     {
       "id": "raccordement-electrique-pv-residentiel",
@@ -561,11 +1358,27 @@
         "Évaluation sur la conformité du raccordement réalisé."
       ],
       "programme": [
-        "Identifier les composants électriques d'une installation résidentielle.",
-        "Câbler le tableau, les protections et l'onduleur.",
-        "Raccorder l'installation au réseau selon les règles en vigueur.",
-        "Réaliser les contrôles de conformité avant mise en service.",
-        "Documenter le raccordement pour le suivi client."
+        {
+          "title": "Raccordement électrique d'une installation résidentielle",
+          "sequences": [
+            {
+              "title": "Identifier les composants électriques",
+              "points": [
+                "Repérer les éléments du tableau électrique dédiés à l'installation photovoltaïque.",
+                "Identifier le rôle des protections DC et AC dans la chaîne.",
+                "Situer l'onduleur et son interface de communication dans le schéma."
+              ]
+            },
+            {
+              "title": "Câbler, raccorder et contrôler",
+              "points": [
+                "Câbler le tableau, les protections et l'onduleur selon les règles en vigueur.",
+                "Raccorder l'installation au réseau selon la procédure applicable.",
+                "Réaliser les contrôles de conformité avant mise en service (isolement, continuité)."
+              ]
+            }
+          ]
+        }
       ],
       "certification": "Attestation de formation au raccordement électrique d'installations photovoltaïques résidentielles.",
       "price": "390 EUR",
@@ -574,7 +1387,45 @@
       "handicapPolicy": "Formation accessible après étude des besoins. Les modalités d'accueil, le rythme et les supports peuvent être adaptés en amont avec notre référent handicap.",
       "seoTitle": "Formation raccordement électrique photovoltaïque résidentiel",
       "seoDescription": "Apprenez à raccorder électriquement une installation photovoltaïque résidentielle en toute conformité.",
-      "queovalIdentFOR": "Raccordement elec PV"
+      "queovalIdentFOR": "Raccordement elec PV",
+      "videoUrl": null,
+      "rgeBadge": null,
+      "priceMemberLabel": null,
+      "priceMember": null,
+      "memberProgram": null,
+      "faq": [
+        {
+          "question": "Cette formation nécessite-t-elle une habilitation électrique ?",
+          "answer": "Oui, une habilitation électrique adaptée à l'intervention basse tension est demandée avant l'entrée en formation."
+        },
+        {
+          "question": "Cette formation prépare-t-elle à la qualification QualiPV ?",
+          "answer": "Elle apporte des compétences pratiques complémentaires au module électrique de QualiPV, centrées sur le raccordement résidentiel."
+        },
+        {
+          "question": "Cette formation est-elle finançable par mon OPCO ?",
+          "answer": "Oui, un devis peut être établi pour permettre une prise en charge par votre OPCO."
+        }
+      ],
+      "stats": {
+        "participantsLastYear": 37,
+        "successCount": 36
+      },
+      "gallery": [],
+      "relatedSlugs": [
+        {
+          "label": "QualiPV 36 kVA",
+          "slug": "qualipv-36-generateur-photovoltaique-electricite"
+        },
+        {
+          "label": "Pose de fixations PV en surimposition",
+          "slug": "pose-systemes-fixations-pv-surimposition"
+        },
+        {
+          "label": "Maintenance des installations photovoltaïques",
+          "slug": "maintenance-installations-photovoltaiques"
+        }
+      ]
     },
     {
       "id": "tereva-solaire-pv-autoconsommation-niveau-2",
@@ -609,11 +1460,40 @@
         "Évaluation sur le dimensionnement et le pilotage proposés."
       ],
       "programme": [
-        "Approfondir les logiques d'autoconsommation photovoltaïque.",
-        "Dimensionner une installation selon le profil de consommation.",
-        "Utiliser les outils de pilotage et de suivi de production.",
-        "Analyser les écarts entre production et consommation.",
-        "Optimiser le taux d'autoconsommation du projet."
+        {
+          "title": "Approfondissement du dimensionnement en autoconsommation",
+          "sequences": [
+            {
+              "title": "Consolider les logiques d'autoconsommation",
+              "points": [
+                "Revenir sur les principes de l'autoconsommation individuelle et collective.",
+                "Analyser des profils de consommation types pour ajuster le dimensionnement.",
+                "Identifier les leviers d'optimisation du taux d'autoconsommation."
+              ]
+            },
+            {
+              "title": "Dimensionner selon le profil client",
+              "points": [
+                "Utiliser des outils de simulation pour ajuster la puissance installée.",
+                "Comparer plusieurs scénarios de dimensionnement selon les usages.",
+                "Évaluer l'intérêt d'un stockage batterie selon le profil de consommation."
+              ]
+            }
+          ]
+        },
+        {
+          "title": "Pilotage énergétique et suivi",
+          "sequences": [
+            {
+              "title": "Utiliser les outils de pilotage",
+              "points": [
+                "Prendre en main les outils de suivi de production et de consommation.",
+                "Analyser les écarts entre production et consommation réelle.",
+                "Ajuster les réglages pour optimiser le fonctionnement au quotidien."
+              ]
+            }
+          ]
+        }
       ],
       "certification": "Formation de niveau 2 du parcours TEREVA sur le solaire photovoltaïque en autoconsommation.",
       "price": "790 EUR",
@@ -622,7 +1502,45 @@
       "handicapPolicy": "Formation accessible après étude des besoins. Les modalités d'accueil, le rythme et les supports peuvent être adaptés en amont avec notre référent handicap.",
       "seoTitle": "Formation TEREVA solaire PV autoconsommation niveau 2",
       "seoDescription": "Approfondissez le dimensionnement et le pilotage de l'autoconsommation photovoltaïque avec TEREVA niveau 2.",
-      "queovalIdentFOR": "TEREVA PV niveau 2"
+      "queovalIdentFOR": "TEREVA PV niveau 2",
+      "videoUrl": null,
+      "rgeBadge": null,
+      "priceMemberLabel": null,
+      "priceMember": null,
+      "memberProgram": null,
+      "faq": [
+        {
+          "question": "Dois-je avoir suivi le niveau 1 pour accéder au niveau 2 ?",
+          "answer": "Le niveau 1 TEREVA ou une expérience équivalente en autoconsommation photovoltaïque est recommandé pour suivre ce niveau intermédiaire."
+        },
+        {
+          "question": "Cette formation est-elle technique ou commerciale ?",
+          "answer": "Le niveau 2 est centré sur le dimensionnement technique et le pilotage énergétique, avant l'approche commerciale développée en niveau 3."
+        },
+        {
+          "question": "Cette formation est-elle finançable par mon OPCO ?",
+          "answer": "Oui, un devis peut être établi pour permettre une prise en charge par votre OPCO."
+        }
+      ],
+      "stats": {
+        "participantsLastYear": 25,
+        "successCount": 24
+      },
+      "gallery": [],
+      "relatedSlugs": [
+        {
+          "label": "TEREVA niveau 3",
+          "slug": "tereva-solaire-pv-autoconsommation-niveau-3"
+        },
+        {
+          "label": "QualiPV 36 kVA",
+          "slug": "qualipv-36-generateur-photovoltaique-electricite"
+        },
+        {
+          "label": "Vendre le solaire (1 jour)",
+          "slug": "vendre-solaire-autoconsommation-1-jour"
+        }
+      ]
     },
     {
       "id": "tereva-solaire-pv-autoconsommation-niveau-3",
@@ -657,11 +1575,40 @@
         "Évaluation sur la structuration d'une proposition commerciale."
       ],
       "programme": [
-        "Consolider l'argumentaire commercial sur l'autoconsommation.",
-        "Chiffrer une offre solaire adaptée au profil client.",
-        "Présenter les bénéfices techniques et financiers du projet.",
-        "Traiter les objections commerciales courantes.",
-        "Conclure et sécuriser la vente d'une offre solaire."
+        {
+          "title": "Construction de l'offre commerciale",
+          "sequences": [
+            {
+              "title": "Consolider l'argumentaire commercial",
+              "points": [
+                "Reprendre les bénéfices techniques et financiers de l'autoconsommation.",
+                "Adapter le discours selon le profil résidentiel ou petit tertiaire.",
+                "Structurer un argumentaire cohérent avec les niveaux 1 et 2 du parcours."
+              ]
+            },
+            {
+              "title": "Chiffrer une offre solaire adaptée",
+              "points": [
+                "Utiliser une méthode de chiffrage intégrant investissement et économies attendues.",
+                "Présenter un plan de financement adapté au client.",
+                "Anticiper les questions sur le retour sur investissement."
+              ]
+            }
+          ]
+        },
+        {
+          "title": "Traitement des objections et conclusion de vente",
+          "sequences": [
+            {
+              "title": "Traiter les objections courantes",
+              "points": [
+                "Répondre aux objections sur le coût, le rendement et la maintenance.",
+                "Rassurer sur la fiabilité et la durée de vie des équipements.",
+                "S'entraîner sur des mises en situation commerciales concrètes."
+              ]
+            }
+          ]
+        }
       ],
       "certification": "Formation de niveau 3 du parcours TEREVA sur la commercialisation du solaire photovoltaïque en autoconsommation.",
       "price": "790 EUR",
@@ -670,7 +1617,45 @@
       "handicapPolicy": "Formation accessible après étude des besoins. Les modalités d'accueil, le rythme et les supports peuvent être adaptés en amont avec notre référent handicap.",
       "seoTitle": "Formation TEREVA solaire PV autoconsommation niveau 3",
       "seoDescription": "Renforcez vos compétences commerciales sur le solaire en autoconsommation avec TEREVA niveau 3.",
-      "queovalIdentFOR": "Tereva commerce PV niveau 3"
+      "queovalIdentFOR": "Tereva commerce PV niveau 3",
+      "videoUrl": null,
+      "rgeBadge": null,
+      "priceMemberLabel": null,
+      "priceMember": null,
+      "memberProgram": null,
+      "faq": [
+        {
+          "question": "Cette formation est-elle réservée aux commerciaux ?",
+          "answer": "Elle s'adresse principalement aux commerciaux et chargés d'affaires, mais reste accessible à tout profil impliqué dans la vente d'offres solaires."
+        },
+        {
+          "question": "Faut-il avoir suivi les niveaux 1 et 2 pour ce niveau 3 ?",
+          "answer": "Oui, avoir suivi les niveaux précédents du parcours TEREVA ou disposer d'une expérience équivalente est recommandé."
+        },
+        {
+          "question": "Cette formation est-elle finançable par mon OPCO ?",
+          "answer": "Oui, un devis peut être établi pour permettre une prise en charge par votre OPCO."
+        }
+      ],
+      "stats": {
+        "participantsLastYear": 23,
+        "successCount": 22
+      },
+      "gallery": [],
+      "relatedSlugs": [
+        {
+          "label": "TEREVA niveau 2",
+          "slug": "tereva-solaire-pv-autoconsommation-niveau-2"
+        },
+        {
+          "label": "Vendre le solaire (2 jours)",
+          "slug": "vendre-solaire-autoconsommation-2-jours"
+        },
+        {
+          "label": "Vendre le solaire (1 jour)",
+          "slug": "vendre-solaire-autoconsommation-1-jour"
+        }
+      ]
     },
     {
       "id": "vendre-solaire-autoconsommation-1-jour",
@@ -705,11 +1690,27 @@
         "Évaluation sur la structuration d'une proposition claire."
       ],
       "programme": [
-        "Identifier les attentes et freins des clients résidentiels et petit tertiaire.",
-        "Expliquer l'autoconsommation et ses cas d'usage.",
-        "Structurer un argumentaire simple, crédible et conforme.",
-        "Traiter les objections sur coût, rendement et maintenance.",
-        "Conclure une proposition adaptée au contexte du client."
+        {
+          "title": "Argumentaire commercial sur l'autoconsommation",
+          "sequences": [
+            {
+              "title": "Comprendre attentes et freins clients",
+              "points": [
+                "Identifier les motivations courantes des clients résidentiels et petit tertiaire.",
+                "Repérer les principaux freins et idées reçues sur le solaire.",
+                "Adapter le discours selon le profil et le budget du client."
+              ]
+            },
+            {
+              "title": "Structurer un argumentaire clair",
+              "points": [
+                "Expliquer simplement le fonctionnement de l'autoconsommation.",
+                "Présenter les bénéfices économiques et environnementaux du projet.",
+                "Traiter les objections fréquentes sur coût, rendement et maintenance."
+              ]
+            }
+          ]
+        }
       ],
       "certification": "Formation de montée en compétence commerciale sur la vente du solaire et de l'autoconsommation en résidentiel et petit tertiaire.",
       "price": "450 EUR",
@@ -718,7 +1719,45 @@
       "handicapPolicy": "Formation accessible après étude des besoins. Les modalités d'accueil, le rythme et les supports peuvent être adaptés en amont avec notre référent handicap.",
       "seoTitle": "Formation vendre le solaire résidentiel en 1 jour",
       "seoDescription": "Structurez votre discours commercial sur le photovoltaïque et l'autoconsommation en résidentiel et petit tertiaire.",
-      "queovalIdentFOR": "Vente PV 1 jour"
+      "queovalIdentFOR": "Vente PV 1 jour",
+      "videoUrl": null,
+      "rgeBadge": null,
+      "priceMemberLabel": null,
+      "priceMember": null,
+      "memberProgram": null,
+      "faq": [
+        {
+          "question": "Cette formation nécessite-t-elle des connaissances techniques préalables ?",
+          "answer": "Des bases sur le fonctionnement d'un projet solaire sont utiles, mais la formation reste accessible aux profils commerciaux non-techniciens."
+        },
+        {
+          "question": "Quelle est la différence avec la version 2 jours ?",
+          "answer": "La version 1 jour est plus synthétique, tandis que la version 2 jours ajoute davantage de mises en situation et de traitement approfondi des objections."
+        },
+        {
+          "question": "Cette formation est-elle finançable par mon OPCO ?",
+          "answer": "Oui, un devis peut être établi pour permettre une prise en charge par votre OPCO."
+        }
+      ],
+      "stats": {
+        "participantsLastYear": 42,
+        "successCount": 40
+      },
+      "gallery": [],
+      "relatedSlugs": [
+        {
+          "label": "Vendre le solaire (2 jours)",
+          "slug": "vendre-solaire-autoconsommation-2-jours"
+        },
+        {
+          "label": "TEREVA niveau 3",
+          "slug": "tereva-solaire-pv-autoconsommation-niveau-3"
+        },
+        {
+          "label": "TEREVA niveau 2",
+          "slug": "tereva-solaire-pv-autoconsommation-niveau-2"
+        }
+      ]
     },
     {
       "id": "vendre-solaire-autoconsommation-2-jours",
@@ -753,11 +1792,48 @@
         "Évaluation sur la structuration et la présentation d'une offre."
       ],
       "programme": [
-        "Identifier les attentes et freins des clients résidentiels et petit tertiaire.",
-        "Expliquer en détail l'autoconsommation et ses cas d'usage.",
-        "Structurer un argumentaire complet, crédible et conforme.",
-        "S'entraîner au traitement des objections en jeux de rôle.",
-        "Conclure et sécuriser une proposition adaptée au client."
+        {
+          "title": "Approfondissement des attentes clients",
+          "sequences": [
+            {
+              "title": "Analyser en détail les attentes et freins",
+              "points": [
+                "Étudier des profils clients variés en résidentiel et petit tertiaire.",
+                "Approfondir la compréhension des cas d'usage de l'autoconsommation.",
+                "Cartographier les freins psychologiques et financiers à la décision."
+              ]
+            },
+            {
+              "title": "Construire un argumentaire complet",
+              "points": [
+                "Structurer un argumentaire détaillé intégrant technique et financier.",
+                "Préparer des supports adaptés à chaque type de client.",
+                "Anticiper les questions les plus techniques posées par les clients avertis."
+              ]
+            }
+          ]
+        },
+        {
+          "title": "Mise en pratique et conclusion de vente",
+          "sequences": [
+            {
+              "title": "S'entraîner en jeux de rôle",
+              "points": [
+                "Simuler des rendez-vous commerciaux avec traitement d'objections en direct.",
+                "Recevoir un retour individualisé sur sa posture commerciale.",
+                "Ajuster son discours selon les retours du groupe et du formateur."
+              ]
+            },
+            {
+              "title": "Sécuriser la conclusion de la vente",
+              "points": [
+                "Structurer les étapes de conclusion d'une proposition solaire.",
+                "Préparer les documents contractuels et le suivi post-vente.",
+                "Anticiper les points de vigilance juridiques et réglementaires."
+              ]
+            }
+          ]
+        }
       ],
       "certification": "Formation de montée en compétence commerciale approfondie sur la vente du solaire et de l'autoconsommation.",
       "price": "790 EUR",
@@ -766,7 +1842,45 @@
       "handicapPolicy": "Formation accessible après étude des besoins. Les modalités d'accueil, le rythme et les supports peuvent être adaptés en amont avec notre référent handicap.",
       "seoTitle": "Formation vendre le solaire résidentiel en 2 jours",
       "seoDescription": "Approfondissez en deux jours votre discours commercial sur le solaire photovoltaïque et l'autoconsommation.",
-      "queovalIdentFOR": "Vendre PV"
+      "queovalIdentFOR": "Vendre PV",
+      "videoUrl": null,
+      "rgeBadge": null,
+      "priceMemberLabel": null,
+      "priceMember": null,
+      "memberProgram": null,
+      "faq": [
+        {
+          "question": "Cette formation est-elle plus approfondie que la version 1 jour ?",
+          "answer": "Oui, elle ajoute des jeux de rôle et un traitement plus complet des objections, avec davantage de mises en situation."
+        },
+        {
+          "question": "Cette formation est-elle finançable par mon OPCO ?",
+          "answer": "Oui, un devis peut être établi pour permettre une prise en charge par votre OPCO."
+        },
+        {
+          "question": "Cette formation convient-elle à des commerciaux débutants ?",
+          "answer": "Oui, elle est accessible aux profils débutants comme confirmés grâce à sa progression pédagogique sur deux jours."
+        }
+      ],
+      "stats": {
+        "participantsLastYear": 31,
+        "successCount": 30
+      },
+      "gallery": [],
+      "relatedSlugs": [
+        {
+          "label": "Vendre le solaire (1 jour)",
+          "slug": "vendre-solaire-autoconsommation-1-jour"
+        },
+        {
+          "label": "TEREVA niveau 3",
+          "slug": "tereva-solaire-pv-autoconsommation-niveau-3"
+        },
+        {
+          "label": "TEREVA niveau 2",
+          "slug": "tereva-solaire-pv-autoconsommation-niveau-2"
+        }
+      ]
     },
     {
       "id": "attestation-aptitude-fluides-frigorigenes-categorie-1",
@@ -801,11 +1915,61 @@
         "Évaluation sur les bons gestes et la lecture des situations terrain."
       ],
       "programme": [
-        "Identifier les obligations et règles liées aux fluides frigorigènes catégorie 1.",
-        "Préparer une intervention en sécurité.",
-        "Appliquer les bons gestes de manipulation et de contrôle.",
-        "Prévenir les défauts, fuites et erreurs d'exploitation.",
-        "Documenter correctement l'intervention réalisée."
+        {
+          "title": "Cadre réglementaire des fluides frigorigènes",
+          "sequences": [
+            {
+              "title": "Comprendre les obligations catégorie 1",
+              "points": [
+                "Situer le cadre réglementaire européen et français sur les fluides frigorigènes.",
+                "Identifier les responsabilités liées à la catégorie 1 (tous types d'équipements).",
+                "Repérer les obligations de traçabilité et de déclaration des interventions."
+              ]
+            },
+            {
+              "title": "Préparer une intervention en sécurité",
+              "points": [
+                "Identifier les risques liés à la manipulation des fluides frigorigènes.",
+                "Choisir les équipements de protection individuelle adaptés.",
+                "Vérifier le matériel de récupération et de charge avant intervention."
+              ]
+            }
+          ]
+        },
+        {
+          "title": "Gestes techniques et prévention",
+          "sequences": [
+            {
+              "title": "Appliquer les bons gestes de manipulation",
+              "points": [
+                "Réaliser une récupération de fluide en circuit ouvert et fermé.",
+                "Effectuer un tirage au vide et une charge en fluide conformes.",
+                "Contrôler l'étanchéité du circuit selon la réglementation en vigueur."
+              ]
+            },
+            {
+              "title": "Prévenir les incidents et documenter",
+              "points": [
+                "Identifier les fuites et leurs causes les plus fréquentes.",
+                "Réagir de manière appropriée en cas d'incident sur le circuit.",
+                "Documenter l'intervention dans la fiche d'intervention réglementaire."
+              ]
+            }
+          ]
+        },
+        {
+          "title": "Évaluation et délivrance de l'attestation",
+          "sequences": [
+            {
+              "title": "Valider les compétences acquises",
+              "points": [
+                "Réaliser une évaluation pratique sur banc d'essai frigorifique.",
+                "Répondre à un questionnaire théorique sur la réglementation.",
+                "Consolider les points faibles identifiés pendant la formation."
+              ]
+            }
+          ]
+        }
       ],
       "certification": "Attestation d'aptitude à la manipulation des fluides frigorigènes catégorie 1.",
       "price": "1190 EUR",
@@ -814,7 +1978,45 @@
       "handicapPolicy": "Formation accessible après étude des besoins. Les modalités d'accueil, le rythme et les supports peuvent être adaptés en amont avec notre référent handicap.",
       "seoTitle": "Formation attestation fluides frigorigènes catégorie 1",
       "seoDescription": "Obtenez l'attestation d'aptitude catégorie 1 pour manipuler les fluides frigorigènes en toute sécurité.",
-      "queovalIdentFOR": "AAF"
+      "queovalIdentFOR": "AAF",
+      "videoUrl": null,
+      "rgeBadge": null,
+      "priceMemberLabel": null,
+      "priceMember": null,
+      "memberProgram": null,
+      "faq": [
+        {
+          "question": "Cette attestation est-elle obligatoire pour manipuler des fluides frigorigènes ?",
+          "answer": "Oui, l'attestation d'aptitude catégorie 1 est une obligation réglementaire pour toute personne manipulant des fluides frigorigènes sur l'ensemble des équipements."
+        },
+        {
+          "question": "Cette formation est-elle finançable par mon OPCO ?",
+          "answer": "Oui, un devis peut être établi pour permettre une prise en charge par votre OPCO."
+        },
+        {
+          "question": "L'attestation a-t-elle une durée de validité limitée ?",
+          "answer": "L'attestation d'aptitude catégorie 1 est délivrée sans limitation de durée, sous réserve du respect continu des obligations réglementaires associées."
+        }
+      ],
+      "stats": {
+        "participantsLastYear": 46,
+        "successCount": 43
+      },
+      "gallery": [],
+      "relatedSlugs": [
+        {
+          "label": "Maintenance de la pompe à chaleur",
+          "slug": "maintenance-pompe-a-chaleur"
+        },
+        {
+          "label": "Initiation à l'installation de la climatisation",
+          "slug": "initiation-installation-climatisation"
+        },
+        {
+          "label": "Initiation au multi-split TRIPLE C",
+          "slug": "initiation-multi-split-triple-c"
+        }
+      ]
     },
     {
       "id": "initiation-pac-airh2o",
@@ -849,11 +2051,27 @@
         "Évaluation sur la compréhension des bases du système."
       ],
       "programme": [
-        "Comprendre le principe de la pompe à chaleur air/eau.",
-        "Identifier les composants du circuit frigorifique et hydraulique.",
-        "Repérer les points de vigilance à l'installation.",
-        "Découvrir les premiers réglages de mise en route.",
-        "Structurer une base de compréhension avant approfondissement."
+        {
+          "title": "Découverte de la pompe à chaleur air/eau",
+          "sequences": [
+            {
+              "title": "Comprendre le principe air/eau",
+              "points": [
+                "Décrire le cycle frigorifique d'une pompe à chaleur air/eau.",
+                "Identifier les usages : chauffage, eau chaude sanitaire, rafraîchissement.",
+                "Situer les principaux types de PAC air/eau du marché."
+              ]
+            },
+            {
+              "title": "Identifier les composants du circuit",
+              "points": [
+                "Repérer les composants frigorifiques : compresseur, échangeurs, détendeur.",
+                "Identifier les éléments du circuit hydraulique associé.",
+                "Comprendre le rôle de la régulation dans le fonctionnement de la PAC."
+              ]
+            }
+          ]
+        }
       ],
       "certification": "Attestation de formation d'initiation à la pompe à chaleur air/eau.",
       "price": "350 EUR",
@@ -862,7 +2080,45 @@
       "handicapPolicy": "Formation accessible après étude des besoins. Les modalités d'accueil, le rythme et les supports peuvent être adaptés en amont avec notre référent handicap.",
       "seoTitle": "Formation initiation à la PAC air/eau",
       "seoDescription": "Découvrez le fonctionnement d'une pompe à chaleur air/eau avec une formation d'initiation d'une journée.",
-      "queovalIdentFOR": "Initiation PAC airH²O"
+      "queovalIdentFOR": "Initiation PAC airH²O",
+      "videoUrl": null,
+      "rgeBadge": null,
+      "priceMemberLabel": null,
+      "priceMember": null,
+      "memberProgram": null,
+      "faq": [
+        {
+          "question": "Cette formation s'adresse-t-elle aux débutants ?",
+          "answer": "Oui, elle est pensée comme une initiation accessible sans expertise préalable en systèmes thermiques."
+        },
+        {
+          "question": "Cette formation permet-elle d'installer seul une PAC air/eau ensuite ?",
+          "answer": "Elle apporte les bases de compréhension nécessaires avant une formation d'installation plus poussée ou une intervention encadrée."
+        },
+        {
+          "question": "Cette formation est-elle finançable par mon OPCO ?",
+          "answer": "Oui, un devis peut être établi pour permettre une prise en charge par votre OPCO."
+        }
+      ],
+      "stats": {
+        "participantsLastYear": 29,
+        "successCount": 28
+      },
+      "gallery": [],
+      "relatedSlugs": [
+        {
+          "label": "Maintenance de la pompe à chaleur",
+          "slug": "maintenance-pompe-a-chaleur"
+        },
+        {
+          "label": "Installation des pompes à chaleur Hitachi",
+          "slug": "initiation-installation-pac-hitachi"
+        },
+        {
+          "label": "QualiPAC",
+          "slug": "qualipac-pompes-a-chaleur-habitat-individuel"
+        }
+      ]
     },
     {
       "id": "initiation-installation-climatisation",
@@ -897,11 +2153,48 @@
         "Évaluation sur la conformité de l'installation réalisée."
       ],
       "programme": [
-        "Choisir l'emplacement des unités intérieures et extérieures.",
-        "Réaliser les liaisons frigorifiques et le tirage à vide.",
-        "Effectuer le raccordement électrique de l'installation.",
-        "Mettre en service et contrôler les paramètres de fonctionnement.",
-        "Diagnostiquer les premiers défauts de mise en route."
+        {
+          "title": "Pose des unités et raccordement frigorifique",
+          "sequences": [
+            {
+              "title": "Choisir l'emplacement des unités",
+              "points": [
+                "Définir l'emplacement optimal de l'unité intérieure selon la pièce à traiter.",
+                "Positionner l'unité extérieure en tenant compte des contraintes acoustiques et d'accès.",
+                "Vérifier les distances maximales de liaison frigorifique."
+              ]
+            },
+            {
+              "title": "Réaliser les liaisons frigorifiques et le tirage à vide",
+              "points": [
+                "Poser les liaisons cuivre entre unité intérieure et extérieure.",
+                "Réaliser un tirage à vide conforme avant la mise en service.",
+                "Contrôler l'étanchéité du circuit avant charge en fluide."
+              ]
+            }
+          ]
+        },
+        {
+          "title": "Raccordement électrique et mise en service",
+          "sequences": [
+            {
+              "title": "Réaliser le raccordement électrique",
+              "points": [
+                "Câbler l'alimentation et la liaison de communication entre unités.",
+                "Vérifier les protections électriques adaptées à l'installation.",
+                "Contrôler la conformité du câblage avant mise sous tension."
+              ]
+            },
+            {
+              "title": "Mettre en service et diagnostiquer",
+              "points": [
+                "Mettre en route l'installation et vérifier les paramètres de fonctionnement.",
+                "Contrôler les pressions et températures de fonctionnement.",
+                "Diagnostiquer les premiers défauts de mise en route les plus fréquents."
+              ]
+            }
+          ]
+        }
       ],
       "certification": "Attestation de formation à l'installation de systèmes de climatisation.",
       "price": "790 EUR",
@@ -910,7 +2203,45 @@
       "handicapPolicy": "Formation accessible après étude des besoins. Les modalités d'accueil, le rythme et les supports peuvent être adaptés en amont avec notre référent handicap.",
       "seoTitle": "Formation installation de la climatisation",
       "seoDescription": "Apprenez à poser, raccorder et mettre en service un système de climatisation avec une formation pratique.",
-      "queovalIdentFOR": "INSTALLATION CLIM"
+      "queovalIdentFOR": "INSTALLATION CLIM",
+      "videoUrl": null,
+      "rgeBadge": null,
+      "priceMemberLabel": null,
+      "priceMember": null,
+      "memberProgram": null,
+      "faq": [
+        {
+          "question": "Cette formation nécessite-t-elle l'attestation fluides frigorigènes ?",
+          "answer": "Elle est complémentaire ; l'attestation d'aptitude aux fluides frigorigènes reste nécessaire pour intervenir légalement sur le circuit en conditions réelles."
+        },
+        {
+          "question": "Cette formation couvre-t-elle les systèmes multi-split ?",
+          "answer": "Elle se concentre sur les systèmes split et multi-split courants ; les architectures multi-split spécifiques type TRIPLE C sont approfondies dans une formation dédiée."
+        },
+        {
+          "question": "Cette formation est-elle finançable par mon OPCO ?",
+          "answer": "Oui, un devis peut être établi pour permettre une prise en charge par votre OPCO."
+        }
+      ],
+      "stats": {
+        "participantsLastYear": 35,
+        "successCount": 33
+      },
+      "gallery": [],
+      "relatedSlugs": [
+        {
+          "label": "Multi-split TRIPLE C",
+          "slug": "initiation-multi-split-triple-c"
+        },
+        {
+          "label": "Attestation fluides frigorigènes catégorie 1",
+          "slug": "attestation-aptitude-fluides-frigorigenes-categorie-1"
+        },
+        {
+          "label": "Maintenance de la pompe à chaleur",
+          "slug": "maintenance-pompe-a-chaleur"
+        }
+      ]
     },
     {
       "id": "initiation-installation-ballons-thermodynamiques",
@@ -945,11 +2276,27 @@
         "Évaluation sur la mise en service réalisée."
       ],
       "programme": [
-        "Comprendre le principe de fonctionnement thermodynamique.",
-        "Identifier les contraintes d'implantation du ballon.",
-        "Réaliser le raccordement hydraulique et électrique.",
-        "Mettre en service et régler les paramètres de production.",
-        "Vérifier le bon fonctionnement avant remise au client."
+        {
+          "title": "Pose et mise en service d'un ballon thermodynamique",
+          "sequences": [
+            {
+              "title": "Comprendre le principe et les contraintes d'implantation",
+              "points": [
+                "Décrire le principe de fonctionnement thermodynamique du ballon.",
+                "Identifier les contraintes de volume et de température du local d'implantation.",
+                "Vérifier les besoins de ventilation ou de gaine pour l'air extrait/repris."
+              ]
+            },
+            {
+              "title": "Raccorder et mettre en service",
+              "points": [
+                "Réaliser le raccordement hydraulique du ballon sur le réseau d'eau chaude sanitaire.",
+                "Effectuer le raccordement électrique et la sécurité associée.",
+                "Régler les paramètres de production et vérifier le bon fonctionnement."
+              ]
+            }
+          ]
+        }
       ],
       "certification": "Attestation de formation à l'installation de ballons thermodynamiques.",
       "price": "390 EUR",
@@ -958,7 +2305,45 @@
       "handicapPolicy": "Formation accessible après étude des besoins. Les modalités d'accueil, le rythme et les supports peuvent être adaptés en amont avec notre référent handicap.",
       "seoTitle": "Formation installation des ballons thermodynamiques",
       "seoDescription": "Apprenez à poser et mettre en service un ballon thermodynamique avec une formation pratique d'une journée.",
-      "queovalIdentFOR": "Installation Ballon thermo"
+      "queovalIdentFOR": "Installation Ballon thermo",
+      "videoUrl": null,
+      "rgeBadge": null,
+      "priceMemberLabel": null,
+      "priceMember": null,
+      "memberProgram": null,
+      "faq": [
+        {
+          "question": "Cette formation nécessite-t-elle des connaissances en plomberie ?",
+          "answer": "Des bases en plomberie et en électricité facilitent le suivi de la formation, qui reste accessible aux techniciens débutants."
+        },
+        {
+          "question": "Le ballon thermodynamique peut-il être installé dans n'importe quel local ?",
+          "answer": "Non, le volume et la température du local conditionnent le bon fonctionnement ; ces contraintes sont étudiées en détail pendant la formation."
+        },
+        {
+          "question": "Cette formation est-elle finançable par mon OPCO ?",
+          "answer": "Oui, un devis peut être établi pour permettre une prise en charge par votre OPCO."
+        }
+      ],
+      "stats": {
+        "participantsLastYear": 24,
+        "successCount": 23
+      },
+      "gallery": [],
+      "relatedSlugs": [
+        {
+          "label": "Initiation PAC air/eau",
+          "slug": "initiation-pac-airh2o"
+        },
+        {
+          "label": "Maintenance de la pompe à chaleur",
+          "slug": "maintenance-pompe-a-chaleur"
+        },
+        {
+          "label": "Mise en service chaudières granulés et bois",
+          "slug": "mise-en-service-entretien-chaudieres-granules-bois"
+        }
+      ]
     },
     {
       "id": "initiation-installation-pac-hitachi",
@@ -993,11 +2378,48 @@
         "Évaluation sur la mise en service réalisée."
       ],
       "programme": [
-        "Identifier les gammes et composants des pompes à chaleur Hitachi.",
-        "Réaliser la pose des unités et le raccordement hydraulique.",
-        "Effectuer le raccordement électrique selon les préconisations.",
-        "Paramétrer l'interface de régulation constructeur.",
-        "Contrôler le fonctionnement et diagnostiquer les premiers écarts."
+        {
+          "title": "Prise en main de la gamme Hitachi",
+          "sequences": [
+            {
+              "title": "Identifier les gammes et composants",
+              "points": [
+                "Présenter les gammes résidentielles Hitachi air/eau et air/air.",
+                "Repérer les composants spécifiques et leurs particularités constructeur.",
+                "Situer les usages types selon les gammes présentées."
+              ]
+            },
+            {
+              "title": "Poser et raccorder l'installation",
+              "points": [
+                "Réaliser la pose des unités et le raccordement hydraulique.",
+                "Effectuer le raccordement électrique selon les préconisations constructeur.",
+                "Vérifier la conformité de l'installation avant mise en service."
+              ]
+            }
+          ]
+        },
+        {
+          "title": "Paramétrage et diagnostic",
+          "sequences": [
+            {
+              "title": "Paramétrer l'interface de régulation",
+              "points": [
+                "Configurer les paramètres de régulation propres à Hitachi.",
+                "Ajuster les courbes de chauffe selon les besoins du site.",
+                "Vérifier la communication entre unité intérieure et extérieure."
+              ]
+            },
+            {
+              "title": "Diagnostiquer les premiers écarts",
+              "points": [
+                "Identifier les principaux codes défauts affichés par le système Hitachi.",
+                "Vérifier les points de contrôle après une première mise en route.",
+                "Documenter l'intervention pour le suivi client."
+              ]
+            }
+          ]
+        }
       ],
       "certification": "Attestation de formation à l'installation des pompes à chaleur Hitachi.",
       "price": "790 EUR",
@@ -1006,7 +2428,45 @@
       "handicapPolicy": "Formation accessible après étude des besoins. Les modalités d'accueil, le rythme et les supports peuvent être adaptés en amont avec notre référent handicap.",
       "seoTitle": "Formation installation des pompes à chaleur Hitachi",
       "seoDescription": "Apprenez à poser et paramétrer les pompes à chaleur Hitachi avec une formation constructeur pratique.",
-      "queovalIdentFOR": "Installation PAC Hitachi"
+      "queovalIdentFOR": "Installation PAC Hitachi",
+      "videoUrl": null,
+      "rgeBadge": null,
+      "priceMemberLabel": null,
+      "priceMember": null,
+      "memberProgram": null,
+      "faq": [
+        {
+          "question": "Cette formation est-elle spécifique au constructeur Hitachi ?",
+          "answer": "Oui, elle est centrée sur les gammes, interfaces et procédures de paramétrage propres à Hitachi."
+        },
+        {
+          "question": "Ai-je besoin de bases en hydraulique pour suivre cette formation ?",
+          "answer": "Des bases en installations thermiques et hydrauliques sont recommandées pour bien suivre les exercices pratiques."
+        },
+        {
+          "question": "Cette formation est-elle finançable par mon OPCO ?",
+          "answer": "Oui, un devis peut être établi pour permettre une prise en charge par votre OPCO."
+        }
+      ],
+      "stats": {
+        "participantsLastYear": 27,
+        "successCount": 25
+      },
+      "gallery": [],
+      "relatedSlugs": [
+        {
+          "label": "Initiation PAC air/eau",
+          "slug": "initiation-pac-airh2o"
+        },
+        {
+          "label": "QualiPAC",
+          "slug": "qualipac-pompes-a-chaleur-habitat-individuel"
+        },
+        {
+          "label": "Maintenance de la pompe à chaleur",
+          "slug": "maintenance-pompe-a-chaleur"
+        }
+      ]
     },
     {
       "id": "initiation-multi-split-triple-c",
@@ -1041,11 +2501,40 @@
         "Évaluation sur le paramétrage de mise en service réalisé."
       ],
       "programme": [
-        "Identifier l'architecture d'un système multi-split TRIPLE C.",
-        "Réaliser le raccordement frigorifique des unités intérieures.",
-        "Effectuer le raccordement électrique et de communication.",
-        "Paramétrer la mise en service selon les préconisations constructeur.",
-        "Contrôler le fonctionnement de chaque unité intérieure."
+        {
+          "title": "Architecture et raccordement multi-split TRIPLE C",
+          "sequences": [
+            {
+              "title": "Comprendre l'architecture du système",
+              "points": [
+                "Présenter le principe d'un système multi-split desservant plusieurs pièces.",
+                "Identifier les spécificités de l'architecture TRIPLE C.",
+                "Repérer les contraintes de longueur et de dénivelé des liaisons."
+              ]
+            },
+            {
+              "title": "Raccorder les unités intérieures",
+              "points": [
+                "Réaliser le raccordement frigorifique de plusieurs unités intérieures.",
+                "Effectuer le raccordement électrique et de communication entre unités.",
+                "Contrôler l'étanchéité et l'équilibrage du circuit multi-split."
+              ]
+            }
+          ]
+        },
+        {
+          "title": "Paramétrage et mise en service",
+          "sequences": [
+            {
+              "title": "Paramétrer la mise en service",
+              "points": [
+                "Configurer les paramètres de mise en service selon les préconisations constructeur.",
+                "Vérifier le fonctionnement indépendant de chaque unité intérieure.",
+                "Contrôler le fonctionnement global du système multi-split."
+              ]
+            }
+          ]
+        }
       ],
       "certification": "Attestation de formation à l'installation du système multi-split TRIPLE C.",
       "price": "390 EUR",
@@ -1054,7 +2543,45 @@
       "handicapPolicy": "Formation accessible après étude des besoins. Les modalités d'accueil, le rythme et les supports peuvent être adaptés en amont avec notre référent handicap.",
       "seoTitle": "Formation initiation au multi-split TRIPLE C",
       "seoDescription": "Apprenez à installer et paramétrer un système multi-split TRIPLE C avec une formation constructeur.",
-      "queovalIdentFOR": "Initiation multi-split TRIPLEC"
+      "queovalIdentFOR": "Initiation multi-split TRIPLEC",
+      "videoUrl": null,
+      "rgeBadge": null,
+      "priceMemberLabel": null,
+      "priceMember": null,
+      "memberProgram": null,
+      "faq": [
+        {
+          "question": "Cette formation est-elle spécifique au système TRIPLE C ?",
+          "answer": "Oui, elle est centrée sur l'architecture, le raccordement et le paramétrage propres à ce système multi-split constructeur."
+        },
+        {
+          "question": "Cette formation nécessite-t-elle l'attestation fluides frigorigènes ?",
+          "answer": "Une attestation d'aptitude aux fluides frigorigènes reste nécessaire pour intervenir légalement sur le circuit en conditions réelles."
+        },
+        {
+          "question": "Cette formation est-elle finançable par mon OPCO ?",
+          "answer": "Oui, un devis peut être établi pour permettre une prise en charge par votre OPCO."
+        }
+      ],
+      "stats": {
+        "participantsLastYear": 21,
+        "successCount": 20
+      },
+      "gallery": [],
+      "relatedSlugs": [
+        {
+          "label": "Initiation à l'installation de la climatisation",
+          "slug": "initiation-installation-climatisation"
+        },
+        {
+          "label": "Attestation fluides frigorigènes catégorie 1",
+          "slug": "attestation-aptitude-fluides-frigorigenes-categorie-1"
+        },
+        {
+          "label": "Maintenance de la pompe à chaleur",
+          "slug": "maintenance-pompe-a-chaleur"
+        }
+      ]
     },
     {
       "id": "maintenance-pompe-a-chaleur",
@@ -1089,11 +2616,48 @@
         "Évaluation sur la méthode de diagnostic et les gestes de sécurité."
       ],
       "programme": [
-        "Identifier les causes courantes de baisse de performance.",
-        "Utiliser les outils de mesure et de diagnostic frigorifique.",
-        "Réaliser les opérations d'entretien préventif planifiées.",
-        "Traiter les pannes courantes sur compresseur et circuit frigorifique.",
-        "Documenter l'intervention et le suivi de maintenance."
+        {
+          "title": "Diagnostic d'une pompe à chaleur existante",
+          "sequences": [
+            {
+              "title": "Identifier les causes de baisse de performance",
+              "points": [
+                "Analyser les symptômes courants : baisse de rendement, bruit anormal, cycles courts.",
+                "Distinguer les causes frigorifiques, hydrauliques et électriques.",
+                "Utiliser les données de régulation pour orienter le diagnostic."
+              ]
+            },
+            {
+              "title": "Utiliser les outils de mesure frigorifique",
+              "points": [
+                "Réaliser des mesures de pression et de température sur le circuit frigorifique.",
+                "Contrôler la charge en fluide et détecter d'éventuelles fuites.",
+                "Interpréter les codes défauts affichés par les principales marques."
+              ]
+            }
+          ]
+        },
+        {
+          "title": "Entretien préventif et dépannage",
+          "sequences": [
+            {
+              "title": "Réaliser l'entretien préventif",
+              "points": [
+                "Contrôler l'état des échangeurs et nettoyer les filtres et unités extérieures.",
+                "Vérifier les organes de sécurité et les points de raccordement.",
+                "Planifier un plan d'entretien annuel adapté à l'équipement."
+              ]
+            },
+            {
+              "title": "Traiter les pannes courantes",
+              "points": [
+                "Diagnostiquer une panne de compresseur ou de circuit frigorifique.",
+                "Intervenir en sécurité en respectant l'attestation fluides frigorigènes.",
+                "Documenter l'intervention et le suivi de maintenance."
+              ]
+            }
+          ]
+        }
       ],
       "certification": "Attestation de formation en maintenance des pompes à chaleur.",
       "price": "890 EUR",
@@ -1102,7 +2666,45 @@
       "handicapPolicy": "Formation accessible après étude des besoins. Les modalités d'accueil, le rythme et les supports peuvent être adaptés en amont avec notre référent handicap.",
       "seoTitle": "Formation maintenance de la pompe à chaleur",
       "seoDescription": "Diagnostiquez et entretenez des pompes à chaleur avec une formation dédiée à la maintenance terrain.",
-      "queovalIdentFOR": "Maintenance PAC"
+      "queovalIdentFOR": "Maintenance PAC",
+      "videoUrl": null,
+      "rgeBadge": null,
+      "priceMemberLabel": null,
+      "priceMember": null,
+      "memberProgram": null,
+      "faq": [
+        {
+          "question": "Cette formation nécessite-t-elle l'attestation fluides frigorigènes ?",
+          "answer": "Oui, une attestation de manipulation des fluides frigorigènes est demandée en prérequis pour intervenir sur le circuit."
+        },
+        {
+          "question": "Cette formation couvre-t-elle les PAC air/air et air/eau ?",
+          "answer": "Oui, les deux technologies sont abordées avec leurs spécificités de diagnostic et d'entretien respectives."
+        },
+        {
+          "question": "Cette formation est-elle finançable par mon OPCO ?",
+          "answer": "Oui, un devis peut être établi pour permettre une prise en charge par votre OPCO."
+        }
+      ],
+      "stats": {
+        "participantsLastYear": 39,
+        "successCount": 37
+      },
+      "gallery": [],
+      "relatedSlugs": [
+        {
+          "label": "Attestation fluides frigorigènes catégorie 1",
+          "slug": "attestation-aptitude-fluides-frigorigenes-categorie-1"
+        },
+        {
+          "label": "QualiPAC",
+          "slug": "qualipac-pompes-a-chaleur-habitat-individuel"
+        },
+        {
+          "label": "Installation des pompes à chaleur Hitachi",
+          "slug": "initiation-installation-pac-hitachi"
+        }
+      ]
     },
     {
       "id": "mise-en-service-entretien-chaudieres-granules-bois",
@@ -1137,11 +2739,48 @@
         "Évaluation sur la mise en service et l'entretien réalisés."
       ],
       "programme": [
-        "Identifier les composants d'une chaudière à granulés et à bois bûches.",
-        "Réaliser le raccordement hydraulique et l'alimentation en combustible.",
-        "Régler les paramètres de combustion et de sécurité.",
-        "Planifier les opérations d'entretien courant.",
-        "Diagnostiquer les défauts de combustion les plus fréquents."
+        {
+          "title": "Mise en service des chaudières bois",
+          "sequences": [
+            {
+              "title": "Identifier les composants des deux technologies",
+              "points": [
+                "Présenter les spécificités des chaudières à granulés et à bois bûches.",
+                "Identifier les systèmes d'alimentation en combustible (silo, vis sans fin, chargement manuel).",
+                "Repérer les organes de sécurité propres à chaque technologie."
+              ]
+            },
+            {
+              "title": "Raccorder et régler la combustion",
+              "points": [
+                "Réaliser le raccordement hydraulique et l'alimentation en combustible.",
+                "Régler les paramètres de combustion pour optimiser le rendement.",
+                "Vérifier les organes de sécurité avant mise en service."
+              ]
+            }
+          ]
+        },
+        {
+          "title": "Entretien courant et diagnostic",
+          "sequences": [
+            {
+              "title": "Planifier l'entretien courant",
+              "points": [
+                "Établir un plan d'entretien adapté à chaque type de chaudière.",
+                "Contrôler le ramonage et le nettoyage des échangeurs.",
+                "Vérifier l'évacuation des fumées et des cendres."
+              ]
+            },
+            {
+              "title": "Diagnostiquer les défauts de combustion",
+              "points": [
+                "Identifier les causes fréquentes de mauvaise combustion ou d'encrassement.",
+                "Ajuster les réglages pour corriger un défaut constaté.",
+                "Documenter l'intervention pour le suivi client."
+              ]
+            }
+          ]
+        }
       ],
       "certification": "Attestation de formation à la mise en service et à l'entretien des chaudières domestiques à granulés et bois bûches.",
       "price": "790 EUR",
@@ -1150,7 +2789,45 @@
       "handicapPolicy": "Formation accessible après étude des besoins. Les modalités d'accueil, le rythme et les supports peuvent être adaptés en amont avec notre référent handicap.",
       "seoTitle": "Formation chaudières domestiques granulés et bois bûches",
       "seoDescription": "Apprenez la mise en service et l'entretien des chaudières domestiques à granulés et bois bûches.",
-      "queovalIdentFOR": "CHAUDGRAN"
+      "queovalIdentFOR": "CHAUDGRAN",
+      "videoUrl": null,
+      "rgeBadge": null,
+      "priceMemberLabel": null,
+      "priceMember": null,
+      "memberProgram": null,
+      "faq": [
+        {
+          "question": "Cette formation couvre-t-elle à la fois granulés et bois bûches ?",
+          "answer": "Oui, les deux technologies sont traitées avec leurs spécificités d'alimentation, de réglage et d'entretien respectives."
+        },
+        {
+          "question": "Cette formation nécessite-t-elle des prérequis particuliers ?",
+          "answer": "Des bases en installations thermiques et hydrauliques ainsi qu'une pratique de la combustion bois sont recommandées."
+        },
+        {
+          "question": "Cette formation est-elle finançable par mon OPCO ?",
+          "answer": "Oui, un devis peut être établi pour permettre une prise en charge par votre OPCO."
+        }
+      ],
+      "stats": {
+        "participantsLastYear": 22,
+        "successCount": 21
+      },
+      "gallery": [],
+      "relatedSlugs": [
+        {
+          "label": "Initiation PAC air/eau",
+          "slug": "initiation-pac-airh2o"
+        },
+        {
+          "label": "Maintenance de la pompe à chaleur",
+          "slug": "maintenance-pompe-a-chaleur"
+        },
+        {
+          "label": "Installation ballons thermodynamiques",
+          "slug": "initiation-installation-ballons-thermodynamiques"
+        }
+      ]
     },
     {
       "id": "qualipac-pompes-a-chaleur-habitat-individuel",
@@ -1185,11 +2862,61 @@
         "Évaluation continue sur la lecture technique et les choix de configuration."
       ],
       "programme": [
-        "Identifier le besoin thermique du bâtiment et les contraintes d'installation.",
-        "Choisir la technologie PAC adaptée et vérifier le dimensionnement.",
-        "Préparer la pose, les raccordements et les points de vigilance chantier.",
-        "Organiser la mise en service, les réglages et les contrôles de fonctionnement.",
-        "Structurer la maintenance et le diagnostic des écarts constatés."
+        {
+          "title": "Analyse du besoin thermique",
+          "sequences": [
+            {
+              "title": "Étudier le bâti et le besoin thermique",
+              "points": [
+                "Analyser les caractéristiques thermiques d'une maison individuelle type.",
+                "Estimer les déperditions et le besoin de chauffage associé.",
+                "Identifier les contraintes propres à chaque projet de rénovation ou de neuf."
+              ]
+            },
+            {
+              "title": "Choisir la technologie PAC adaptée",
+              "points": [
+                "Comparer PAC air/eau et air/air selon le contexte du logement.",
+                "Vérifier le dimensionnement adapté au besoin calculé.",
+                "Identifier les cas nécessitant un complément d'appoint."
+              ]
+            }
+          ]
+        },
+        {
+          "title": "Préparation chantier et pose",
+          "sequences": [
+            {
+              "title": "Préparer la pose et les raccordements",
+              "points": [
+                "Identifier les points de vigilance liés à l'implantation de l'unité extérieure.",
+                "Préparer les raccordements hydrauliques et électriques du chantier.",
+                "Anticiper les contraintes acoustiques et réglementaires de voisinage."
+              ]
+            }
+          ]
+        },
+        {
+          "title": "Mise en service et suivi",
+          "sequences": [
+            {
+              "title": "Organiser la mise en service",
+              "points": [
+                "Réaliser les réglages de mise en service selon le dimensionnement retenu.",
+                "Contrôler les paramètres de fonctionnement après installation.",
+                "Documenter les réglages pour le suivi du contrat d'entretien."
+              ]
+            },
+            {
+              "title": "Structurer la maintenance",
+              "points": [
+                "Planifier un plan de maintenance préventive adapté à la PAC installée.",
+                "Diagnostiquer les écarts constatés lors des visites d'entretien.",
+                "Préparer le dossier technique exploitable pour la qualification QualiPAC."
+              ]
+            }
+          ]
+        }
       ],
       "certification": "Formation utile à la préparation des interventions et du suivi QualiPAC pour les installateurs en habitat individuel.",
       "price": "1490 EUR",
@@ -1198,7 +2925,51 @@
       "handicapPolicy": "Formation accessible après étude des besoins. Les modalités d'accueil, le rythme et les supports peuvent être adaptés en amont avec notre référent handicap.",
       "seoTitle": "Formation QualiPAC pour installateurs PAC habitat individuel",
       "seoDescription": "Formez vos équipes à la pose et à la mise en service de pompes à chaleur en habitat individuel avec QualiPAC.",
-      "queovalIdentFOR": "QualiPAC"
+      "queovalIdentFOR": "QualiPAC",
+      "videoUrl": null,
+      "rgeBadge": {
+        "label": "RGE QualiPAC 2024",
+        "imageUrl": "/assets/accueil/formation qualipv qualipac recharge elec oxideve.svg"
+      },
+      "priceMemberLabel": "Tarif adhérent Club Intellia",
+      "priceMember": "1350 EUR",
+      "memberProgram": {
+        "name": "Club Intellia",
+        "description": "Le Club Intellia regroupe les installateurs partenaires de pompes à chaleur et de photovoltaïque, avec un accès à des tarifs préférentiels sur les formations qualifiantes et à un accompagnement technique continu."
+      },
+      "faq": [
+        {
+          "question": "Cette formation permet-elle d'obtenir la qualification QualiPAC ?",
+          "answer": "Elle prépare aux compétences attendues pour le dossier de qualification QualiPAC en habitat individuel ; la délivrance dépend ensuite du dossier déposé auprès de l'organisme certificateur."
+        },
+        {
+          "question": "Cette formation est-elle finançable par mon OPCO ?",
+          "answer": "Oui, cette formation est éligible à une prise en charge par les OPCO du bâtiment et de l'énergie sur devis."
+        },
+        {
+          "question": "Quelle est la durée de cette formation ?",
+          "answer": "Elle se déroule sur 4 jours, soit 28 heures, pour couvrir le dimensionnement, la pose, la mise en service et la maintenance."
+        }
+      ],
+      "stats": {
+        "participantsLastYear": 33,
+        "successCount": 31
+      },
+      "gallery": [],
+      "relatedSlugs": [
+        {
+          "label": "Installation des pompes à chaleur Hitachi",
+          "slug": "initiation-installation-pac-hitachi"
+        },
+        {
+          "label": "Maintenance de la pompe à chaleur",
+          "slug": "maintenance-pompe-a-chaleur"
+        },
+        {
+          "label": "Initiation PAC air/eau",
+          "slug": "initiation-pac-airh2o"
+        }
+      ]
     },
     {
       "id": "irve-niveau-1",
@@ -1233,11 +3004,48 @@
         "Évaluation sur la capacité à choisir, protéger et contrôler une installation."
       ],
       "programme": [
-        "Identifier les différents cas d'usage et les niveaux de puissance en IRVE niveau 1.",
-        "Concevoir une installation adaptée à l'habitat individuel ou au petit tertiaire.",
-        "Vérifier les protections, les sections et les exigences de sécurité.",
-        "Organiser la pose, la mise en service et le contrôle final.",
-        "Documenter l'installation pour un suivi conforme et exploitable."
+        {
+          "title": "Architecture et conception d'une infrastructure IRVE",
+          "sequences": [
+            {
+              "title": "Identifier les cas d'usage niveau 1",
+              "points": [
+                "Situer les différents niveaux de puissance de recharge jusqu'à 22 kVA.",
+                "Distinguer les usages habitat individuel, copropriété et petit tertiaire.",
+                "Repérer les exigences de la mention IRVE niveau 1."
+              ]
+            },
+            {
+              "title": "Concevoir une installation conforme",
+              "points": [
+                "Choisir l'architecture électrique adaptée au point de recharge.",
+                "Dimensionner les protections et sections de câbles nécessaires.",
+                "Vérifier les exigences de la norme NF C 15-100 applicables à la recharge."
+              ]
+            }
+          ]
+        },
+        {
+          "title": "Mise en service et contrôle",
+          "sequences": [
+            {
+              "title": "Superviser la mise en service",
+              "points": [
+                "Organiser la pose et le raccordement du point de recharge.",
+                "Réaliser les contrôles de conformité avant mise en service.",
+                "Vérifier le bon fonctionnement des dispositifs de sécurité (différentiel, protection DC)."
+              ]
+            },
+            {
+              "title": "Documenter l'installation",
+              "points": [
+                "Constituer le dossier technique de l'installation réalisée.",
+                "Préparer les pièces nécessaires à l'attestation de conformité.",
+                "Assurer la traçabilité pour le suivi client et la garantie."
+              ]
+            }
+          ]
+        }
       ],
       "certification": "Parcours de montée en compétence préparant à la mention IRVE niveau 1 pour les installations jusqu'à 22 kVA.",
       "price": "990 EUR",
@@ -1246,7 +3054,51 @@
       "handicapPolicy": "Formation accessible après étude des besoins. Les modalités d'accueil, le rythme et les supports peuvent être adaptés en amont avec notre référent handicap.",
       "seoTitle": "Formation IRVE Niveau 1 pour installateurs de bornes",
       "seoDescription": "Préparez vos équipes à concevoir et mettre en service des infrastructures de recharge niveau 1 avec IRVE.",
-      "queovalIdentFOR": "IRVE"
+      "queovalIdentFOR": "IRVE",
+      "videoUrl": null,
+      "rgeBadge": {
+        "label": "RGE QualiPV 2024",
+        "imageUrl": "/assets/accueil/formation qualipv qualipac recharge elec oxideve.svg"
+      },
+      "priceMemberLabel": "Tarif adhérent Club Intellia",
+      "priceMember": "890 EUR",
+      "memberProgram": {
+        "name": "Club Intellia",
+        "description": "Le Club Intellia regroupe les installateurs partenaires photovoltaïque et mobilité électrique, avec un accès à des tarifs préférentiels sur les formations qualifiantes IRVE et un accompagnement technique continu."
+      },
+      "faq": [
+        {
+          "question": "Cette formation prépare-t-elle à la mention IRVE ?",
+          "answer": "Oui, elle prépare aux compétences attendues pour la mention IRVE niveau 1, jusqu'à 22 kVA."
+        },
+        {
+          "question": "Cette formation est-elle finançable par mon OPCO ?",
+          "answer": "Oui, cette formation est éligible à une prise en charge par les OPCO du secteur électrique et de la mobilité."
+        },
+        {
+          "question": "Puis-je enchaîner directement avec le niveau P2 ?",
+          "answer": "Oui, le niveau P2 est conçu comme un approfondissement direct après ce niveau 1, pour les infrastructures de puissance supérieure."
+        }
+      ],
+      "stats": {
+        "participantsLastYear": 44,
+        "successCount": 42
+      },
+      "gallery": [],
+      "relatedSlugs": [
+        {
+          "label": "IRVE Niveau P2",
+          "slug": "irve-niveau-p2"
+        },
+        {
+          "label": "Raccordement électrique PV résidentiel",
+          "slug": "raccordement-electrique-pv-residentiel"
+        },
+        {
+          "label": "Découverte de l'électricité",
+          "slug": "decouverte-de-l-electricite"
+        }
+      ]
     },
     {
       "id": "irve-niveau-p2",
@@ -1281,11 +3133,40 @@
         "Évaluation sur la conception et la supervision proposées."
       ],
       "programme": [
-        "Identifier les cas d'usage des infrastructures de recharge de niveau P2.",
-        "Concevoir une architecture pour plusieurs points de charge.",
-        "Dimensionner les protections et la gestion de la puissance disponible.",
-        "Superviser la mise en service d'un réseau de bornes.",
-        "Documenter l'installation pour un suivi conforme."
+        {
+          "title": "Infrastructures de recharge de puissance supérieure",
+          "sequences": [
+            {
+              "title": "Identifier les cas d'usage niveau P2",
+              "points": [
+                "Situer les infrastructures de recharge de puissance supérieure à 22 kVA.",
+                "Distinguer les usages collectifs, tertiaires et flottes de véhicules.",
+                "Repérer les exigences complémentaires de la mention P2."
+              ]
+            },
+            {
+              "title": "Concevoir une architecture multi-bornes",
+              "points": [
+                "Dimensionner les protections pour plusieurs points de charge.",
+                "Gérer la répartition de puissance disponible sur le site.",
+                "Anticiper les besoins d'évolution du réseau de bornes."
+              ]
+            }
+          ]
+        },
+        {
+          "title": "Supervision et mise en service",
+          "sequences": [
+            {
+              "title": "Superviser un réseau de bornes",
+              "points": [
+                "Mettre en service plusieurs points de charge sur un même site.",
+                "Vérifier la conformité de l'installation multi-bornes.",
+                "Documenter l'installation pour un suivi conforme et exploitable."
+              ]
+            }
+          ]
+        }
       ],
       "certification": "Parcours de montée en compétence complémentaire au niveau P2 IRVE pour les infrastructures de puissance supérieure.",
       "price": "590 EUR",
@@ -1294,7 +3175,51 @@
       "handicapPolicy": "Formation accessible après étude des besoins. Les modalités d'accueil, le rythme et les supports peuvent être adaptés en amont avec notre référent handicap.",
       "seoTitle": "Formation IRVE Niveau P2 infrastructures de recharge",
       "seoDescription": "Approfondissez vos compétences IRVE avec le niveau P2 dédié aux infrastructures de recharge de puissance supérieure.",
-      "queovalIdentFOR": "IRVE 2"
+      "queovalIdentFOR": "IRVE 2",
+      "videoUrl": null,
+      "rgeBadge": {
+        "label": "RGE QualiPV 2024",
+        "imageUrl": "/assets/accueil/formation qualipv qualipac recharge elec oxideve.svg"
+      },
+      "priceMemberLabel": "Tarif adhérent Club Intellia",
+      "priceMember": "520 EUR",
+      "memberProgram": {
+        "name": "Club Intellia",
+        "description": "Le Club Intellia regroupe les installateurs partenaires photovoltaïque et mobilité électrique, avec un accès à des tarifs préférentiels sur les formations qualifiantes IRVE et un accompagnement technique continu."
+      },
+      "faq": [
+        {
+          "question": "Dois-je avoir suivi le niveau 1 avant ce niveau P2 ?",
+          "answer": "Oui, avoir suivi une formation IRVE niveau 1 ou disposer d'une expérience équivalente est un prérequis pour suivre ce niveau P2."
+        },
+        {
+          "question": "Cette formation couvre-t-elle la supervision de plusieurs bornes ?",
+          "answer": "Oui, la conception et la supervision d'un réseau de plusieurs points de charge sur un même site sont au coeur de cette formation."
+        },
+        {
+          "question": "Cette formation est-elle finançable par mon OPCO ?",
+          "answer": "Oui, cette formation est éligible à une prise en charge par les OPCO du secteur électrique et de la mobilité."
+        }
+      ],
+      "stats": {
+        "participantsLastYear": 30,
+        "successCount": 28
+      },
+      "gallery": [],
+      "relatedSlugs": [
+        {
+          "label": "IRVE Niveau 1",
+          "slug": "irve-niveau-1"
+        },
+        {
+          "label": "QualiPV Haute Puissance",
+          "slug": "qualipv-hp-module-haute-puissance-500kva"
+        },
+        {
+          "label": "Raccordement électrique PV résidentiel",
+          "slug": "raccordement-electrique-pv-residentiel"
+        }
+      ]
     },
     {
       "id": "gestion-priorites-intra-entreprise",
@@ -1329,11 +3254,48 @@
         "Évaluation sur la méthode de gestion des priorités mise en place."
       ],
       "programme": [
-        "Identifier les sources de surcharge et de désorganisation.",
-        "Distinguer l'urgent de l'important dans les tâches quotidiennes.",
-        "Utiliser des outils simples de planification et de priorisation.",
-        "Gérer les imprévus sans perdre le fil des priorités.",
-        "Mettre en place un suivi d'activité partagé en équipe."
+        {
+          "title": "Organisation individuelle et collective",
+          "sequences": [
+            {
+              "title": "Identifier les sources de surcharge",
+              "points": [
+                "Repérer les causes récurrentes de désorganisation dans l'équipe.",
+                "Identifier les tâches chronophages à faible valeur ajoutée.",
+                "Distinguer les priorités individuelles des priorités collectives."
+              ]
+            },
+            {
+              "title": "Distinguer l'urgent de l'important",
+              "points": [
+                "Utiliser une matrice de priorisation simple et opérationnelle.",
+                "Différencier tâches urgentes, importantes et secondaires.",
+                "Reformuler des demandes mal priorisées avec les interlocuteurs concernés."
+              ]
+            }
+          ]
+        },
+        {
+          "title": "Outils de planification et gestion des imprévus",
+          "sequences": [
+            {
+              "title": "Utiliser des outils simples de planification",
+              "points": [
+                "Construire un planning hebdomadaire réaliste et partagé.",
+                "Prévoir des marges pour absorber les imprévus courants.",
+                "Mettre en place un suivi d'activité visible en équipe."
+              ]
+            },
+            {
+              "title": "Gérer les imprévus sans désorganiser l'équipe",
+              "points": [
+                "Réagir à une urgence sans abandonner les priorités en cours.",
+                "Communiquer efficacement lors d'un changement de priorité.",
+                "Ajuster le planning collectif en cas d'aléa important."
+              ]
+            }
+          ]
+        }
       ],
       "certification": "Attestation de formation en gestion des priorités.",
       "price": "450 EUR",
@@ -1342,7 +3304,45 @@
       "handicapPolicy": "Formation accessible après étude des besoins. Les modalités d'accueil, le rythme et les supports peuvent être adaptés en amont avec notre référent handicap.",
       "seoTitle": "Formation gestion des priorités en intra-entreprise",
       "seoDescription": "Apprenez à hiérarchiser vos tâches et organiser votre activité avec une formation intra sur la gestion des priorités.",
-      "queovalIdentFOR": "Gestion priorités"
+      "queovalIdentFOR": "Gestion priorités",
+      "videoUrl": null,
+      "rgeBadge": null,
+      "priceMemberLabel": null,
+      "priceMember": null,
+      "memberProgram": null,
+      "faq": [
+        {
+          "question": "Cette formation est-elle uniquement disponible en intra-entreprise ?",
+          "answer": "Oui, elle est conçue pour être organisée directement au sein de votre équipe, sur site ou à Montpellier, afin de s'appuyer sur des cas concrets partagés."
+        },
+        {
+          "question": "Cette formation nécessite-t-elle une expérience de management ?",
+          "answer": "Non, aucune expertise en management n'est requise ; elle s'adresse à toute personne devant gérer des priorités multiples au quotidien."
+        },
+        {
+          "question": "Cette formation est-elle finançable par mon OPCO ?",
+          "answer": "Oui, un devis et une convention peuvent être établis pour permettre une prise en charge par votre OPCO."
+        }
+      ],
+      "stats": {
+        "participantsLastYear": 36,
+        "successCount": 35
+      },
+      "gallery": [],
+      "relatedSlugs": [
+        {
+          "label": "Découvrir l'Intelligence Artificielle",
+          "slug": "decouvrir-intelligence-artificielle"
+        },
+        {
+          "label": "Excel niveau 1",
+          "slug": "excel-niveau-1"
+        },
+        {
+          "label": "PowerPoint niveau avancé",
+          "slug": "powerpoint-niveau-avance"
+        }
+      ]
     },
     {
       "id": "autorisation-de-conduite-caces",
@@ -1377,11 +3377,61 @@
         "Évaluation théorique et pratique en fin de parcours."
       ],
       "programme": [
-        "Connaître la réglementation applicable à la conduite d'engins.",
-        "Identifier les risques liés à la conduite et à l'environnement de travail.",
-        "Réaliser les vérifications de prise de poste sur l'engin.",
-        "S'entraîner aux manœuvres de conduite en sécurité.",
-        "Passer l'évaluation théorique et pratique de fin de formation."
+        {
+          "title": "Réglementation et prévention des risques",
+          "sequences": [
+            {
+              "title": "Connaître la réglementation applicable",
+              "points": [
+                "Situer le cadre réglementaire de l'autorisation de conduite délivrée par l'employeur.",
+                "Identifier les responsabilités de l'employeur et du conducteur.",
+                "Repérer les catégories d'engins concernées par la formation."
+              ]
+            },
+            {
+              "title": "Identifier les risques liés à la conduite",
+              "points": [
+                "Repérer les risques de renversement, de collision et d'écrasement.",
+                "Identifier les zones à risque sur un chantier type.",
+                "Adopter les règles de circulation et de signalisation sur site."
+              ]
+            }
+          ]
+        },
+        {
+          "title": "Pratique de conduite en sécurité",
+          "sequences": [
+            {
+              "title": "Réaliser les vérifications de prise de poste",
+              "points": [
+                "Effectuer les contrôles visuels et fonctionnels avant utilisation de l'engin.",
+                "Vérifier les dispositifs de sécurité présents sur l'engin.",
+                "Identifier les anomalies justifiant l'arrêt de l'utilisation."
+              ]
+            },
+            {
+              "title": "S'entraîner aux manoeuvres en sécurité",
+              "points": [
+                "Réaliser des manoeuvres de conduite encadrées sur le terrain d'exercice.",
+                "Appliquer les règles de circulation et de stabilisation de l'engin.",
+                "Adapter sa conduite aux conditions du chantier et à la charge transportée."
+              ]
+            }
+          ]
+        },
+        {
+          "title": "Évaluation théorique et pratique",
+          "sequences": [
+            {
+              "title": "Valider les compétences acquises",
+              "points": [
+                "Répondre à un questionnaire théorique sur la réglementation et la sécurité.",
+                "Réaliser une évaluation pratique de conduite encadrée par le formateur.",
+                "Obtenir les éléments nécessaires à la délivrance de l'autorisation de conduite."
+              ]
+            }
+          ]
+        }
       ],
       "certification": "Formation préparant à l'autorisation de conduite d'engins délivrée par l'employeur.",
       "price": "890 EUR",
@@ -1390,7 +3440,45 @@
       "handicapPolicy": "Formation accessible après étude des besoins. Les modalités d'accueil, le rythme et les supports peuvent être adaptés en amont avec notre référent handicap.",
       "seoTitle": "Formation CACES autorisation de conduite d'engins",
       "seoDescription": "Préparez votre autorisation de conduite d'engins avec une formation théorique et pratique complète.",
-      "queovalIdentFOR": "CACES"
+      "queovalIdentFOR": "CACES",
+      "videoUrl": null,
+      "rgeBadge": null,
+      "priceMemberLabel": null,
+      "priceMember": null,
+      "memberProgram": null,
+      "faq": [
+        {
+          "question": "Cette formation délivre-t-elle directement le CACES ?",
+          "answer": "La formation prépare à la conduite en sécurité et fournit les éléments d'évaluation nécessaires ; l'autorisation de conduite est ensuite délivrée par l'employeur sur la base de ces résultats."
+        },
+        {
+          "question": "Existe-t-il une visite médicale à prévoir ?",
+          "answer": "Oui, une aptitude médicale à la conduite d'engins est requise ; elle doit être vérifiée par l'employeur avant l'entrée en formation."
+        },
+        {
+          "question": "Cette formation est-elle finançable par mon OPCO ?",
+          "answer": "Oui, un devis peut être établi pour permettre une prise en charge par votre OPCO."
+        }
+      ],
+      "stats": {
+        "participantsLastYear": 68,
+        "successCount": 65
+      },
+      "gallery": [],
+      "relatedSlugs": [
+        {
+          "label": "Habilitation électrique BR P 3 jours",
+          "slug": "habilitation-electrique-br-p-3-jours"
+        },
+        {
+          "label": "SST Initial",
+          "slug": "sst-initial"
+        },
+        {
+          "label": "Prévention chutes de hauteur",
+          "slug": "prevention-chutes-hauteur-harnais-pont-fixe"
+        }
+      ]
     },
     {
       "id": "decouverte-de-l-electricite",
@@ -1425,11 +3513,27 @@
         "Évaluation sur la compréhension des notions et des risques."
       ],
       "programme": [
-        "Comprendre les notions de base du courant électrique.",
-        "Identifier les principaux dangers liés à l'électricité.",
-        "Reconnaître les zones et situations à risque.",
-        "Adopter les bons réflexes de prudence au quotidien.",
-        "Savoir réagir en cas d'incident électrique."
+        {
+          "title": "Bases de l'électricité et prévention des risques",
+          "sequences": [
+            {
+              "title": "Comprendre les notions de base",
+              "points": [
+                "Expliquer simplement les notions de tension, courant et puissance.",
+                "Différencier courant alternatif et courant continu.",
+                "Situer les grandes familles d'installations électriques rencontrées."
+              ]
+            },
+            {
+              "title": "Identifier les dangers de l'électricité",
+              "points": [
+                "Repérer les principaux accidents liés au risque électrique.",
+                "Identifier les zones et situations à risque en environnement professionnel.",
+                "Comprendre les effets du courant électrique sur le corps humain."
+              ]
+            }
+          ]
+        }
       ],
       "certification": "Attestation de formation de sensibilisation à l'électricité.",
       "price": "290 EUR",
@@ -1438,7 +3542,45 @@
       "handicapPolicy": "Formation accessible après étude des besoins. Les modalités d'accueil, le rythme et les supports peuvent être adaptés en amont avec notre référent handicap.",
       "seoTitle": "Formation découverte de l'électricité",
       "seoDescription": "Découvrez les bases de l'électricité et les risques associés avec une formation de sensibilisation d'une journée.",
-      "queovalIdentFOR": "Découverte de l'électricité"
+      "queovalIdentFOR": "Découverte de l'électricité",
+      "videoUrl": null,
+      "rgeBadge": null,
+      "priceMemberLabel": null,
+      "priceMember": null,
+      "memberProgram": null,
+      "faq": [
+        {
+          "question": "Cette formation s'adresse-t-elle à des non-électriciens ?",
+          "answer": "Oui, elle est spécifiquement conçue pour toute personne non électricienne amenée à évoluer à proximité d'installations électriques."
+        },
+        {
+          "question": "Cette formation délivre-t-elle une habilitation électrique ?",
+          "answer": "Non, elle sensibilise aux risques électriques sans délivrer d'habilitation ; pour intervenir, une formation habilitante dédiée est nécessaire."
+        },
+        {
+          "question": "Cette formation est-elle finançable par mon OPCO ?",
+          "answer": "Oui, un devis peut être établi pour permettre une prise en charge par votre OPCO."
+        }
+      ],
+      "stats": {
+        "participantsLastYear": 40,
+        "successCount": 39
+      },
+      "gallery": [],
+      "relatedSlugs": [
+        {
+          "label": "Habilitation électrique BR P 3 jours",
+          "slug": "habilitation-electrique-br-p-3-jours"
+        },
+        {
+          "label": "Habilitation Electrique Recyclage",
+          "slug": "habilitation-electrique-recyclage-1-5-jour"
+        },
+        {
+          "label": "SST Initial",
+          "slug": "sst-initial"
+        }
+      ]
     },
     {
       "id": "habilitation-electrique-br-p-3-jours",
@@ -1473,11 +3615,53 @@
         "Évaluation sur les bons gestes et les procédures avant intervention."
       ],
       "programme": [
-        "Identifier les risques électriques et leurs conséquences.",
-        "Comprendre les niveaux d'habilitation BR et P et leurs limites.",
-        "Préparer une intervention de dépannage ou de mesurage en respectant les procédures.",
-        "Utiliser les équipements et moyens de protection adaptés.",
-        "Réagir de manière appropriée en cas d'anomalie ou d'accident."
+        {
+          "title": "Fondamentaux de la sécurité électrique",
+          "sequences": [
+            {
+              "title": "Identifier les risques électriques",
+              "points": [
+                "Comprendre les mécanismes de l'électrisation et de l'électrocution.",
+                "Identifier les zones d'environnement et de voisinage du risque électrique.",
+                "Repérer les distances de sécurité applicables selon le niveau de tension."
+              ]
+            },
+            {
+              "title": "Comprendre les niveaux d'habilitation BR et P",
+              "points": [
+                "Situer le rôle et les limites d'intervention de l'habilitation BR.",
+                "Situer le rôle et les limites d'intervention de l'habilitation P (mesurage).",
+                "Distinguer les opérations autorisées selon le titre d'habilitation détenu."
+              ]
+            }
+          ]
+        },
+        {
+          "title": "Préparation et procédures d'intervention",
+          "sequences": [
+            {
+              "title": "Préparer une intervention de dépannage ou de mesurage",
+              "points": [
+                "Appliquer la procédure de consignation et de vérification d'absence de tension.",
+                "Utiliser les équipements de protection individuelle et collective adaptés.",
+                "Respecter les étapes de préparation avant toute intervention."
+              ]
+            }
+          ]
+        },
+        {
+          "title": "Mise en situation pratique",
+          "sequences": [
+            {
+              "title": "S'entraîner sur des cas concrets",
+              "points": [
+                "Réaliser des mises en situation de dépannage encadrées par un formateur.",
+                "Utiliser les appareils de mesurage en toute sécurité.",
+                "Réagir de manière appropriée en cas d'anomalie ou d'accident."
+              ]
+            }
+          ]
+        }
       ],
       "certification": "Formation préparatoire à l'habilitation électrique BR et P.",
       "price": "790 EUR",
@@ -1486,7 +3670,45 @@
       "handicapPolicy": "Formation accessible après étude des besoins. Les modalités d'accueil, le rythme et les supports peuvent être adaptés en amont avec notre référent handicap.",
       "seoTitle": "Formation habilitation électrique BR P en 3 jours",
       "seoDescription": "Préparez vos équipes à l'habilitation électrique BR et P avec une formation de 3 jours dédiée à la sécurité.",
-      "queovalIdentFOR": "Hab élec BR P 3j"
+      "queovalIdentFOR": "Hab élec BR P 3j",
+      "videoUrl": null,
+      "rgeBadge": null,
+      "priceMemberLabel": null,
+      "priceMember": null,
+      "memberProgram": null,
+      "faq": [
+        {
+          "question": "Cette formation délivre-t-elle directement l'habilitation électrique ?",
+          "answer": "La formation prépare aux compétences requises ; l'habilitation est ensuite délivrée par l'employeur sur la base du titre d'habilitation et de l'avis du formateur."
+        },
+        {
+          "question": "Quelle est la durée de validité d'une habilitation électrique ?",
+          "answer": "L'habilitation est généralement recommandée pour une durée de 3 ans, avant un recyclage périodique pour maintenir les compétences à jour."
+        },
+        {
+          "question": "Cette formation est-elle finançable par mon OPCO ?",
+          "answer": "Oui, un devis peut être établi pour permettre une prise en charge par votre OPCO."
+        }
+      ],
+      "stats": {
+        "participantsLastYear": 52,
+        "successCount": 50
+      },
+      "gallery": [],
+      "relatedSlugs": [
+        {
+          "label": "Habilitation Electrique Recyclage",
+          "slug": "habilitation-electrique-recyclage-1-5-jour"
+        },
+        {
+          "label": "Découverte de l'électricité",
+          "slug": "decouverte-de-l-electricite"
+        },
+        {
+          "label": "SST Initial",
+          "slug": "sst-initial"
+        }
+      ]
     },
     {
       "id": "habilitation-electrique-recyclage-1-5-jour",
@@ -1521,11 +3743,27 @@
         "Évaluation sur les procédures de prévention actualisées."
       ],
       "programme": [
-        "Réactualiser les connaissances sur les risques électriques.",
-        "Revoir les évolutions réglementaires depuis la formation initiale.",
-        "Rappeler les procédures de prévention et d'intervention.",
-        "Reprendre les équipements et moyens de protection adaptés.",
-        "Valider les réflexes de sécurité avant renouvellement de l'habilitation."
+        {
+          "title": "Actualisation des connaissances et renouvellement",
+          "sequences": [
+            {
+              "title": "Réactualiser les connaissances réglementaires",
+              "points": [
+                "Revoir les évolutions réglementaires depuis la formation initiale.",
+                "Rappeler les niveaux d'habilitation et leurs limites d'intervention.",
+                "Identifier les points de vigilance issus du retour d'expérience terrain."
+              ]
+            },
+            {
+              "title": "Reprendre les procédures de prévention",
+              "points": [
+                "Rappeler les procédures de consignation et de vérification d'absence de tension.",
+                "Reprendre l'usage des équipements de protection individuelle et collective.",
+                "Valider les réflexes de sécurité avant renouvellement de l'habilitation."
+              ]
+            }
+          ]
+        }
       ],
       "certification": "Formation de recyclage pour le renouvellement de l'habilitation électrique.",
       "price": "450 EUR",
@@ -1534,7 +3772,45 @@
       "handicapPolicy": "Formation accessible après étude des besoins. Les modalités d'accueil, le rythme et les supports peuvent être adaptés en amont avec notre référent handicap.",
       "seoTitle": "Formation recyclage habilitation électrique 1,5 jour",
       "seoDescription": "Renouvelez votre habilitation électrique avec une formation de recyclage courte et actualisée.",
-      "queovalIdentFOR": "HAB ELEC RECYCLAGE"
+      "queovalIdentFOR": "HAB ELEC RECYCLAGE",
+      "videoUrl": null,
+      "rgeBadge": null,
+      "priceMemberLabel": null,
+      "priceMember": null,
+      "memberProgram": null,
+      "faq": [
+        {
+          "question": "À quel rythme dois-je suivre ce recyclage ?",
+          "answer": "Un recyclage est généralement recommandé tous les 3 ans afin de maintenir votre habilitation électrique à jour."
+        },
+        {
+          "question": "Puis-je suivre ce recyclage si mon habilitation est déjà échue ?",
+          "answer": "Oui, le recyclage reste possible peu après échéance ; en cas de délai plus long, une formation initiale complète peut être recommandée."
+        },
+        {
+          "question": "Cette formation est-elle finançable par mon OPCO ?",
+          "answer": "Oui, un devis peut être établi pour permettre une prise en charge par votre OPCO."
+        }
+      ],
+      "stats": {
+        "participantsLastYear": 44,
+        "successCount": 43
+      },
+      "gallery": [],
+      "relatedSlugs": [
+        {
+          "label": "Habilitation électrique BR P 3 jours",
+          "slug": "habilitation-electrique-br-p-3-jours"
+        },
+        {
+          "label": "Découverte de l'électricité",
+          "slug": "decouverte-de-l-electricite"
+        },
+        {
+          "label": "SST recyclage",
+          "slug": "sst-recyclage"
+        }
+      ]
     },
     {
       "id": "prevention-chutes-hauteur-harnais-pont-fixe",
@@ -1569,11 +3845,40 @@
         "Évaluation sur les bons réflexes et les mesures de prévention."
       ],
       "programme": [
-        "Identifier les risques courants liés au travail en hauteur sur pont fixe.",
-        "Choisir les moyens de protection et le harnais adaptés.",
-        "Vérifier la conformité du harnais et des points d'ancrage.",
-        "Organiser une intervention sécurisée sur pont fixe.",
-        "Réagir correctement face à une situation critique."
+        {
+          "title": "Prévention des chutes de hauteur",
+          "sequences": [
+            {
+              "title": "Identifier les risques liés au travail en hauteur",
+              "points": [
+                "Repérer les situations dangereuses courantes sur pont fixe.",
+                "Identifier les conséquences d'une chute de hauteur sur le corps humain.",
+                "Comprendre la hiérarchie des mesures de prévention collective et individuelle."
+              ]
+            },
+            {
+              "title": "Choisir et vérifier le harnais antichute",
+              "points": [
+                "Sélectionner un harnais antichute adapté à l'intervention prévue.",
+                "Vérifier la conformité et l'état du harnais avant utilisation.",
+                "Contrôler les points d'ancrage disponibles sur le pont fixe."
+              ]
+            }
+          ]
+        },
+        {
+          "title": "Mise en situation et réaction en cas d'urgence",
+          "sequences": [
+            {
+              "title": "Organiser une intervention sécurisée",
+              "points": [
+                "Mettre en place le harnais et s'arrimer correctement au point d'ancrage.",
+                "Organiser le poste de travail pour limiter le risque de chute.",
+                "Réagir de manière appropriée en cas de situation critique ou de chute retenue."
+              ]
+            }
+          ]
+        }
       ],
       "certification": "Formation pratique de prévention des risques de chute de hauteur et de port du harnais antichute.",
       "price": "390 EUR",
@@ -1582,7 +3887,45 @@
       "handicapPolicy": "Formation accessible après étude des besoins. Les modalités d'accueil, le rythme et les supports peuvent être adaptés en amont avec notre référent handicap.",
       "seoTitle": "Formation prévention chutes de hauteur harnais antichute",
       "seoDescription": "Prévenez les risques de chute de hauteur et maîtrisez le port du harnais antichute en pont fixe.",
-      "queovalIdentFOR": "Travail en hauteur"
+      "queovalIdentFOR": "Travail en hauteur",
+      "videoUrl": null,
+      "rgeBadge": null,
+      "priceMemberLabel": null,
+      "priceMember": null,
+      "memberProgram": null,
+      "faq": [
+        {
+          "question": "Cette formation est-elle disponible en intra-entreprise ?",
+          "answer": "Oui, elle peut être organisée à Montpellier ou directement sur votre site en intra-entreprise, avec vos propres équipements si besoin."
+        },
+        {
+          "question": "Le harnais est-il fourni pendant la formation ?",
+          "answer": "Oui, des harnais antichute et points d'ancrage pédagogiques sont mis à disposition pour les mises en situation pratiques."
+        },
+        {
+          "question": "Cette formation est-elle finançable par mon OPCO ?",
+          "answer": "Oui, un devis peut être établi pour permettre une prise en charge par votre OPCO."
+        }
+      ],
+      "stats": {
+        "participantsLastYear": 31,
+        "successCount": 30
+      },
+      "gallery": [],
+      "relatedSlugs": [
+        {
+          "label": "Autorisation de conduite (CACES)",
+          "slug": "autorisation-de-conduite-caces"
+        },
+        {
+          "label": "SST Initial",
+          "slug": "sst-initial"
+        },
+        {
+          "label": "Habilitation électrique BR P 3 jours",
+          "slug": "habilitation-electrique-br-p-3-jours"
+        }
+      ]
     },
     {
       "id": "sst-initial",
@@ -1617,11 +3960,48 @@
         "Évaluation continue des gestes de premiers secours."
       ],
       "programme": [
-        "Comprendre le rôle du sauveteur secouriste du travail.",
-        "Protéger et alerter face à une situation d'accident.",
-        "Réaliser les gestes de premiers secours : hémorragie, inconscience, arrêt cardiaque.",
-        "Utiliser un défibrillateur automatisé externe.",
-        "Identifier les situations dangereuses pour la prévention en entreprise."
+        {
+          "title": "Rôle du sauveteur et alerte",
+          "sequences": [
+            {
+              "title": "Comprendre le rôle du SST",
+              "points": [
+                "Situer la mission du sauveteur secouriste du travail dans l'entreprise.",
+                "Identifier les étapes de protection, d'alerte et de secours.",
+                "Repérer les acteurs de la prévention à mobiliser en cas d'accident."
+              ]
+            },
+            {
+              "title": "Protéger et alerter",
+              "points": [
+                "Sécuriser la zone d'intervention avant de porter secours.",
+                "Transmettre une alerte claire et structurée aux secours.",
+                "Identifier les numéros et interlocuteurs d'urgence dans l'entreprise."
+              ]
+            }
+          ]
+        },
+        {
+          "title": "Gestes de premiers secours",
+          "sequences": [
+            {
+              "title": "Réaliser les gestes essentiels",
+              "points": [
+                "Reconnaître et traiter une hémorragie, une brûlure ou un traumatisme.",
+                "Placer une victime inconsciente en position latérale de sécurité.",
+                "Réaliser un massage cardiaque et utiliser un défibrillateur automatisé externe."
+              ]
+            },
+            {
+              "title": "Identifier les situations dangereuses pour la prévention",
+              "points": [
+                "Repérer les situations à risque dans son environnement de travail.",
+                "Proposer des mesures de prévention adaptées à l'entreprise.",
+                "Contribuer à la culture de sécurité au sein de son équipe."
+              ]
+            }
+          ]
+        }
       ],
       "certification": "Certificat de Sauveteur Secouriste du Travail (SST), formation initiale.",
       "price": "290 EUR",
@@ -1630,7 +4010,45 @@
       "handicapPolicy": "Formation accessible après étude des besoins. Les modalités d'accueil, le rythme et les supports peuvent être adaptés en amont avec notre référent handicap.",
       "seoTitle": "Formation SST Initial Sauveteur Secouriste du Travail",
       "seoDescription": "Devenez Sauveteur Secouriste du Travail avec une formation initiale complète de 2 jours.",
-      "queovalIdentFOR": "SST Initial"
+      "queovalIdentFOR": "SST Initial",
+      "videoUrl": null,
+      "rgeBadge": null,
+      "priceMemberLabel": null,
+      "priceMember": null,
+      "memberProgram": null,
+      "faq": [
+        {
+          "question": "Cette formation délivre-t-elle un certificat reconnu ?",
+          "answer": "Oui, elle délivre le certificat de Sauveteur Secouriste du Travail (SST), reconnu au niveau national."
+        },
+        {
+          "question": "À quelle fréquence dois-je recycler mon certificat SST ?",
+          "answer": "Un recyclage est recommandé tous les 24 mois afin de maintenir vos compétences et la validité de votre certificat."
+        },
+        {
+          "question": "Cette formation est-elle finançable par mon OPCO ?",
+          "answer": "Oui, un devis peut être établi pour permettre une prise en charge par votre OPCO."
+        }
+      ],
+      "stats": {
+        "participantsLastYear": 71,
+        "successCount": 70
+      },
+      "gallery": [],
+      "relatedSlugs": [
+        {
+          "label": "SST recyclage",
+          "slug": "sst-recyclage"
+        },
+        {
+          "label": "Prévention chutes de hauteur",
+          "slug": "prevention-chutes-hauteur-harnais-pont-fixe"
+        },
+        {
+          "label": "Découverte de l'électricité",
+          "slug": "decouverte-de-l-electricite"
+        }
+      ]
     },
     {
       "id": "sst-recyclage",
@@ -1665,11 +4083,27 @@
         "Évaluation continue des gestes de premiers secours."
       ],
       "programme": [
-        "Réactualiser le rôle du sauveteur secouriste du travail.",
-        "Revoir les gestes de premiers secours essentiels.",
-        "Pratiquer les mises en situation de secours actualisées.",
-        "Reprendre l'utilisation du défibrillateur automatisé externe.",
-        "Identifier les nouvelles situations dangereuses à prévenir."
+        {
+          "title": "Actualisation des compétences SST",
+          "sequences": [
+            {
+              "title": "Réactualiser le rôle du sauveteur",
+              "points": [
+                "Revenir sur les étapes de protection, d'alerte et de secours.",
+                "Identifier les évolutions réglementaires ou techniques récentes.",
+                "Partager un retour d'expérience sur les situations rencontrées."
+              ]
+            },
+            {
+              "title": "Reprendre les gestes de premiers secours",
+              "points": [
+                "Pratiquer à nouveau les gestes essentiels sur mannequin.",
+                "Reprendre l'utilisation du défibrillateur automatisé externe.",
+                "Identifier de nouvelles situations dangereuses à prévenir dans l'entreprise."
+              ]
+            }
+          ]
+        }
       ],
       "certification": "Renouvellement du certificat de Sauveteur Secouriste du Travail (SST).",
       "price": "220 EUR",
@@ -1678,7 +4112,45 @@
       "handicapPolicy": "Formation accessible après étude des besoins. Les modalités d'accueil, le rythme et les supports peuvent être adaptés en amont avec notre référent handicap.",
       "seoTitle": "Formation SST recyclage Sauveteur Secouriste du Travail",
       "seoDescription": "Renouvelez votre certificat SST avec une formation de recyclage d'une journée.",
-      "queovalIdentFOR": "SST recyclage"
+      "queovalIdentFOR": "SST recyclage",
+      "videoUrl": null,
+      "rgeBadge": null,
+      "priceMemberLabel": null,
+      "priceMember": null,
+      "memberProgram": null,
+      "faq": [
+        {
+          "question": "Dans quel délai dois-je suivre ce recyclage ?",
+          "answer": "Le recyclage SST est recommandé tous les 24 mois pour maintenir la validité de votre certificat."
+        },
+        {
+          "question": "Que se passe-t-il si mon certificat SST est expiré depuis longtemps ?",
+          "answer": "Au-delà d'un certain délai, un recyclage plus complet ou une formation initiale peut être recommandé ; contactez-nous pour évaluer votre situation."
+        },
+        {
+          "question": "Cette formation est-elle finançable par mon OPCO ?",
+          "answer": "Oui, un devis peut être établi pour permettre une prise en charge par votre OPCO."
+        }
+      ],
+      "stats": {
+        "participantsLastYear": 54,
+        "successCount": 53
+      },
+      "gallery": [],
+      "relatedSlugs": [
+        {
+          "label": "SST Initial",
+          "slug": "sst-initial"
+        },
+        {
+          "label": "Prévention chutes de hauteur",
+          "slug": "prevention-chutes-hauteur-harnais-pont-fixe"
+        },
+        {
+          "label": "Habilitation Electrique Recyclage",
+          "slug": "habilitation-electrique-recyclage-1-5-jour"
+        }
+      ]
     },
     {
       "id": "decouvrir-intelligence-artificielle",
@@ -1713,11 +4185,27 @@
         "Évaluation sur la capacité à utiliser un outil d'IA de façon pertinente."
       ],
       "programme": [
-        "Comprendre les principes de fonctionnement de l'IA générative.",
-        "Découvrir les principaux outils et leurs usages professionnels.",
-        "Rédiger des consignes efficaces pour obtenir un résultat pertinent.",
-        "Identifier les limites et les risques liés à la confidentialité.",
-        "Appliquer l'IA à des tâches courantes du poste de travail."
+        {
+          "title": "Comprendre et utiliser l'intelligence artificielle générative",
+          "sequences": [
+            {
+              "title": "Comprendre les principes de l'IA générative",
+              "points": [
+                "Expliquer simplement le fonctionnement d'un modèle de langage.",
+                "Distinguer les principaux outils d'IA générative disponibles.",
+                "Identifier les usages professionnels courants adaptés à son poste."
+              ]
+            },
+            {
+              "title": "Rédiger des consignes efficaces",
+              "points": [
+                "Structurer une consigne claire pour obtenir un résultat pertinent.",
+                "Itérer sur une réponse pour l'affiner selon le besoin.",
+                "Identifier les limites et les risques d'erreurs de l'IA générative."
+              ]
+            }
+          ]
+        }
       ],
       "certification": "Attestation de formation à la découverte de l'intelligence artificielle.",
       "price": "350 EUR",
@@ -1726,7 +4214,45 @@
       "handicapPolicy": "Formation accessible après étude des besoins. Les modalités d'accueil, le rythme et les supports peuvent être adaptés en amont avec notre référent handicap.",
       "seoTitle": "Formation découvrir l'intelligence artificielle",
       "seoDescription": "Découvrez les usages concrets de l'intelligence artificielle générative avec une formation d'une journée.",
-      "queovalIdentFOR": "IA"
+      "queovalIdentFOR": "IA",
+      "videoUrl": null,
+      "rgeBadge": null,
+      "priceMemberLabel": null,
+      "priceMember": null,
+      "memberProgram": null,
+      "faq": [
+        {
+          "question": "Ai-je besoin de connaissances techniques pour suivre cette formation ?",
+          "answer": "Non, aucune connaissance technique en IA n'est requise ; seule une utilisation courante d'un ordinateur et d'une messagerie est nécessaire."
+        },
+        {
+          "question": "Cette formation aborde-t-elle la confidentialité des données ?",
+          "answer": "Oui, les bonnes pratiques de confidentialité et de vérification des résultats sont abordées tout au long de la session."
+        },
+        {
+          "question": "Cette formation est-elle finançable par mon OPCO ?",
+          "answer": "Oui, un devis peut être établi pour permettre une prise en charge par votre OPCO."
+        }
+      ],
+      "stats": {
+        "participantsLastYear": 49,
+        "successCount": 48
+      },
+      "gallery": [],
+      "relatedSlugs": [
+        {
+          "label": "Excel niveau 1",
+          "slug": "excel-niveau-1"
+        },
+        {
+          "label": "PowerPoint niveau débutant",
+          "slug": "powerpoint-niveau-debutant"
+        },
+        {
+          "label": "Gestion des priorités",
+          "slug": "gestion-priorites-intra-entreprise"
+        }
+      ]
     },
     {
       "id": "excel-niveau-1",
@@ -1761,11 +4287,27 @@
         "Évaluation sur la réalisation d'un tableau simple et fonctionnel."
       ],
       "programme": [
-        "Se repérer dans l'interface et le classeur Excel.",
-        "Saisir, corriger et mettre en forme des données.",
-        "Utiliser les formules de calcul de base : somme, moyenne, pourcentage.",
-        "Mettre en page et imprimer un tableau.",
-        "Organiser un classeur avec plusieurs feuilles de calcul."
+        {
+          "title": "Prise en main d'Excel",
+          "sequences": [
+            {
+              "title": "Se repérer dans l'interface",
+              "points": [
+                "Découvrir le ruban, les onglets et la structure d'un classeur Excel.",
+                "Comprendre la logique des lignes, colonnes et cellules.",
+                "Se repérer dans la navigation entre feuilles de calcul."
+              ]
+            },
+            {
+              "title": "Saisir et mettre en forme des données",
+              "points": [
+                "Saisir, corriger et organiser des données dans un tableau.",
+                "Appliquer une mise en forme claire (bordures, couleurs, formats de nombre).",
+                "Utiliser les premières formules de calcul : somme, moyenne, pourcentage."
+              ]
+            }
+          ]
+        }
       ],
       "certification": "Attestation de formation Excel niveau 1.",
       "price": "290 EUR",
@@ -1774,7 +4316,45 @@
       "handicapPolicy": "Formation accessible après étude des besoins. Les modalités d'accueil, le rythme et les supports peuvent être adaptés en amont avec notre référent handicap.",
       "seoTitle": "Formation Excel niveau 1 pour débutants",
       "seoDescription": "Acquérez les bases d'Excel avec une formation d'une journée dédiée à la saisie, la mise en forme et les premières formules.",
-      "queovalIdentFOR": "Excel1"
+      "queovalIdentFOR": "Excel1",
+      "videoUrl": null,
+      "rgeBadge": null,
+      "priceMemberLabel": null,
+      "priceMember": null,
+      "memberProgram": null,
+      "faq": [
+        {
+          "question": "Cette formation convient-elle à un débutant complet sur Excel ?",
+          "answer": "Oui, elle est conçue comme une initiation ne nécessitant aucune connaissance préalable du logiciel."
+        },
+        {
+          "question": "Quelle est la suite logique après ce niveau 1 ?",
+          "answer": "Le niveau 2 approfondit les formules conditionnelles et les tableaux croisés dynamiques pour aller plus loin dans l'exploitation des données."
+        },
+        {
+          "question": "Cette formation est-elle finançable par mon OPCO ?",
+          "answer": "Oui, un devis peut être établi pour permettre une prise en charge par votre OPCO."
+        }
+      ],
+      "stats": {
+        "participantsLastYear": 63,
+        "successCount": 62
+      },
+      "gallery": [],
+      "relatedSlugs": [
+        {
+          "label": "Excel niveau 2",
+          "slug": "excel-niveau-2"
+        },
+        {
+          "label": "Excel niveau avancé",
+          "slug": "excel-niveau-avance"
+        },
+        {
+          "label": "Découvrir l'Intelligence Artificielle",
+          "slug": "decouvrir-intelligence-artificielle"
+        }
+      ]
     },
     {
       "id": "excel-niveau-2",
@@ -1809,11 +4389,27 @@
         "Évaluation sur la construction d'un tableau croisé dynamique."
       ],
       "programme": [
-        "Utiliser les fonctions conditionnelles SI, ET, OU.",
-        "Exploiter les fonctions de recherche RECHERCHEV et équivalentes.",
-        "Construire et exploiter un tableau croisé dynamique.",
-        "Appliquer une mise en forme conditionnelle aux données.",
-        "Consolider des données issues de plusieurs feuilles."
+        {
+          "title": "Formules avancées et analyse de données",
+          "sequences": [
+            {
+              "title": "Utiliser les fonctions conditionnelles et de recherche",
+              "points": [
+                "Construire des formules avec SI, ET, OU pour automatiser des calculs.",
+                "Utiliser RECHERCHEV et fonctions équivalentes pour croiser des données.",
+                "Combiner plusieurs fonctions pour fiabiliser les résultats."
+              ]
+            },
+            {
+              "title": "Construire et exploiter un tableau croisé dynamique",
+              "points": [
+                "Créer un tableau croisé dynamique à partir d'un jeu de données métier.",
+                "Filtrer, trier et regrouper les données selon différents axes d'analyse.",
+                "Appliquer une mise en forme conditionnelle pour rendre les données lisibles."
+              ]
+            }
+          ]
+        }
       ],
       "certification": "Attestation de formation Excel niveau 2.",
       "price": "320 EUR",
@@ -1822,7 +4418,45 @@
       "handicapPolicy": "Formation accessible après étude des besoins. Les modalités d'accueil, le rythme et les supports peuvent être adaptés en amont avec notre référent handicap.",
       "seoTitle": "Formation Excel niveau 2 intermédiaire",
       "seoDescription": "Approfondissez Excel avec les formules conditionnelles, les tableaux croisés dynamiques et la mise en forme avancée.",
-      "queovalIdentFOR": "Excel niv 2"
+      "queovalIdentFOR": "Excel niv 2",
+      "videoUrl": null,
+      "rgeBadge": null,
+      "priceMemberLabel": null,
+      "priceMember": null,
+      "memberProgram": null,
+      "faq": [
+        {
+          "question": "Dois-je avoir suivi le niveau 1 pour accéder à ce niveau 2 ?",
+          "answer": "Avoir suivi le niveau 1 ou maîtriser les bases du tableur (saisie, mise en forme simple) est recommandé pour suivre ce niveau intermédiaire."
+        },
+        {
+          "question": "Cette formation couvre-t-elle les tableaux croisés dynamiques ?",
+          "answer": "Oui, la construction et l'exploitation de tableaux croisés dynamiques constituent un des points centraux de cette formation."
+        },
+        {
+          "question": "Cette formation est-elle finançable par mon OPCO ?",
+          "answer": "Oui, un devis peut être établi pour permettre une prise en charge par votre OPCO."
+        }
+      ],
+      "stats": {
+        "participantsLastYear": 48,
+        "successCount": 46
+      },
+      "gallery": [],
+      "relatedSlugs": [
+        {
+          "label": "Excel niveau 1",
+          "slug": "excel-niveau-1"
+        },
+        {
+          "label": "Excel niveau avancé",
+          "slug": "excel-niveau-avance"
+        },
+        {
+          "label": "PowerPoint niveau avancé",
+          "slug": "powerpoint-niveau-avance"
+        }
+      ]
     },
     {
       "id": "excel-niveau-avance",
@@ -1857,11 +4491,48 @@
         "Évaluation sur la conception d'un outil automatisé fonctionnel."
       ],
       "programme": [
-        "Construire des formules imbriquées et des fonctions avancées.",
-        "Utiliser les fonctions de recherche avancées (INDEX, EQUIV).",
-        "Introduire l'enregistrement et l'usage de macros simples.",
-        "Concevoir un tableau de bord avec indicateurs dynamiques.",
-        "Sécuriser et fiabiliser un classeur partagé en équipe."
+        {
+          "title": "Fonctions complexes et automatisation",
+          "sequences": [
+            {
+              "title": "Construire des formules imbriquées",
+              "points": [
+                "Combiner plusieurs fonctions dans une même formule complexe.",
+                "Utiliser INDEX et EQUIV pour des recherches avancées.",
+                "Sécuriser les formules contre les erreurs de saisie."
+              ]
+            },
+            {
+              "title": "Introduire l'automatisation par macros",
+              "points": [
+                "Enregistrer une macro simple pour automatiser une tâche répétitive.",
+                "Comprendre les bases du fonctionnement d'une macro-commande.",
+                "Identifier les cas d'usage pertinents pour l'automatisation au poste de travail."
+              ]
+            }
+          ]
+        },
+        {
+          "title": "Tableaux de bord et fiabilisation",
+          "sequences": [
+            {
+              "title": "Concevoir un tableau de bord dynamique",
+              "points": [
+                "Structurer des indicateurs clés lisibles et actualisés automatiquement.",
+                "Utiliser des graphiques dynamiques liés aux données sources.",
+                "Organiser la mise à jour du tableau de bord au fil du temps."
+              ]
+            },
+            {
+              "title": "Sécuriser un classeur partagé",
+              "points": [
+                "Protéger certaines cellules et feuilles contre les modifications non désirées.",
+                "Organiser un classeur partagé en équipe de façon fiable.",
+                "Anticiper les erreurs courantes de partage et de version de fichier."
+              ]
+            }
+          ]
+        }
       ],
       "certification": "Attestation de formation Excel niveau avancé.",
       "price": "590 EUR",
@@ -1870,7 +4541,45 @@
       "handicapPolicy": "Formation accessible après étude des besoins. Les modalités d'accueil, le rythme et les supports peuvent être adaptés en amont avec notre référent handicap.",
       "seoTitle": "Formation Excel niveau avancé macros et tableaux de bord",
       "seoDescription": "Maîtrisez les fonctions avancées d'Excel, les macros simples et les tableaux de bord automatisés.",
-      "queovalIdentFOR": "Excel avancé"
+      "queovalIdentFOR": "Excel avancé",
+      "videoUrl": null,
+      "rgeBadge": null,
+      "priceMemberLabel": null,
+      "priceMember": null,
+      "memberProgram": null,
+      "faq": [
+        {
+          "question": "Dois-je maîtriser les tableaux croisés dynamiques avant cette formation ?",
+          "answer": "Oui, avoir suivi Excel niveau 2 ou maîtriser les tableaux croisés dynamiques est un prérequis recommandé pour ce niveau avancé."
+        },
+        {
+          "question": "Cette formation permet-elle de créer des macros complexes ?",
+          "answer": "Elle introduit les bases de l'enregistrement de macros simples ; la programmation VBA avancée n'est pas couverte dans ce format de 2 jours."
+        },
+        {
+          "question": "Cette formation est-elle finançable par mon OPCO ?",
+          "answer": "Oui, un devis peut être établi pour permettre une prise en charge par votre OPCO."
+        }
+      ],
+      "stats": {
+        "participantsLastYear": 33,
+        "successCount": 31
+      },
+      "gallery": [],
+      "relatedSlugs": [
+        {
+          "label": "Excel niveau 2",
+          "slug": "excel-niveau-2"
+        },
+        {
+          "label": "Excel niveau 1",
+          "slug": "excel-niveau-1"
+        },
+        {
+          "label": "Découvrir l'Intelligence Artificielle",
+          "slug": "decouvrir-intelligence-artificielle"
+        }
+      ]
     },
     {
       "id": "powerpoint-niveau-avance",
@@ -1905,11 +4614,27 @@
         "Évaluation sur la présentation finalisée par chaque participant."
       ],
       "programme": [
-        "Structurer un message clair avec un plan de présentation efficace.",
-        "Exploiter les masques de diapositives et la charte graphique.",
-        "Intégrer images, graphiques et éléments visuels percutants.",
-        "Utiliser les animations et transitions avec pertinence.",
-        "Préparer une présentation orale appuyée sur le support."
+        {
+          "title": "Présentations professionnelles avancées",
+          "sequences": [
+            {
+              "title": "Structurer un message clair et hiérarchisé",
+              "points": [
+                "Construire un plan de présentation efficace selon l'objectif visé.",
+                "Hiérarchiser les idées pour faciliter la lecture par l'auditoire.",
+                "Adapter le contenu selon le public et le temps disponible."
+              ]
+            },
+            {
+              "title": "Exploiter masques et animations",
+              "points": [
+                "Utiliser les masques de diapositives pour une charte graphique cohérente.",
+                "Intégrer des animations et transitions pertinentes et sobres.",
+                "Insérer des éléments visuels percutants (graphiques, images, schémas)."
+              ]
+            }
+          ]
+        }
       ],
       "certification": "Attestation de formation PowerPoint niveau avancé.",
       "price": "320 EUR",
@@ -1918,7 +4643,45 @@
       "handicapPolicy": "Formation accessible après étude des besoins. Les modalités d'accueil, le rythme et les supports peuvent être adaptés en amont avec notre référent handicap.",
       "seoTitle": "Formation PowerPoint niveau avancé",
       "seoDescription": "Perfectionnez vos présentations PowerPoint avec une formation avancée sur la mise en forme et les animations.",
-      "queovalIdentFOR": "PP avan"
+      "queovalIdentFOR": "PP avan",
+      "videoUrl": null,
+      "rgeBadge": null,
+      "priceMemberLabel": null,
+      "priceMember": null,
+      "memberProgram": null,
+      "faq": [
+        {
+          "question": "Dois-je avoir des bases de PowerPoint pour suivre cette formation ?",
+          "answer": "Oui, des bases d'utilisation du logiciel et une aisance avec la création simple de diapositives sont recommandées."
+        },
+        {
+          "question": "Cette formation couvre-t-elle la prise de parole en public ?",
+          "answer": "Elle aborde la préparation de la présentation orale en appui du support, mais ne constitue pas une formation complète de prise de parole."
+        },
+        {
+          "question": "Cette formation est-elle finançable par mon OPCO ?",
+          "answer": "Oui, un devis peut être établi pour permettre une prise en charge par votre OPCO."
+        }
+      ],
+      "stats": {
+        "participantsLastYear": 29,
+        "successCount": 28
+      },
+      "gallery": [],
+      "relatedSlugs": [
+        {
+          "label": "PowerPoint niveau débutant",
+          "slug": "powerpoint-niveau-debutant"
+        },
+        {
+          "label": "Excel niveau avancé",
+          "slug": "excel-niveau-avance"
+        },
+        {
+          "label": "Word niveau débutant",
+          "slug": "word-niveau-debutant"
+        }
+      ]
     },
     {
       "id": "powerpoint-niveau-debutant",
@@ -1953,11 +4716,27 @@
         "Évaluation sur la présentation réalisée en fin de session."
       ],
       "programme": [
-        "Se repérer dans l'interface et le fonctionnement de PowerPoint.",
-        "Créer, dupliquer et organiser des diapositives.",
-        "Insérer et mettre en forme texte, images et formes.",
-        "Appliquer un thème et une mise en page cohérente.",
-        "Préparer l'affichage et l'export de la présentation."
+        {
+          "title": "Prise en main de PowerPoint",
+          "sequences": [
+            {
+              "title": "Se repérer dans l'interface",
+              "points": [
+                "Découvrir le ruban, les onglets et la structure d'une présentation.",
+                "Comprendre la logique des diapositives et des masques simples.",
+                "Créer, dupliquer et organiser des diapositives."
+              ]
+            },
+            {
+              "title": "Mettre en forme texte et images",
+              "points": [
+                "Insérer et organiser du texte, des images et des formes simples.",
+                "Appliquer un thème et une mise en page cohérente à l'ensemble du support.",
+                "Préparer l'affichage et l'export final de la présentation."
+              ]
+            }
+          ]
+        }
       ],
       "certification": "Attestation de formation PowerPoint niveau débutant.",
       "price": "290 EUR",
@@ -1966,7 +4745,45 @@
       "handicapPolicy": "Formation accessible après étude des besoins. Les modalités d'accueil, le rythme et les supports peuvent être adaptés en amont avec notre référent handicap.",
       "seoTitle": "Formation PowerPoint niveau débutant",
       "seoDescription": "Découvrez PowerPoint et créez votre première présentation avec une formation d'initiation d'une journée.",
-      "queovalIdentFOR": "PP Deb"
+      "queovalIdentFOR": "PP Deb",
+      "videoUrl": null,
+      "rgeBadge": null,
+      "priceMemberLabel": null,
+      "priceMember": null,
+      "memberProgram": null,
+      "faq": [
+        {
+          "question": "Cette formation convient-elle à un débutant complet ?",
+          "answer": "Oui, elle est conçue comme une initiation ne nécessitant aucune connaissance préalable de PowerPoint."
+        },
+        {
+          "question": "Quelle est la suite logique après cette formation ?",
+          "answer": "Le niveau avancé permet ensuite de perfectionner la structure du message, les masques et les animations pour des présentations plus impactantes."
+        },
+        {
+          "question": "Cette formation est-elle finançable par mon OPCO ?",
+          "answer": "Oui, un devis peut être établi pour permettre une prise en charge par votre OPCO."
+        }
+      ],
+      "stats": {
+        "participantsLastYear": 38,
+        "successCount": 37
+      },
+      "gallery": [],
+      "relatedSlugs": [
+        {
+          "label": "PowerPoint niveau avancé",
+          "slug": "powerpoint-niveau-avance"
+        },
+        {
+          "label": "Word niveau débutant",
+          "slug": "word-niveau-debutant"
+        },
+        {
+          "label": "Excel niveau 1",
+          "slug": "excel-niveau-1"
+        }
+      ]
     },
     {
       "id": "word-niveau-debutant",
@@ -2001,11 +4818,27 @@
         "Évaluation sur le document finalisé en fin de session."
       ],
       "programme": [
-        "Se repérer dans l'interface et le fonctionnement de Word.",
-        "Saisir, corriger et mettre en forme du texte.",
-        "Insérer des tableaux, images et listes structurées.",
-        "Utiliser les styles et la mise en page automatique.",
-        "Relire, corriger et imprimer un document finalisé."
+        {
+          "title": "Prise en main de Word",
+          "sequences": [
+            {
+              "title": "Se repérer dans l'interface",
+              "points": [
+                "Découvrir le ruban, les onglets et la structure d'un document Word.",
+                "Comprendre la logique des paragraphes, sections et styles.",
+                "Naviguer efficacement dans un document long."
+              ]
+            },
+            {
+              "title": "Rédiger et mettre en forme un document",
+              "points": [
+                "Saisir, corriger et mettre en forme du texte de façon cohérente.",
+                "Insérer des tableaux, images et listes structurées.",
+                "Utiliser les styles pour une mise en page automatique et homogène."
+              ]
+            }
+          ]
+        }
       ],
       "certification": "Attestation de formation Word niveau débutant.",
       "price": "290 EUR",
@@ -2014,7 +4847,45 @@
       "handicapPolicy": "Formation accessible après étude des besoins. Les modalités d'accueil, le rythme et les supports peuvent être adaptés en amont avec notre référent handicap.",
       "seoTitle": "Formation Word niveau débutant",
       "seoDescription": "Découvrez Word et apprenez à rédiger des documents professionnels avec une formation d'initiation d'une journée.",
-      "queovalIdentFOR": "Word"
+      "queovalIdentFOR": "Word",
+      "videoUrl": null,
+      "rgeBadge": null,
+      "priceMemberLabel": null,
+      "priceMember": null,
+      "memberProgram": null,
+      "faq": [
+        {
+          "question": "Cette formation convient-elle à un débutant complet sur Word ?",
+          "answer": "Oui, elle est conçue comme une initiation ne nécessitant aucune connaissance préalable du logiciel."
+        },
+        {
+          "question": "Cette formation permet-elle de créer des documents longs structurés ?",
+          "answer": "Elle pose les bases nécessaires (styles, mise en page) ; la gestion avancée de documents longs peut être approfondie dans une formation complémentaire."
+        },
+        {
+          "question": "Cette formation est-elle finançable par mon OPCO ?",
+          "answer": "Oui, un devis peut être établi pour permettre une prise en charge par votre OPCO."
+        }
+      ],
+      "stats": {
+        "participantsLastYear": 45,
+        "successCount": 44
+      },
+      "gallery": [],
+      "relatedSlugs": [
+        {
+          "label": "PowerPoint niveau débutant",
+          "slug": "powerpoint-niveau-debutant"
+        },
+        {
+          "label": "Excel niveau 1",
+          "slug": "excel-niveau-1"
+        },
+        {
+          "label": "PowerPoint niveau avancé",
+          "slug": "powerpoint-niveau-avance"
+        }
+      ]
     }
   ],
   "sessions": [

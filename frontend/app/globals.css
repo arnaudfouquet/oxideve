@@ -1402,6 +1402,145 @@ main {
   background: linear-gradient(180deg, rgba(255, 255, 255, 0.98), rgba(235, 245, 248, 0.96));
 }
 
+.formation-rge-strip {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
+  gap: var(--space-4);
+  margin: var(--space-4) 0;
+  padding: var(--space-4);
+  border-radius: var(--radius-xl);
+  background: linear-gradient(135deg, rgba(0, 156, 220, 0.1), rgba(9, 207, 101, 0.1));
+}
+
+.formation-rge-strip h2 {
+  margin-top: 0;
+}
+
+.formation-rge-badge {
+  width: 120px;
+  height: auto;
+  justify-self: end;
+}
+
+.formation-objectives-list {
+  margin: var(--space-3) 0;
+}
+
+.formation-objectives-list ol {
+  display: grid;
+  gap: 14px;
+  margin: var(--space-2) 0 0;
+  padding-left: 0;
+  list-style: none;
+  counter-reset: objective;
+}
+
+.formation-objectives-list li {
+  position: relative;
+  padding: 14px 18px 14px 56px;
+  border-radius: var(--radius-lg);
+  background: rgba(0, 156, 220, 0.06);
+}
+
+.formation-objectives-list li::before {
+  counter-increment: objective;
+  content: counter(objective);
+  position: absolute;
+  left: 14px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 28px;
+  height: 28px;
+  display: grid;
+  place-items: center;
+  border-radius: 999px;
+  background: var(--color-blue);
+  color: var(--color-white);
+  font-weight: 700;
+}
+
+.formation-programme-days {
+  display: grid;
+  gap: var(--space-4);
+}
+
+.formation-programme-day {
+  padding: var(--space-4);
+  border-radius: var(--radius-xl);
+  background: rgba(255, 255, 255, 0.92);
+  box-shadow: var(--shadow-card);
+}
+
+.formation-programme-day h3 {
+  margin-top: 0;
+  color: var(--color-blue);
+}
+
+.formation-programme-sequence {
+  margin-top: var(--space-3);
+}
+
+.formation-programme-sequence h4 {
+  margin-bottom: 8px;
+  color: var(--color-green);
+}
+
+.formation-pricing-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: var(--space-3);
+  margin-bottom: var(--space-3);
+}
+
+.formation-pricing-card {
+  display: grid;
+  gap: 10px;
+  padding: var(--space-4);
+  border-radius: var(--radius-xl);
+  background: rgba(9, 207, 101, 0.12);
+  text-align: center;
+}
+
+.formation-pricing-card strong {
+  font-size: 2.2rem;
+  font-family: var(--font-display), sans-serif;
+  color: var(--color-blue);
+}
+
+.formation-pricing-card-accent {
+  background: linear-gradient(135deg, var(--color-green), #0aa356);
+  color: var(--color-white);
+}
+
+.formation-pricing-card-accent strong {
+  color: var(--color-white);
+}
+
+.formation-member-program {
+  margin-top: var(--space-3);
+}
+
+.formation-related-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: var(--space-3);
+}
+
+.formation-related-card {
+  text-align: center;
+  justify-content: center;
+}
+
+.formation-faq-list {
+  display: grid;
+  gap: var(--space-2);
+}
+
+.formation-faq-item summary {
+  font-size: 1.05rem;
+}
+
 .programme-list-modern {
   grid-template-columns: repeat(3, minmax(0, 1fr));
 }
