@@ -25,13 +25,18 @@ export function ContactForm({
   const [selectedFormationSlug, setSelectedFormationSlug] = useState(defaultFormationSlug);
   const [selectedSessionId, setSelectedSessionId] = useState(defaultSessionId);
 
+  const categories = useMemo(
+    () => Array.from(new Set(formations.map((formation) => formation.category))),
+    [formations]
+  );
+
   const availableSessions = useMemo(
     () => sessions.filter((session) => session.formationSlug === selectedFormationSlug),
     [selectedFormationSlug, sessions]
   );
 
   useEffect(() => {
-    if (!showSelectors) {
+    if (!showSelectors || !selectedFormationSlug) {
       return;
     }
 
@@ -40,7 +45,7 @@ export function ContactForm({
     }
 
     setSelectedSessionId(availableSessions[0]?.id || "");
-  }, [availableSessions, selectedSessionId, showSelectors]);
+  }, [availableSessions, selectedFormationSlug, selectedSessionId, showSelectors]);
 
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -105,16 +110,35 @@ export function ContactForm({
               onChange={(event) => setSelectedFormationSlug(event.target.value)}
               required
             >
-              {formations.map((formation) => (
-                <option key={formation.slug} value={formation.slug}>
-                  {formation.title}
-                </option>
+              <option disabled value="">
+                Choisir une formation
+              </option>
+              {categories.map((category) => (
+                <optgroup key={category} label={category}>
+                  {formations
+                    .filter((formation) => formation.category === category)
+                    .map((formation) => (
+                      <option key={formation.slug} value={formation.slug}>
+                        {formation.title}
+                      </option>
+                    ))}
+                </optgroup>
               ))}
             </select>
           </label>
           <label>
             Session
-            <select className="ui-field" name="sessionId" value={selectedSessionId} onChange={(event) => setSelectedSessionId(event.target.value)} required>
+            <select
+              className="ui-field"
+              name="sessionId"
+              value={selectedSessionId}
+              onChange={(event) => setSelectedSessionId(event.target.value)}
+              required
+              disabled={!selectedFormationSlug}
+            >
+              <option disabled value="">
+                {selectedFormationSlug ? "Choisir une session" : "Sélectionnez d'abord une formation"}
+              </option>
               {availableSessions.map((session) => (
                 <option key={session.id} value={session.id}>
                   {session.city} - {new Intl.DateTimeFormat("fr-FR", { day: "2-digit", month: "2-digit", year: "numeric" }).format(new Date(session.startDate))}

@@ -196,20 +196,16 @@ export function HomeCalendarSection({ formations, sessions }: Props) {
   const calendarCells = useMemo(() => (activeMonth ? buildCalendarCells(activeMonth, monthSessions) : []), [activeMonth, monthSessions]);
 
   useEffect(() => {
-    const firstDate = calendarCells.find((cell) => cell.date && cell.sessions.length)?.date || "";
-    if (!selectedDate || !calendarCells.some((cell) => cell.date === selectedDate)) {
-      setSelectedDate(firstDate);
-    }
-  }, [calendarCells, selectedDate]);
+    setSelectedDate("");
+  }, [activeMonth]);
 
-  const selectedDaySessions = useMemo(() => {
-    const day = calendarCells.find((cell) => cell.date === selectedDate);
-    if (day?.sessions.length) {
-      return day.sessions;
+  const filteredMonthSessions = useMemo(() => {
+    if (!selectedDate) {
+      return monthSessions;
     }
 
-    return monthSessions.slice(0, 4);
-  }, [calendarCells, monthSessions, selectedDate]);
+    return monthSessions.filter((session) => session.startDate <= selectedDate && session.endDate >= selectedDate);
+  }, [monthSessions, selectedDate]);
 
   function moveMonth(direction: -1 | 1) {
     if (!months.length || !activeMonth) {
@@ -265,25 +261,35 @@ export function HomeCalendarSection({ formations, sessions }: Props) {
           </div>
 
           <div className="home-calendar-side">
-            <div className="home-calendar-session-box">
-              {selectedDaySessions[0] ? (
-                <>
-                  <h3>{selectedDaySessions[0].formationTitle}</h3>
-                  <p>{formatDateRange(selectedDaySessions[0].startDate, selectedDaySessions[0].endDate)}</p>
-                  <ul>
-                    <li>{selectedDaySessions[0].category}</li>
-                    <li>{selectedDaySessions[0].city} · {selectedDaySessions[0].mode}</li>
-                    <li>{selectedDaySessions[0].seatsLeft} places disponibles</li>
-                  </ul>
-                  <Link className="ui-button ui-button-card" href={`/inscriptions?formationSlug=${selectedDaySessions[0].formationSlug}&sessionId=${selectedDaySessions[0].id}`}>
-                    Découvrir
-                  </Link>
-                </>
+            <div className="home-calendar-session-list">
+              <div className="home-calendar-session-list-heading">
+                <h3>
+                  {selectedDate
+                    ? `Sessions du ${new Intl.DateTimeFormat("fr-FR", { day: "2-digit", month: "long" }).format(new Date(`${selectedDate}T00:00:00`))}`
+                    : `Toutes les sessions de ${activeMonth ? monthLabel(activeMonth) : "ce mois"}`}
+                </h3>
+                {selectedDate ? (
+                  <button className="home-calendar-clear-day" onClick={() => setSelectedDate("")} type="button">
+                    Voir tout le mois
+                  </button>
+                ) : null}
+              </div>
+
+              {filteredMonthSessions.length ? (
+                <ul className="home-calendar-session-cards">
+                  {filteredMonthSessions.map((session) => (
+                    <li key={session.id}>
+                      <strong>{session.formationTitle}</strong>
+                      <span>{formatDateRange(session.startDate, session.endDate)}</span>
+                      <span>{session.category} · {session.city} · {session.mode}</span>
+                      <Link className="ui-button ui-button-card" href={`/inscriptions?formationSlug=${session.formationSlug}&sessionId=${session.id}`}>
+                        Découvrir
+                      </Link>
+                    </li>
+                  ))}
+                </ul>
               ) : (
-                <>
-                  <h3>Aucune session</h3>
-                  <p>Changez de mois ou utilisez un autre filtre pour afficher une session disponible.</p>
-                </>
+                <p>Aucune session ce jour-là. Changez de mois ou choisissez un autre jour.</p>
               )}
             </div>
           </div>

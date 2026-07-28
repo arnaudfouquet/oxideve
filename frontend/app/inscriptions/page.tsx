@@ -17,9 +17,13 @@ type Props = {
 export default async function InscriptionsPage({ searchParams }: Props) {
   const [formations, sessions] = await Promise.all([getFormations(), getSessions()]);
   const params = searchParams ? await searchParams : {};
-  const defaultFormationSlug = params?.formationSlug && formations.some((formation) => formation.slug === params.formationSlug) ? params.formationSlug : formations[0]?.slug;
+  const defaultFormationSlug =
+    params?.formationSlug && formations.some((formation) => formation.slug === params.formationSlug)
+      ? params.formationSlug
+      : "";
   const scopedSessions = sessions.filter((session) => session.formationSlug === defaultFormationSlug);
-  const defaultSessionId = params?.sessionId && sessions.some((session) => session.id === params.sessionId) ? params.sessionId : scopedSessions[0]?.id || sessions[0]?.id;
+  const defaultSessionId =
+    params?.sessionId && scopedSessions.some((session) => session.id === params.sessionId) ? params.sessionId : "";
 
   return (
     <section className="section">

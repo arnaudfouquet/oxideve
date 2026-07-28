@@ -103,7 +103,8 @@ main {
 }
 
 .ui-title-hero {
-  font-size: clamp(3rem, 6vw, 5.4rem);
+  font-size: clamp(2rem, 4.5vw, 3.6rem);
+  line-height: 1.05;
 }
 
 .ui-title-copy {
@@ -3490,6 +3491,70 @@ main {
 .home-calendar-session-box ul {
   padding-left: 18px;
   margin: 14px 0 20px;
+}
+
+.home-calendar-session-list {
+  padding: 24px;
+  border-radius: 18px;
+  background: linear-gradient(135deg, var(--color-blue), #11c59c);
+  color: var(--color-white);
+  max-height: 520px;
+  overflow-y: auto;
+}
+
+.home-calendar-session-list-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.home-calendar-session-list-heading h3 {
+  margin: 0;
+  font-family: var(--font-display), sans-serif;
+  font-size: 1.3rem;
+}
+
+.home-calendar-clear-day {
+  border: 1px solid rgba(255, 255, 255, 0.6);
+  background: transparent;
+  color: var(--color-white);
+  border-radius: 999px;
+  padding: 6px 14px;
+  font-size: 0.85rem;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.home-calendar-session-cards {
+  display: grid;
+  gap: 14px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.home-calendar-session-cards li {
+  display: grid;
+  gap: 6px;
+  padding: 16px;
+  border-radius: 14px;
+  background: rgba(255, 255, 255, 0.14);
+}
+
+.home-calendar-session-cards strong {
+  font-size: 1.05rem;
+}
+
+.home-calendar-session-cards span {
+  color: rgba(255, 255, 255, 0.9);
+  font-size: 0.9rem;
+}
+
+.home-calendar-session-cards .ui-button-card {
+  justify-self: start;
+  margin-top: 4px;
 }
 
 .benefits-board {
