@@ -352,6 +352,7 @@ export function AdminWorkspace({
   const [bulkSessionSeats, setBulkSessionSeats] = useState("");
 
   const [queovalSyncing, setQueovalSyncing] = useState(false);
+  const [queovalStageIds, setQueovalStageIds] = useState("");
   const [pendingSessions, setPendingSessions] = useState<PendingSyncSession[]>([]);
   const [pendingFormationChoice, setPendingFormationChoice] = useState<Record<string, string>>({});
 
@@ -780,10 +781,24 @@ export function AdminWorkspace({
   }
 
   async function handleQueovalSync() {
+    const externalIds = queovalStageIds
+      .split(/[\s,;]+/)
+      .map((value) => value.trim())
+      .filter(Boolean);
+
+    if (!externalIds.length) {
+      setError("Indiquez au moins un identifiant de stage Queoval.");
+      return;
+    }
+
     setQueovalSyncing(true);
     setFeedback("");
 
-    const response = await fetch("/api/admin/queoval/sync", { method: "POST" });
+    const response = await fetch("/api/admin/queoval/sync", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ externalIds }),
+    });
     const result = (await response.json().catch(() => null)) as { data?: { matched: number; pending: number; total: number }; error?: string; message?: string } | null;
 
     setQueovalSyncing(false);
@@ -1167,7 +1182,10 @@ export function AdminWorkspace({
         <div className="admin-stack-grid">
           <section className="admin-shell">
             <div className="section-heading section-heading-tight">
-              <div><span className="eyebrow">Queoval</span><h2>Synchronisation du calendrier</h2><p>Récupère les stages Planifiés et Confirmés depuis Queoval et les ajoute au calendrier public.</p></div>
+              <div><span className="eyebrow">Queoval</span><h2>Synchronisation du calendrier</h2><p>Colle les identifiants de stage Queoval (visibles dans l'URL de la fiche stage, ex. stage-detail/191738) séparés par des virgules ou espaces.</p></div>
+            </div>
+            <div className="admin-bulk-grid">
+              <label><span>Identifiants de stage</span><input className="ui-field" value={queovalStageIds} onChange={(event) => setQueovalStageIds(event.target.value)} placeholder="191738, 192274, 192282..." /></label>
               <Button onClick={handleQueovalSync} disabled={queovalSyncing}>{queovalSyncing ? "Synchronisation..." : "Synchroniser Queoval"}</Button>
             </div>
             {pendingSessions.length ? (

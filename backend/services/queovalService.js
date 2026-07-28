@@ -1,142 +1,94 @@
 const { getPrismaClient } = require("./prismaClient");
 
-const QUEOVAL_PIPE_URL = "https://applimetier.com/QueovalSiteWS1/api/Pipe/Formation/Filtered/CARD_PAGINATION";
+const QUEOVAL_API_BASE = "https://api.applimetier.com/web.API.auth";
 
-const SYNCED_STATES = ["2", "3"]; // 2 = Planifiée, 3 = Confirmée
-
-const COLUMN_DEFINITION = {
-  codeBo: "BO_STAGE",
-  codeProperty: "Etat_PRO",
-  tableName: "TDOProduction",
-  tablePrefix: "stg",
-  columnOrderBy: "DatedPRO asc",
-  columnFilterCode: "0",
-  columnFilterGroupe: "COLPIPESTAGE",
-};
-
-function buildPayload(state, stepOffset) {
-  return {
-    column: {
-      titre: "",
-      columnSelector: [
-        {
-          PropType: 0,
-          PropKey: "stg.Etat_PRO",
-          PropValue: state,
-          PropOperator: 1,
-          PropInWhere: true,
-          Order: 0,
-          Text: null,
-          Value: null,
-          Hidden: false,
-          Treeview: false,
-        },
-      ],
-      pagination: {
-        nbElement: 0,
-        nbPage: 0,
-        currentPage: 0,
-        step: 50,
-        stepOffset,
-        paginationLoading: false,
-        getPagination: true,
-      },
-      dropDisable: false,
-    },
-    filterBadges: [],
-    columnDefinition: COLUMN_DEFINITION,
-  };
-}
+// États "Etat_PRO" à synchroniser ; les stages annulés (5) sont ignorés.
+const SYNCED_STATES = new Set(["2", "3"]);
 
 function getQueovalHeaders() {
-  const bearer = process.env.QUEOVAL_BEARER_TOKEN;
-  const qgmt = process.env.QUEOVAL_QGMT_TOKEN;
-  const cookie = process.env.QUEOVAL_COOKIE;
+  const bearer = process.env.QUEOVAL_API_TOKEN;
 
-  if (!bearer || !qgmt || !cookie) {
-    throw new Error(
-      "Identifiants Queoval manquants : renseignez QUEOVAL_BEARER_TOKEN, QUEOVAL_QGMT_TOKEN et QUEOVAL_COOKIE dans .env"
-    );
+  if (!bearer) {
+    throw new Error("Identifiant Queoval manquant : renseignez QUEOVAL_API_TOKEN dans .env");
   }
 
   return {
     Authorization: `Bearer ${bearer}`,
-    qgmt: `queoval ${qgmt}`,
-    Cookie: cookie,
-    "Content-Type": "application/json",
-    Accept: "application/json, text/plain, */*",
-    "Accept-Language": "fr-FR",
+    Accept: "application/json",
   };
 }
 
-function toIsoDate(datePart) {
-  if (!datePart) {
-    return null;
+async function queovalGet(path, params) {
+  const headers = getQueovalHeaders();
+  const url = new URL(`${QUEOVAL_API_BASE}${path}`);
+
+  for (const [key, value] of Object.entries(params)) {
+    url.searchParams.set(key, value);
   }
 
-  const month = String(datePart.Month).padStart(2, "0");
-  const day = String(datePart.Day).padStart(2, "0");
-  return `${datePart.Year}-${month}-${day}`;
+  const response = await fetch(url, { headers });
+
+  if (!response.ok) {
+    const bodyText = await response.text().catch(() => "");
+    throw new Error(`Appel Queoval échoué (statut ${response.status}) sur ${path} : ${bodyText.slice(0, 500)}`);
+  }
+
+  const payload = await response.json();
+
+  if (payload.HasError) {
+    throw new Error(`Erreur Queoval sur ${path} : ${payload.ErrorMessage || "inconnue"}`);
+  }
+
+  return payload.Value || [];
 }
 
-function extractCity(cpVille) {
-  if (!cpVille) {
+function extractCity(villeADR) {
+  if (!villeADR) {
     return null;
   }
 
-  const parts = cpVille.split(",");
+  const parts = villeADR.split(",");
   return (parts[1] || parts[0] || "").trim();
 }
 
-async function fetchStagesForState(state) {
-  const headers = getQueovalHeaders();
+async function fetchStageDetails(externalId) {
+  const [sessions, addresses] = await Promise.all([
+    queovalGet(`/STAGE/sessions/${externalId}`, {
+      select: "Info_PRO,datedEVE,datefEVE,Etat_PRO",
+      orderby: "datedEVE",
+      fetch: "200",
+    }),
+    queovalGet(`/STAGE/adresse/${externalId}`, {
+      select: "DenomADR,villeADR",
+      fetch: "1",
+    }),
+  ]);
+
+  if (!sessions.length) {
+    return null;
+  }
+
+  const title = sessions[0].Info_PRO;
+  const state = sessions[0].Etat_PRO;
+  const startDate = sessions[0].datedEVE;
+  const endDate = sessions[sessions.length - 1].datefEVE;
+  const city = extractCity(addresses[0]?.villeADR);
+
+  return { externalId, title, state, startDate, endDate, city };
+}
+
+async function fetchUpcomingStages(externalIds) {
   const stages = [];
-  let stepOffset = 0;
 
-  while (true) {
-    const response = await fetch(QUEOVAL_PIPE_URL, {
-      method: "POST",
-      headers,
-      body: JSON.stringify(buildPayload(state, stepOffset)),
-    });
+  for (const externalId of externalIds) {
+    const details = await fetchStageDetails(externalId);
 
-    if (!response.ok) {
-      const bodyText = await response.text().catch(() => "");
-      throw new Error(
-        `Appel Queoval échoué (statut ${response.status}) pour l'état ${state} : ${bodyText.slice(0, 500)}`
-      );
+    if (details && SYNCED_STATES.has(details.state)) {
+      stages.push(details);
     }
-
-    const payload = await response.json();
-
-    if (payload.HasError) {
-      throw new Error(`Erreur Queoval : ${payload.Error || "inconnue"}`);
-    }
-
-    const cards = payload.Value?.cards || [];
-    stages.push(...cards);
-
-    const pagination = payload.Value?.pagination;
-    const nextOffset = stepOffset + (pagination?.step || cards.length || 50);
-
-    if (!pagination || cards.length === 0 || nextOffset >= (pagination.nbElement || 0)) {
-      break;
-    }
-
-    stepOffset = nextOffset;
   }
 
   return stages;
-}
-
-async function fetchUpcomingStages() {
-  const results = [];
-
-  for (const state of SYNCED_STATES) {
-    results.push(await fetchStagesForState(state));
-  }
-
-  return results.flat();
 }
 
 function normalizeTitleForMatching(title) {
@@ -184,52 +136,47 @@ function findBestFormationMatch(stageTitle, formations) {
   return bestScore >= MATCH_THRESHOLD ? best : null;
 }
 
-async function syncQueovalCalendar() {
+async function syncQueovalCalendar(externalIds) {
   const prisma = getPrismaClient();
 
   if (!prisma) {
     throw new Error("Base de données indisponible : DATABASE_URL non configuré");
   }
 
-  const stages = await fetchUpcomingStages();
+  if (!Array.isArray(externalIds) || !externalIds.length) {
+    throw new Error("Aucun identifiant de stage Queoval fourni");
+  }
+
+  const stages = await fetchUpcomingStages(externalIds);
   const formations = await prisma.formation.findMany({ select: { slug: true, title: true } });
 
   const summary = {
     matched: 0,
     pending: 0,
-    skippedCancelled: 0,
     total: stages.length,
   };
 
   for (const stage of stages) {
-    const startDate = toIsoDate(stage.DateDebut);
-    const endDate = toIsoDate(stage.DateFin);
-
-    if (!startDate || !endDate) {
-      continue;
-    }
-
-    const match = findBestFormationMatch(stage.Titre, formations);
+    const match = findBestFormationMatch(stage.title, formations);
 
     if (!match) {
       await prisma.pendingSyncSession.upsert({
-        where: { externalId: stage.Ident },
+        where: { externalId: stage.externalId },
         create: {
-          externalId: stage.Ident,
-          externalTitle: stage.Titre,
-          city: extractCity(stage.CpVille),
-          startDate: new Date(startDate),
-          endDate: new Date(endDate),
-          seatsLeft: stage.NbStagiaire ?? 0,
-          externalState: stage.Etat,
+          externalId: stage.externalId,
+          externalTitle: stage.title,
+          city: stage.city,
+          startDate: new Date(stage.startDate),
+          endDate: new Date(stage.endDate),
+          seatsLeft: 0,
+          externalState: stage.state,
         },
         update: {
-          externalTitle: stage.Titre,
-          city: extractCity(stage.CpVille),
-          startDate: new Date(startDate),
-          endDate: new Date(endDate),
-          seatsLeft: stage.NbStagiaire ?? 0,
-          externalState: stage.Etat,
+          externalTitle: stage.title,
+          city: stage.city,
+          startDate: new Date(stage.startDate),
+          endDate: new Date(stage.endDate),
+          externalState: stage.state,
         },
       });
       summary.pending += 1;
@@ -237,29 +184,28 @@ async function syncQueovalCalendar() {
     }
 
     await prisma.session.upsert({
-      where: { externalId: stage.Ident },
+      where: { externalId: stage.externalId },
       create: {
         formationSlug: match.slug,
-        city: extractCity(stage.CpVille) || "À distance",
-        startDate: new Date(startDate),
-        endDate: new Date(endDate),
-        seatsLeft: stage.NbStagiaire ?? 0,
-        mode: stage.CpVille ? "Présentiel" : "Distanciel",
+        city: stage.city || "À distance",
+        startDate: new Date(stage.startDate),
+        endDate: new Date(stage.endDate),
+        seatsLeft: 0,
+        mode: stage.city ? "Présentiel" : "Distanciel",
         source: "queoval",
-        externalId: stage.Ident,
-        externalTitle: stage.Titre,
-        externalState: stage.Etat,
+        externalId: stage.externalId,
+        externalTitle: stage.title,
+        externalState: stage.state,
         lastSyncedAt: new Date(),
       },
       update: {
         formationSlug: match.slug,
-        city: extractCity(stage.CpVille) || "À distance",
-        startDate: new Date(startDate),
-        endDate: new Date(endDate),
-        seatsLeft: stage.NbStagiaire ?? 0,
-        mode: stage.CpVille ? "Présentiel" : "Distanciel",
-        externalTitle: stage.Titre,
-        externalState: stage.Etat,
+        city: stage.city || "À distance",
+        startDate: new Date(stage.startDate),
+        endDate: new Date(stage.endDate),
+        mode: stage.city ? "Présentiel" : "Distanciel",
+        externalTitle: stage.title,
+        externalState: stage.state,
         lastSyncedAt: new Date(),
       },
     });

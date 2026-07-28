@@ -329,8 +329,11 @@ function createApiRouter() {
 
   router.post(
     "/admin/queoval/sync",
-    asyncHandler(async (_req, res) => {
-      const summary = await syncQueovalCalendar();
+    asyncHandler(async (req, res) => {
+      const payload = z
+        .object({ externalIds: z.array(z.string().min(1)).min(1).max(200) })
+        .parse(req.body);
+      const summary = await syncQueovalCalendar(payload.externalIds);
       res.json({
         data: summary,
         message: `Synchronisation terminée : ${summary.matched} session(s) mise(s) à jour, ${summary.pending} en attente de rattachement.`,
