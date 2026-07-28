@@ -70,7 +70,7 @@ export default async function HomePage() {
       <Section className="landing-section landing-categories">
         <Container>
           <div className="landing-heading center">
-            <h2>Votre centre de formation professionnelle <span className="title-accent">avec Oxideve</span></h2>
+            <h2>Nos grandes familles <span className="title-accent">de formation</span></h2>
           </div>
           <div className="landing-category-grid">
             {homeCategories.map((item) => (

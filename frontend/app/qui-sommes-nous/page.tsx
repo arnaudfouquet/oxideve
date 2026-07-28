@@ -65,12 +65,13 @@ export default async function QuiSommesNousPage() {
           </div>
           <div className="about-wheel">
             <div className="day-type-wheel">
-              <span>⛑</span>
-              <span>💻</span>
-              <span>🧭</span>
-              <span>☀</span>
-              <strong>?</strong>
+              <span title="Sécurité">⛑</span>
+              <span title="Bureautique">💻</span>
+              <span title="Management">🧭</span>
+              <span title="Énergies renouvelables">☀</span>
+              <strong>+</strong>
             </div>
+            <p className="about-wheel-caption">Sécurité · Bureautique · Management · Énergies renouvelables et plus encore</p>
           </div>
         </div>
       </section>

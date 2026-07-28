@@ -99,7 +99,7 @@ main {
 .ui-title {
   margin: 14px 0 0;
   font-size: clamp(2rem, 4vw, 3.2rem);
-  line-height: 0.96;
+  line-height: 1.1;
 }
 
 .ui-title-hero {
@@ -1011,7 +1011,16 @@ main {
 
 .about-wheel {
   display: flex;
-  justify-content: center;
+  flex-direction: column;
+  align-items: center;
+  gap: 18px;
+}
+
+.about-wheel-caption {
+  max-width: 280px;
+  text-align: center;
+  color: var(--color-muted);
+  font-size: 0.95rem;
 }
 
 .training-section-stack {
@@ -1421,6 +1430,11 @@ main {
 
 .contact-card-form {
   background: rgba(255, 255, 255, 0.96);
+}
+
+.contact-card-form .ui-title {
+  font-size: clamp(1.5rem, 2.5vw, 2rem);
+  line-height: 1.15;
 }
 
 .contact-form {
