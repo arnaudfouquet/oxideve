@@ -23,21 +23,21 @@ const identitySteps = [
   {
     id: "2",
     label: "Notre objectif",
-    title: "Texte 2",
+    title: "Notre objectif",
     note:
       "Nos parcours sont pensés pour faire gagner du temps à vos équipes avec des formats denses, pratiques et directement utiles sur le terrain.",
     description:
-      "Faux texte de présentation pour illustrer la deuxième carte. L'idée est de montrer un contenu éditorial plus institutionnel, calibré pour l'activité et la montée en compétence.",
+      "Accompagner chaque professionnel, quel que soit son métier, avec des formations courtes et actionnables : sécurité, bureautique, management, habilitations ou énergies renouvelables.",
     image: "https://images.unsplash.com/photo-1517048676732-d65bc937f952?auto=format&fit=crop&w=1200&q=80",
   },
   {
     id: "3",
     label: "Notre organisme",
-    title: "Texte 3",
+    title: "Notre organisme",
     note:
-      "Oxideve relie qualification, pratique chantier et lecture réglementaire dans une même expérience de formation.",
+      "Oxideve relie qualification, pratique terrain et lecture réglementaire dans une même expérience de formation.",
     description:
-      "Faux texte de présentation pour la troisième carte. Il sert à occuper la zone éditoriale prévue et à respecter le gabarit du design cible.",
+      "Un centre de formation professionnelle généraliste, avec des formateurs experts dans chacune de leurs spécialités et un accompagnement personnalisé du premier contact jusqu'à la certification.",
     image: "https://images.unsplash.com/photo-1520607162513-77705c0f0d4a?auto=format&fit=crop&w=1200&q=80",
   },
 ];

@@ -21,7 +21,7 @@ const bodyFont = Poppins({
 export const metadata: Metadata = {
   metadataBase: new URL(process.env.SITE_URL || "http://localhost:3000"),
   title: {
-    default: `${siteName} | Formations énergie et BTP`,
+    default: `${siteName} | Organisme de formation professionnelle`,
     template: `%s | ${siteName}`,
   },
   description: siteDescription,

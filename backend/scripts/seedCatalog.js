@@ -79,6 +79,7 @@ async function main() {
           handicapPolicy: formation.handicapPolicy,
           seoTitle: formation.seoTitle,
           seoDescription: formation.seoDescription,
+          queovalIdentFOR: formation.queovalIdentFOR || null,
         },
         update: {
           title: formation.title,
@@ -102,8 +103,18 @@ async function main() {
           handicapPolicy: formation.handicapPolicy,
           seoTitle: formation.seoTitle,
           seoDescription: formation.seoDescription,
+          queovalIdentFOR: formation.queovalIdentFOR || null,
         },
       });
+    }
+
+    const currentSlugs = formations.map((formation) => formation.slug);
+    const removedFormations = await prisma.formation.deleteMany({
+      where: { slug: { notIn: currentSlugs } },
+    });
+
+    if (removedFormations.count > 0) {
+      console.log(`Removed ${removedFormations.count} formation(s) no longer present in the catalog.`);
     }
 
     for (const session of sessions) {

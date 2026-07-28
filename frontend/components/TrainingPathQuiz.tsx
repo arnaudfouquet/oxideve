@@ -10,43 +10,43 @@ type Props = {
 
 const questions = [
   {
-    id: "market",
-    title: "Quel chantier revient le plus souvent ?",
+    id: "domain",
+    title: "Quel domaine correspond le mieux à votre besoin ?",
     answers: [
-      { label: "Installation photovoltaïque en toiture", scores: { Photovoltaïque: 3 } },
-      { label: "PAC air / eau ou climatisation", scores: { "Pompes à chaleur": 3, "Traitement d'air": 2 } },
-      { label: "Bornes de recharge et IRVE", scores: { "Bornes de recharge": 3 } },
-      { label: "Sécurité et habilitations équipe", scores: { "Sécurité au travail": 3 } },
+      { label: "Sécurité au travail, CACES ou habilitations", scores: { "Sécurité au travail": 3 } },
+      { label: "Bureautique ou outils numériques", scores: { Bureautique: 3 } },
+      { label: "Management ou organisation d'équipe", scores: { Management: 3 } },
+      { label: "Énergies renouvelables (solaire, PAC, IRVE)", scores: { Photovoltaïque: 2, "Pompes à chaleur": 2, "Bornes de recharge": 1 } },
     ],
   },
   {
     id: "goal",
     title: "Quel est le besoin principal ?",
     answers: [
+      { label: "Obtenir ou renouveler une habilitation obligatoire", scores: { "Sécurité au travail": 3 } },
+      { label: "Gagner en efficacité sur un logiciel ou un outil", scores: { Bureautique: 3 } },
+      { label: "Renforcer le pilotage ou la cohésion d'équipe", scores: { Management: 3 } },
       { label: "Obtenir ou renforcer une qualification chantier", scores: { Photovoltaïque: 2, "Pompes à chaleur": 2 } },
-      { label: "Mise en service et diagnostic", scores: { "Pompes à chaleur": 2, "Traitement d'air": 2 } },
-      { label: "Vendre et cadrer l'offre", scores: { Photovoltaïque: 2 } },
-      { label: "Mettre une équipe en conformité", scores: { "Sécurité au travail": 2 } },
     ],
   },
   {
     id: "experience",
     title: "Votre niveau actuel sur ce sujet ?",
     answers: [
-      { label: "Je démarre sur cette famille", scores: { Photovoltaïque: 1, "Pompes à chaleur": 1, "Traitement d'air": 1 } },
-      { label: "Je pose déjà mais je veux sécuriser mes pratiques", scores: { Photovoltaïque: 2, "Pompes à chaleur": 2 } },
-      { label: "Je gère surtout la préparation et l'avant-vente", scores: { Photovoltaïque: 1, Bureautique: 1 } },
-      { label: "Je pilote une équipe et son organisation", scores: { "Sécurité au travail": 1, Bureautique: 1 } },
+      { label: "Je découvre ce sujet", scores: { Bureautique: 1, "Sécurité au travail": 1, Management: 1 } },
+      { label: "Je pratique déjà mais je veux sécuriser mes acquis", scores: { Photovoltaïque: 2, "Pompes à chaleur": 2, "Sécurité au travail": 1 } },
+      { label: "Je gère surtout la préparation et l'organisation", scores: { Bureautique: 1, Management: 1 } },
+      { label: "Je pilote une équipe et je veux la faire monter en compétence", scores: { Management: 2, "Sécurité au travail": 1 } },
     ],
   },
   {
     id: "format",
-    title: "Quel format te ferait gagner du temps ?",
+    title: "Quel format vous ferait gagner du temps ?",
     answers: [
       { label: "Un parcours qualification complet", scores: { Photovoltaïque: 2, "Pompes à chaleur": 2 } },
-      { label: "Un module court d'introduction ou de prise en main", scores: { "Pompes à chaleur": 1, "Traitement d'air": 2 } },
-      { label: "Une formation commerciale ou administrative", scores: { Photovoltaïque: 2, Bureautique: 2 } },
-      { label: "Une remise à niveau sécurité", scores: { "Sécurité au travail": 2 } },
+      { label: "Un module court d'introduction ou de prise en main", scores: { Bureautique: 2, "Bornes de recharge": 1 } },
+      { label: "Une remise à niveau sécurité ou habilitation", scores: { "Sécurité au travail": 2 } },
+      { label: "Une formation encadrement ou gestion d'équipe", scores: { Management: 2 } },
     ],
   },
 ];

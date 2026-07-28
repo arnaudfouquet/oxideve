@@ -31,9 +31,10 @@ type EditorialServiceModule = {
 
 export const siteName = "Oxideve";
 export const siteDescription =
-  "Organisme de formation BTP et énergie spécialisé en QualiPV, QualiPAC, IRVE et climatisation.";
-export const contactPhone = "02 35 00 00 00";
+  "Organisme de formation professionnelle généraliste : énergie, bâtiment, sécurité et bureautique.";
+export const contactPhone = "06 36 44 55 93";
 export const contactEmail = "contact@oxideve.fr";
+export const contactAddress = "39 avenue Jean-François Champollion, 31100 Toulouse";
 
 export function getSiteUrl() {
   return process.env.SITE_URL || "http://localhost:3000";

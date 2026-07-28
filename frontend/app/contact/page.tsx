@@ -1,13 +1,17 @@
 import type { Metadata } from "next";
 import { ContactForm } from "@/components/ContactForm";
-import { contactEmail, contactPhone } from "@/lib/content";
+import { contactAddress, contactEmail, contactPhone, getFormations, getSessions } from "@/lib/content";
 
 export const metadata: Metadata = {
   title: "Contact et inscription",
   description: "Contactez Oxideve pour obtenir des informations ou réserver une formation.",
 };
 
-export default function ContactPage() {
+export default async function ContactPage() {
+  const [formations, sessions] = await Promise.all([getFormations(), getSessions()]);
+  const firstFormation = formations[0];
+  const firstSession = sessions.find((session) => session.formationSlug === firstFormation?.slug);
+
   return (
     <section className="section">
       <div className="container contact-layout">
@@ -18,11 +22,15 @@ export default function ContactPage() {
           <div className="detail-list">
             <p>Téléphone: {contactPhone}</p>
             <p>Email: {contactEmail}</p>
-            <p>Adresse: Rouen.</p>
+            <p>Adresse: {contactAddress}</p>
           </div>
         </div>
         <div className="contact-card">
-          <ContactForm submitLabel="Envoyer la demande" />
+          <ContactForm
+            defaultFormationSlug={firstFormation?.slug}
+            defaultSessionId={firstSession?.id}
+            submitLabel="Envoyer la demande"
+          />
         </div>
       </div>
     </section>

@@ -8,7 +8,7 @@ export const dynamic = "force-dynamic";
 
 export const metadata: Metadata = {
   title: "Catalogue des formations",
-  description: "Découvrez les formations Oxideve en photovoltaïque, pompe à chaleur, IRVE, sécurité au travail et bureautique.",
+  description: "Découvrez l'ensemble du catalogue de formations Oxideve, classées par thématique : sécurité, bureautique, management, énergies renouvelables et plus.",
 };
 
 function categoryId(category: string) {

@@ -1448,6 +1448,35 @@ main {
   margin-top: 0;
 }
 
+.formation-detail-accordion {
+  margin-top: var(--space-3);
+  border-top: 1px solid rgba(0, 0, 0, 0.08);
+  padding-top: var(--space-3);
+}
+
+.formation-detail-accordion summary {
+  cursor: pointer;
+  font-weight: 600;
+  list-style: none;
+}
+
+.formation-detail-accordion summary::-webkit-details-marker {
+  display: none;
+}
+
+.formation-detail-accordion summary::before {
+  content: "+ ";
+}
+
+.formation-detail-accordion[open] summary::before {
+  content: "- ";
+}
+
+.formation-detail-accordion .detail-list,
+.formation-detail-accordion .detail-block-grid {
+  margin-top: var(--space-2);
+}
+
 .article-detail-shell {
   display: grid;
   gap: var(--space-3);

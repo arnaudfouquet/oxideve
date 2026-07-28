@@ -1,296 +1,398 @@
 {
   "formations": [
     {
-      "id": "qualipv",
-      "slug": "formation-qualipv",
-      "title": "Formation QualiPV Electricité 36 kVA",
-      "shortTitle": "QualiPV",
+      "id": "qualipv-36-generateur-photovoltaique-electricite",
+      "slug": "qualipv-36-generateur-photovoltaique-electricite",
+      "title": "QUALIPV 36 Générateur photovoltaïque raccordé au réseau compétence électrique",
+      "shortTitle": "QualiPV 36 kVA",
       "category": "Photovoltaïque",
       "duration": "3 jours",
-      "durationDetails": "3 jours, soit 21 heures de formation, avec alternance d'apports techniques, d'etudes de cas et de mises en situation terrain.",
-      "location": "Rouen et distanciel tutoré",
+      "durationDetails": "3 jours, soit 21 heures de formation, avec alternance d'apports techniques, d'études de cas et de mises en situation terrain.",
+      "location": "Montpellier et distanciel tutoré",
       "audience": "Installateurs photovoltaïques et responsables techniques",
-      "summary": "Préparez vos équipes à concevoir, poser et contrôler des générateurs photovoltaïques raccordés au réseau.",
-      "description": "Cette formation accompagne les électriciens et installateurs qui doivent intervenir sur des installations photovoltaïques en respectant les exigences de sécurité, de raccordement et de qualification.",
+      "summary": "Préparez vos équipes à concevoir, poser et contrôler des générateurs photovoltaïques raccordés au réseau jusqu'à 36 kVA.",
+      "description": "Cette formation accompagne les électriciens et installateurs qui doivent intervenir sur des installations photovoltaïques jusqu'à 36 kVA en respectant les exigences de sécurité, de raccordement et de qualification QualiPV compétence électrique.",
       "benefits": [
-        "Alternance theorie, etudes de cas et exercices appliques",
-        "Preparation au dossier de qualification QualiPV",
-        "Reperes clairs sur securite, raccordement et controle"
+        "Alternance théorie, études de cas et exercices appliqués",
+        "Préparation au dossier de qualification QualiPV module électricité",
+        "Repères clairs sur sécurité, raccordement et contrôle"
+      ],
+      "objectives": [
+        "Dimensionner une installation solaire jusqu'à 36 kVA adaptée au besoin du chantier",
+        "Sécuriser le raccordement et la mise en service",
+        "Constituer un dossier technique exploitable pour la qualification"
       ],
       "prerequisites": [
-        "Maitriser le francais a l'ecrit et a l'oral.",
-        "Disposer de connaissances en electricite basse tension.",
-        "Presenter une habilitation electrique BR ou BE(P), ou preparer l'attestation demandee avant l'entree en formation."
+        "Maîtriser le français à l'écrit et à l'oral.",
+        "Disposer de connaissances en électricité basse tension.",
+        "Présenter une habilitation électrique BR ou BE(P), ou préparer l'attestation demandée avant l'entrée en formation."
       ],
       "modalities": [
-        "Formation organisee en presentiel ou en format tutoré selon la session.",
-        "Alternance d'apports techniques, d'etudes de cas et d'exercices d'application.",
-        "Evaluation en continu sur les mises en situation et la maitrise des points de conformite."
+        "Formation organisée en présentiel ou en format tutoré selon la session.",
+        "Alternance d'apports techniques, d'études de cas et d'exercices d'application.",
+        "Évaluation en continu sur les mises en situation et la maîtrise des points de conformité."
       ],
       "programme": [
-        "Comprendre le fonctionnement d'un generateur photovoltaique raccorde au reseau.",
-        "Verifier les pre requis electriques et les regles de securite avant intervention.",
+        "Comprendre le fonctionnement d'un générateur photovoltaïque raccordé au réseau jusqu'à 36 kVA.",
+        "Vérifier les prérequis électriques et les règles de sécurité avant intervention.",
         "Dimensionner l'installation selon le besoin et l'environnement du chantier.",
-        "Realiser le raccordement, les controles et la mise en service dans les regles.",
+        "Réaliser le raccordement, les contrôles et la mise en service dans les règles.",
         "Constituer un dossier exploitable pour la qualification et le suivi client."
       ],
-      "certification": "Parcours preparant a la qualification QualiPV module electricite pour les intervenants amenes a poser des generateurs photovoltaiques raccordes au reseau.",
+      "certification": "Parcours préparant à la qualification QualiPV module électricité 36 kVA pour les intervenants amenés à poser des générateurs photovoltaïques raccordés au réseau.",
       "price": "1290 EUR",
-      "priceDetails": "Tarif indicatif par participant, support pedagogique inclus. Un devis peut etre prepare pour l'inter, l'intra ou la session dediee.",
-      "successRate": "Taux de reussite 2025 : 93 %",
-      "handicapPolicy": "Formation accessible apres etude des besoins. Les modalites d'accueil, le rythme et les supports peuvent etre adaptes en amont avec notre referent handicap.",
-      "seoTitle": "Formation QualiPV certifiante pour installateurs photovoltaiques",
-      "seoDescription": "Preparez vos equipes a la pose et au raccordement de generateurs photovoltaiques avec une formation QualiPV structuree et terrain.",
-      "objectives": [
-        "Dimensionner une installation solaire adaptee au besoin du chantier",
-        "Securiser le raccordement et la mise en service",
-        "Constituer un dossier technique exploitable pour la qualification"
-      ]
+      "priceDetails": "Tarif indicatif par participant, support pédagogique inclus. Un devis peut être préparé pour l'inter, l'intra ou la session dédiée.",
+      "successRate": "Taux de réussite 2025 : 93 %",
+      "handicapPolicy": "Formation accessible après étude des besoins. Les modalités d'accueil, le rythme et les supports peuvent être adaptés en amont avec notre référent handicap.",
+      "seoTitle": "Formation QualiPV 36 kVA électricité pour installateurs",
+      "seoDescription": "Préparez vos équipes à la pose et au raccordement de générateurs photovoltaïques 36 kVA avec une formation QualiPV structurée.",
+      "queovalIdentFOR": "QualiPV 36 3 jours"
     },
     {
-      "id": "qualipv-bati",
-      "slug": "formation-qualipv-bati",
-      "title": "Formation QualiPV Bâti",
+      "id": "qualipv-bati-generateur-photovoltaique-competence-bati",
+      "slug": "qualipv-bati-generateur-photovoltaique-competence-bati",
+      "title": "QualiPV Bâti Générateur photovoltaïque raccordé au réseau compétence Bâti",
       "shortTitle": "QualiPV Bâti",
       "category": "Photovoltaïque",
       "duration": "3 jours",
-      "durationDetails": "3 jours, soit 21 heures de formation, centrés sur l'integration au bati, l'etancheite et les points de controle chantier.",
-      "location": "Rouen",
+      "durationDetails": "3 jours, soit 21 heures de formation, centrés sur l'intégration au bâti, l'étanchéité et les points de contrôle chantier.",
+      "location": "Montpellier",
       "audience": "Couvreurs, installateurs photovoltaïques et responsables techniques",
-      "summary": "Maîtrisez l'integration au bati d'une installation photovoltaïque en conciliant performance, etancheite et conformité.",
-      "description": "Ce parcours traite les interfaces couverture, support, fixation, securite et raccordement pour des installations photovoltaiques integrees ou surimposees au bati.",
+      "summary": "Maîtrisez l'intégration au bâti d'une installation photovoltaïque en conciliant performance, étanchéité et conformité.",
+      "description": "Ce parcours traite les interfaces couverture, support, fixation, sécurité et raccordement pour des installations photovoltaïques intégrées ou surimposées au bâti, dans le cadre de la qualification QualiPV compétence Bâti.",
       "benefits": [
-        "Vision complete des contraintes de couverture et d'etancheite",
-        "Methode de pose sur cas pratiques",
-        "Points de controle clairs avant reception chantier"
+        "Vision complète des contraintes de couverture et d'étanchéité",
+        "Méthode de pose sur cas pratiques",
+        "Points de contrôle clairs avant réception chantier"
+      ],
+      "objectives": [
+        "Choisir un système de pose adapté au support",
+        "Sécuriser l'étanchéité et la fixation",
+        "Contrôler la qualité d'exécution avant réception"
       ],
       "prerequisites": [
-        "Disposer de bases en couverture ou en pose photovoltaique.",
-        "Connaitre les regles elementaires de securite sur chantier.",
+        "Disposer de bases en couverture ou en pose photovoltaïque.",
+        "Connaître les règles élémentaires de sécurité sur chantier.",
         "Pouvoir lire des notices techniques et des plans de pose."
       ],
       "modalities": [
-        "Formation en presentiel avec demonstrations et mise en situation.",
-        "Analyse de cas de pose sur differents supports de toiture.",
-        "Evaluation continue sur les choix techniques et les controles de pose."
+        "Formation en présentiel avec démonstrations et mise en situation.",
+        "Analyse de cas de pose sur différents supports de toiture.",
+        "Évaluation continue sur les choix techniques et les contrôles de pose."
       ],
       "programme": [
-        "Identifier les contraintes structurelles et d'etancheite d'une toiture.",
-        "Choisir le systeme de fixation adapte au support.",
-        "Securiser les interfaces entre couverture et generateur photovoltaïque.",
-        "Verifier les points de vigilance avant mise en service.",
+        "Identifier les contraintes structurelles et d'étanchéité d'une toiture.",
+        "Choisir le système de fixation adapté au support.",
+        "Sécuriser les interfaces entre couverture et générateur photovoltaïque.",
+        "Vérifier les points de vigilance avant mise en service.",
         "Documenter une installation exploitable pour le suivi client."
       ],
-      "certification": "Formation utile a la qualite d'execution et a la preparation des installations photovoltaïques integrees au bati.",
+      "certification": "Formation préparant à la qualification QualiPV module Bâti pour les installations photovoltaïques intégrées ou surimposées.",
       "price": "1340 EUR",
-      "priceDetails": "Tarif indicatif par participant. Organisation possible en session dediee selon les besoins de l'entreprise.",
-      "successRate": "Taux de reussite 2025 : 92 %",
-      "handicapPolicy": "Les conditions d'accueil et de rythme peuvent etre adaptees apres echange preparatoire.",
+      "priceDetails": "Tarif indicatif par participant. Organisation possible en session dédiée selon les besoins de l'entreprise.",
+      "successRate": "Taux de réussite 2025 : 92 %",
+      "handicapPolicy": "Formation accessible après étude des besoins. Les modalités d'accueil, le rythme et les supports peuvent être adaptés en amont avec notre référent handicap.",
       "seoTitle": "Formation QualiPV Bâti pour professionnels du photovoltaïque",
-      "seoDescription": "Apprenez a integrer une installation photovoltaïque au bati avec une approche terrain sur la pose, l'etancheite et le controle.",
-      "objectives": [
-        "Choisir un systeme de pose adapte au support",
-        "Securiser l'etancheite et la fixation",
-        "Controler la qualite d'execution avant reception"
-      ]
+      "seoDescription": "Apprenez à intégrer une installation photovoltaïque au bâti avec une approche terrain sur la pose, l'étanchéité et le contrôle.",
+      "queovalIdentFOR": "QualiPV Bâti"
     },
     {
-      "id": "qualipv-haute-puissance",
-      "slug": "formation-qualipv-haute-puissance",
-      "title": "Formation QualiPV Haute Puissance 500 kVA",
-      "shortTitle": "QualiPV HP",
+      "id": "qualipv-hp-module-haute-puissance-500kva",
+      "slug": "qualipv-hp-module-haute-puissance-500kva",
+      "title": "QUALIPV HP Générateur photovoltaïque raccordé au réseau Module Haute puissance 500kva",
+      "shortTitle": "QualiPV HP 500 kVA",
       "category": "Photovoltaïque",
       "duration": "3 jours",
       "durationDetails": "3 jours, soit 21 heures de formation, dédiés aux générateurs photovoltaïques de forte puissance et à leurs exigences techniques.",
-      "location": "Rouen et intra-entreprise",
-      "audience": "Bureaux d'etudes, installateurs et responsables d'affaires photovoltaïques",
-      "summary": "Structurez vos projets photovoltaïques de forte puissance avec une lecture claire du dimensionnement, des protections et du raccordement.",
-      "description": "Cette formation traite les projets supérieurs a 36 kVA jusqu'a 500 kVA avec un accent sur la conception, la coordination technique et la documentation d'execution.",
+      "location": "Montpellier et intra-entreprise",
+      "audience": "Bureaux d'études, installateurs et responsables d'affaires photovoltaïques",
+      "summary": "Structurez vos projets photovoltaïques de forte puissance jusqu'à 500 kVA avec une lecture claire du dimensionnement et du raccordement.",
+      "description": "Cette formation traite les projets supérieurs à 36 kVA jusqu'à 500 kVA avec un accent sur la conception, la coordination technique et la documentation d'exécution, dans le cadre du module QualiPV Haute Puissance.",
       "benefits": [
         "Lecture claire des architectures haute puissance",
         "Repères sur protections, onduleurs et raccordement",
-        "Preparation des dossiers techniques et de validation"
+        "Préparation des dossiers techniques et de validation"
+      ],
+      "objectives": [
+        "Dimensionner une installation photovoltaïque de forte puissance jusqu'à 500 kVA",
+        "Vérifier protections et raccordement",
+        "Produire un dossier technique exploitable"
       ],
       "prerequisites": [
-        "Avoir des bases solides en electricite et en photovoltaïque.",
+        "Avoir des bases solides en électricité et en photovoltaïque.",
         "Intervenir sur des projets tertiaires, industriels ou collectifs.",
-        "Pouvoir analyser des schemas et des notes de calcul."
+        "Pouvoir analyser des schémas et des notes de calcul."
       ],
       "modalities": [
-        "Formation avec etudes de cas et analyse de projets de forte puissance.",
+        "Formation avec études de cas et analyse de projets de forte puissance.",
         "Travail sur les architectures de raccordement et les protections.",
-        "Evaluation sur la capacite a dimensionner et documenter le projet."
+        "Évaluation sur la capacité à dimensionner et documenter le projet."
       ],
       "programme": [
-        "Identifier les cas d'usage des installations photovoltaïques de forte puissance.",
-        "Dimensionner les chaines, onduleurs et protections associees.",
+        "Identifier les cas d'usage des installations photovoltaïques jusqu'à 500 kVA.",
+        "Dimensionner les chaînes, onduleurs et protections associées.",
         "Structurer le raccordement et les interfaces avec le site d'accueil.",
-        "Verifier les contraintes documentaires et de reception.",
+        "Vérifier les contraintes documentaires et de réception.",
         "Organiser un suivi d'installation conforme et exploitable."
       ],
-      "certification": "Formation de montee en competence pour la preparation et le suivi des projets photovoltaïques de forte puissance.",
+      "certification": "Formation préparant à la qualification QualiPV module Haute Puissance jusqu'à 500 kVA.",
       "price": "1490 EUR",
-      "priceDetails": "Tarif indicatif par participant. Une formule entreprise peut etre proposee pour les equipes projet.",
-      "successRate": "Taux de reussite 2025 : 94 %",
-      "handicapPolicy": "Modalites d'accueil adaptables apres analyse des besoins.",
+      "priceDetails": "Tarif indicatif par participant. Une formule entreprise peut être proposée pour les équipes projet.",
+      "successRate": "Taux de réussite 2025 : 94 %",
+      "handicapPolicy": "Formation accessible après étude des besoins. Les modalités d'accueil, le rythme et les supports peuvent être adaptés en amont avec notre référent handicap.",
       "seoTitle": "Formation QualiPV Haute Puissance 500 kVA",
-      "seoDescription": "Préparez vos projets photovoltaïques de forte puissance avec une formation dédiée au dimensionnement, au raccordement et au suivi technique.",
-      "objectives": [
-        "Dimensionner une installation photovoltaïque de forte puissance",
-        "Verifier protections et raccordement",
-        "Produire un dossier technique exploitable"
-      ]
+      "seoDescription": "Préparez vos projets photovoltaïques de forte puissance avec une formation dédiée au dimensionnement et au raccordement.",
+      "queovalIdentFOR": "QualiPV 500 kva"
     },
     {
-      "id": "demarches-admin-36kwc",
-      "slug": "formation-demarches-administratives-36kwc",
-      "title": "Démarches administratives 36 kWc",
-      "shortTitle": "Démarches 36 kWc",
+      "id": "demarches-administratives-pv-36kva-batterie",
+      "slug": "demarches-administratives-pv-36kva-batterie",
+      "title": "Démarches administratives photovoltaïques jusqu'à 36kva incluant Batterie",
+      "shortTitle": "Démarches PV 36 kVA",
       "category": "Photovoltaïque",
-      "duration": "1 jour",
-      "durationDetails": "1 jour, soit 7 heures de formation, pour comprendre les demarches administratives d'un projet photovoltaïque jusqu'a 36 kWc.",
-      "location": "Distanciel tutoré",
+      "duration": "2 jours",
+      "durationDetails": "2 jours, soit 14 heures de formation, pour comprendre les démarches administratives d'un projet photovoltaïque jusqu'à 36 kVA avec stockage batterie.",
+      "location": "Montpellier",
       "audience": "Installateurs, chargés d'affaires et assistants administratifs",
-      "summary": "Apprenez à constituer et suivre les démarches administratives d'un projet photovoltaïque jusqu'à 36 kWc.",
-      "description": "Cette formation synthétise les formalités, les interlocuteurs, les pièces et les délais à anticiper pour lancer un projet photovoltaïque résidentiel ou petit tertiaire.",
+      "summary": "Apprenez à constituer et suivre les démarches administratives d'un projet photovoltaïque jusqu'à 36 kVA incluant une batterie de stockage.",
+      "description": "Cette formation synthétise les formalités, les interlocuteurs, les pièces et les délais à anticiper pour lancer un projet photovoltaïque résidentiel ou petit tertiaire jusqu'à 36 kVA, batterie de stockage comprise.",
       "benefits": [
         "Vision synthétique des étapes administratives",
-        "Checklist des pieces a produire",
-        "Reduction des oublis et retards de dossier"
+        "Checklist des pièces à produire, batterie incluse",
+        "Réduction des oublis et retards de dossier"
+      ],
+      "objectives": [
+        "Identifier les formalités d'un projet jusqu'à 36 kVA avec batterie",
+        "Constituer un dossier complet",
+        "Suivre les validations et les délais"
       ],
       "prerequisites": [
         "Intervenir sur des projets photovoltaïques ou leur suivi administratif.",
         "Pouvoir exploiter des documents clients et techniques.",
-        "Avoir une pratique de base des echanges administratifs."
+        "Avoir une pratique de base des échanges administratifs."
       ],
       "modalities": [
-        "Formation courte avec cas pratiques de constitution de dossier.",
+        "Formation avec cas pratiques de constitution de dossier.",
         "Travail sur les interlocuteurs, formulaires et points de vigilance.",
-        "Evaluation sur la capacite a structurer un dossier complet."
+        "Évaluation sur la capacité à structurer un dossier complet."
       ],
       "programme": [
-        "Identifier les demarches prealables selon le type de projet.",
-        "Lister les pieces necessaires et les circuits de validation.",
-        "Structurer la relation avec le client et les organismes concernes.",
-        "Suivre les delais, retours et points de blocage.",
+        "Identifier les démarches préalables selon le type de projet et la présence de batterie.",
+        "Lister les pièces nécessaires et les circuits de validation.",
+        "Structurer la relation avec le client et les organismes concernés.",
+        "Suivre les délais, retours et points de blocage.",
         "Archiver un dossier exploitable pour le chantier."
       ],
-      "certification": "Formation pratique pour la preparation et le suivi administratif des projets photovoltaïques jusqu'a 36 kWc.",
-      "price": "490 EUR",
+      "certification": "Attestation de formation pour la préparation et le suivi administratif des projets photovoltaïques jusqu'à 36 kVA avec batterie.",
+      "price": "590 EUR",
       "priceDetails": "Tarif indicatif par participant, supports inclus.",
-      "successRate": "Taux de reussite 2025 : 97 %",
-      "handicapPolicy": "Supports et modalites adaptables apres echange preparatoire.",
-      "seoTitle": "Formation démarches administratives photovoltaïque 36 kWc",
-      "seoDescription": "Maîtrisez les démarches administratives d'un projet photovoltaïque jusqu'à 36 kWc avec une formation claire et opérationnelle.",
-      "objectives": [
-        "Identifier les formalites d'un projet jusqu'a 36 kWc",
-        "Constituer un dossier complet",
-        "Suivre les validations et les delais"
-      ]
+      "successRate": "Taux de réussite 2025 : 97 %",
+      "handicapPolicy": "Formation accessible après étude des besoins. Les modalités d'accueil, le rythme et les supports peuvent être adaptés en amont avec notre référent handicap.",
+      "seoTitle": "Formation démarches administratives PV 36 kVA et batterie",
+      "seoDescription": "Maîtrisez les démarches administratives d'un projet photovoltaïque jusqu'à 36 kVA avec batterie de stockage.",
+      "queovalIdentFOR": "Démarches adm pv 36 2 jours"
     },
     {
-      "id": "demarches-admin-sup-36kwc",
-      "slug": "formation-demarches-administratives-superieur-36kwc",
-      "title": "Démarches administratives supérieures à 36 kWc",
-      "shortTitle": "Démarches > 36 kWc",
+      "id": "demarches-administratives-pv-superieur-36kva-batterie",
+      "slug": "demarches-administratives-pv-superieur-36kva-batterie",
+      "title": "Démarches administratives pour les dossiers photovoltaïques supérieures à 36kva incluant Batterie",
+      "shortTitle": "Démarches PV > 36 kVA",
       "category": "Photovoltaïque",
       "duration": "1 jour",
-      "durationDetails": "1 jour, soit 7 heures de formation, pour aborder les formalités administratives propres aux projets photovoltaïques de plus grande puissance.",
-      "location": "Distanciel tutoré",
-      "audience": "Chargés d'affaires, bureaux d'etudes et coordinateurs projet",
-      "summary": "Préparez les dossiers administratifs des projets photovoltaïques supérieurs à 36 kWc avec une méthode claire et structurée.",
-      "description": "Le parcours revient sur les autorisations, les échanges administratifs et la structuration documentaire des projets photovoltaïques de moyenne et forte puissance.",
+      "durationDetails": "1 jour, soit 7 heures de formation, pour aborder les formalités administratives propres aux projets photovoltaïques de plus de 36 kVA avec batterie.",
+      "location": "Montpellier et distanciel tutoré",
+      "audience": "Chargés d'affaires, bureaux d'études et coordinateurs projet",
+      "summary": "Préparez les dossiers administratifs des projets photovoltaïques supérieurs à 36 kVA incluant une batterie de stockage.",
+      "description": "Le parcours revient sur les autorisations, les échanges administratifs et la structuration documentaire des projets photovoltaïques de moyenne et forte puissance, batterie de stockage comprise.",
       "benefits": [
         "Repères sur les obligations documentaires",
         "Vision chronologique des démarches",
         "Méthode de suivi pour projets complexes"
       ],
+      "objectives": [
+        "Identifier les formalités des projets supérieurs à 36 kVA",
+        "Organiser un suivi administratif robuste",
+        "Produire un dossier clair pour chaque acteur"
+      ],
       "prerequisites": [
         "Intervenir sur des projets photovoltaïques professionnels ou tertiaires.",
-        "Connaitre les bases d'un dossier administratif classique.",
+        "Connaître les bases d'un dossier administratif classique.",
         "Pouvoir lire des documents techniques et contractuels."
       ],
       "modalities": [
         "Formation courte avec analyse de cas projet.",
         "Exemples de dossiers et de circuits administratifs.",
-        "Evaluation sur la capacite a structurer un suivi de demarches."
+        "Évaluation sur la capacité à structurer un suivi de démarches."
       ],
       "programme": [
-        "Cartographier les formalites selon la puissance et le contexte du site.",
-        "Identifier les acteurs et les pièces a fournir.",
-        "Planifier les depots et les phases de validation.",
+        "Cartographier les formalités selon la puissance, le contexte du site et la batterie.",
+        "Identifier les acteurs et les pièces à fournir.",
+        "Planifier les dépôts et les phases de validation.",
         "Anticiper les points de blocage et les retours administratifs.",
         "Mettre en place un suivi documentaire exploitable."
       ],
-      "certification": "Formation pratique pour mieux piloter les formalites administratives des projets photovoltaïques supérieurs a 36 kWc.",
+      "certification": "Attestation de formation pour piloter les formalités administratives des projets photovoltaïques supérieurs à 36 kVA.",
       "price": "590 EUR",
       "priceDetails": "Tarif indicatif par participant.",
-      "successRate": "Taux de reussite 2025 : 96 %",
-      "handicapPolicy": "Modalites adaptables sur demande avant la session.",
-      "seoTitle": "Formation démarches administratives photovoltaïque supérieur à 36 kWc",
-      "seoDescription": "Structurez les démarches administratives des projets photovoltaïques supérieurs à 36 kWc grâce à une formation pratique et synthétique.",
-      "objectives": [
-        "Identifier les formalites des projets > 36 kWc",
-        "Organiser un suivi administratif robuste",
-        "Produire un dossier clair pour chaque acteur"
-      ]
+      "successRate": "Taux de réussite 2025 : 96 %",
+      "handicapPolicy": "Formation accessible après étude des besoins. Les modalités d'accueil, le rythme et les supports peuvent être adaptés en amont avec notre référent handicap.",
+      "seoTitle": "Formation démarches administratives PV supérieur à 36 kVA",
+      "seoDescription": "Structurez les démarches administratives des projets photovoltaïques supérieurs à 36 kVA avec batterie de stockage.",
+      "queovalIdentFOR": "DASUP36"
     },
     {
-      "id": "vendre-solaire",
-      "slug": "formation-vendre-solaire-autoconsommation",
-      "title": "Vendre le solaire et l'autoconsommation",
-      "shortTitle": "Vendre le solaire",
+      "id": "demarches-administratives-pv-36kva-batterie-visio",
+      "slug": "demarches-administratives-pv-36kva-batterie-visio",
+      "title": "Démarches administratives PV jusqu'à 36kva incluant Batterie en VISIO",
+      "shortTitle": "Démarches PV 36 kVA visio",
       "category": "Photovoltaïque",
       "duration": "1 jour",
-      "durationDetails": "1 jour, soit 7 heures de formation, pour structurer un discours commercial clair sur le photovoltaïque et l'autoconsommation.",
-      "location": "Rouen et distanciel tutoré",
-      "audience": "Chargés d'affaires, commerciaux et responsables développement",
-      "summary": "Présentez le solaire photovoltaïque et l'autoconsommation avec un discours clair, crédible et orienté client.",
-      "description": "Cette formation aide les équipes commerciales à expliquer les usages, le retour sur investissement, les points de vigilance et les attentes clients autour de l'autoconsommation.",
+      "durationDetails": "1 jour, soit 7 heures de formation en visioconférence, pour traiter les démarches administratives d'un projet photovoltaïque jusqu'à 36 kVA avec batterie.",
+      "location": "Distanciel tutoré",
+      "audience": "Installateurs, chargés d'affaires et assistants administratifs à distance",
+      "summary": "Suivez à distance une formation complète sur les démarches administratives d'un projet photovoltaïque jusqu'à 36 kVA avec batterie.",
+      "description": "Cette session en visioconférence reprend les formalités, interlocuteurs, pièces et délais d'un projet photovoltaïque résidentiel ou petit tertiaire jusqu'à 36 kVA avec batterie, dans un format entièrement à distance.",
       "benefits": [
-        "Argumentaire commercial plus clair",
-        "Meilleure lecture des usages clients",
-        "Réponses structurées aux objections courantes"
+        "Formation accessible sans déplacement",
+        "Checklist des pièces à produire, batterie incluse",
+        "Échanges en direct avec le formateur en visio"
+      ],
+      "objectives": [
+        "Identifier les formalités d'un projet jusqu'à 36 kVA avec batterie",
+        "Constituer un dossier complet à distance",
+        "Suivre les validations et les délais"
       ],
       "prerequisites": [
-        "Intervenir dans la vente ou la preparation d'offres photovoltaïques.",
-        "Connaitre les bases d'un projet solaire.",
-        "Pouvoir dialoguer avec des clients particuliers ou professionnels."
+        "Disposer d'un ordinateur et d'une connexion internet stable.",
+        "Intervenir sur des projets photovoltaïques ou leur suivi administratif.",
+        "Pouvoir exploiter des documents clients et techniques en ligne."
       ],
       "modalities": [
-        "Formation courte basee sur des cas commerciaux concrets.",
-        "Travail sur les besoins clients et les objections frequentes.",
-        "Evaluation sur la structuration d'une proposition claire."
+        "Formation entièrement à distance en visioconférence tutorée.",
+        "Partage d'écran et étude de cas en direct avec le formateur.",
+        "Évaluation sur la capacité à structurer un dossier complet."
       ],
       "programme": [
-        "Identifier les attentes et freins des clients sur le solaire.",
-        "Expliquer l'autoconsommation et ses cas d'usage.",
-        "Structurer un argumentaire simple, credibilisant et conforme.",
-        "Traiter les objections sur cout, rendement et maintenance.",
-        "Conclure une proposition adaptee au contexte du client."
+        "Identifier les démarches préalables selon le type de projet et la présence de batterie.",
+        "Lister les pièces nécessaires et les circuits de validation en ligne.",
+        "Structurer la relation avec le client et les organismes concernés.",
+        "Suivre les délais, retours et points de blocage à distance.",
+        "Archiver un dossier exploitable pour le chantier."
       ],
-      "certification": "Formation de montee en competence commerciale sur la vente du solaire et de l'autoconsommation.",
+      "certification": "Attestation de formation pour la préparation et le suivi administratif des projets photovoltaïques jusqu'à 36 kVA avec batterie, en distanciel.",
       "price": "450 EUR",
-      "priceDetails": "Tarif indicatif par participant.",
-      "successRate": "Taux de reussite 2025 : 95 %",
-      "handicapPolicy": "Supports adaptables sur demande avant la session.",
-      "seoTitle": "Formation vendre le solaire et l'autoconsommation",
-      "seoDescription": "Structurez votre discours commercial sur le photovoltaïque et l'autoconsommation avec une formation courte et concrète.",
-      "objectives": [
-        "Comprendre les attentes client sur l'autoconsommation",
-        "Construire un argumentaire clair",
-        "Traiter les objections frequentes"
-      ]
+      "priceDetails": "Tarif indicatif par participant, session en visioconférence, supports numériques inclus.",
+      "successRate": "Taux de réussite 2025 : 96 %",
+      "handicapPolicy": "Formation accessible après étude des besoins. Les modalités d'accueil, le rythme et les supports peuvent être adaptés en amont avec notre référent handicap.",
+      "seoTitle": "Formation démarches administratives PV 36 kVA en visio",
+      "seoDescription": "Suivez à distance une formation sur les démarches administratives photovoltaïques jusqu'à 36 kVA avec batterie.",
+      "queovalIdentFOR": "Démarches adm pv 36  VISIO"
     },
     {
-      "id": "huawei-certification",
-      "slug": "formation-mise-en-service-certification-huawei",
-      "title": "Mise en service et certification HUAWEI",
+      "id": "maintenance-installations-photovoltaiques",
+      "slug": "maintenance-installations-photovoltaiques",
+      "title": "Maintenance des installations photovoltaïques",
+      "shortTitle": "Maintenance PV",
+      "category": "Photovoltaïque",
+      "duration": "2 jours",
+      "durationDetails": "2 jours, soit 14 heures de formation, pour diagnostiquer, entretenir et dépanner des installations photovoltaïques en exploitation.",
+      "location": "Montpellier",
+      "audience": "Techniciens de maintenance et installateurs photovoltaïques",
+      "summary": "Sécurisez vos interventions de maintenance sur installations photovoltaïques et gagnez en efficacité de diagnostic.",
+      "description": "Cette formation traite les opérations d'entretien préventif et curatif des installations photovoltaïques raccordées au réseau, avec un focus sur le diagnostic de pannes et la sécurité d'intervention.",
+      "benefits": [
+        "Méthode de diagnostic structurée sur installation existante",
+        "Repères sur l'entretien préventif et curatif",
+        "Sécurisation des interventions sur installation sous tension"
+      ],
+      "objectives": [
+        "Diagnostiquer une baisse de production ou une panne",
+        "Réaliser les opérations d'entretien préventif",
+        "Intervenir en sécurité sur une installation existante"
+      ],
+      "prerequisites": [
+        "Avoir des bases en électricité et en installations photovoltaïques.",
+        "Disposer d'une habilitation électrique adaptée à l'intervention.",
+        "Intervenir ou superviser la maintenance de parcs photovoltaïques."
+      ],
+      "modalities": [
+        "Formation en présentiel avec cas de pannes réelles.",
+        "Travail sur les outils de diagnostic et de mesure.",
+        "Évaluation sur la méthode de diagnostic et les gestes de sécurité."
+      ],
+      "programme": [
+        "Identifier les causes courantes de baisse de production.",
+        "Utiliser les outils de mesure et de diagnostic adaptés.",
+        "Réaliser les opérations d'entretien préventif planifiées.",
+        "Traiter les pannes courantes sur onduleurs et chaînes photovoltaïques.",
+        "Documenter l'intervention et le suivi de maintenance."
+      ],
+      "certification": "Attestation de formation en maintenance des installations photovoltaïques raccordées au réseau.",
+      "price": "890 EUR",
+      "priceDetails": "Tarif indicatif par participant, supports et outils de diagnostic présentés inclus.",
+      "successRate": "Taux de réussite 2025 : 95 %",
+      "handicapPolicy": "Formation accessible après étude des besoins. Les modalités d'accueil, le rythme et les supports peuvent être adaptés en amont avec notre référent handicap.",
+      "seoTitle": "Formation maintenance des installations photovoltaïques",
+      "seoDescription": "Diagnostiquez et entretenez des installations photovoltaïques avec une formation dédiée à la maintenance terrain.",
+      "queovalIdentFOR": "Maintenance PV"
+    },
+    {
+      "id": "mise-en-service-certification-bourgeois-global",
+      "slug": "mise-en-service-certification-bourgeois-global",
+      "title": "Mise en service & certification Bourgeois GLOBAL",
+      "shortTitle": "Certification Bourgeois Global",
+      "category": "Photovoltaïque",
+      "duration": "1 jour",
+      "durationDetails": "1 jour, soit 7 heures de formation, pour travailler la mise en service et les paramétrages liés aux équipements Bourgeois Global.",
+      "location": "Montpellier",
+      "audience": "Installateurs photovoltaïques et techniciens mise en service",
+      "summary": "Maîtrisez la mise en service et les réglages essentiels des équipements Bourgeois Global pour fiabiliser vos installations photovoltaïques.",
+      "description": "Le parcours traite les points de configuration, la mise en route, le contrôle et les premiers diagnostics sur les solutions Bourgeois Global liées au photovoltaïque et au stockage.",
+      "benefits": [
+        "Prise en main des interfaces et réglages Bourgeois Global",
+        "Vision claire des étapes de mise en service",
+        "Repères de diagnostic de premier niveau"
+      ],
+      "objectives": [
+        "Configurer les paramètres essentiels de mise en service",
+        "Sécuriser la mise en service d'un système Bourgeois Global",
+        "Diagnostiquer les premiers défauts courants"
+      ],
+      "prerequisites": [
+        "Avoir des bases en pose et raccordement photovoltaïque.",
+        "Intervenir sur la mise en service des installations.",
+        "Pouvoir exploiter des notices et interfaces de configuration."
+      ],
+      "modalities": [
+        "Formation en présentiel avec démonstrations et cas pratiques.",
+        "Travail sur paramètres, contrôles et suivi de mise en service.",
+        "Évaluation sur la capacité à sécuriser la mise en route."
+      ],
+      "programme": [
+        "Identifier les équipements et interfaces Bourgeois Global liés au projet.",
+        "Configurer les paramètres essentiels de mise en service.",
+        "Réaliser les contrôles et vérifications avant remise au client.",
+        "Diagnostiquer les premiers écarts ou défauts courants.",
+        "Documenter une mise en service exploitable pour le suivi."
+      ],
+      "certification": "Attestation de formation à la mise en service et à la certification des équipements Bourgeois Global.",
+      "price": "590 EUR",
+      "priceDetails": "Tarif indicatif par participant.",
+      "successRate": "Taux de réussite 2025 : 94 %",
+      "handicapPolicy": "Formation accessible après étude des besoins. Les modalités d'accueil, le rythme et les supports peuvent être adaptés en amont avec notre référent handicap.",
+      "seoTitle": "Formation mise en service et certification Bourgeois Global",
+      "seoDescription": "Apprenez à mettre en service et paramétrer les équipements Bourgeois Global pour vos installations photovoltaïques.",
+      "queovalIdentFOR": "BG"
+    },
+    {
+      "id": "mise-en-service-certification-huawei",
+      "slug": "mise-en-service-certification-huawei",
+      "title": "Mise en service & certification HUAWEI",
       "shortTitle": "Certification HUAWEI",
       "category": "Photovoltaïque",
       "duration": "1 jour",
       "durationDetails": "1 jour, soit 7 heures de formation, pour travailler la mise en service et les paramétrages liés aux équipements HUAWEI.",
-      "location": "Rouen",
+      "location": "Montpellier",
       "audience": "Installateurs photovoltaïques et techniciens mise en service",
       "summary": "Travaillez la mise en service et les réglages essentiels des équipements HUAWEI pour fiabiliser vos installations photovoltaïques.",
       "description": "Le parcours traite les points de configuration, la mise en route, le contrôle et les premiers diagnostics sur les solutions HUAWEI liées au photovoltaïque.",
@@ -299,15 +401,20 @@
         "Vision claire des étapes de mise en service",
         "Repères de diagnostic de premier niveau"
       ],
+      "objectives": [
+        "Configurer les paramètres essentiels",
+        "Sécuriser la mise en service",
+        "Diagnostiquer les premiers défauts"
+      ],
       "prerequisites": [
         "Avoir des bases en pose et raccordement photovoltaïque.",
         "Intervenir sur la mise en service des installations.",
         "Pouvoir exploiter des notices et interfaces de configuration."
       ],
       "modalities": [
-        "Formation en presentiel avec demonstrations et cas pratiques.",
-        "Travail sur parametres, contrôles et suivi de mise en service.",
-        "Evaluation sur la capacité à sécuriser la mise en route."
+        "Formation en présentiel avec démonstrations et cas pratiques.",
+        "Travail sur paramètres, contrôles et suivi de mise en service.",
+        "Évaluation sur la capacité à sécuriser la mise en route."
       ],
       "programme": [
         "Identifier les équipements et interfaces HUAWEI liés au projet.",
@@ -319,537 +426,1975 @@
       "certification": "Formation pratique de prise en main et de mise en service des équipements HUAWEI appliqués au photovoltaïque.",
       "price": "590 EUR",
       "priceDetails": "Tarif indicatif par participant.",
-      "successRate": "Taux de reussite 2025 : 94 %",
-      "handicapPolicy": "Modalites adaptables apres echange preparatoire.",
+      "successRate": "Taux de réussite 2025 : 94 %",
+      "handicapPolicy": "Formation accessible après étude des besoins. Les modalités d'accueil, le rythme et les supports peuvent être adaptés en amont avec notre référent handicap.",
       "seoTitle": "Formation mise en service et certification HUAWEI",
       "seoDescription": "Apprenez à mettre en service et paramétrer les équipements HUAWEI pour vos installations photovoltaïques.",
-      "objectives": [
-        "Configurer les paramètres essentiels",
-        "Sécuriser la mise en service",
-        "Diagnostiquer les premiers défauts"
-      ]
+      "queovalIdentFOR": "Installateur HUAWEI"
     },
     {
-      "id": "qualipac",
-      "slug": "formation-qualipac",
-      "title": "Formation QualiPAC pompe à chaleur en habitat individuel",
-      "shortTitle": "QualiPAC",
-      "category": "Pompes à chaleur",
-      "duration": "4 jours",
-      "durationDetails": "4 jours, soit 28 heures de formation, pour traiter le dimensionnement, la mise en service, la maintenance et les points de conformite.",
-      "location": "Rouen",
-      "audience": "Installateurs CVC et conducteurs de travaux",
-      "summary": "Structurez vos chantiers PAC avec une lecture claire du dimensionnement, de la mise en service et du suivi.",
-      "description": "Le parcours QualiPAC aborde les pompes a chaleur air/eau et air/air avec un angle tres operationnel, utile pour la preparation chantier comme pour la mise en service.",
-      "benefits": [
-        "Approche reglementaire et terrain",
-        "Cas pratiques de dimensionnement PAC",
-        "Mise au point sur les controles et la maintenance"
-      ],
-      "prerequisites": [
-        "Maitriser les bases des installations thermiques et hydrauliques.",
-        "Etre amene a poser, mettre en service ou suivre des pompes a chaleur.",
-        "Pouvoir lire des schemas et des donnees techniques d'installation."
-      ],
-      "modalities": [
-        "Formation en groupe avec demonstrations, cas d'usage et analyse d'installations.",
-        "Travail sur des exemples de dimensionnement et de mise en service.",
-        "Evaluation continue sur la lecture technique et les choix de configuration."
-      ],
-      "programme": [
-        "Identifier le besoin thermique du batiment et les contraintes d'installation.",
-        "Choisir la technologie PAC adaptee et verifier le dimensionnement.",
-        "Preparer la pose, les raccordements et les points de vigilance chantier.",
-        "Organiser la mise en service, les reglages et les controles de fonctionnement.",
-        "Structurer la maintenance et le diagnostic des ecarts constates."
-      ],
-      "certification": "Formation utile a la preparation des interventions et du suivi QualiPAC pour les installateurs et responsables d'execution.",
-      "price": "1490 EUR",
-      "priceDetails": "Tarif indicatif par participant, incluant les supports de formation. Une formule intra-entreprise peut etre preparee sur demande.",
-      "successRate": "Taux de reussite 2025 : 95 %",
-      "handicapPolicy": "Chaque demande fait l'objet d'un echange preparatoire pour adapter l'accueil, les supports et l'organisation de la session si necessaire.",
-      "seoTitle": "Formation QualiPAC pour installateurs PAC",
-      "seoDescription": "Formez vos equipes a la pose et a la mise en service de pompes a chaleur avec un parcours QualiPAC structure et applicatif.",
-      "objectives": [
-        "Analyser le besoin thermique du batiment",
-        "Dimensionner une pompe a chaleur adaptee",
-        "Securiser la mise en service et la maintenance"
-      ]
-    },
-    {
-      "id": "pac-yutaki",
-      "slug": "formation-introduction-pac-yutaki",
-      "title": "Introduction PAC air / eau YUTAKI",
-      "shortTitle": "PAC YUTAKI",
-      "category": "Pompes à chaleur",
+      "id": "mise-en-service-batterie-aura-bourgeois-global",
+      "slug": "mise-en-service-batterie-aura-bourgeois-global",
+      "title": "Mise en service de la batterie AURA de Bourgeois Global",
+      "shortTitle": "Batterie AURA",
+      "category": "Photovoltaïque",
       "duration": "1 jour",
-      "durationDetails": "1 jour, soit 7 heures de formation, pour découvrir l'environnement PAC air / eau YUTAKI, ses usages et ses premiers réglages.",
-      "location": "Rouen",
-      "audience": "Installateurs PAC et techniciens mise en service",
-      "summary": "Découvrez l'écosystème PAC air / eau YUTAKI et sécurisez vos premières interventions de pose et de paramétrage.",
-      "description": "Cette journée introductive permet d'identifier les composants, l'architecture, les réglages principaux et les points de vigilance des solutions YUTAKI.",
+      "durationDetails": "1 jour, soit 7 heures de formation, dédiée à la mise en service de la batterie de stockage AURA.",
+      "location": "Montpellier",
+      "audience": "Installateurs photovoltaïques et techniciens mise en service",
+      "summary": "Apprenez à installer, raccorder et mettre en service la batterie de stockage AURA de Bourgeois Global en toute sécurité.",
+      "description": "Cette formation courte traite le raccordement, le paramétrage et les contrôles de mise en service de la batterie AURA, destinée au stockage d'énergie photovoltaïque en habitat individuel.",
       "benefits": [
-        "Prise en main rapide de la gamme YUTAKI",
-        "Vision claire des réglages essentiels",
-        "Repères pour les premières mises en service"
+        "Prise en main rapide de la batterie AURA",
+        "Sécurisation du raccordement électrique du stockage",
+        "Repères de diagnostic après mise en service"
+      ],
+      "objectives": [
+        "Raccorder la batterie AURA en sécurité",
+        "Paramétrer la mise en service du stockage",
+        "Vérifier le bon fonctionnement après installation"
       ],
       "prerequisites": [
-        "Connaitre les bases d'une installation PAC.",
-        "Intervenir sur des chantiers de pose ou de maintenance.",
-        "Pouvoir lire une documentation constructeur."
+        "Avoir des bases en électricité et en installations photovoltaïques.",
+        "Disposer d'une habilitation électrique adaptée à l'intervention.",
+        "Intervenir sur la pose ou la mise en service de systèmes de stockage."
       ],
       "modalities": [
-        "Formation en presentiel sur cas concrets et documentation constructeur.",
-        "Présentation des interfaces, composants et réglages.",
-        "Evaluation sur la lecture des points clés de mise en route."
+        "Formation en présentiel avec démonstration sur équipement réel.",
+        "Travail sur le raccordement, le paramétrage et les contrôles.",
+        "Évaluation sur la capacité à sécuriser la mise en service."
       ],
       "programme": [
-        "Identifier les composants et l'architecture d'une solution YUTAKI.",
-        "Comprendre les logiques de fonctionnement air / eau.",
-        "Repérer les réglages essentiels de mise en route.",
-        "Vérifier les contrôles de base sur l'installation.",
-        "Documenter l'intervention et les paramètres utiles."
+        "Identifier l'architecture et les composants de la batterie AURA.",
+        "Réaliser le raccordement électrique en sécurité.",
+        "Paramétrer les réglages de mise en service.",
+        "Contrôler le fonctionnement et la communication avec l'onduleur.",
+        "Documenter l'intervention pour le suivi client."
       ],
-      "certification": "Formation introductive de prise en main de la gamme PAC air / eau YUTAKI.",
+      "certification": "Attestation de formation à la mise en service de la batterie AURA de Bourgeois Global.",
       "price": "490 EUR",
       "priceDetails": "Tarif indicatif par participant.",
-      "successRate": "Taux de reussite 2025 : 94 %",
-      "handicapPolicy": "Supports et modalites adaptables apres echange preparatoire.",
-      "seoTitle": "Formation introduction PAC air / eau YUTAKI",
-      "seoDescription": "Découvrez les bases des solutions PAC air / eau YUTAKI avec une journée de prise en main et de réglages essentiels.",
-      "objectives": [
-        "Identifier les composants d'une YUTAKI",
-        "Comprendre les réglages de base",
-        "Sécuriser une première mise en route"
-      ]
+      "successRate": "Taux de réussite 2025 : 95 %",
+      "handicapPolicy": "Formation accessible après étude des besoins. Les modalités d'accueil, le rythme et les supports peuvent être adaptés en amont avec notre référent handicap.",
+      "seoTitle": "Formation mise en service batterie AURA Bourgeois Global",
+      "seoDescription": "Apprenez à raccorder et mettre en service la batterie de stockage AURA de Bourgeois Global.",
+      "queovalIdentFOR": "Batterie AURA"
     },
     {
-      "id": "irve",
-      "slug": "formation-irve",
-      "title": "Infrastructure de recharges pour véhicules électriques",
-      "shortTitle": "IRVE",
-      "category": "Bornes de recharge",
-      "duration": "2 jours",
-      "durationDetails": "2 jours, soit 14 heures de formation, avec progression rapide sur la conception, la pose et la verification d'une infrastructure de recharge.",
-      "location": "Rouen et intra-entreprise",
-      "audience": "Electriciens et chargés d'affaires mobilité",
-      "summary": "Concevez et posez des infrastructures de recharge securisees et conformes au cadre technique attendu.",
-      "description": "Cette formation IRVE est pensee pour les equipes qui doivent choisir l'architecture de recharge, preparer les protections, poser les equipements et verifier la mise en service.",
-      "benefits": [
-        "Preparation a la mention IRVE",
-        "Etudes de cas habitat collectif et tertiaire",
-        "Focalisation securite electrique et exploitation"
-      ],
-      "prerequisites": [
-        "Avoir une experience sur les installations electriques basse tension.",
-        "Savoir lire un schema electrique et preparer une intervention technique.",
-        "Intervenir ou superviser des projets lies a la mobilite electrique."
-      ],
-      "modalities": [
-        "Formation courte en presentiel ou en intra selon le besoin de l'entreprise.",
-        "Cas d'usage concrets sur les architectures de recharge et leurs contraintes.",
-        "Evaluation sur la capacite a choisir, proteger et controler une installation."
-      ],
-      "programme": [
-        "Identifier les differents cas d'usage et les niveaux de puissance en IRVE.",
-        "Concevoir une installation adaptee a l'habitat, au tertiaire ou au collectif.",
-        "Verifier les protections, les sections et les exigences de securite.",
-        "Organiser la pose, la mise en service et le controle final.",
-        "Documenter l'installation pour un suivi conforme et exploitable."
-      ],
-      "certification": "Parcours de montee en competence utile a la preparation des interventions IRVE et a la structuration des dossiers techniques associes.",
-      "price": "990 EUR",
-      "priceDetails": "Tarif indicatif par participant. Une organisation intra-entreprise peut etre prevue pour une equipe deja mobilisee sur des projets IRVE.",
-      "successRate": "Taux de reussite 2025 : 96 %",
-      "handicapPolicy": "Un point preparatoire est realise avant la session afin d'etudier les besoins d'adaptation des supports, du rythme et des modalites d'accueil.",
-      "seoTitle": "Formation IRVE pour installateurs de bornes de recharge",
-      "seoDescription": "Preparez vos equipes a concevoir et mettre en service des infrastructures de recharge avec un parcours IRVE concret et structure.",
-      "objectives": [
-        "Identifier les architectures de recharge adaptees",
-        "Concevoir une installation conforme",
-        "Superviser la mise en service et le controle"
-      ]
-    },
-    {
-      "id": "travail-hauteur",
-      "slug": "formation-travail-en-hauteur",
-      "title": "Prévention des risques liés au travail en hauteur",
-      "shortTitle": "Travail en hauteur",
-      "category": "Sécurité au travail",
+      "id": "pose-systemes-fixations-pv-surimposition",
+      "slug": "pose-systemes-fixations-pv-surimposition",
+      "title": "A la pose de systèmes de fixations PV en surimposition",
+      "shortTitle": "Pose fixations PV",
+      "category": "Photovoltaïque",
       "duration": "1 jour",
-      "durationDetails": "1 jour, soit 7 heures de formation, pour prévenir les risques liés aux interventions en hauteur sur chantier.",
-      "location": "Rouen et intra-entreprise",
-      "audience": "Techniciens, installateurs et encadrants chantier",
-      "summary": "Renforcez vos pratiques de sécurité pour les interventions en hauteur et les situations de chantier à risque.",
-      "description": "La formation permet d'identifier les situations dangereuses, d'utiliser les bons équipements et d'organiser des interventions sécurisées en hauteur.",
+      "durationDetails": "1 jour, soit 7 heures de formation, centrée sur la pose de systèmes de fixation photovoltaïque en surimposition de toiture.",
+      "location": "Montpellier",
+      "audience": "Couvreurs, installateurs et poseurs photovoltaïques",
+      "summary": "Maîtrisez la pose de systèmes de fixation photovoltaïque en surimposition, du choix du rail à la fixation finale des modules.",
+      "description": "Cette formation pratique traite le choix et la pose des systèmes de fixation en surimposition sur les principaux types de toitures, avec un focus sur la sécurité et l'étanchéité des points de fixation.",
       "benefits": [
-        "Lecture claire des situations a risque",
-        "Bon usage des equipements et ancrages",
-        "Organisation plus sure des interventions"
+        "Méthode de pose fiable en surimposition",
+        "Repères sur le choix du système de fixation",
+        "Vigilance renforcée sur l'étanchéité des points d'ancrage"
+      ],
+      "objectives": [
+        "Choisir un système de fixation en surimposition adapté",
+        "Poser rails et modules en sécurité",
+        "Contrôler l'étanchéité des points de fixation"
       ],
       "prerequisites": [
-        "Intervenir sur chantier ou superviser des interventions en hauteur.",
-        "Pouvoir suivre des consignes de securite en environnement chantier.",
-        "Avoir une experience terrain de base."
+        "Disposer de bases en couverture ou en pose photovoltaïque.",
+        "Connaître les règles élémentaires de sécurité sur chantier.",
+        "Pouvoir travailler en hauteur sur toiture."
       ],
       "modalities": [
-        "Formation en presentiel avec demonstrations et cas pratiques.",
-        "Travail sur l'evaluation du risque et le choix des equipements.",
-        "Evaluation sur les bons reflexes et les mesures de prevention."
+        "Formation en présentiel avec démonstration sur maquette de toiture.",
+        "Mise en situation de pose sur différents supports.",
+        "Évaluation sur la conformité de la pose réalisée."
       ],
       "programme": [
-        "Identifier les risques courants lies au travail en hauteur.",
-        "Choisir les moyens de protection adaptes.",
-        "Utiliser les equipements et verifier leur conformite.",
-        "Organiser une intervention securisee sur chantier.",
-        "Reagir correctement face a une situation critique."
+        "Identifier les types de toitures et systèmes de fixation associés.",
+        "Choisir le rail et les fixations adaptés au support.",
+        "Poser les systèmes de fixation en respectant l'étanchéité.",
+        "Fixer les modules photovoltaïques en sécurité.",
+        "Contrôler la pose avant raccordement électrique."
       ],
-      "certification": "Formation pratique de prevention des risques et de securisation des interventions en hauteur.",
+      "certification": "Attestation de formation à la pose de systèmes de fixation photovoltaïque en surimposition.",
       "price": "390 EUR",
       "priceDetails": "Tarif indicatif par participant.",
-      "successRate": "Taux de reussite 2025 : 98 %",
-      "handicapPolicy": "Etude prealable des besoins pour adapter l'accueil et les modalites.",
-      "seoTitle": "Formation prévention des risques liés au travail en hauteur",
-      "seoDescription": "Prévenez les risques liés au travail en hauteur avec une formation pratique dédiée aux interventions chantier.",
-      "objectives": [
-        "Identifier les situations a risque",
-        "Choisir les moyens de protection adaptes",
-        "Organiser une intervention securisee"
-      ]
+      "successRate": "Taux de réussite 2025 : 96 %",
+      "handicapPolicy": "Formation accessible après étude des besoins. Les modalités d'accueil, le rythme et les supports peuvent être adaptés en amont avec notre référent handicap.",
+      "seoTitle": "Formation pose de fixations photovoltaïques en surimposition",
+      "seoDescription": "Apprenez à poser des systèmes de fixation photovoltaïque en surimposition en toute sécurité.",
+      "queovalIdentFOR": "pose pv"
     },
     {
-      "id": "habilitation-electrique",
-      "slug": "formation-habilitation-electrique",
-      "title": "Habilitation électrique",
-      "shortTitle": "Habilitation électrique",
-      "category": "Sécurité au travail",
-      "duration": "2 jours",
-      "durationDetails": "2 jours, soit 14 heures de formation, pour sécuriser les interventions sur ou au voisinage d'installations électriques.",
-      "location": "Rouen",
-      "audience": "Techniciens, electriciens et personnels intervenants",
-      "summary": "Préparez vos équipes à intervenir en sécurité sur des installations électriques et à maîtriser les réflexes essentiels.",
-      "description": "La formation traite les risques électriques, les zones d'intervention, les habilitations et les procédures de prévention avant toute opération.",
-      "benefits": [
-        "Maitrise des fondamentaux de securite electrique",
-        "Lecture claire des roles et habilitations",
-        "Reflexes adaptes avant intervention"
-      ],
-      "prerequisites": [
-        "Intervenir ou etre amene a travailler au voisinage du risque electrique.",
-        "Pouvoir suivre des consignes de securite strictes.",
-        "Disposer d'une experience terrain ou technique de base."
-      ],
-      "modalities": [
-        "Formation avec apports theoriques et mises en situation.",
-        "Travail sur les procedures et equipements de prevention.",
-        "Evaluation sur les bons gestes et les procedures avant intervention."
-      ],
-      "programme": [
-        "Identifier les risques électriques et leurs consequences.",
-        "Comprendre les niveaux d'habilitation et leurs limites.",
-        "Préparer une intervention en respectant les procédures.",
-        "Utiliser les équipements et moyens de protection adaptés.",
-        "Réagir de manière appropriée en cas d'anomalie ou d'accident."
-      ],
-      "certification": "Formation préparatoire ou de recyclage à l'habilitation électrique selon le niveau visé.",
-      "price": "590 EUR",
-      "priceDetails": "Tarif indicatif par participant.",
-      "successRate": "Taux de reussite 2025 : 97 %",
-      "handicapPolicy": "Accueil et supports adaptables apres echange prealable.",
-      "seoTitle": "Formation habilitation électrique",
-      "seoDescription": "Préparez vos équipes à l'habilitation électrique avec une formation dédiée à la sécurité et aux procédures d'intervention.",
-      "objectives": [
-        "Identifier les risques électriques",
-        "Appliquer les procédures de prevention",
-        "Intervenir en securite sur le terrain"
-      ]
-    },
-    {
-      "id": "clim-intro",
-      "slug": "formation-introduction-climatisation",
-      "title": "Introduction - La climatisation",
-      "shortTitle": "Introduction clim",
-      "category": "Traitement d'air",
+      "id": "raccordement-electrique-pv-residentiel",
+      "slug": "raccordement-electrique-pv-residentiel",
+      "title": "Savoir raccorder électriquement une installation photovoltaique pour du résidentiel",
+      "shortTitle": "Raccordement élec PV",
+      "category": "Photovoltaïque",
       "duration": "1 jour",
-      "durationDetails": "1 jour, soit 7 heures de formation, pour comprendre les fondamentaux de la climatisation, ses composants et ses usages.",
-      "location": "Rouen",
-      "audience": "Techniciens débutants, commerciaux techniques et personnels de maintenance",
-      "summary": "Découvrez les fondamentaux des systèmes de climatisation et les principaux points de vigilance liés à leur pose et à leur exploitation.",
-      "description": "La formation propose une lecture claire des familles de climatisation, de leurs composants, de leurs usages et des premières vérifications à connaître.",
+      "durationDetails": "1 jour, soit 7 heures de formation, dédiée au raccordement électrique d'une installation photovoltaïque résidentielle.",
+      "location": "Montpellier",
+      "audience": "Électriciens et installateurs photovoltaïques en résidentiel",
+      "summary": "Sécurisez le raccordement électrique d'une installation photovoltaïque résidentielle, du tableau à l'onduleur.",
+      "description": "Cette formation pratique traite le câblage, les protections, le raccordement au réseau et les contrôles à réaliser sur une installation photovoltaïque résidentielle raccordée au réseau.",
       "benefits": [
-        "Vision globale des systemes de climatisation",
-        "Compréhension des composants et usages",
-        "Premiers repères avant pose ou maintenance"
+        "Méthode de raccordement fiable et conforme",
+        "Repères sur les protections électriques adaptées",
+        "Contrôles de conformité avant mise en service"
+      ],
+      "objectives": [
+        "Réaliser un raccordement électrique conforme",
+        "Choisir les protections adaptées à l'installation",
+        "Contrôler la conformité avant mise en service"
       ],
       "prerequisites": [
-        "Avoir un intérêt pour les systemes CVC ou frigorifiques.",
-        "Pouvoir suivre une formation technique introductive.",
-        "Aucune expertise avancee n'est requise."
+        "Disposer de connaissances en électricité basse tension.",
+        "Présenter une habilitation électrique adaptée à l'intervention.",
+        "Avoir des bases en installations photovoltaïques résidentielles."
       ],
       "modalities": [
-        "Formation en presentiel avec demonstrations et exemples concrets.",
-        "Travail sur les differents types de systemes et leurs usages.",
-        "Evaluation sur la lecture et la compréhension des bases."
+        "Formation en présentiel avec exercices de câblage sur maquette.",
+        "Étude de cas d'installations résidentielles types.",
+        "Évaluation sur la conformité du raccordement réalisé."
       ],
       "programme": [
-        "Identifier les grandes familles de systemes de climatisation.",
-        "Comprendre le role des principaux composants.",
-        "Repérer les usages et contraintes d'installation.",
-        "Lire les premiers points de contrôle en exploitation.",
-        "Structurer une base de compréhension avant approfondissement."
+        "Identifier les composants électriques d'une installation résidentielle.",
+        "Câbler le tableau, les protections et l'onduleur.",
+        "Raccorder l'installation au réseau selon les règles en vigueur.",
+        "Réaliser les contrôles de conformité avant mise en service.",
+        "Documenter le raccordement pour le suivi client."
       ],
-      "certification": "Formation introductive de decouverte des systemes de climatisation.",
+      "certification": "Attestation de formation au raccordement électrique d'installations photovoltaïques résidentielles.",
       "price": "390 EUR",
       "priceDetails": "Tarif indicatif par participant.",
-      "successRate": "Taux de reussite 2025 : 95 %",
-      "handicapPolicy": "Modalites adaptables apres echange preparatoire.",
-      "seoTitle": "Formation introduction à la climatisation",
-      "seoDescription": "Découvrez les bases de la climatisation avec une journée d'introduction dédiée aux composants, usages et points de vigilance.",
-      "objectives": [
-        "Identifier les systemes de climatisation",
-        "Comprendre les composants principaux",
-        "Lire les points de vigilance de base"
-      ]
+      "successRate": "Taux de réussite 2025 : 96 %",
+      "handicapPolicy": "Formation accessible après étude des besoins. Les modalités d'accueil, le rythme et les supports peuvent être adaptés en amont avec notre référent handicap.",
+      "seoTitle": "Formation raccordement électrique photovoltaïque résidentiel",
+      "seoDescription": "Apprenez à raccorder électriquement une installation photovoltaïque résidentielle en toute conformité.",
+      "queovalIdentFOR": "Raccordement elec PV"
     },
     {
-      "id": "fluides-frigorigenes",
-      "slug": "formation-fluides-frigorigenes",
-      "title": "Attestation Manipulation fluides frigorigènes",
-      "shortTitle": "Fluides frigorigènes",
+      "id": "tereva-solaire-pv-autoconsommation-niveau-2",
+      "slug": "tereva-solaire-pv-autoconsommation-niveau-2",
+      "title": "TEREVA : solaire photovoltaïque Autoconsommation niveau 2",
+      "shortTitle": "TEREVA PV niveau 2",
+      "category": "Photovoltaïque",
+      "duration": "2 jours",
+      "durationDetails": "2 jours, soit 14 heures de formation, niveau 2 du parcours TEREVA sur le solaire photovoltaïque en autoconsommation.",
+      "location": "Montpellier",
+      "audience": "Installateurs photovoltaïques ayant suivi le niveau 1 ou disposant d'une première expérience",
+      "summary": "Approfondissez vos compétences en autoconsommation photovoltaïque avec le niveau 2 du parcours TEREVA.",
+      "description": "Ce niveau intermédiaire du parcours TEREVA approfondit le dimensionnement, le pilotage de l'autoconsommation et les points de contrôle spécifiques aux installations photovoltaïques en autoconsommation.",
+      "benefits": [
+        "Approfondissement du dimensionnement en autoconsommation",
+        "Repères sur le pilotage énergétique des installations",
+        "Progression cohérente dans le parcours TEREVA"
+      ],
+      "objectives": [
+        "Dimensionner une installation en autoconsommation de niveau intermédiaire",
+        "Piloter les flux d'énergie produite et consommée",
+        "Contrôler la performance de l'installation"
+      ],
+      "prerequisites": [
+        "Avoir suivi le niveau 1 TEREVA ou disposer d'une expérience équivalente.",
+        "Maîtriser les bases du photovoltaïque en autoconsommation.",
+        "Pouvoir analyser des données de production et de consommation."
+      ],
+      "modalities": [
+        "Formation en présentiel avec études de cas d'autoconsommation.",
+        "Travail sur des outils de simulation et de suivi énergétique.",
+        "Évaluation sur le dimensionnement et le pilotage proposés."
+      ],
+      "programme": [
+        "Approfondir les logiques d'autoconsommation photovoltaïque.",
+        "Dimensionner une installation selon le profil de consommation.",
+        "Utiliser les outils de pilotage et de suivi de production.",
+        "Analyser les écarts entre production et consommation.",
+        "Optimiser le taux d'autoconsommation du projet."
+      ],
+      "certification": "Formation de niveau 2 du parcours TEREVA sur le solaire photovoltaïque en autoconsommation.",
+      "price": "790 EUR",
+      "priceDetails": "Tarif indicatif par participant, supports inclus.",
+      "successRate": "Taux de réussite 2025 : 94 %",
+      "handicapPolicy": "Formation accessible après étude des besoins. Les modalités d'accueil, le rythme et les supports peuvent être adaptés en amont avec notre référent handicap.",
+      "seoTitle": "Formation TEREVA solaire PV autoconsommation niveau 2",
+      "seoDescription": "Approfondissez le dimensionnement et le pilotage de l'autoconsommation photovoltaïque avec TEREVA niveau 2.",
+      "queovalIdentFOR": "TEREVA PV niveau 2"
+    },
+    {
+      "id": "tereva-solaire-pv-autoconsommation-niveau-3",
+      "slug": "tereva-solaire-pv-autoconsommation-niveau-3",
+      "title": "TEREVA : Solaire photovoltaïque autoconsommation niveau 3",
+      "shortTitle": "TEREVA PV niveau 3",
+      "category": "Photovoltaïque",
+      "duration": "2 jours",
+      "durationDetails": "2 jours, soit 14 heures de formation, niveau 3 du parcours TEREVA orienté commercialisation du solaire en autoconsommation.",
+      "location": "Montpellier",
+      "audience": "Commerciaux et chargés d'affaires ayant suivi les niveaux 1 et 2 TEREVA",
+      "summary": "Finalisez votre parcours TEREVA avec le niveau 3, centré sur la commercialisation d'offres solaires en autoconsommation.",
+      "description": "Ce niveau avancé du parcours TEREVA se concentre sur l'argumentaire commercial, le chiffrage et la présentation d'une offre solaire en autoconsommation adaptée au client.",
+      "benefits": [
+        "Argumentaire commercial affiné sur l'autoconsommation",
+        "Méthode de chiffrage d'une offre solaire",
+        "Progression complète du parcours TEREVA"
+      ],
+      "objectives": [
+        "Construire une offre commerciale solaire chiffrée",
+        "Présenter les bénéfices de l'autoconsommation au client",
+        "Conclure une vente sur des bases techniques solides"
+      ],
+      "prerequisites": [
+        "Avoir suivi les niveaux 1 et 2 TEREVA ou une formation équivalente.",
+        "Intervenir dans la vente d'offres photovoltaïques.",
+        "Maîtriser les bases techniques de l'autoconsommation."
+      ],
+      "modalities": [
+        "Formation en présentiel avec simulations commerciales.",
+        "Travail sur le chiffrage et la présentation d'offres.",
+        "Évaluation sur la structuration d'une proposition commerciale."
+      ],
+      "programme": [
+        "Consolider l'argumentaire commercial sur l'autoconsommation.",
+        "Chiffrer une offre solaire adaptée au profil client.",
+        "Présenter les bénéfices techniques et financiers du projet.",
+        "Traiter les objections commerciales courantes.",
+        "Conclure et sécuriser la vente d'une offre solaire."
+      ],
+      "certification": "Formation de niveau 3 du parcours TEREVA sur la commercialisation du solaire photovoltaïque en autoconsommation.",
+      "price": "790 EUR",
+      "priceDetails": "Tarif indicatif par participant, supports inclus.",
+      "successRate": "Taux de réussite 2025 : 94 %",
+      "handicapPolicy": "Formation accessible après étude des besoins. Les modalités d'accueil, le rythme et les supports peuvent être adaptés en amont avec notre référent handicap.",
+      "seoTitle": "Formation TEREVA solaire PV autoconsommation niveau 3",
+      "seoDescription": "Renforcez vos compétences commerciales sur le solaire en autoconsommation avec TEREVA niveau 3.",
+      "queovalIdentFOR": "Tereva commerce PV niveau 3"
+    },
+    {
+      "id": "vendre-solaire-autoconsommation-1-jour",
+      "slug": "vendre-solaire-autoconsommation-1-jour",
+      "title": "Vendre le solaire photovoltaïque et l'autoconsommation Dans le résidentiel et le petit tertiaire",
+      "shortTitle": "Vendre le solaire (1 j)",
+      "category": "Photovoltaïque",
+      "duration": "1 jour",
+      "durationDetails": "1 jour, soit 7 heures de formation, pour structurer un discours commercial clair sur le photovoltaïque et l'autoconsommation en résidentiel et petit tertiaire.",
+      "location": "Montpellier et distanciel tutoré",
+      "audience": "Chargés d'affaires, commerciaux et responsables développement",
+      "summary": "Présentez le solaire photovoltaïque et l'autoconsommation en résidentiel et petit tertiaire avec un discours clair et crédible.",
+      "description": "Cette formation d'une journée aide les équipes commerciales à expliquer les usages, le retour sur investissement, les points de vigilance et les attentes clients autour de l'autoconsommation en résidentiel et petit tertiaire.",
+      "benefits": [
+        "Argumentaire commercial plus clair",
+        "Meilleure lecture des usages clients résidentiels",
+        "Réponses structurées aux objections courantes"
+      ],
+      "objectives": [
+        "Comprendre les attentes client sur l'autoconsommation",
+        "Construire un argumentaire clair",
+        "Traiter les objections fréquentes"
+      ],
+      "prerequisites": [
+        "Intervenir dans la vente ou la préparation d'offres photovoltaïques.",
+        "Connaître les bases d'un projet solaire.",
+        "Pouvoir dialoguer avec des clients particuliers ou professionnels."
+      ],
+      "modalities": [
+        "Formation courte basée sur des cas commerciaux concrets.",
+        "Travail sur les besoins clients et les objections fréquentes.",
+        "Évaluation sur la structuration d'une proposition claire."
+      ],
+      "programme": [
+        "Identifier les attentes et freins des clients résidentiels et petit tertiaire.",
+        "Expliquer l'autoconsommation et ses cas d'usage.",
+        "Structurer un argumentaire simple, crédible et conforme.",
+        "Traiter les objections sur coût, rendement et maintenance.",
+        "Conclure une proposition adaptée au contexte du client."
+      ],
+      "certification": "Formation de montée en compétence commerciale sur la vente du solaire et de l'autoconsommation en résidentiel et petit tertiaire.",
+      "price": "450 EUR",
+      "priceDetails": "Tarif indicatif par participant.",
+      "successRate": "Taux de réussite 2025 : 95 %",
+      "handicapPolicy": "Formation accessible après étude des besoins. Les modalités d'accueil, le rythme et les supports peuvent être adaptés en amont avec notre référent handicap.",
+      "seoTitle": "Formation vendre le solaire résidentiel en 1 jour",
+      "seoDescription": "Structurez votre discours commercial sur le photovoltaïque et l'autoconsommation en résidentiel et petit tertiaire.",
+      "queovalIdentFOR": "Vente PV 1 jour"
+    },
+    {
+      "id": "vendre-solaire-autoconsommation-2-jours",
+      "slug": "vendre-solaire-autoconsommation-2-jours",
+      "title": "Vendre le solaire photovoltaïque et l'autoconsommation Dans le résidentiel et le petit tertiaire (2 jours)",
+      "shortTitle": "Vendre le solaire (2 j)",
+      "category": "Photovoltaïque",
+      "duration": "2 jours",
+      "durationDetails": "2 jours, soit 14 heures de formation, version approfondie pour structurer un discours commercial complet sur le photovoltaïque et l'autoconsommation.",
+      "location": "Montpellier et distanciel tutoré",
+      "audience": "Chargés d'affaires, commerciaux et responsables développement",
+      "summary": "Approfondissez en deux jours votre discours commercial sur le solaire photovoltaïque et l'autoconsommation en résidentiel et petit tertiaire.",
+      "description": "Version approfondie de la formation commerciale sur l'autoconsommation, avec davantage de mises en situation et de traitement d'objections pour les équipes commerciales en résidentiel et petit tertiaire.",
+      "benefits": [
+        "Argumentaire commercial approfondi et mis en pratique",
+        "Davantage de mises en situation client",
+        "Traitement complet des objections courantes"
+      ],
+      "objectives": [
+        "Comprendre en profondeur les attentes client sur l'autoconsommation",
+        "Construire et éprouver un argumentaire complet",
+        "Traiter l'ensemble des objections fréquentes"
+      ],
+      "prerequisites": [
+        "Intervenir dans la vente ou la préparation d'offres photovoltaïques.",
+        "Connaître les bases d'un projet solaire.",
+        "Pouvoir dialoguer avec des clients particuliers ou professionnels."
+      ],
+      "modalities": [
+        "Formation sur deux jours avec cas commerciaux et jeux de rôle.",
+        "Travail approfondi sur les besoins clients et les objections.",
+        "Évaluation sur la structuration et la présentation d'une offre."
+      ],
+      "programme": [
+        "Identifier les attentes et freins des clients résidentiels et petit tertiaire.",
+        "Expliquer en détail l'autoconsommation et ses cas d'usage.",
+        "Structurer un argumentaire complet, crédible et conforme.",
+        "S'entraîner au traitement des objections en jeux de rôle.",
+        "Conclure et sécuriser une proposition adaptée au client."
+      ],
+      "certification": "Formation de montée en compétence commerciale approfondie sur la vente du solaire et de l'autoconsommation.",
+      "price": "790 EUR",
+      "priceDetails": "Tarif indicatif par participant, format sur deux jours.",
+      "successRate": "Taux de réussite 2025 : 95 %",
+      "handicapPolicy": "Formation accessible après étude des besoins. Les modalités d'accueil, le rythme et les supports peuvent être adaptés en amont avec notre référent handicap.",
+      "seoTitle": "Formation vendre le solaire résidentiel en 2 jours",
+      "seoDescription": "Approfondissez en deux jours votre discours commercial sur le solaire photovoltaïque et l'autoconsommation.",
+      "queovalIdentFOR": "Vendre PV"
+    },
+    {
+      "id": "attestation-aptitude-fluides-frigorigenes-categorie-1",
+      "slug": "attestation-aptitude-fluides-frigorigenes-categorie-1",
+      "title": "Attestation d'aptitude à la manipulation des fluides frigorigènes catégorie 1",
+      "shortTitle": "Attestation fluides frigo",
       "category": "Traitement d'air",
       "duration": "3 jours",
-      "durationDetails": "3 jours, soit 21 heures de formation, pour aborder les bonnes pratiques liées à la manipulation des fluides frigorigènes.",
-      "location": "Rouen",
+      "durationDetails": "3 jours, soit 21 heures de formation, pour aborder les bonnes pratiques liées à la manipulation des fluides frigorigènes de catégorie 1.",
+      "location": "Montpellier",
       "audience": "Frigoristes, techniciens CVC et installateurs maintenance",
-      "summary": "Renforcez vos pratiques de manipulation des fluides frigorigènes avec une approche sécurité, réglementation et gestes techniques.",
-      "description": "Le parcours revient sur les fondamentaux réglementaires, les gestes de manipulation, les contrôles et les procédures liées aux fluides frigorigènes sur le terrain.",
+      "summary": "Obtenez l'attestation d'aptitude catégorie 1 pour manipuler les fluides frigorigènes en sécurité et en conformité.",
+      "description": "Le parcours revient sur les fondamentaux réglementaires, les gestes de manipulation, les contrôles et les procédures liées aux fluides frigorigènes de catégorie 1 sur le terrain.",
       "benefits": [
         "Lecture claire des obligations réglementaires",
         "Gestes techniques mieux maîtrisés",
         "Prévention renforcée des risques et incidents"
       ],
+      "objectives": [
+        "Comprendre les obligations réglementaires liées à la catégorie 1",
+        "Appliquer les bons gestes de manipulation",
+        "Sécuriser l'intervention et le suivi"
+      ],
       "prerequisites": [
-        "Intervenir sur des systemes frigorifiques ou CVC.",
-        "Connaitre les bases d'une installation thermique ou frigorifique.",
-        "Pouvoir suivre une formation technique appliquee."
+        "Intervenir sur des systèmes frigorifiques ou CVC.",
+        "Connaître les bases d'une installation thermique ou frigorifique.",
+        "Pouvoir suivre une formation technique appliquée."
       ],
       "modalities": [
         "Formation avec apports techniques et mises en situation.",
-        "Travail sur les procedures de manipulation et de controle.",
-        "Evaluation sur les bons gestes et la lecture des situations terrain."
+        "Travail sur les procédures de manipulation et de contrôle.",
+        "Évaluation sur les bons gestes et la lecture des situations terrain."
       ],
       "programme": [
-        "Identifier les obligations et règles liées aux fluides frigorigènes.",
+        "Identifier les obligations et règles liées aux fluides frigorigènes catégorie 1.",
         "Préparer une intervention en sécurité.",
         "Appliquer les bons gestes de manipulation et de contrôle.",
         "Prévenir les défauts, fuites et erreurs d'exploitation.",
         "Documenter correctement l'intervention réalisée."
       ],
-      "certification": "Formation de préparation et de renforcement des pratiques liées à la manipulation des fluides frigorigènes.",
+      "certification": "Attestation d'aptitude à la manipulation des fluides frigorigènes catégorie 1.",
       "price": "1190 EUR",
       "priceDetails": "Tarif indicatif par participant, supports inclus.",
-      "successRate": "Taux de reussite 2025 : 93 %",
-      "handicapPolicy": "Adaptation possible des supports et du rythme apres echange preparatoire.",
-      "seoTitle": "Formation manipulation des fluides frigorigènes",
-      "seoDescription": "Travaillez les bonnes pratiques liées à la manipulation des fluides frigorigènes avec une formation orientée sécurité et terrain.",
-      "objectives": [
-        "Comprendre les obligations réglementaires",
-        "Appliquer les bons gestes de manipulation",
-        "Sécuriser l'intervention et le suivi"
-      ]
+      "successRate": "Taux de réussite 2025 : 93 %",
+      "handicapPolicy": "Formation accessible après étude des besoins. Les modalités d'accueil, le rythme et les supports peuvent être adaptés en amont avec notre référent handicap.",
+      "seoTitle": "Formation attestation fluides frigorigènes catégorie 1",
+      "seoDescription": "Obtenez l'attestation d'aptitude catégorie 1 pour manipuler les fluides frigorigènes en toute sécurité.",
+      "queovalIdentFOR": "AAF"
     },
     {
-      "id": "excel",
-      "slug": "formation-excel-batiment",
-      "title": "Formation Excel pour les métiers du bâtiment",
-      "shortTitle": "Excel bâtiment",
-      "category": "Bureautique",
+      "id": "initiation-pac-airh2o",
+      "slug": "initiation-pac-airh2o",
+      "title": "Initiation à la PAC airH²O",
+      "shortTitle": "Initiation PAC airH2O",
+      "category": "Pompes à chaleur",
       "duration": "1 jour",
-      "durationDetails": "1 jour, soit 7 heures de formation, pour structurer ses tableaux, suivis et analyses avec Excel dans un contexte bâtiment.",
-      "location": "Rouen et distanciel tutoré",
-      "audience": "Assistants, chargés d'affaires, conducteurs de travaux et coordinateurs",
-      "summary": "Gagnez en efficacité sur vos suivis chantier, tableaux de bord et fichiers de pilotage avec Excel.",
-      "description": "La formation aborde les bases utiles d'Excel pour organiser les suivis, exploiter les données et gagner du temps dans un contexte opérationnel bâtiment.",
+      "durationDetails": "1 jour, soit 7 heures de formation, pour découvrir le fonctionnement et les premières bases d'installation d'une pompe à chaleur air/eau.",
+      "location": "Montpellier",
+      "audience": "Techniciens débutants et installateurs CVC",
+      "summary": "Découvrez le fonctionnement d'une pompe à chaleur air/eau et les points de vigilance essentiels avant intervention.",
+      "description": "Cette journée d'initiation présente les principes de fonctionnement, les composants et les premiers repères d'installation et de réglage d'une pompe à chaleur air/eau (airH²O).",
       "benefits": [
-        "Fichiers de suivi plus lisibles",
-        "Automatismes utiles au quotidien",
-        "Meilleure exploitation des données opérationnelles"
+        "Compréhension claire du principe air/eau",
+        "Repères sur les composants et leur rôle",
+        "Bases avant une première intervention encadrée"
+      ],
+      "objectives": [
+        "Comprendre le principe de fonctionnement d'une PAC air/eau",
+        "Identifier les composants principaux du circuit",
+        "Repérer les points de vigilance avant intervention"
       ],
       "prerequisites": [
-        "Utiliser un ordinateur et des outils bureautiques courants.",
-        "Avoir un besoin de suivi, planning ou tableau de bord.",
-        "Aucune maitrise avancee d'Excel n'est requise."
+        "Avoir un intérêt pour les systèmes thermiques ou frigorifiques.",
+        "Pouvoir suivre une formation technique introductive.",
+        "Aucune expertise avancée n'est requise."
       ],
       "modalities": [
-        "Formation courte avec exercices pratiques sur cas d'usage.",
-        "Travail sur tableaux, formules et organisation des donnees.",
-        "Evaluation sur la capacite a construire un suivi simple et robuste."
+        "Formation en présentiel avec support pédagogique illustré.",
+        "Présentation de composants réels et de schémas de principe.",
+        "Évaluation sur la compréhension des bases du système."
       ],
       "programme": [
-        "Structurer un tableau de suivi clair et exploitable.",
-        "Utiliser les formules et fonctions les plus utiles.",
-        "Mettre en forme et filtrer les donnees efficacement.",
-        "Construire des syntheses et tableaux de bord simples.",
-        "Adapter ses fichiers au contexte chantier ou administratif."
+        "Comprendre le principe de la pompe à chaleur air/eau.",
+        "Identifier les composants du circuit frigorifique et hydraulique.",
+        "Repérer les points de vigilance à l'installation.",
+        "Découvrir les premiers réglages de mise en route.",
+        "Structurer une base de compréhension avant approfondissement."
       ],
-      "certification": "Formation pratique de bureautique pour gagner en aisance sur Excel dans un contexte métier bâtiment.",
+      "certification": "Attestation de formation d'initiation à la pompe à chaleur air/eau.",
       "price": "350 EUR",
       "priceDetails": "Tarif indicatif par participant.",
-      "successRate": "Taux de reussite 2025 : 98 %",
-      "handicapPolicy": "Support et rythme adaptables sur demande.",
-      "seoTitle": "Formation Excel pour le bâtiment",
-      "seoDescription": "Renforcez vos usages d'Excel pour le suivi chantier, les tableaux de bord et l'organisation de vos données métier.",
+      "successRate": "Taux de réussite 2025 : 96 %",
+      "handicapPolicy": "Formation accessible après étude des besoins. Les modalités d'accueil, le rythme et les supports peuvent être adaptés en amont avec notre référent handicap.",
+      "seoTitle": "Formation initiation à la PAC air/eau",
+      "seoDescription": "Découvrez le fonctionnement d'une pompe à chaleur air/eau avec une formation d'initiation d'une journée.",
+      "queovalIdentFOR": "Initiation PAC airH²O"
+    },
+    {
+      "id": "initiation-installation-climatisation",
+      "slug": "initiation-installation-climatisation",
+      "title": "Initiation à l'installation de la climatisation",
+      "shortTitle": "Installation clim",
+      "category": "Traitement d'air",
+      "duration": "2 jours",
+      "durationDetails": "2 jours, soit 14 heures de formation, pour apprendre à poser, raccorder et mettre en service un système de climatisation.",
+      "location": "Montpellier",
+      "audience": "Techniciens débutants et installateurs CVC",
+      "summary": "Apprenez à poser, raccorder et mettre en service un système de climatisation split ou multi-split.",
+      "description": "Cette formation pratique couvre la pose des unités intérieures et extérieures, le tirage à vide, le raccordement frigorifique et électrique ainsi que la mise en service d'un système de climatisation courant.",
+      "benefits": [
+        "Méthode de pose complète, de l'unité au raccordement",
+        "Repères sur le tirage à vide et la mise en service",
+        "Premiers réflexes de contrôle après installation"
+      ],
       "objectives": [
-        "Construire un tableau de suivi efficace",
-        "Utiliser les fonctions les plus utiles",
-        "Exploiter ses données avec plus d'aisance"
-      ]
+        "Poser les unités intérieures et extérieures",
+        "Réaliser le raccordement frigorifique et électrique",
+        "Mettre en service l'installation et contrôler son fonctionnement"
+      ],
+      "prerequisites": [
+        "Avoir un intérêt pour les systèmes CVC ou frigorifiques.",
+        "Connaître les bases de l'électricité basse tension.",
+        "Pouvoir suivre une formation technique appliquée."
+      ],
+      "modalities": [
+        "Formation en présentiel avec pose sur matériel pédagogique.",
+        "Démonstration du tirage à vide et de la charge en fluide.",
+        "Évaluation sur la conformité de l'installation réalisée."
+      ],
+      "programme": [
+        "Choisir l'emplacement des unités intérieures et extérieures.",
+        "Réaliser les liaisons frigorifiques et le tirage à vide.",
+        "Effectuer le raccordement électrique de l'installation.",
+        "Mettre en service et contrôler les paramètres de fonctionnement.",
+        "Diagnostiquer les premiers défauts de mise en route."
+      ],
+      "certification": "Attestation de formation à l'installation de systèmes de climatisation.",
+      "price": "790 EUR",
+      "priceDetails": "Tarif indicatif par participant, supports et matériel pédagogique inclus.",
+      "successRate": "Taux de réussite 2025 : 95 %",
+      "handicapPolicy": "Formation accessible après étude des besoins. Les modalités d'accueil, le rythme et les supports peuvent être adaptés en amont avec notre référent handicap.",
+      "seoTitle": "Formation installation de la climatisation",
+      "seoDescription": "Apprenez à poser, raccorder et mettre en service un système de climatisation avec une formation pratique.",
+      "queovalIdentFOR": "INSTALLATION CLIM"
+    },
+    {
+      "id": "initiation-installation-ballons-thermodynamiques",
+      "slug": "initiation-installation-ballons-thermodynamiques",
+      "title": "Initiation à l'installation des ballons thermodynamiques",
+      "shortTitle": "Installation ballon thermo",
+      "category": "Pompes à chaleur",
+      "duration": "1 jour",
+      "durationDetails": "1 jour, soit 7 heures de formation, pour apprendre à poser et mettre en service un ballon thermodynamique.",
+      "location": "Montpellier",
+      "audience": "Techniciens débutants et installateurs CVC",
+      "summary": "Découvrez la pose, le raccordement et la mise en service d'un ballon thermodynamique pour la production d'eau chaude sanitaire.",
+      "description": "Cette formation présente le fonctionnement d'un ballon thermodynamique, les contraintes d'implantation, le raccordement hydraulique et électrique ainsi que les réglages de mise en service.",
+      "benefits": [
+        "Compréhension du fonctionnement thermodynamique",
+        "Repères sur l'implantation et le raccordement",
+        "Premiers réglages de mise en service"
+      ],
+      "objectives": [
+        "Comprendre le principe du ballon thermodynamique",
+        "Réaliser l'implantation et le raccordement",
+        "Mettre en service et régler l'appareil"
+      ],
+      "prerequisites": [
+        "Avoir un intérêt pour les systèmes thermiques ou frigorifiques.",
+        "Connaître les bases de la plomberie et de l'électricité.",
+        "Pouvoir suivre une formation technique appliquée."
+      ],
+      "modalities": [
+        "Formation en présentiel avec démonstration sur appareil réel.",
+        "Étude des contraintes d'implantation en volume habité ou technique.",
+        "Évaluation sur la mise en service réalisée."
+      ],
+      "programme": [
+        "Comprendre le principe de fonctionnement thermodynamique.",
+        "Identifier les contraintes d'implantation du ballon.",
+        "Réaliser le raccordement hydraulique et électrique.",
+        "Mettre en service et régler les paramètres de production.",
+        "Vérifier le bon fonctionnement avant remise au client."
+      ],
+      "certification": "Attestation de formation à l'installation de ballons thermodynamiques.",
+      "price": "390 EUR",
+      "priceDetails": "Tarif indicatif par participant.",
+      "successRate": "Taux de réussite 2025 : 96 %",
+      "handicapPolicy": "Formation accessible après étude des besoins. Les modalités d'accueil, le rythme et les supports peuvent être adaptés en amont avec notre référent handicap.",
+      "seoTitle": "Formation installation des ballons thermodynamiques",
+      "seoDescription": "Apprenez à poser et mettre en service un ballon thermodynamique avec une formation pratique d'une journée.",
+      "queovalIdentFOR": "Installation Ballon thermo"
+    },
+    {
+      "id": "initiation-installation-pac-hitachi",
+      "slug": "initiation-installation-pac-hitachi",
+      "title": "Initiation à l'installation des pompes à chaleur Hitachi",
+      "shortTitle": "Installation PAC Hitachi",
+      "category": "Pompes à chaleur",
+      "duration": "2 jours",
+      "durationDetails": "2 jours, soit 14 heures de formation, pour découvrir la pose et la mise en service des pompes à chaleur Hitachi.",
+      "location": "Montpellier",
+      "audience": "Installateurs et techniciens de mise en service CVC",
+      "summary": "Apprenez à poser, raccorder et paramétrer les pompes à chaleur Hitachi lors de leur mise en service.",
+      "description": "Cette formation constructeur présente les gammes Hitachi, leur pose, leur raccordement hydraulique et électrique ainsi que les paramétrages spécifiques à la mise en service.",
+      "benefits": [
+        "Prise en main de la gamme Hitachi",
+        "Repères sur le raccordement et le paramétrage constructeur",
+        "Premiers réflexes de diagnostic après mise en service"
+      ],
+      "objectives": [
+        "Identifier les composants et gammes de PAC Hitachi",
+        "Réaliser la pose et le raccordement de l'installation",
+        "Paramétrer la mise en service selon les préconisations constructeur"
+      ],
+      "prerequisites": [
+        "Avoir des bases en installations thermiques et hydrauliques.",
+        "Connaître les fondamentaux de l'électricité basse tension.",
+        "Intervenir sur la pose ou la mise en service de pompes à chaleur."
+      ],
+      "modalities": [
+        "Formation en présentiel avec documentation constructeur Hitachi.",
+        "Démonstration de pose et de paramétrage sur équipement.",
+        "Évaluation sur la mise en service réalisée."
+      ],
+      "programme": [
+        "Identifier les gammes et composants des pompes à chaleur Hitachi.",
+        "Réaliser la pose des unités et le raccordement hydraulique.",
+        "Effectuer le raccordement électrique selon les préconisations.",
+        "Paramétrer l'interface de régulation constructeur.",
+        "Contrôler le fonctionnement et diagnostiquer les premiers écarts."
+      ],
+      "certification": "Attestation de formation à l'installation des pompes à chaleur Hitachi.",
+      "price": "790 EUR",
+      "priceDetails": "Tarif indicatif par participant, supports constructeur inclus.",
+      "successRate": "Taux de réussite 2025 : 94 %",
+      "handicapPolicy": "Formation accessible après étude des besoins. Les modalités d'accueil, le rythme et les supports peuvent être adaptés en amont avec notre référent handicap.",
+      "seoTitle": "Formation installation des pompes à chaleur Hitachi",
+      "seoDescription": "Apprenez à poser et paramétrer les pompes à chaleur Hitachi avec une formation constructeur pratique.",
+      "queovalIdentFOR": "Installation PAC Hitachi"
+    },
+    {
+      "id": "initiation-multi-split-triple-c",
+      "slug": "initiation-multi-split-triple-c",
+      "title": "Initiation au multi-split TRIPLE C",
+      "shortTitle": "Multi-split Triple C",
+      "category": "Traitement d'air",
+      "duration": "1 jour",
+      "durationDetails": "1 jour, soit 7 heures de formation, pour découvrir la pose et le paramétrage d'un système multi-split TRIPLE C.",
+      "location": "Montpellier",
+      "audience": "Installateurs et techniciens de mise en service CVC",
+      "summary": "Découvrez l'installation et le paramétrage d'un système multi-split TRIPLE C pour la climatisation multi-pièces.",
+      "description": "Cette formation constructeur présente l'architecture d'un système multi-split TRIPLE C, sa pose, son raccordement frigorifique et électrique ainsi que son paramétrage de mise en service.",
+      "benefits": [
+        "Prise en main de l'architecture multi-split TRIPLE C",
+        "Repères sur le raccordement de plusieurs unités intérieures",
+        "Paramétrage de mise en service maîtrisé"
+      ],
+      "objectives": [
+        "Comprendre l'architecture d'un système multi-split",
+        "Réaliser le raccordement de plusieurs unités intérieures",
+        "Paramétrer la mise en service du système TRIPLE C"
+      ],
+      "prerequisites": [
+        "Avoir des bases en climatisation ou en systèmes frigorifiques.",
+        "Connaître les fondamentaux de l'électricité basse tension.",
+        "Intervenir sur la pose ou la mise en service de climatisations."
+      ],
+      "modalities": [
+        "Formation en présentiel avec documentation constructeur.",
+        "Démonstration de raccordement multi-unités sur équipement.",
+        "Évaluation sur le paramétrage de mise en service réalisé."
+      ],
+      "programme": [
+        "Identifier l'architecture d'un système multi-split TRIPLE C.",
+        "Réaliser le raccordement frigorifique des unités intérieures.",
+        "Effectuer le raccordement électrique et de communication.",
+        "Paramétrer la mise en service selon les préconisations constructeur.",
+        "Contrôler le fonctionnement de chaque unité intérieure."
+      ],
+      "certification": "Attestation de formation à l'installation du système multi-split TRIPLE C.",
+      "price": "390 EUR",
+      "priceDetails": "Tarif indicatif par participant, supports constructeur inclus.",
+      "successRate": "Taux de réussite 2025 : 95 %",
+      "handicapPolicy": "Formation accessible après étude des besoins. Les modalités d'accueil, le rythme et les supports peuvent être adaptés en amont avec notre référent handicap.",
+      "seoTitle": "Formation initiation au multi-split TRIPLE C",
+      "seoDescription": "Apprenez à installer et paramétrer un système multi-split TRIPLE C avec une formation constructeur.",
+      "queovalIdentFOR": "Initiation multi-split TRIPLEC"
+    },
+    {
+      "id": "maintenance-pompe-a-chaleur",
+      "slug": "maintenance-pompe-a-chaleur",
+      "title": "Maintenance de la pompe à chaleur",
+      "shortTitle": "Maintenance PAC",
+      "category": "Pompes à chaleur",
+      "duration": "2 jours",
+      "durationDetails": "2 jours, soit 14 heures de formation, pour diagnostiquer, entretenir et dépanner des pompes à chaleur en exploitation.",
+      "location": "Montpellier",
+      "audience": "Techniciens de maintenance et installateurs CVC",
+      "summary": "Sécurisez vos interventions de maintenance sur pompes à chaleur et gagnez en efficacité de diagnostic.",
+      "description": "Cette formation traite les opérations d'entretien préventif et curatif des pompes à chaleur air/air et air/eau, avec un focus sur le diagnostic de pannes courantes et les contrôles réglementaires.",
+      "benefits": [
+        "Méthode de diagnostic structurée sur PAC existante",
+        "Repères sur l'entretien préventif et curatif",
+        "Sécurisation des interventions sur circuit frigorifique"
+      ],
+      "objectives": [
+        "Diagnostiquer une baisse de performance ou une panne",
+        "Réaliser les opérations d'entretien préventif",
+        "Intervenir en sécurité sur le circuit frigorifique"
+      ],
+      "prerequisites": [
+        "Avoir des bases en installations thermiques et frigorifiques.",
+        "Disposer d'une attestation de manipulation des fluides frigorigènes.",
+        "Intervenir ou superviser la maintenance de pompes à chaleur."
+      ],
+      "modalities": [
+        "Formation en présentiel avec cas de pannes réelles.",
+        "Travail sur les outils de diagnostic et de mesure frigorifique.",
+        "Évaluation sur la méthode de diagnostic et les gestes de sécurité."
+      ],
+      "programme": [
+        "Identifier les causes courantes de baisse de performance.",
+        "Utiliser les outils de mesure et de diagnostic frigorifique.",
+        "Réaliser les opérations d'entretien préventif planifiées.",
+        "Traiter les pannes courantes sur compresseur et circuit frigorifique.",
+        "Documenter l'intervention et le suivi de maintenance."
+      ],
+      "certification": "Attestation de formation en maintenance des pompes à chaleur.",
+      "price": "890 EUR",
+      "priceDetails": "Tarif indicatif par participant, supports et outils de diagnostic présentés inclus.",
+      "successRate": "Taux de réussite 2025 : 95 %",
+      "handicapPolicy": "Formation accessible après étude des besoins. Les modalités d'accueil, le rythme et les supports peuvent être adaptés en amont avec notre référent handicap.",
+      "seoTitle": "Formation maintenance de la pompe à chaleur",
+      "seoDescription": "Diagnostiquez et entretenez des pompes à chaleur avec une formation dédiée à la maintenance terrain.",
+      "queovalIdentFOR": "Maintenance PAC"
+    },
+    {
+      "id": "mise-en-service-entretien-chaudieres-granules-bois",
+      "slug": "mise-en-service-entretien-chaudieres-granules-bois",
+      "title": "Mise en service et entretien chaudières domestiques à granulés et bois bûches",
+      "shortTitle": "Chaudières granulés/bois",
+      "category": "Pompes à chaleur",
+      "duration": "2 jours",
+      "durationDetails": "2 jours, soit 14 heures de formation, pour apprendre la mise en service et l'entretien des chaudières domestiques à granulés et bois bûches.",
+      "location": "Montpellier",
+      "audience": "Installateurs et techniciens de maintenance en chauffage bois",
+      "summary": "Apprenez à mettre en service, régler et entretenir des chaudières domestiques à granulés et à bois bûches.",
+      "description": "Cette formation traite le raccordement hydraulique, l'alimentation en combustible, les réglages de combustion et l'entretien courant des chaudières domestiques à granulés et à bois bûches.",
+      "benefits": [
+        "Repères sur les deux technologies granulés et bois bûches",
+        "Méthode de réglage de la combustion",
+        "Plan d'entretien préventif structuré"
+      ],
+      "objectives": [
+        "Réaliser la mise en service d'une chaudière à granulés ou à bois bûches",
+        "Régler les paramètres de combustion",
+        "Planifier et réaliser l'entretien courant"
+      ],
+      "prerequisites": [
+        "Avoir des bases en installations thermiques et hydrauliques.",
+        "Connaître les fondamentaux de la combustion bois.",
+        "Intervenir sur la pose ou la maintenance de chaudières domestiques."
+      ],
+      "modalities": [
+        "Formation en présentiel avec démonstration sur chaudières réelles.",
+        "Travail sur les réglages de combustion et les contrôles associés.",
+        "Évaluation sur la mise en service et l'entretien réalisés."
+      ],
+      "programme": [
+        "Identifier les composants d'une chaudière à granulés et à bois bûches.",
+        "Réaliser le raccordement hydraulique et l'alimentation en combustible.",
+        "Régler les paramètres de combustion et de sécurité.",
+        "Planifier les opérations d'entretien courant.",
+        "Diagnostiquer les défauts de combustion les plus fréquents."
+      ],
+      "certification": "Attestation de formation à la mise en service et à l'entretien des chaudières domestiques à granulés et bois bûches.",
+      "price": "790 EUR",
+      "priceDetails": "Tarif indicatif par participant, supports inclus.",
+      "successRate": "Taux de réussite 2025 : 94 %",
+      "handicapPolicy": "Formation accessible après étude des besoins. Les modalités d'accueil, le rythme et les supports peuvent être adaptés en amont avec notre référent handicap.",
+      "seoTitle": "Formation chaudières domestiques granulés et bois bûches",
+      "seoDescription": "Apprenez la mise en service et l'entretien des chaudières domestiques à granulés et bois bûches.",
+      "queovalIdentFOR": "CHAUDGRAN"
+    },
+    {
+      "id": "qualipac-pompes-a-chaleur-habitat-individuel",
+      "slug": "qualipac-pompes-a-chaleur-habitat-individuel",
+      "title": "QualiPAC Pompes à chaleur en habitat individuel",
+      "shortTitle": "QualiPAC",
+      "category": "Pompes à chaleur",
+      "duration": "4 jours",
+      "durationDetails": "4 jours, soit 28 heures de formation, pour traiter le dimensionnement, la mise en service, la maintenance et les points de conformité en habitat individuel.",
+      "location": "Montpellier",
+      "audience": "Installateurs CVC et conducteurs de travaux",
+      "summary": "Structurez vos chantiers PAC en habitat individuel avec une lecture claire du dimensionnement, de la mise en service et du suivi.",
+      "description": "Le parcours QualiPAC aborde les pompes à chaleur air/eau et air/air en habitat individuel avec un angle très opérationnel, utile pour la préparation chantier comme pour la mise en service.",
+      "benefits": [
+        "Approche réglementaire et terrain",
+        "Cas pratiques de dimensionnement PAC en habitat individuel",
+        "Mise au point sur les contrôles et la maintenance"
+      ],
+      "objectives": [
+        "Analyser le besoin thermique du bâtiment",
+        "Dimensionner une pompe à chaleur adaptée",
+        "Sécuriser la mise en service et la maintenance"
+      ],
+      "prerequisites": [
+        "Maîtriser les bases des installations thermiques et hydrauliques.",
+        "Être amené à poser, mettre en service ou suivre des pompes à chaleur.",
+        "Pouvoir lire des schémas et des données techniques d'installation."
+      ],
+      "modalities": [
+        "Formation en groupe avec démonstrations, cas d'usage et analyse d'installations.",
+        "Travail sur des exemples de dimensionnement et de mise en service.",
+        "Évaluation continue sur la lecture technique et les choix de configuration."
+      ],
+      "programme": [
+        "Identifier le besoin thermique du bâtiment et les contraintes d'installation.",
+        "Choisir la technologie PAC adaptée et vérifier le dimensionnement.",
+        "Préparer la pose, les raccordements et les points de vigilance chantier.",
+        "Organiser la mise en service, les réglages et les contrôles de fonctionnement.",
+        "Structurer la maintenance et le diagnostic des écarts constatés."
+      ],
+      "certification": "Formation utile à la préparation des interventions et du suivi QualiPAC pour les installateurs en habitat individuel.",
+      "price": "1490 EUR",
+      "priceDetails": "Tarif indicatif par participant, incluant les supports de formation. Une formule intra-entreprise peut être préparée sur demande.",
+      "successRate": "Taux de réussite 2025 : 95 %",
+      "handicapPolicy": "Formation accessible après étude des besoins. Les modalités d'accueil, le rythme et les supports peuvent être adaptés en amont avec notre référent handicap.",
+      "seoTitle": "Formation QualiPAC pour installateurs PAC habitat individuel",
+      "seoDescription": "Formez vos équipes à la pose et à la mise en service de pompes à chaleur en habitat individuel avec QualiPAC.",
+      "queovalIdentFOR": "QualiPAC"
+    },
+    {
+      "id": "irve-niveau-1",
+      "slug": "irve-niveau-1",
+      "title": "Infrastructures de Recharge pour Véhicules Electriques Niveau 1",
+      "shortTitle": "IRVE Niveau 1",
+      "category": "Bornes de recharge",
+      "duration": "2 jours",
+      "durationDetails": "2 jours, soit 14 heures de formation, avec progression rapide sur la conception, la pose et la vérification d'une infrastructure de recharge de niveau 1.",
+      "location": "Montpellier et intra-entreprise",
+      "audience": "Électriciens et chargés d'affaires mobilité",
+      "summary": "Concevez et posez des infrastructures de recharge de niveau 1 sécurisées et conformes au cadre technique attendu.",
+      "description": "Cette formation IRVE niveau 1 est pensée pour les équipes qui doivent choisir l'architecture de recharge, préparer les protections, poser les équipements et vérifier la mise en service pour des points de recharge jusqu'à 22 kVA.",
+      "benefits": [
+        "Préparation à la mention IRVE niveau 1",
+        "Études de cas habitat individuel et petit tertiaire",
+        "Focalisation sécurité électrique et exploitation"
+      ],
+      "objectives": [
+        "Identifier les architectures de recharge de niveau 1",
+        "Concevoir une installation conforme",
+        "Superviser la mise en service et le contrôle"
+      ],
+      "prerequisites": [
+        "Avoir une expérience sur les installations électriques basse tension.",
+        "Savoir lire un schéma électrique et préparer une intervention technique.",
+        "Intervenir ou superviser des projets liés à la mobilité électrique."
+      ],
+      "modalities": [
+        "Formation courte en présentiel ou en intra selon le besoin de l'entreprise.",
+        "Cas d'usage concrets sur les architectures de recharge et leurs contraintes.",
+        "Évaluation sur la capacité à choisir, protéger et contrôler une installation."
+      ],
+      "programme": [
+        "Identifier les différents cas d'usage et les niveaux de puissance en IRVE niveau 1.",
+        "Concevoir une installation adaptée à l'habitat individuel ou au petit tertiaire.",
+        "Vérifier les protections, les sections et les exigences de sécurité.",
+        "Organiser la pose, la mise en service et le contrôle final.",
+        "Documenter l'installation pour un suivi conforme et exploitable."
+      ],
+      "certification": "Parcours de montée en compétence préparant à la mention IRVE niveau 1 pour les installations jusqu'à 22 kVA.",
+      "price": "990 EUR",
+      "priceDetails": "Tarif indicatif par participant. Une organisation intra-entreprise peut être prévue pour une équipe déjà mobilisée sur des projets IRVE.",
+      "successRate": "Taux de réussite 2025 : 96 %",
+      "handicapPolicy": "Formation accessible après étude des besoins. Les modalités d'accueil, le rythme et les supports peuvent être adaptés en amont avec notre référent handicap.",
+      "seoTitle": "Formation IRVE Niveau 1 pour installateurs de bornes",
+      "seoDescription": "Préparez vos équipes à concevoir et mettre en service des infrastructures de recharge niveau 1 avec IRVE.",
+      "queovalIdentFOR": "IRVE"
+    },
+    {
+      "id": "irve-niveau-p2",
+      "slug": "irve-niveau-p2",
+      "title": "Infrastructures de Recharge pour Véhicules Electriques. Niveau P2",
+      "shortTitle": "IRVE Niveau P2",
+      "category": "Bornes de recharge",
+      "duration": "1 jour",
+      "durationDetails": "1 jour, soit 7 heures de formation, pour approfondir la conception et la mise en service d'infrastructures de recharge de puissance supérieure, niveau P2.",
+      "location": "Montpellier et intra-entreprise",
+      "audience": "Électriciens ayant suivi le niveau 1 IRVE ou disposant d'une expérience équivalente",
+      "summary": "Approfondissez vos compétences IRVE avec le niveau P2, dédié aux infrastructures de recharge de puissance supérieure et aux réseaux de bornes.",
+      "description": "Cette formation complète le parcours IRVE en traitant les architectures de recharge de puissance supérieure à 22 kVA, la supervision de plusieurs points de charge et les exigences spécifiques du niveau P2.",
+      "benefits": [
+        "Approfondissement des architectures de recharge complexes",
+        "Repères sur la supervision de plusieurs bornes",
+        "Progression cohérente après le niveau 1 IRVE"
+      ],
+      "objectives": [
+        "Concevoir une infrastructure de recharge de puissance supérieure",
+        "Superviser plusieurs points de charge sur un même site",
+        "Vérifier la conformité d'une installation de niveau P2"
+      ],
+      "prerequisites": [
+        "Avoir suivi une formation IRVE niveau 1 ou disposer d'une expérience équivalente.",
+        "Maîtriser les installations électriques basse tension.",
+        "Intervenir sur des projets de mobilité électrique collectifs ou tertiaires."
+      ],
+      "modalities": [
+        "Formation courte en présentiel ou en intra selon le besoin de l'entreprise.",
+        "Étude de cas sur des infrastructures multi-bornes.",
+        "Évaluation sur la conception et la supervision proposées."
+      ],
+      "programme": [
+        "Identifier les cas d'usage des infrastructures de recharge de niveau P2.",
+        "Concevoir une architecture pour plusieurs points de charge.",
+        "Dimensionner les protections et la gestion de la puissance disponible.",
+        "Superviser la mise en service d'un réseau de bornes.",
+        "Documenter l'installation pour un suivi conforme."
+      ],
+      "certification": "Parcours de montée en compétence complémentaire au niveau P2 IRVE pour les infrastructures de puissance supérieure.",
+      "price": "590 EUR",
+      "priceDetails": "Tarif indicatif par participant. Une organisation intra-entreprise peut être prévue pour une équipe déjà formée au niveau 1.",
+      "successRate": "Taux de réussite 2025 : 95 %",
+      "handicapPolicy": "Formation accessible après étude des besoins. Les modalités d'accueil, le rythme et les supports peuvent être adaptés en amont avec notre référent handicap.",
+      "seoTitle": "Formation IRVE Niveau P2 infrastructures de recharge",
+      "seoDescription": "Approfondissez vos compétences IRVE avec le niveau P2 dédié aux infrastructures de recharge de puissance supérieure.",
+      "queovalIdentFOR": "IRVE 2"
+    },
+    {
+      "id": "gestion-priorites-intra-entreprise",
+      "slug": "gestion-priorites-intra-entreprise",
+      "title": "Gestion des priorités en intra-entreprise",
+      "shortTitle": "Gestion des priorités",
+      "category": "Management",
+      "duration": "1 jour",
+      "durationDetails": "1 jour, soit 7 heures de formation en intra-entreprise, pour organiser son activité et gérer les priorités au quotidien.",
+      "location": "Session intra-entreprise, sur site ou à Montpellier",
+      "audience": "Managers, chefs d'équipe et collaborateurs en gestion de projets",
+      "summary": "Apprenez à hiérarchiser vos tâches, gérer les urgences et organiser votre activité au quotidien en équipe.",
+      "description": "Cette formation intra-entreprise aide les équipes à structurer leur organisation du travail, distinguer l'urgent de l'important et mieux planifier leur charge d'activité.",
+      "benefits": [
+        "Méthode concrète de hiérarchisation des tâches",
+        "Meilleure gestion des imprévus et des urgences",
+        "Organisation collective plus fluide"
+      ],
+      "objectives": [
+        "Distinguer l'urgent de l'important dans son activité",
+        "Planifier sa charge de travail de façon réaliste",
+        "Gérer les imprévus sans désorganiser l'équipe"
+      ],
+      "prerequisites": [
+        "Exercer une activité professionnelle avec des priorités multiples.",
+        "Être en situation de gestion d'équipe ou de projets.",
+        "Aucune expertise en management n'est requise au préalable."
+      ],
+      "modalities": [
+        "Formation en intra-entreprise avec cas issus du contexte de l'équipe.",
+        "Exercices pratiques de planification et de priorisation.",
+        "Évaluation sur la méthode de gestion des priorités mise en place."
+      ],
+      "programme": [
+        "Identifier les sources de surcharge et de désorganisation.",
+        "Distinguer l'urgent de l'important dans les tâches quotidiennes.",
+        "Utiliser des outils simples de planification et de priorisation.",
+        "Gérer les imprévus sans perdre le fil des priorités.",
+        "Mettre en place un suivi d'activité partagé en équipe."
+      ],
+      "certification": "Attestation de formation en gestion des priorités.",
+      "price": "450 EUR",
+      "priceDetails": "Tarif indicatif par participant en session intra-entreprise, supports inclus.",
+      "successRate": "Taux de réussite 2025 : 97 %",
+      "handicapPolicy": "Formation accessible après étude des besoins. Les modalités d'accueil, le rythme et les supports peuvent être adaptés en amont avec notre référent handicap.",
+      "seoTitle": "Formation gestion des priorités en intra-entreprise",
+      "seoDescription": "Apprenez à hiérarchiser vos tâches et organiser votre activité avec une formation intra sur la gestion des priorités.",
+      "queovalIdentFOR": "Gestion priorités"
+    },
+    {
+      "id": "autorisation-de-conduite-caces",
+      "slug": "autorisation-de-conduite-caces",
+      "title": "Autorisation de conduite",
+      "shortTitle": "CACES",
+      "category": "Sécurité au travail",
+      "duration": "3 jours",
+      "durationDetails": "3 jours, soit 21 heures de formation théorique et pratique, pour préparer l'autorisation de conduite d'engins de chantier.",
+      "location": "Montpellier",
+      "audience": "Conducteurs d'engins et personnels de chantier",
+      "summary": "Préparez votre autorisation de conduite d'engins avec une formation alliant théorie réglementaire et pratique sur engin.",
+      "description": "Cette formation prépare les candidats à la conduite en sécurité d'engins de chantier, avec des apports théoriques sur la réglementation et des exercices pratiques de conduite encadrés.",
+      "benefits": [
+        "Préparation complète théorique et pratique",
+        "Mise en situation sur engin réel",
+        "Réflexes de sécurité renforcés avant délivrance de l'autorisation"
+      ],
+      "objectives": [
+        "Connaître la réglementation liée à la conduite d'engins",
+        "Réaliser les manœuvres de conduite en sécurité",
+        "Obtenir l'autorisation de conduite délivrée par l'employeur"
+      ],
+      "prerequisites": [
+        "Être apte médicalement à la conduite d'engins.",
+        "Avoir un intérêt ou une expérience pour la conduite d'engins de chantier.",
+        "Maîtriser le français à l'écrit et à l'oral pour l'évaluation théorique."
+      ],
+      "modalities": [
+        "Formation avec apports théoriques et exercices pratiques sur engin.",
+        "Mises en situation encadrées par un formateur qualifié.",
+        "Évaluation théorique et pratique en fin de parcours."
+      ],
+      "programme": [
+        "Connaître la réglementation applicable à la conduite d'engins.",
+        "Identifier les risques liés à la conduite et à l'environnement de travail.",
+        "Réaliser les vérifications de prise de poste sur l'engin.",
+        "S'entraîner aux manœuvres de conduite en sécurité.",
+        "Passer l'évaluation théorique et pratique de fin de formation."
+      ],
+      "certification": "Formation préparant à l'autorisation de conduite d'engins délivrée par l'employeur.",
+      "price": "890 EUR",
+      "priceDetails": "Tarif indicatif par participant, location d'engin et supports inclus selon la session.",
+      "successRate": "Taux de réussite 2025 : 95 %",
+      "handicapPolicy": "Formation accessible après étude des besoins. Les modalités d'accueil, le rythme et les supports peuvent être adaptés en amont avec notre référent handicap.",
+      "seoTitle": "Formation CACES autorisation de conduite d'engins",
+      "seoDescription": "Préparez votre autorisation de conduite d'engins avec une formation théorique et pratique complète.",
+      "queovalIdentFOR": "CACES"
+    },
+    {
+      "id": "decouverte-de-l-electricite",
+      "slug": "decouverte-de-l-electricite",
+      "title": "Découverte de l'électricité",
+      "shortTitle": "Découverte électricité",
+      "category": "Sécurité au travail",
+      "duration": "1 jour",
+      "durationDetails": "1 jour, soit 7 heures de formation, pour découvrir les bases de l'électricité et les risques associés.",
+      "location": "Montpellier",
+      "audience": "Personnels non électriciens amenés à évoluer près d'installations électriques",
+      "summary": "Découvrez les bases de l'électricité et les risques associés pour évoluer en sécurité près des installations.",
+      "description": "Cette formation d'initiation présente les notions de base du courant électrique, les principaux dangers et les règles élémentaires de prudence pour toute personne non électricienne amenée à côtoyer des installations électriques.",
+      "benefits": [
+        "Vocabulaire et notions de base clarifiés",
+        "Compréhension des principaux dangers électriques",
+        "Réflexes de prudence renforcés au quotidien"
+      ],
+      "objectives": [
+        "Comprendre les notions de base du courant électrique",
+        "Identifier les principaux dangers liés à l'électricité",
+        "Adopter les réflexes de prudence adaptés"
+      ],
+      "prerequisites": [
+        "Aucun prérequis technique n'est nécessaire.",
+        "Être amené à évoluer à proximité d'installations électriques.",
+        "Pouvoir suivre une formation théorique de sensibilisation."
+      ],
+      "modalities": [
+        "Formation en présentiel avec supports illustrés et exemples concrets.",
+        "Échanges sur des situations vécues en entreprise.",
+        "Évaluation sur la compréhension des notions et des risques."
+      ],
+      "programme": [
+        "Comprendre les notions de base du courant électrique.",
+        "Identifier les principaux dangers liés à l'électricité.",
+        "Reconnaître les zones et situations à risque.",
+        "Adopter les bons réflexes de prudence au quotidien.",
+        "Savoir réagir en cas d'incident électrique."
+      ],
+      "certification": "Attestation de formation de sensibilisation à l'électricité.",
+      "price": "290 EUR",
+      "priceDetails": "Tarif indicatif par participant.",
+      "successRate": "Taux de réussite 2025 : 98 %",
+      "handicapPolicy": "Formation accessible après étude des besoins. Les modalités d'accueil, le rythme et les supports peuvent être adaptés en amont avec notre référent handicap.",
+      "seoTitle": "Formation découverte de l'électricité",
+      "seoDescription": "Découvrez les bases de l'électricité et les risques associés avec une formation de sensibilisation d'une journée.",
+      "queovalIdentFOR": "Découverte de l'électricité"
+    },
+    {
+      "id": "habilitation-electrique-br-p-3-jours",
+      "slug": "habilitation-electrique-br-p-3-jours",
+      "title": "Habilitation électrique BR P 3 jours",
+      "shortTitle": "Habilitation BR/P",
+      "category": "Sécurité au travail",
+      "duration": "3 jours",
+      "durationDetails": "3 jours, soit 21 heures de formation, pour préparer l'habilitation électrique de niveau BR et P avec mises en situation pratiques.",
+      "location": "Montpellier",
+      "audience": "Techniciens, électriciens et personnels intervenants",
+      "summary": "Préparez vos équipes à l'habilitation électrique BR et P avec une formation complète alliant théorie et mises en situation.",
+      "description": "La formation traite les risques électriques, les zones d'intervention, les habilitations BR et P ainsi que les procédures de prévention avant toute opération de dépannage ou de mesurage sur installation basse tension.",
+      "benefits": [
+        "Maîtrise des fondamentaux de sécurité électrique",
+        "Lecture claire des rôles et niveaux d'habilitation BR et P",
+        "Réflexes adaptés avant intervention de dépannage"
+      ],
+      "objectives": [
+        "Identifier les risques électriques",
+        "Appliquer les procédures de prévention BR et P",
+        "Intervenir en sécurité sur le terrain"
+      ],
+      "prerequisites": [
+        "Intervenir ou être amené à travailler au voisinage du risque électrique.",
+        "Pouvoir suivre des consignes de sécurité strictes.",
+        "Disposer d'une expérience terrain ou technique de base."
+      ],
+      "modalities": [
+        "Formation avec apports théoriques et mises en situation sur 3 jours.",
+        "Travail sur les procédures et équipements de prévention BR et P.",
+        "Évaluation sur les bons gestes et les procédures avant intervention."
+      ],
+      "programme": [
+        "Identifier les risques électriques et leurs conséquences.",
+        "Comprendre les niveaux d'habilitation BR et P et leurs limites.",
+        "Préparer une intervention de dépannage ou de mesurage en respectant les procédures.",
+        "Utiliser les équipements et moyens de protection adaptés.",
+        "Réagir de manière appropriée en cas d'anomalie ou d'accident."
+      ],
+      "certification": "Formation préparatoire à l'habilitation électrique BR et P.",
+      "price": "790 EUR",
+      "priceDetails": "Tarif indicatif par participant, formation sur 3 jours.",
+      "successRate": "Taux de réussite 2025 : 97 %",
+      "handicapPolicy": "Formation accessible après étude des besoins. Les modalités d'accueil, le rythme et les supports peuvent être adaptés en amont avec notre référent handicap.",
+      "seoTitle": "Formation habilitation électrique BR P en 3 jours",
+      "seoDescription": "Préparez vos équipes à l'habilitation électrique BR et P avec une formation de 3 jours dédiée à la sécurité.",
+      "queovalIdentFOR": "Hab élec BR P 3j"
+    },
+    {
+      "id": "habilitation-electrique-recyclage-1-5-jour",
+      "slug": "habilitation-electrique-recyclage-1-5-jour",
+      "title": "Habilitation Electrique Recyclage 1,5 jour",
+      "shortTitle": "Recyclage habilitation élec",
+      "category": "Sécurité au travail",
+      "duration": "1,5 jour",
+      "durationDetails": "1,5 jour, soit 10h30 de formation, pour actualiser ses connaissances et renouveler son habilitation électrique.",
+      "location": "Montpellier",
+      "audience": "Techniciens et électriciens déjà habilités, en renouvellement",
+      "summary": "Actualisez vos connaissances en sécurité électrique et renouvelez votre habilitation avec une session de recyclage.",
+      "description": "Cette formation de recyclage permet aux personnels déjà habilités de réactualiser leurs connaissances réglementaires, de revoir les procédures de prévention et de renouveler leur habilitation électrique.",
+      "benefits": [
+        "Mise à jour des connaissances réglementaires",
+        "Rappel des procédures de prévention essentielles",
+        "Renouvellement de l'habilitation dans les délais"
+      ],
+      "objectives": [
+        "Actualiser ses connaissances des risques électriques",
+        "Revoir les procédures de prévention à jour",
+        "Renouveler son habilitation électrique"
+      ],
+      "prerequisites": [
+        "Être déjà titulaire d'une habilitation électrique en cours ou récemment échue.",
+        "Intervenir régulièrement au voisinage du risque électrique.",
+        "Pouvoir justifier de la formation initiale suivie précédemment."
+      ],
+      "modalities": [
+        "Formation courte de recyclage avec rappels théoriques et mises en situation.",
+        "Retour d'expérience sur les pratiques de terrain.",
+        "Évaluation sur les procédures de prévention actualisées."
+      ],
+      "programme": [
+        "Réactualiser les connaissances sur les risques électriques.",
+        "Revoir les évolutions réglementaires depuis la formation initiale.",
+        "Rappeler les procédures de prévention et d'intervention.",
+        "Reprendre les équipements et moyens de protection adaptés.",
+        "Valider les réflexes de sécurité avant renouvellement de l'habilitation."
+      ],
+      "certification": "Formation de recyclage pour le renouvellement de l'habilitation électrique.",
+      "price": "450 EUR",
+      "priceDetails": "Tarif indicatif par participant, formation courte de recyclage.",
+      "successRate": "Taux de réussite 2025 : 98 %",
+      "handicapPolicy": "Formation accessible après étude des besoins. Les modalités d'accueil, le rythme et les supports peuvent être adaptés en amont avec notre référent handicap.",
+      "seoTitle": "Formation recyclage habilitation électrique 1,5 jour",
+      "seoDescription": "Renouvelez votre habilitation électrique avec une formation de recyclage courte et actualisée.",
+      "queovalIdentFOR": "HAB ELEC RECYCLAGE"
+    },
+    {
+      "id": "prevention-chutes-hauteur-harnais-pont-fixe",
+      "slug": "prevention-chutes-hauteur-harnais-pont-fixe",
+      "title": "Prévention des risques de chutes de hauteur : port du harnais antichute en pont fixe",
+      "shortTitle": "Harnais antichute pont fixe",
+      "category": "Sécurité au travail",
+      "duration": "1 jour",
+      "durationDetails": "1 jour, soit 7 heures de formation, pour prévenir les risques de chute de hauteur et maîtriser le port du harnais antichute en pont fixe.",
+      "location": "Montpellier et intra-entreprise",
+      "audience": "Techniciens, installateurs et encadrants chantier",
+      "summary": "Renforcez vos pratiques de sécurité face aux chutes de hauteur avec un focus sur le port du harnais antichute en pont fixe.",
+      "description": "La formation permet d'identifier les situations dangereuses en hauteur, de choisir et vérifier un harnais antichute, et d'organiser des interventions sécurisées sur pont fixe.",
+      "benefits": [
+        "Lecture claire des situations à risque en hauteur",
+        "Bon usage du harnais antichute et des points d'ancrage",
+        "Organisation plus sûre des interventions sur pont fixe"
+      ],
+      "objectives": [
+        "Identifier les situations à risque de chute de hauteur",
+        "Choisir et vérifier un harnais antichute adapté",
+        "Organiser une intervention sécurisée sur pont fixe"
+      ],
+      "prerequisites": [
+        "Intervenir sur chantier ou superviser des interventions en hauteur.",
+        "Pouvoir suivre des consignes de sécurité en environnement chantier.",
+        "Avoir une expérience terrain de base."
+      ],
+      "modalities": [
+        "Formation en présentiel avec démonstrations et cas pratiques.",
+        "Travail sur l'évaluation du risque et le choix des équipements.",
+        "Évaluation sur les bons réflexes et les mesures de prévention."
+      ],
+      "programme": [
+        "Identifier les risques courants liés au travail en hauteur sur pont fixe.",
+        "Choisir les moyens de protection et le harnais adaptés.",
+        "Vérifier la conformité du harnais et des points d'ancrage.",
+        "Organiser une intervention sécurisée sur pont fixe.",
+        "Réagir correctement face à une situation critique."
+      ],
+      "certification": "Formation pratique de prévention des risques de chute de hauteur et de port du harnais antichute.",
+      "price": "390 EUR",
+      "priceDetails": "Tarif indicatif par participant.",
+      "successRate": "Taux de réussite 2025 : 98 %",
+      "handicapPolicy": "Formation accessible après étude des besoins. Les modalités d'accueil, le rythme et les supports peuvent être adaptés en amont avec notre référent handicap.",
+      "seoTitle": "Formation prévention chutes de hauteur harnais antichute",
+      "seoDescription": "Prévenez les risques de chute de hauteur et maîtrisez le port du harnais antichute en pont fixe.",
+      "queovalIdentFOR": "Travail en hauteur"
+    },
+    {
+      "id": "sst-initial",
+      "slug": "sst-initial",
+      "title": "SST Initial",
+      "shortTitle": "SST Initial",
+      "category": "Sécurité au travail",
+      "duration": "2 jours",
+      "durationDetails": "2 jours, soit 14 heures de formation, pour devenir Sauveteur Secouriste du Travail et acquérir les gestes qui sauvent.",
+      "location": "Montpellier",
+      "audience": "Tout salarié souhaitant devenir sauveteur secouriste du travail",
+      "summary": "Devenez Sauveteur Secouriste du Travail et apprenez à porter secours en situation d'urgence dans l'entreprise.",
+      "description": "Cette formation initiale SST permet d'acquérir les compétences de secourisme adaptées au milieu professionnel : protéger, alerter et secourir une victime en situation d'urgence, tout en identifiant les situations dangereuses.",
+      "benefits": [
+        "Compétences de secourisme reconnues et actualisées",
+        "Capacité à réagir efficacement en situation d'urgence",
+        "Contribution à la prévention des risques dans l'entreprise"
+      ],
+      "objectives": [
+        "Protéger, alerter et secourir une victime",
+        "Réaliser les gestes de premiers secours adaptés",
+        "Identifier les situations dangereuses dans l'entreprise"
+      ],
+      "prerequisites": [
+        "Aucun prérequis technique n'est nécessaire.",
+        "Être salarié ou en situation de travail en entreprise.",
+        "Pouvoir suivre des mises en situation pratiques."
+      ],
+      "modalities": [
+        "Formation en présentiel avec mises en situation pratiques.",
+        "Exercices de simulation de secours sur mannequin.",
+        "Évaluation continue des gestes de premiers secours."
+      ],
+      "programme": [
+        "Comprendre le rôle du sauveteur secouriste du travail.",
+        "Protéger et alerter face à une situation d'accident.",
+        "Réaliser les gestes de premiers secours : hémorragie, inconscience, arrêt cardiaque.",
+        "Utiliser un défibrillateur automatisé externe.",
+        "Identifier les situations dangereuses pour la prévention en entreprise."
+      ],
+      "certification": "Certificat de Sauveteur Secouriste du Travail (SST), formation initiale.",
+      "price": "290 EUR",
+      "priceDetails": "Tarif indicatif par participant, matériel pédagogique de simulation inclus.",
+      "successRate": "Taux de réussite 2025 : 98 %",
+      "handicapPolicy": "Formation accessible après étude des besoins. Les modalités d'accueil, le rythme et les supports peuvent être adaptés en amont avec notre référent handicap.",
+      "seoTitle": "Formation SST Initial Sauveteur Secouriste du Travail",
+      "seoDescription": "Devenez Sauveteur Secouriste du Travail avec une formation initiale complète de 2 jours.",
+      "queovalIdentFOR": "SST Initial"
+    },
+    {
+      "id": "sst-recyclage",
+      "slug": "sst-recyclage",
+      "title": "SST recyclage",
+      "shortTitle": "SST Recyclage",
+      "category": "Sécurité au travail",
+      "duration": "1 jour",
+      "durationDetails": "1 jour, soit 7 heures de formation, pour maintenir et actualiser ses compétences de Sauveteur Secouriste du Travail.",
+      "location": "Montpellier",
+      "audience": "Sauveteurs secouristes du travail déjà certifiés",
+      "summary": "Maintenez vos compétences de Sauveteur Secouriste du Travail à jour avec une session de recyclage.",
+      "description": "Cette formation de recyclage permet aux titulaires du certificat SST de réactualiser leurs gestes de premiers secours et de maintenir leur certification à jour selon la périodicité réglementaire.",
+      "benefits": [
+        "Maintien à jour des gestes de premiers secours",
+        "Rappel des évolutions réglementaires et techniques",
+        "Renouvellement du certificat SST dans les délais"
+      ],
+      "objectives": [
+        "Réactualiser les gestes de premiers secours",
+        "Revoir les procédures de protection et d'alerte",
+        "Renouveler son certificat de Sauveteur Secouriste du Travail"
+      ],
+      "prerequisites": [
+        "Être titulaire d'un certificat SST initial en cours ou récemment échu.",
+        "Avoir suivi la formation initiale SST.",
+        "Pouvoir suivre des mises en situation pratiques."
+      ],
+      "modalities": [
+        "Formation courte de recyclage avec mises en situation pratiques.",
+        "Retour d'expérience sur les situations vécues depuis la formation initiale.",
+        "Évaluation continue des gestes de premiers secours."
+      ],
+      "programme": [
+        "Réactualiser le rôle du sauveteur secouriste du travail.",
+        "Revoir les gestes de premiers secours essentiels.",
+        "Pratiquer les mises en situation de secours actualisées.",
+        "Reprendre l'utilisation du défibrillateur automatisé externe.",
+        "Identifier les nouvelles situations dangereuses à prévenir."
+      ],
+      "certification": "Renouvellement du certificat de Sauveteur Secouriste du Travail (SST).",
+      "price": "220 EUR",
+      "priceDetails": "Tarif indicatif par participant, formation courte de recyclage.",
+      "successRate": "Taux de réussite 2025 : 98 %",
+      "handicapPolicy": "Formation accessible après étude des besoins. Les modalités d'accueil, le rythme et les supports peuvent être adaptés en amont avec notre référent handicap.",
+      "seoTitle": "Formation SST recyclage Sauveteur Secouriste du Travail",
+      "seoDescription": "Renouvelez votre certificat SST avec une formation de recyclage d'une journée.",
+      "queovalIdentFOR": "SST recyclage"
+    },
+    {
+      "id": "decouvrir-intelligence-artificielle",
+      "slug": "decouvrir-intelligence-artificielle",
+      "title": "Découvrir l'Intelligence Artificielle",
+      "shortTitle": "Découvrir l'IA",
+      "category": "Bureautique",
+      "duration": "1 jour",
+      "durationDetails": "1 jour, soit 7 heures de formation, pour découvrir les usages concrets de l'intelligence artificielle dans le travail quotidien.",
+      "location": "Montpellier et distanciel tutoré",
+      "audience": "Tout collaborateur souhaitant découvrir les outils d'intelligence artificielle",
+      "summary": "Découvrez les usages concrets de l'intelligence artificielle générative pour gagner en efficacité au quotidien.",
+      "description": "Cette formation d'initiation présente les principes de l'intelligence artificielle générative, ses usages professionnels courants et les bonnes pratiques d'utilisation en toute confidentialité.",
+      "benefits": [
+        "Compréhension claire des principes de l'IA générative",
+        "Découverte d'usages concrets applicables au poste",
+        "Bonnes pratiques de confidentialité et de fiabilité"
+      ],
+      "objectives": [
+        "Comprendre les principes de l'intelligence artificielle générative",
+        "Utiliser un outil d'IA pour des tâches courantes",
+        "Adopter de bonnes pratiques d'usage et de vérification"
+      ],
+      "prerequisites": [
+        "Utiliser un ordinateur et une messagerie professionnelle.",
+        "Aucune connaissance technique en IA n'est requise.",
+        "Disposer d'un accès internet pour les exercices pratiques."
+      ],
+      "modalities": [
+        "Formation courte avec démonstrations et exercices guidés.",
+        "Travail sur des cas d'usage professionnels concrets.",
+        "Évaluation sur la capacité à utiliser un outil d'IA de façon pertinente."
+      ],
+      "programme": [
+        "Comprendre les principes de fonctionnement de l'IA générative.",
+        "Découvrir les principaux outils et leurs usages professionnels.",
+        "Rédiger des consignes efficaces pour obtenir un résultat pertinent.",
+        "Identifier les limites et les risques liés à la confidentialité.",
+        "Appliquer l'IA à des tâches courantes du poste de travail."
+      ],
+      "certification": "Attestation de formation à la découverte de l'intelligence artificielle.",
+      "price": "350 EUR",
+      "priceDetails": "Tarif indicatif par participant.",
+      "successRate": "Taux de réussite 2025 : 97 %",
+      "handicapPolicy": "Formation accessible après étude des besoins. Les modalités d'accueil, le rythme et les supports peuvent être adaptés en amont avec notre référent handicap.",
+      "seoTitle": "Formation découvrir l'intelligence artificielle",
+      "seoDescription": "Découvrez les usages concrets de l'intelligence artificielle générative avec une formation d'une journée.",
+      "queovalIdentFOR": "IA"
+    },
+    {
+      "id": "excel-niveau-1",
+      "slug": "excel-niveau-1",
+      "title": "Excel niveau 1",
+      "shortTitle": "Excel niveau 1",
+      "category": "Bureautique",
+      "duration": "1 jour",
+      "durationDetails": "1 jour, soit 7 heures de formation, pour acquérir les bases d'Excel : saisie, mise en forme et premières formules.",
+      "location": "Montpellier et distanciel tutoré",
+      "audience": "Toute personne débutant sur Excel",
+      "summary": "Acquérez les bases d'Excel : saisie, mise en forme, calculs simples et premières formules.",
+      "description": "Cette formation d'initiation permet de prendre en main l'interface Excel, de saisir et mettre en forme des données, et d'utiliser les premières formules de calcul courantes.",
+      "benefits": [
+        "Prise en main rapide de l'interface Excel",
+        "Autonomie sur la saisie et la mise en forme",
+        "Premières formules de calcul maîtrisées"
+      ],
+      "objectives": [
+        "Se repérer dans l'interface Excel",
+        "Saisir et mettre en forme un tableau",
+        "Utiliser les premières formules de calcul"
+      ],
+      "prerequisites": [
+        "Utiliser un ordinateur dans un environnement bureautique courant.",
+        "Aucune connaissance préalable d'Excel n'est requise.",
+        "Disposer d'un poste équipé d'Excel pour les exercices."
+      ],
+      "modalities": [
+        "Formation avec exercices pratiques progressifs sur poste.",
+        "Travail sur des cas concrets de saisie et de mise en forme.",
+        "Évaluation sur la réalisation d'un tableau simple et fonctionnel."
+      ],
+      "programme": [
+        "Se repérer dans l'interface et le classeur Excel.",
+        "Saisir, corriger et mettre en forme des données.",
+        "Utiliser les formules de calcul de base : somme, moyenne, pourcentage.",
+        "Mettre en page et imprimer un tableau.",
+        "Organiser un classeur avec plusieurs feuilles de calcul."
+      ],
+      "certification": "Attestation de formation Excel niveau 1.",
+      "price": "290 EUR",
+      "priceDetails": "Tarif indicatif par participant.",
+      "successRate": "Taux de réussite 2025 : 98 %",
+      "handicapPolicy": "Formation accessible après étude des besoins. Les modalités d'accueil, le rythme et les supports peuvent être adaptés en amont avec notre référent handicap.",
+      "seoTitle": "Formation Excel niveau 1 pour débutants",
+      "seoDescription": "Acquérez les bases d'Excel avec une formation d'une journée dédiée à la saisie, la mise en forme et les premières formules.",
+      "queovalIdentFOR": "Excel1"
+    },
+    {
+      "id": "excel-niveau-2",
+      "slug": "excel-niveau-2",
+      "title": "Excel niveau 2",
+      "shortTitle": "Excel niveau 2",
+      "category": "Bureautique",
+      "duration": "1 jour",
+      "durationDetails": "1 jour, soit 7 heures de formation, pour approfondir les formules, les tableaux croisés dynamiques et la mise en forme conditionnelle.",
+      "location": "Montpellier et distanciel tutoré",
+      "audience": "Utilisateurs ayant suivi Excel niveau 1 ou disposant de bases équivalentes",
+      "summary": "Approfondissez vos usages d'Excel avec les formules conditionnelles, les tableaux croisés dynamiques et la mise en forme avancée.",
+      "description": "Cette formation intermédiaire permet d'exploiter des formules plus avancées, de construire des tableaux croisés dynamiques et de mettre en forme des données de façon conditionnelle.",
+      "benefits": [
+        "Formules conditionnelles et de recherche maîtrisées",
+        "Tableaux croisés dynamiques exploitables au quotidien",
+        "Mise en forme conditionnelle pour des tableaux lisibles"
+      ],
+      "objectives": [
+        "Utiliser des formules conditionnelles et de recherche",
+        "Construire un tableau croisé dynamique",
+        "Appliquer une mise en forme conditionnelle pertinente"
+      ],
+      "prerequisites": [
+        "Avoir suivi Excel niveau 1 ou maîtriser les bases du tableur.",
+        "Être à l'aise avec la saisie et la mise en forme simple.",
+        "Disposer d'un poste équipé d'Excel pour les exercices."
+      ],
+      "modalities": [
+        "Formation avec exercices pratiques progressifs sur poste.",
+        "Travail sur des jeux de données métier concrets.",
+        "Évaluation sur la construction d'un tableau croisé dynamique."
+      ],
+      "programme": [
+        "Utiliser les fonctions conditionnelles SI, ET, OU.",
+        "Exploiter les fonctions de recherche RECHERCHEV et équivalentes.",
+        "Construire et exploiter un tableau croisé dynamique.",
+        "Appliquer une mise en forme conditionnelle aux données.",
+        "Consolider des données issues de plusieurs feuilles."
+      ],
+      "certification": "Attestation de formation Excel niveau 2.",
+      "price": "320 EUR",
+      "priceDetails": "Tarif indicatif par participant.",
+      "successRate": "Taux de réussite 2025 : 97 %",
+      "handicapPolicy": "Formation accessible après étude des besoins. Les modalités d'accueil, le rythme et les supports peuvent être adaptés en amont avec notre référent handicap.",
+      "seoTitle": "Formation Excel niveau 2 intermédiaire",
+      "seoDescription": "Approfondissez Excel avec les formules conditionnelles, les tableaux croisés dynamiques et la mise en forme avancée.",
+      "queovalIdentFOR": "Excel niv 2"
+    },
+    {
+      "id": "excel-niveau-avance",
+      "slug": "excel-niveau-avance",
+      "title": "Excel niveau avancé",
+      "shortTitle": "Excel avancé",
+      "category": "Bureautique",
+      "duration": "2 jours",
+      "durationDetails": "2 jours, soit 14 heures de formation, pour maîtriser les fonctions avancées, les macros simples et l'automatisation de tableaux.",
+      "location": "Montpellier et distanciel tutoré",
+      "audience": "Utilisateurs confirmés ayant suivi Excel niveau 2 ou disposant d'une pratique équivalente",
+      "summary": "Maîtrisez les fonctions avancées d'Excel, les macros simples et l'automatisation de vos tableaux de bord.",
+      "description": "Cette formation avancée traite les fonctions complexes, l'imbrication de formules, l'introduction aux macros et la construction de tableaux de bord automatisés.",
+      "benefits": [
+        "Maîtrise des fonctions avancées et imbriquées",
+        "Introduction concrète à l'automatisation par macros",
+        "Tableaux de bord dynamiques et fiables"
+      ],
+      "objectives": [
+        "Construire des formules complexes et imbriquées",
+        "Automatiser des tâches répétitives avec des macros simples",
+        "Concevoir un tableau de bord dynamique et fiable"
+      ],
+      "prerequisites": [
+        "Avoir suivi Excel niveau 2 ou maîtriser les tableaux croisés dynamiques.",
+        "Être à l'aise avec les formules conditionnelles et de recherche.",
+        "Disposer d'un poste équipé d'Excel pour les exercices."
+      ],
+      "modalities": [
+        "Formation sur deux jours avec exercices pratiques progressifs.",
+        "Travail sur des cas métier de tableaux de bord complexes.",
+        "Évaluation sur la conception d'un outil automatisé fonctionnel."
+      ],
+      "programme": [
+        "Construire des formules imbriquées et des fonctions avancées.",
+        "Utiliser les fonctions de recherche avancées (INDEX, EQUIV).",
+        "Introduire l'enregistrement et l'usage de macros simples.",
+        "Concevoir un tableau de bord avec indicateurs dynamiques.",
+        "Sécuriser et fiabiliser un classeur partagé en équipe."
+      ],
+      "certification": "Attestation de formation Excel niveau avancé.",
+      "price": "590 EUR",
+      "priceDetails": "Tarif indicatif par participant, formation sur 2 jours.",
+      "successRate": "Taux de réussite 2025 : 95 %",
+      "handicapPolicy": "Formation accessible après étude des besoins. Les modalités d'accueil, le rythme et les supports peuvent être adaptés en amont avec notre référent handicap.",
+      "seoTitle": "Formation Excel niveau avancé macros et tableaux de bord",
+      "seoDescription": "Maîtrisez les fonctions avancées d'Excel, les macros simples et les tableaux de bord automatisés.",
+      "queovalIdentFOR": "Excel avancé"
+    },
+    {
+      "id": "powerpoint-niveau-avance",
+      "slug": "powerpoint-niveau-avance",
+      "title": "Power Point niveau avancé",
+      "shortTitle": "PowerPoint avancé",
+      "category": "Bureautique",
+      "duration": "1 jour",
+      "durationDetails": "1 jour, soit 7 heures de formation, pour concevoir des présentations professionnelles avancées avec PowerPoint.",
+      "location": "Montpellier et distanciel tutoré",
+      "audience": "Utilisateurs ayant des bases de PowerPoint souhaitant perfectionner leurs présentations",
+      "summary": "Perfectionnez vos présentations PowerPoint avec une mise en forme avancée, des animations et une structure impactante.",
+      "description": "Cette formation avancée permet de structurer un message clair, d'exploiter les masques de diapositives, les animations et les transitions pour produire des présentations professionnelles percutantes.",
+      "benefits": [
+        "Présentations plus structurées et impactantes",
+        "Maîtrise des masques et de la charte graphique",
+        "Utilisation pertinente des animations et transitions"
+      ],
+      "objectives": [
+        "Structurer un message clair et hiérarchisé",
+        "Exploiter les masques de diapositives et la charte graphique",
+        "Utiliser animations et transitions avec pertinence"
+      ],
+      "prerequisites": [
+        "Avoir des bases d'utilisation de PowerPoint.",
+        "Être à l'aise avec la création simple de diapositives.",
+        "Disposer d'un poste équipé de PowerPoint pour les exercices."
+      ],
+      "modalities": [
+        "Formation avec exercices pratiques sur des présentations réelles.",
+        "Travail sur la structuration du message et le design visuel.",
+        "Évaluation sur la présentation finalisée par chaque participant."
+      ],
+      "programme": [
+        "Structurer un message clair avec un plan de présentation efficace.",
+        "Exploiter les masques de diapositives et la charte graphique.",
+        "Intégrer images, graphiques et éléments visuels percutants.",
+        "Utiliser les animations et transitions avec pertinence.",
+        "Préparer une présentation orale appuyée sur le support."
+      ],
+      "certification": "Attestation de formation PowerPoint niveau avancé.",
+      "price": "320 EUR",
+      "priceDetails": "Tarif indicatif par participant.",
+      "successRate": "Taux de réussite 2025 : 97 %",
+      "handicapPolicy": "Formation accessible après étude des besoins. Les modalités d'accueil, le rythme et les supports peuvent être adaptés en amont avec notre référent handicap.",
+      "seoTitle": "Formation PowerPoint niveau avancé",
+      "seoDescription": "Perfectionnez vos présentations PowerPoint avec une formation avancée sur la mise en forme et les animations.",
+      "queovalIdentFOR": "PP avan"
+    },
+    {
+      "id": "powerpoint-niveau-debutant",
+      "slug": "powerpoint-niveau-debutant",
+      "title": "Power Point niveau débutant",
+      "shortTitle": "PowerPoint débutant",
+      "category": "Bureautique",
+      "duration": "1 jour",
+      "durationDetails": "1 jour, soit 7 heures de formation, pour découvrir PowerPoint et créer une présentation simple et claire.",
+      "location": "Montpellier et distanciel tutoré",
+      "audience": "Toute personne débutant sur PowerPoint",
+      "summary": "Découvrez PowerPoint et créez votre première présentation claire, structurée et bien mise en forme.",
+      "description": "Cette formation d'initiation permet de prendre en main l'interface PowerPoint, de créer des diapositives, d'insérer du texte et des images, et de structurer une présentation simple.",
+      "benefits": [
+        "Prise en main rapide de l'interface PowerPoint",
+        "Autonomie pour créer une présentation simple",
+        "Mise en forme claire et cohérente des diapositives"
+      ],
+      "objectives": [
+        "Se repérer dans l'interface PowerPoint",
+        "Créer et organiser des diapositives",
+        "Mettre en forme texte et images de façon cohérente"
+      ],
+      "prerequisites": [
+        "Utiliser un ordinateur dans un environnement bureautique courant.",
+        "Aucune connaissance préalable de PowerPoint n'est requise.",
+        "Disposer d'un poste équipé de PowerPoint pour les exercices."
+      ],
+      "modalities": [
+        "Formation avec exercices pratiques progressifs sur poste.",
+        "Travail sur la création d'une présentation à partir d'un cas concret.",
+        "Évaluation sur la présentation réalisée en fin de session."
+      ],
+      "programme": [
+        "Se repérer dans l'interface et le fonctionnement de PowerPoint.",
+        "Créer, dupliquer et organiser des diapositives.",
+        "Insérer et mettre en forme texte, images et formes.",
+        "Appliquer un thème et une mise en page cohérente.",
+        "Préparer l'affichage et l'export de la présentation."
+      ],
+      "certification": "Attestation de formation PowerPoint niveau débutant.",
+      "price": "290 EUR",
+      "priceDetails": "Tarif indicatif par participant.",
+      "successRate": "Taux de réussite 2025 : 98 %",
+      "handicapPolicy": "Formation accessible après étude des besoins. Les modalités d'accueil, le rythme et les supports peuvent être adaptés en amont avec notre référent handicap.",
+      "seoTitle": "Formation PowerPoint niveau débutant",
+      "seoDescription": "Découvrez PowerPoint et créez votre première présentation avec une formation d'initiation d'une journée.",
+      "queovalIdentFOR": "PP Deb"
+    },
+    {
+      "id": "word-niveau-debutant",
+      "slug": "word-niveau-debutant",
+      "title": "Word niveau débutant",
+      "shortTitle": "Word débutant",
+      "category": "Bureautique",
+      "duration": "1 jour",
+      "durationDetails": "1 jour, soit 7 heures de formation, pour découvrir Word et rédiger des documents professionnels bien mis en forme.",
+      "location": "Montpellier et distanciel tutoré",
+      "audience": "Toute personne débutant sur Word",
+      "summary": "Découvrez Word et apprenez à rédiger, mettre en forme et organiser des documents professionnels simples.",
+      "description": "Cette formation d'initiation permet de prendre en main l'interface Word, de saisir et mettre en forme du texte, d'insérer des tableaux et images, et de structurer un document professionnel.",
+      "benefits": [
+        "Prise en main rapide de l'interface Word",
+        "Autonomie pour rédiger des documents courants",
+        "Mise en forme cohérente et professionnelle"
+      ],
+      "objectives": [
+        "Se repérer dans l'interface Word",
+        "Saisir et mettre en forme un document",
+        "Insérer tableaux, images et éléments de structure"
+      ],
+      "prerequisites": [
+        "Utiliser un ordinateur dans un environnement bureautique courant.",
+        "Aucune connaissance préalable de Word n'est requise.",
+        "Disposer d'un poste équipé de Word pour les exercices."
+      ],
+      "modalities": [
+        "Formation avec exercices pratiques progressifs sur poste.",
+        "Travail sur la rédaction de documents types courants.",
+        "Évaluation sur le document finalisé en fin de session."
+      ],
+      "programme": [
+        "Se repérer dans l'interface et le fonctionnement de Word.",
+        "Saisir, corriger et mettre en forme du texte.",
+        "Insérer des tableaux, images et listes structurées.",
+        "Utiliser les styles et la mise en page automatique.",
+        "Relire, corriger et imprimer un document finalisé."
+      ],
+      "certification": "Attestation de formation Word niveau débutant.",
+      "price": "290 EUR",
+      "priceDetails": "Tarif indicatif par participant.",
+      "successRate": "Taux de réussite 2025 : 98 %",
+      "handicapPolicy": "Formation accessible après étude des besoins. Les modalités d'accueil, le rythme et les supports peuvent être adaptés en amont avec notre référent handicap.",
+      "seoTitle": "Formation Word niveau débutant",
+      "seoDescription": "Découvrez Word et apprenez à rédiger des documents professionnels avec une formation d'initiation d'une journée.",
+      "queovalIdentFOR": "Word"
     }
   ],
   "sessions": [
     {
-      "id": "sess-qpv-1",
-      "formationSlug": "formation-qualipv",
-      "city": "Rouen",
-      "startDate": "2026-05-12",
-      "endDate": "2026-05-14",
-      "seatsLeft": 7,
-      "mode": "Présentiel"
-    },
-    {
-      "id": "sess-qpv-2",
-      "formationSlug": "formation-qualipv",
-      "city": "Distanciel tutoré",
-      "startDate": "2026-06-16",
-      "endDate": "2026-06-18",
-      "seatsLeft": 12,
-      "mode": "Hybride"
-    },
-    {
-      "id": "sess-bati-1",
-      "formationSlug": "formation-qualipv-bati",
-      "city": "Rouen",
-      "startDate": "2026-06-02",
-      "endDate": "2026-06-04",
-      "seatsLeft": 8,
-      "mode": "Présentiel"
-    },
-    {
-      "id": "sess-hp-1",
-      "formationSlug": "formation-qualipv-haute-puissance",
-      "city": "Rouen",
-      "startDate": "2026-07-07",
-      "endDate": "2026-07-09",
+      "id": "sess-qualipv-36-generateur-photovoltaique-electricite-1",
+      "formationSlug": "qualipv-36-generateur-photovoltaique-electricite",
+      "city": "Toulouse",
+      "startDate": "2026-08-10",
+      "endDate": "2026-08-12",
       "seatsLeft": 6,
       "mode": "Présentiel"
     },
     {
-      "id": "sess-admin-36-1",
-      "formationSlug": "formation-demarches-administratives-36kwc",
-      "city": "Distanciel tutoré",
-      "startDate": "2026-05-20",
-      "endDate": "2026-05-20",
-      "seatsLeft": 15,
-      "mode": "Distanciel"
-    },
-    {
-      "id": "sess-admin-sup-1",
-      "formationSlug": "formation-demarches-administratives-superieur-36kwc",
-      "city": "Distanciel tutoré",
-      "startDate": "2026-06-24",
-      "endDate": "2026-06-24",
-      "seatsLeft": 12,
-      "mode": "Distanciel"
-    },
-    {
-      "id": "sess-yutaki-1",
-      "formationSlug": "formation-introduction-pac-yutaki",
-      "city": "Rouen",
-      "startDate": "2026-06-03",
-      "endDate": "2026-06-03",
-      "seatsLeft": 10,
+      "id": "sess-qualipv-bati-generateur-photovoltaique-competence-bati-1",
+      "formationSlug": "qualipv-bati-generateur-photovoltaique-competence-bati",
+      "city": "Toulouse",
+      "startDate": "2026-08-19",
+      "endDate": "2026-08-21",
+      "seatsLeft": 7,
       "mode": "Présentiel"
     },
     {
-      "id": "sess-qpac-1",
-      "formationSlug": "formation-qualipac",
-      "city": "Rouen",
-      "startDate": "2026-05-26",
-      "endDate": "2026-05-29",
-      "seatsLeft": 5,
-      "mode": "Présentiel"
-    },
-    {
-      "id": "sess-irve-1",
-      "formationSlug": "formation-irve",
-      "city": "Rouen",
-      "startDate": "2026-06-09",
-      "endDate": "2026-06-10",
-      "seatsLeft": 9,
-      "mode": "Présentiel"
-    },
-    {
-      "id": "sess-huawei-1",
-      "formationSlug": "formation-mise-en-service-certification-huawei",
-      "city": "Rouen",
-      "startDate": "2026-07-01",
-      "endDate": "2026-07-01",
-      "seatsLeft": 9,
-      "mode": "Présentiel"
-    },
-    {
-      "id": "sess-height-1",
-      "formationSlug": "formation-travail-en-hauteur",
-      "city": "Rouen",
-      "startDate": "2026-06-11",
-      "endDate": "2026-06-11",
-      "seatsLeft": 10,
-      "mode": "Présentiel"
-    },
-    {
-      "id": "sess-habil-1",
-      "formationSlug": "formation-habilitation-electrique",
-      "city": "Rouen",
-      "startDate": "2026-06-17",
-      "endDate": "2026-06-18",
+      "id": "sess-qualipv-hp-module-haute-puissance-500kva-1",
+      "formationSlug": "qualipv-hp-module-haute-puissance-500kva",
+      "city": "Toulouse",
+      "startDate": "2026-08-28",
+      "endDate": "2026-08-30",
       "seatsLeft": 8,
       "mode": "Présentiel"
     },
     {
-      "id": "sess-fluides-1",
-      "formationSlug": "formation-fluides-frigorigenes",
-      "city": "Rouen",
-      "startDate": "2026-06-23",
-      "endDate": "2026-06-25",
-      "seatsLeft": 8,
+      "id": "sess-demarches-administratives-pv-36kva-batterie-1",
+      "formationSlug": "demarches-administratives-pv-36kva-batterie",
+      "city": "Distanciel tutoré",
+      "startDate": "2026-09-06",
+      "endDate": "2026-09-08",
+      "seatsLeft": 9,
+      "mode": "Distanciel"
+    },
+    {
+      "id": "sess-demarches-administratives-pv-superieur-36kva-batterie-1",
+      "formationSlug": "demarches-administratives-pv-superieur-36kva-batterie",
+      "city": "Toulouse",
+      "startDate": "2026-09-15",
+      "endDate": "2026-09-17",
+      "seatsLeft": 10,
       "mode": "Présentiel"
     },
     {
-      "id": "sess-clim-intro-1",
-      "formationSlug": "formation-introduction-climatisation",
-      "city": "Rouen",
-      "startDate": "2026-07-08",
-      "endDate": "2026-07-08",
+      "id": "sess-demarches-administratives-pv-36kva-batterie-visio-1",
+      "formationSlug": "demarches-administratives-pv-36kva-batterie-visio",
+      "city": "Toulouse",
+      "startDate": "2026-09-24",
+      "endDate": "2026-09-26",
       "seatsLeft": 11,
       "mode": "Présentiel"
     },
     {
-      "id": "sess-vendre-1",
-      "formationSlug": "formation-vendre-solaire-autoconsommation",
+      "id": "sess-maintenance-installations-photovoltaiques-1",
+      "formationSlug": "maintenance-installations-photovoltaiques",
+      "city": "Toulouse",
+      "startDate": "2026-10-03",
+      "endDate": "2026-10-05",
+      "seatsLeft": 6,
+      "mode": "Présentiel"
+    },
+    {
+      "id": "sess-mise-en-service-certification-bourgeois-global-1",
+      "formationSlug": "mise-en-service-certification-bourgeois-global",
       "city": "Distanciel tutoré",
-      "startDate": "2026-07-15",
-      "endDate": "2026-07-15",
-      "seatsLeft": 14,
+      "startDate": "2026-10-12",
+      "endDate": "2026-10-14",
+      "seatsLeft": 7,
       "mode": "Distanciel"
     },
     {
-      "id": "sess-excel-1",
-      "formationSlug": "formation-excel-batiment",
+      "id": "sess-mise-en-service-certification-huawei-1",
+      "formationSlug": "mise-en-service-certification-huawei",
+      "city": "Toulouse",
+      "startDate": "2026-10-21",
+      "endDate": "2026-10-23",
+      "seatsLeft": 8,
+      "mode": "Présentiel"
+    },
+    {
+      "id": "sess-mise-en-service-batterie-aura-bourgeois-global-1",
+      "formationSlug": "mise-en-service-batterie-aura-bourgeois-global",
+      "city": "Toulouse",
+      "startDate": "2026-10-30",
+      "endDate": "2026-11-01",
+      "seatsLeft": 9,
+      "mode": "Présentiel"
+    },
+    {
+      "id": "sess-pose-systemes-fixations-pv-surimposition-1",
+      "formationSlug": "pose-systemes-fixations-pv-surimposition",
+      "city": "Toulouse",
+      "startDate": "2026-11-08",
+      "endDate": "2026-11-10",
+      "seatsLeft": 10,
+      "mode": "Présentiel"
+    },
+    {
+      "id": "sess-raccordement-electrique-pv-residentiel-1",
+      "formationSlug": "raccordement-electrique-pv-residentiel",
       "city": "Distanciel tutoré",
-      "startDate": "2026-07-22",
-      "endDate": "2026-07-22",
-      "seatsLeft": 15,
+      "startDate": "2026-11-17",
+      "endDate": "2026-11-19",
+      "seatsLeft": 11,
       "mode": "Distanciel"
+    },
+    {
+      "id": "sess-tereva-solaire-pv-autoconsommation-niveau-2-1",
+      "formationSlug": "tereva-solaire-pv-autoconsommation-niveau-2",
+      "city": "Toulouse",
+      "startDate": "2026-11-26",
+      "endDate": "2026-11-28",
+      "seatsLeft": 6,
+      "mode": "Présentiel"
+    },
+    {
+      "id": "sess-tereva-solaire-pv-autoconsommation-niveau-3-1",
+      "formationSlug": "tereva-solaire-pv-autoconsommation-niveau-3",
+      "city": "Toulouse",
+      "startDate": "2026-12-05",
+      "endDate": "2026-12-07",
+      "seatsLeft": 7,
+      "mode": "Présentiel"
+    },
+    {
+      "id": "sess-vendre-solaire-autoconsommation-1-jour-1",
+      "formationSlug": "vendre-solaire-autoconsommation-1-jour",
+      "city": "Toulouse",
+      "startDate": "2026-12-14",
+      "endDate": "2026-12-16",
+      "seatsLeft": 8,
+      "mode": "Présentiel"
+    },
+    {
+      "id": "sess-vendre-solaire-autoconsommation-2-jours-1",
+      "formationSlug": "vendre-solaire-autoconsommation-2-jours",
+      "city": "Distanciel tutoré",
+      "startDate": "2026-12-23",
+      "endDate": "2026-12-25",
+      "seatsLeft": 9,
+      "mode": "Distanciel"
+    },
+    {
+      "id": "sess-attestation-aptitude-fluides-frigorigenes-categorie-1-1",
+      "formationSlug": "attestation-aptitude-fluides-frigorigenes-categorie-1",
+      "city": "Toulouse",
+      "startDate": "2027-01-01",
+      "endDate": "2027-01-03",
+      "seatsLeft": 10,
+      "mode": "Présentiel"
+    },
+    {
+      "id": "sess-initiation-pac-airh2o-1",
+      "formationSlug": "initiation-pac-airh2o",
+      "city": "Toulouse",
+      "startDate": "2027-01-10",
+      "endDate": "2027-01-12",
+      "seatsLeft": 11,
+      "mode": "Présentiel"
+    },
+    {
+      "id": "sess-initiation-installation-climatisation-1",
+      "formationSlug": "initiation-installation-climatisation",
+      "city": "Toulouse",
+      "startDate": "2027-01-19",
+      "endDate": "2027-01-21",
+      "seatsLeft": 6,
+      "mode": "Présentiel"
+    },
+    {
+      "id": "sess-initiation-installation-ballons-thermodynamiques-1",
+      "formationSlug": "initiation-installation-ballons-thermodynamiques",
+      "city": "Distanciel tutoré",
+      "startDate": "2027-01-28",
+      "endDate": "2027-01-30",
+      "seatsLeft": 7,
+      "mode": "Distanciel"
+    },
+    {
+      "id": "sess-initiation-installation-pac-hitachi-1",
+      "formationSlug": "initiation-installation-pac-hitachi",
+      "city": "Toulouse",
+      "startDate": "2027-02-06",
+      "endDate": "2027-02-08",
+      "seatsLeft": 8,
+      "mode": "Présentiel"
+    },
+    {
+      "id": "sess-initiation-multi-split-triple-c-1",
+      "formationSlug": "initiation-multi-split-triple-c",
+      "city": "Toulouse",
+      "startDate": "2027-02-15",
+      "endDate": "2027-02-17",
+      "seatsLeft": 9,
+      "mode": "Présentiel"
+    },
+    {
+      "id": "sess-maintenance-pompe-a-chaleur-1",
+      "formationSlug": "maintenance-pompe-a-chaleur",
+      "city": "Toulouse",
+      "startDate": "2027-02-24",
+      "endDate": "2027-02-26",
+      "seatsLeft": 10,
+      "mode": "Présentiel"
+    },
+    {
+      "id": "sess-mise-en-service-entretien-chaudieres-granules-bois-1",
+      "formationSlug": "mise-en-service-entretien-chaudieres-granules-bois",
+      "city": "Distanciel tutoré",
+      "startDate": "2027-03-05",
+      "endDate": "2027-03-07",
+      "seatsLeft": 11,
+      "mode": "Distanciel"
+    },
+    {
+      "id": "sess-qualipac-pompes-a-chaleur-habitat-individuel-1",
+      "formationSlug": "qualipac-pompes-a-chaleur-habitat-individuel",
+      "city": "Toulouse",
+      "startDate": "2027-03-14",
+      "endDate": "2027-03-16",
+      "seatsLeft": 6,
+      "mode": "Présentiel"
+    },
+    {
+      "id": "sess-irve-niveau-1-1",
+      "formationSlug": "irve-niveau-1",
+      "city": "Toulouse",
+      "startDate": "2027-03-23",
+      "endDate": "2027-03-25",
+      "seatsLeft": 7,
+      "mode": "Présentiel"
+    },
+    {
+      "id": "sess-irve-niveau-p2-1",
+      "formationSlug": "irve-niveau-p2",
+      "city": "Toulouse",
+      "startDate": "2027-04-01",
+      "endDate": "2027-04-03",
+      "seatsLeft": 8,
+      "mode": "Présentiel"
+    },
+    {
+      "id": "sess-gestion-priorites-intra-entreprise-1",
+      "formationSlug": "gestion-priorites-intra-entreprise",
+      "city": "Distanciel tutoré",
+      "startDate": "2027-04-10",
+      "endDate": "2027-04-12",
+      "seatsLeft": 9,
+      "mode": "Distanciel"
+    },
+    {
+      "id": "sess-autorisation-de-conduite-caces-1",
+      "formationSlug": "autorisation-de-conduite-caces",
+      "city": "Toulouse",
+      "startDate": "2027-04-19",
+      "endDate": "2027-04-21",
+      "seatsLeft": 10,
+      "mode": "Présentiel"
+    },
+    {
+      "id": "sess-decouverte-de-l-electricite-1",
+      "formationSlug": "decouverte-de-l-electricite",
+      "city": "Toulouse",
+      "startDate": "2027-04-28",
+      "endDate": "2027-04-30",
+      "seatsLeft": 11,
+      "mode": "Présentiel"
+    },
+    {
+      "id": "sess-habilitation-electrique-br-p-3-jours-1",
+      "formationSlug": "habilitation-electrique-br-p-3-jours",
+      "city": "Toulouse",
+      "startDate": "2027-05-07",
+      "endDate": "2027-05-09",
+      "seatsLeft": 6,
+      "mode": "Présentiel"
+    },
+    {
+      "id": "sess-habilitation-electrique-recyclage-1-5-jour-1",
+      "formationSlug": "habilitation-electrique-recyclage-1-5-jour",
+      "city": "Distanciel tutoré",
+      "startDate": "2027-05-16",
+      "endDate": "2027-05-18",
+      "seatsLeft": 7,
+      "mode": "Distanciel"
+    },
+    {
+      "id": "sess-prevention-chutes-hauteur-harnais-pont-fixe-1",
+      "formationSlug": "prevention-chutes-hauteur-harnais-pont-fixe",
+      "city": "Toulouse",
+      "startDate": "2027-05-25",
+      "endDate": "2027-05-27",
+      "seatsLeft": 8,
+      "mode": "Présentiel"
+    },
+    {
+      "id": "sess-sst-initial-1",
+      "formationSlug": "sst-initial",
+      "city": "Toulouse",
+      "startDate": "2027-06-03",
+      "endDate": "2027-06-05",
+      "seatsLeft": 9,
+      "mode": "Présentiel"
+    },
+    {
+      "id": "sess-sst-recyclage-1",
+      "formationSlug": "sst-recyclage",
+      "city": "Toulouse",
+      "startDate": "2027-06-12",
+      "endDate": "2027-06-14",
+      "seatsLeft": 10,
+      "mode": "Présentiel"
+    },
+    {
+      "id": "sess-decouvrir-intelligence-artificielle-1",
+      "formationSlug": "decouvrir-intelligence-artificielle",
+      "city": "Distanciel tutoré",
+      "startDate": "2027-06-21",
+      "endDate": "2027-06-23",
+      "seatsLeft": 11,
+      "mode": "Distanciel"
+    },
+    {
+      "id": "sess-excel-niveau-1-1",
+      "formationSlug": "excel-niveau-1",
+      "city": "Toulouse",
+      "startDate": "2027-06-30",
+      "endDate": "2027-07-02",
+      "seatsLeft": 6,
+      "mode": "Présentiel"
+    },
+    {
+      "id": "sess-excel-niveau-2-1",
+      "formationSlug": "excel-niveau-2",
+      "city": "Toulouse",
+      "startDate": "2027-07-09",
+      "endDate": "2027-07-11",
+      "seatsLeft": 7,
+      "mode": "Présentiel"
+    },
+    {
+      "id": "sess-excel-niveau-avance-1",
+      "formationSlug": "excel-niveau-avance",
+      "city": "Toulouse",
+      "startDate": "2027-07-18",
+      "endDate": "2027-07-20",
+      "seatsLeft": 8,
+      "mode": "Présentiel"
+    },
+    {
+      "id": "sess-powerpoint-niveau-avance-1",
+      "formationSlug": "powerpoint-niveau-avance",
+      "city": "Distanciel tutoré",
+      "startDate": "2027-07-27",
+      "endDate": "2027-07-29",
+      "seatsLeft": 9,
+      "mode": "Distanciel"
+    },
+    {
+      "id": "sess-powerpoint-niveau-debutant-1",
+      "formationSlug": "powerpoint-niveau-debutant",
+      "city": "Toulouse",
+      "startDate": "2027-08-05",
+      "endDate": "2027-08-07",
+      "seatsLeft": 10,
+      "mode": "Présentiel"
+    },
+    {
+      "id": "sess-word-niveau-debutant-1",
+      "formationSlug": "word-niveau-debutant",
+      "city": "Toulouse",
+      "startDate": "2027-08-14",
+      "endDate": "2027-08-16",
+      "seatsLeft": 11,
+      "mode": "Présentiel"
     }
   ]
 }

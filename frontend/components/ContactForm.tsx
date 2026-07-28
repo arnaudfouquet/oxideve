@@ -13,8 +13,8 @@ type Props = {
 };
 
 export function ContactForm({
-  defaultFormationSlug = "formation-qualipv",
-  defaultSessionId = "sess-qpv-1",
+  defaultFormationSlug = "",
+  defaultSessionId = "",
   formations = [],
   sessions = [],
   showSelectors = false,

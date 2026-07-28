@@ -31,6 +31,7 @@ model Formation {
   handicapPolicy  String?       @db.Text
   seoTitle        String
   seoDescription  String        @db.Text
+  queovalIdentFOR String?       @unique
   createdAt       DateTime      @default(now())
   updatedAt       DateTime      @updatedAt
   sessions        Session[]

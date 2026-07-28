@@ -7,7 +7,6 @@ import { Container } from "@/components/ui";
 const navItems = [
   { href: "/qui-sommes-nous", label: "Qui sommes-nous" },
   { href: "/formations", label: "Formations" },
-  { href: "/rge", label: "RGE" },
   { href: "/actualites", label: "Actualités" },
 ];
 

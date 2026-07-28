@@ -27,6 +27,7 @@ function normalizeFormation(formation) {
     priceDetails: formation.priceDetails || "",
     successRate: formation.successRate || "",
     handicapPolicy: formation.handicapPolicy || "",
+    queovalIdentFOR: formation.queovalIdentFOR || null,
   };
 }
 

@@ -20,6 +20,7 @@ export type Formation = {
   priceDetails: string;
   successRate: string;
   handicapPolicy: string;
+  queovalIdentFOR?: string | null;
 };
 
 export type Session = {

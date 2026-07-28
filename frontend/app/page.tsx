@@ -21,11 +21,11 @@ function categoryAnchor(category: string) {
 }
 
 const homeCategories = [
+  { title: ["Formation", "sécurité au travail"], href: categoryAnchor("Sécurité au travail") },
+  { title: ["Formation", "bureautique"], href: categoryAnchor("Bureautique") },
+  { title: ["Formation", "management"], href: categoryAnchor("Management") },
   { title: ["Formation", "photovoltaïque"], href: categoryAnchor("Photovoltaïque") },
   { title: ["Formation", "pompe à chaleur"], href: categoryAnchor("Pompes à chaleur") },
-  { title: ["Formation", "bornes de recharge"], href: categoryAnchor("Bornes de recharge") },
-  { title: ["Formation", "sécurité au travail"], href: categoryAnchor("Sécurité au travail") },
-  { title: ["Formation", "Excel"], href: categoryAnchor("Bureautique") },
   { title: "Logo", href: "/formations", accent: true, logo: true },
 ];
 
@@ -153,32 +153,18 @@ export default async function HomePage() {
 
       <Section className="landing-section">
         <Container>
-          <div className="rge-highlight-card">
-            <div>
-              <h2>TOUT SAVOIR SUR LES CERTIFICATIONS RGE</h2>
-              <h3>Une expertise reconnaissable grâce à votre certification</h3>
-              <p>Découvrez l&apos;importance d&apos;être artisan RGE grâce à nos formations QualiPV, QualiPAC et IRVE.</p>
-              <ButtonLink className="ui-button-blue" href="/rge" variant="primary">Devenir artisan RGE</ButtonLink>
-            </div>
-            <div className="rge-badges">
-              <div className="rge-highlight-media">
-                <img alt="Formations QualiPV, QualiPAC et Recharge Elec+" src={rgeHighlightImage} />
-              </div>
-            </div>
-          </div>
-
           <div className="day-type-card">
             <div className="day-type-copy">
               <h2>Votre journée type <span className="title-accent">chez Oxideve</span></h2>
               <p>Chaque programme est structuré pour combiner théorie essentielle et pratique sur nos plateaux techniques.</p>
-              <p>Nos formations énergies renouvelables sont conçues pour enrichir vos compétences et vous préparer aux défis actuels du secteur du bâtiment. Que ce soit en photovoltaïque, pompes à chaleur, sécurité, bureautique ou véhicules électriques, nos parcours répondent à vos besoins.</p>
+              <p>Nos formations professionnelles sont conçues pour enrichir vos compétences et vous préparer aux défis actuels de votre métier, quel qu'il soit. Sécurité, bureautique, management, habilitations ou énergies renouvelables, nos parcours répondent à vos besoins.</p>
               <p>Explorez le déroulé de chaque formation et trouvez celle qui correspond le mieux à vos ambitions. Faites le premier pas vers une qualification reconnue et un apprentissage de qualité.</p>
               <ul>
-                <li>Photovoltaïque</li>
-                <li>Pompe à chaleur</li>
-                <li>Sécurité</li>
+                <li>Sécurité au travail</li>
                 <li>Bureautique</li>
-                <li>Véhicules électriques</li>
+                <li>Management</li>
+                <li>Photovoltaïque &amp; pompe à chaleur</li>
+                <li>Habilitations &amp; CACES</li>
               </ul>
             </div>
             <div className="day-type-visual">
@@ -201,11 +187,25 @@ export default async function HomePage() {
             </div>
           </div>
 
+          <div className="rge-highlight-card">
+            <div>
+              <h2>TOUT SAVOIR SUR LES CERTIFICATIONS RGE</h2>
+              <h3>Une expertise reconnaissable grâce à votre certification</h3>
+              <p>Nos formations QualiPV, QualiPAC et IRVE préparent vos équipes à la qualification RGE.</p>
+              <ButtonLink className="ui-button-blue" href="/rge" variant="primary">Devenir artisan RGE</ButtonLink>
+            </div>
+            <div className="rge-badges">
+              <div className="rge-highlight-media">
+                <img alt="Formations QualiPV, QualiPAC et Recharge Elec+" src={rgeHighlightImage} />
+              </div>
+            </div>
+          </div>
+
           <div className="funding-card funding-card-last">
             <div>
               <h2>Aide financière formation</h2>
               <p>Notre centre de formation professionnelle certifié Qualiopi vous permet d&apos;accéder à des organismes de financement formation comme le CPF, les OPCO et d&apos;autres dispositifs.</p>
-              <p>Notre objectif est de rendre nos formations en énergies renouvelables accessibles à tous et de soutenir votre montée en compétences face aux attentes du marché.</p>
+              <p>Notre objectif est de rendre nos formations accessibles à tous et de soutenir votre montée en compétences face aux attentes du marché.</p>
             </div>
             <ButtonLink className="ui-button-card" href="/actualites" variant="secondary">Découvrir</ButtonLink>
           </div>

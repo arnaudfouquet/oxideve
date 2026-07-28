@@ -79,7 +79,7 @@ export default async function FormationDetailPage({ params }: Props) {
               <Badge tone="accent">{formation.category}</Badge>
               <Title as="h1" title={formation.title} description={formation.summary} />
               <div className="formation-hero-actions">
-                <ButtonLink href={`/inscriptions?formationSlug=${formation.slug}&sessionId=${sessions[0]?.id || ""}`} variant="primary">Je m'inscris</ButtonLink>
+                <ButtonLink href="#inscription" variant="primary">Je m'inscris</ButtonLink>
                 <ButtonLink href="/contact" variant="secondary">Parler a l'equipe</ButtonLink>
               </div>
             </div>
@@ -87,7 +87,7 @@ export default async function FormationDetailPage({ params }: Props) {
               <strong>Prochaine session</strong>
               <p>{sessions[0] ? formatDateRange(sessions[0].startDate, sessions[0].endDate) : "Calendrier en preparation"}</p>
               <span>{sessions[0]?.city || formation.location}</span>
-              <ButtonLink href={`/inscriptions?formationSlug=${formation.slug}&sessionId=${sessions[0]?.id || ""}`} variant="primary">Choisir cette session</ButtonLink>
+              <ButtonLink href="#inscription" variant="primary">Choisir cette session</ButtonLink>
             </aside>
           </div>
 
@@ -120,52 +120,54 @@ export default async function FormationDetailPage({ params }: Props) {
                   </ul>
                 </div>
               </div>
+
+              <details className="formation-detail-accordion">
+                <summary>Voir le programme détaillé</summary>
+                <ul className="detail-list">
+                  {formation.programme.map((item) => (
+                    <li key={item}>{item}</li>
+                  ))}
+                </ul>
+              </details>
+
+              <details className="formation-detail-accordion">
+                <summary>Prérequis et modalités</summary>
+                <div className="detail-block-grid">
+                  <div>
+                    <h3>Prérequis</h3>
+                    <ul className="detail-list">
+                      {formation.prerequisites.map((item) => (
+                        <li key={item}>{item}</li>
+                      ))}
+                    </ul>
+                  </div>
+                  <div>
+                    <h3>Modalités</h3>
+                    <ul className="detail-list">
+                      {formation.modalities.map((item) => (
+                        <li key={item}>{item}</li>
+                      ))}
+                    </ul>
+                  </div>
+                </div>
+              </details>
             </article>
 
             <aside className="detail-sidebar-stack">
-              <div className="detail-side-card">
-                <h2>Prérequis</h2>
-                <ul className="detail-list">
-                  {formation.prerequisites.map((item) => (
-                    <li key={item}>{item}</li>
-                  ))}
-                </ul>
-              </div>
-              <div className="detail-side-card">
-                <h2>Modalites</h2>
-                <ul className="detail-list">
-                  {formation.modalities.map((item) => (
-                    <li key={item}>{item}</li>
-                  ))}
-                </ul>
-              </div>
               <div className="detail-side-card detail-side-card-accent">
                 <h2>Informations pratiques</h2>
                 <p><strong>Duree detaillee :</strong> {formation.durationDetails}</p>
                 <p><strong>Tarif :</strong> {formation.priceDetails}</p>
                 <p><strong>Reussite :</strong> {formation.successRate}</p>
+                <p><strong>Accessibilité :</strong> {formation.handicapPolicy}</p>
+                <p><strong>Finalité :</strong> {formation.certification}</p>
               </div>
             </aside>
           </div>
         </Container>
       </Section>
 
-      <Section surface="muted">
-        <Container>
-          <Title eyebrow="Programme" title="Deroule jour par jour" />
-          <div className="programme-list programme-list-modern">
-            {formation.programme.map((item, index) => (
-              <article className="programme-card" key={item}>
-                <span className="programme-step">{String(index + 1).padStart(2, "0")}</span>
-                <h3>Jour {index + 1}</h3>
-                <p>{item}</p>
-              </article>
-            ))}
-          </div>
-        </Container>
-      </Section>
-
-      <Section>
+      <Section surface="muted" id="inscription">
         <Container>
           <div className="session-detail-grid">
             <div>
@@ -176,37 +178,26 @@ export default async function FormationDetailPage({ params }: Props) {
                 ))}
               </div>
             </div>
-            <div className="detail-side-card">
-              <h2>Accessibilite</h2>
-              <p>{formation.handicapPolicy}</p>
-              <h2>Finalite</h2>
-              <p>{formation.certification}</p>
+            <div className="contact-card contact-card-form">
+              <Title eyebrow="Inscription" title={`Préparer votre inscription à ${formation.shortTitle}`} />
+              <ContactForm defaultFormationSlug={formation.slug} defaultSessionId={sessions[0]?.id} />
             </div>
           </div>
         </Container>
       </Section>
 
-      <Section className="detail-cta-section">
-        <Container className="detail-cta-band detail-cta-band-green">
-          <div>
-            <Title eyebrow="Inscription" title={`Préparer votre inscription à ${formation.shortTitle}`} description="Le formulaire ci-contre permet de rattacher directement votre demande à cette formation et à la prochaine session visible." />
-          </div>
-          <div className="contact-card contact-card-form">
-            <ContactForm defaultFormationSlug={formation.slug} defaultSessionId={sessions[0]?.id} />
-          </div>
-        </Container>
-      </Section>
-
-      <Section>
-        <Container>
-          <Title eyebrow="Formations similaires" title={`Autres formations ${formation.category.toLowerCase()}`} />
-          <div className="training-showcase-grid">
-            {similarFormations.map((item) => (
-              <FormationCard formation={item} key={item.slug} />
-            ))}
-          </div>
-        </Container>
-      </Section>
+      {similarFormations.length ? (
+        <Section>
+          <Container>
+            <Title eyebrow="Formations similaires" title={`Autres formations ${formation.category.toLowerCase()}`} />
+            <div className="training-showcase-grid">
+              {similarFormations.map((item) => (
+                <FormationCard formation={item} key={item.slug} />
+              ))}
+            </div>
+          </Container>
+        </Section>
+      ) : null}
     </>
   );
 }
