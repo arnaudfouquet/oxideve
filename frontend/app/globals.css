@@ -1084,7 +1084,6 @@ main {
 .hero-shell-grid,
 .spotlight-grid,
 .detail-cta-band,
-.session-detail-grid,
 .catalog-filter-bar,
 .detail-layout-modern,
 .contact-layout-modern,
@@ -1106,12 +1105,16 @@ main {
   grid-template-columns: repeat(auto-fit, minmax(280px, 380px));
 }
 
+.session-booking-stack {
+  display: grid;
+  gap: var(--space-4);
+}
+
 .hero-shell-grid,
 .spotlight-grid,
 .detail-layout-modern,
 .contact-layout-modern,
-.detail-cta-band,
-.session-detail-grid {
+.detail-cta-band {
   grid-template-columns: minmax(0, 1.35fr) minmax(320px, 0.9fr);
 }
 
@@ -1761,7 +1764,6 @@ main {
   .detail-layout-modern,
   .contact-layout-modern,
   .detail-cta-band,
-  .session-detail-grid,
   .formation-hero,
   .detail-block-grid,
   .catalog-hero-shell,
@@ -3885,8 +3887,8 @@ main {
 
 .review-track-viewport {
   overflow: hidden;
-  mask-image: linear-gradient(90deg, transparent, #000 6%, #000 94%, transparent);
-  -webkit-mask-image: linear-gradient(90deg, transparent, #000 6%, #000 94%, transparent);
+  mask-image: linear-gradient(90deg, transparent, #000 48px, #000 calc(100% - 48px), transparent);
+  -webkit-mask-image: linear-gradient(90deg, transparent, #000 48px, #000 calc(100% - 48px), transparent);
 }
 
 .review-track {
@@ -3914,8 +3916,9 @@ main {
   width: min(360px, 82vw);
   padding: 26px 28px;
   border-radius: var(--radius-xl);
-  background: rgba(255, 255, 255, 0.92);
-  box-shadow: var(--shadow-card);
+  background: var(--color-white);
+  border: 1px solid var(--border-subtle);
+  box-shadow: 0 8px 24px rgba(0, 77, 109, 0.08);
 }
 
 .review-card-head {

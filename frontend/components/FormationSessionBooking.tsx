@@ -24,24 +24,29 @@ export function FormationSessionBooking({ formation, sessions }: Props) {
   function handleSelectSession(sessionId: string) {
     setSelectedSessionId(sessionId);
     formRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
+
+    const firstField = formRef.current?.querySelector<HTMLInputElement>('input[name="company"]');
+    firstField?.focus({ preventScroll: true });
   }
 
   return (
-    <div className="session-detail-grid">
-      <div>
-        <Title eyebrow="Sessions" title="Sessions disponibles" />
-        <div className="session-grid">
-          {sessions.map((session) => (
-            <SessionCard
-              formation={formation}
-              isSelected={session.id === selectedSessionId}
-              key={session.id}
-              onSelect={handleSelectSession}
-              session={session}
-            />
-          ))}
+    <div className="session-booking-stack">
+      {sessions.length > 1 ? (
+        <div>
+          <Title eyebrow="Sessions" title="Sessions disponibles" />
+          <div className="session-grid">
+            {sessions.map((session) => (
+              <SessionCard
+                formation={formation}
+                isSelected={session.id === selectedSessionId}
+                key={session.id}
+                onSelect={handleSelectSession}
+                session={session}
+              />
+            ))}
+          </div>
         </div>
-      </div>
+      ) : null}
       <div className="contact-card contact-card-form" ref={formRef}>
         <Title eyebrow="Inscription" title={`Préparer votre inscription à ${formation.shortTitle}`} />
         {selectedSession ? (
