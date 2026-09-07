@@ -6,6 +6,8 @@ import type { Formation, Session } from "../../shared/types";
 type Props = {
   defaultFormationSlug?: string;
   defaultSessionId?: string;
+  /** Session imposée depuis l'extérieur (ex: clic sur une carte de session). Prend le pas sur la sélection interne. */
+  selectedSessionId?: string;
   formations?: Formation[];
   sessions?: Session[];
   showSelectors?: boolean;
@@ -15,6 +17,7 @@ type Props = {
 export function ContactForm({
   defaultFormationSlug = "",
   defaultSessionId = "",
+  selectedSessionId: controlledSessionId,
   formations = [],
   sessions = [],
   showSelectors = false,
@@ -23,7 +26,10 @@ export function ContactForm({
   const [status, setStatus] = useState<"idle" | "loading" | "success" | "error">("idle");
   const [message, setMessage] = useState("");
   const [selectedFormationSlug, setSelectedFormationSlug] = useState(defaultFormationSlug);
-  const [selectedSessionId, setSelectedSessionId] = useState(defaultSessionId);
+  const [internalSessionId, setInternalSessionId] = useState(defaultSessionId);
+  const isControlled = controlledSessionId !== undefined;
+  const selectedSessionId = isControlled ? controlledSessionId : internalSessionId;
+  const setSelectedSessionId = isControlled ? () => {} : setInternalSessionId;
 
   const categories = useMemo(
     () => Array.from(new Set(formations.map((formation) => formation.category))),

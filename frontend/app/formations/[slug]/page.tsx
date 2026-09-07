@@ -1,8 +1,7 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
-import { ContactForm } from "@/components/ContactForm";
 import { FormationCard } from "@/components/FormationCard";
-import { SessionCard } from "@/components/SessionCard";
+import { FormationSessionBooking } from "@/components/FormationSessionBooking";
 import { Badge, ButtonLink, Container, Section, Text, Title } from "@/components/ui";
 import { formatDateRange, getFormationBySlug, getFormations, getSessionsForFormation, getSiteUrl } from "@/lib/content";
 
@@ -197,7 +196,7 @@ export default async function FormationDetailPage({ params }: Props) {
         </Container>
       </Section>
 
-      <Section id="inscription">
+      <Section>
         <Container>
           <div className="formation-pricing-grid">
             <div className="formation-pricing-card">
@@ -221,22 +220,9 @@ export default async function FormationDetailPage({ params }: Props) {
         </Container>
       </Section>
 
-      <Section surface="muted">
+      <Section id="inscription" surface="muted">
         <Container>
-          <div className="session-detail-grid">
-            <div>
-              <Title eyebrow="Sessions" title="Sessions disponibles" />
-              <div className="session-grid">
-                {sessions.map((session) => (
-                  <SessionCard key={session.id} formation={formation} session={session} />
-                ))}
-              </div>
-            </div>
-            <div className="contact-card contact-card-form">
-              <Title eyebrow="Inscription" title={`Préparer votre inscription à ${formation.shortTitle}`} />
-              <ContactForm defaultFormationSlug={formation.slug} defaultSessionId={sessions[0]?.id} />
-            </div>
-          </div>
+          <FormationSessionBooking formation={formation} sessions={sessions} />
         </Container>
       </Section>
 

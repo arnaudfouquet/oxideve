@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
-import Link from "next/link";
 import { TrainingCalendar } from "@/components/TrainingCalendar";
+import { ButtonLink } from "@/components/ui";
 import { getFormations, getSessions } from "@/lib/content";
 
 export const dynamic = "force-dynamic";
@@ -34,9 +34,9 @@ export default async function CalendrierPage() {
             <h2>Prêt à réserver ?</h2>
             <p>La page d'inscription vous permet d'envoyer votre demande en quelques étapes.</p>
             <div className="cta-row">
-              <Link href="/inscriptions" className="button button-primary">
+              <ButtonLink href="/inscriptions" variant="primary">
                 Aller à l'inscription
-              </Link>
+              </ButtonLink>
             </div>
           </article>
         </div>

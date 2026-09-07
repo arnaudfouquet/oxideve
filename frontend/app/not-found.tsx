@@ -1,4 +1,4 @@
-import Link from "next/link";
+import { ButtonLink } from "@/components/ui";
 
 export default function NotFoundPage() {
   return (
@@ -7,9 +7,9 @@ export default function NotFoundPage() {
         <span className="eyebrow">404</span>
         <h1>Page introuvable</h1>
         <p>La ressource demandée n'existe pas ou a été déplacée.</p>
-        <Link href="/" className="button button-primary">
+        <ButtonLink href="/" variant="primary">
           Revenir à l'accueil
-        </Link>
+        </ButtonLink>
       </div>
     </section>
   );

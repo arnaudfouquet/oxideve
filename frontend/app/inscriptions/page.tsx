@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
 import { ContactForm } from "@/components/ContactForm";
-import { TrainingCalendar } from "@/components/TrainingCalendar";
 import { getFormations, getSessions } from "@/lib/content";
 
 export const dynamic = "force-dynamic";
@@ -34,25 +33,16 @@ export default async function InscriptionsPage({ searchParams }: Props) {
           <p>Choisissez une formation, une session disponible et transmettez votre demande. L'équipe Oxideve vous recontacte ensuite pour confirmer l'organisation.</p>
         </div>
 
-        <div className="contact-layout">
-          <article className="contact-card">
-            <h2>Formulaire d'inscription</h2>
-            <p>Utilisez ce formulaire pour réserver une place ou demander des informations complémentaires sur une session.</p>
-            <ContactForm
-              formations={formations}
-              sessions={sessions}
-              showSelectors
-              defaultFormationSlug={defaultFormationSlug}
-              defaultSessionId={defaultSessionId}
-              submitLabel="Envoyer l'inscription"
-            />
-          </article>
-          <article className="contact-card">
-            <h2>Sessions disponibles</h2>
-            <p>Voici les créneaux actuellement ouverts pour vous aider à choisir une date adaptée.</p>
-            <TrainingCalendar formations={formations} sessions={sessions.slice(0, 5)} compact />
-          </article>
-        </div>
+        <article className="contact-card contact-card-standalone">
+          <ContactForm
+            formations={formations}
+            sessions={sessions}
+            showSelectors
+            defaultFormationSlug={defaultFormationSlug}
+            defaultSessionId={defaultSessionId}
+            submitLabel="Envoyer l'inscription"
+          />
+        </article>
       </div>
     </section>
   );

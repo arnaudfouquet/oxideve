@@ -1,6 +1,6 @@
-import Link from "next/link";
 import type { Formation, Session } from "../../shared/types";
 import { formatDateRange, formatShortDate } from "@/lib/content";
+import { ButtonLink } from "@/components/ui";
 
 type Props = {
   formations: Formation[];
@@ -30,9 +30,12 @@ export function TrainingCalendar({ formations, sessions, compact = false }: Prop
               <p>{formatDateRange(session.startDate, session.endDate)}</p>
             </div>
             <div className="schedule-action">
-              <Link href={`/formations/${session.formationSlug}`} className="button button-secondary">
+              <ButtonLink href={`/formations/${session.formationSlug}`} variant="secondary">
                 Voir la formation
-              </Link>
+              </ButtonLink>
+              <ButtonLink href={`/inscriptions?formationSlug=${session.formationSlug}&sessionId=${session.id}`} variant="primary">
+                S'inscrire
+              </ButtonLink>
             </div>
           </article>
         );
