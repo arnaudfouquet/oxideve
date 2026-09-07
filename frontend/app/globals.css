@@ -63,6 +63,7 @@ main {
 
 .ui-section {
   padding: 72px 0;
+  scroll-margin-top: 84px;
 }
 
 .ui-section-muted {
@@ -1589,6 +1590,7 @@ main {
 
 .contact-card-form {
   background: rgba(255, 255, 255, 0.96);
+  scroll-margin-top: 108px;
 }
 
 .contact-card-standalone {
