@@ -1,5 +1,5 @@
 import type { Formation, Session } from "../../shared/types";
-import { formatDateRange, formatShortDate } from "@/lib/content";
+import { formatDateRange, formatShortDate } from "@/lib/dates";
 import { ButtonLink } from "@/components/ui";
 
 type Props = {

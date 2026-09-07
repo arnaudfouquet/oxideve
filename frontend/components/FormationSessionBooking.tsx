@@ -5,16 +5,12 @@ import type { Formation, Session } from "../../shared/types";
 import { ContactForm } from "@/components/ContactForm";
 import { SessionCard } from "@/components/SessionCard";
 import { Title } from "@/components/ui";
+import { formatDateRange } from "@/lib/dates";
 
 type Props = {
   formation: Formation;
   sessions: Session[];
 };
-
-function formatDateRange(startDate: string, endDate: string) {
-  const formatter = new Intl.DateTimeFormat("fr-FR", { day: "2-digit", month: "long", year: "numeric" });
-  return `${formatter.format(new Date(startDate))} au ${formatter.format(new Date(endDate))}`;
-}
 
 export function FormationSessionBooking({ formation, sessions }: Props) {
   const [selectedSessionId, setSelectedSessionId] = useState(sessions[0]?.id || "");
