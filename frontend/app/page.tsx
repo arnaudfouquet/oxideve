@@ -1,5 +1,6 @@
 import { ButtonLink, Container, Section } from "@/components/ui";
 import { HomeCalendarSection, HomeIdentitySection } from "@/components/HomeExperience";
+import { TestimonialCarousel } from "@/components/TestimonialCarousel";
 import { getFormations, getSessions } from "@/lib/content";
 
 export const dynamic = "force-dynamic";
@@ -142,13 +143,23 @@ export default async function HomePage() {
             <div className="trust-strip-copy">
               <h3>Ils nous font confiance</h3>
               <p>Des professionnels du terrain choisissent Oxideve pour des formations concrètes, rapides et directement applicables.</p>
+              <ul className="trust-strip-points">
+                <li>Formateurs experts et disponibles</li>
+                <li>Sessions courtes, résultats concrets</li>
+                <li>Suivi personnalisé après formation</li>
+              </ul>
             </div>
             <div className="trust-strip-card">
               <img alt="Avis Google Oxideve" src={trustIconUrl} />
-              <strong>4,7/5 sur les avis stagiaires</strong>
+              <strong>4,7/5</strong>
+              <span>sur les avis stagiaires</span>
             </div>
           </div>
         </Container>
+      </Section>
+
+      <Section className="landing-section landing-testimonials-section">
+        <TestimonialCarousel />
       </Section>
 
       <Section className="landing-section">

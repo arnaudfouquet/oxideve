@@ -41,7 +41,7 @@ export default async function FormationsPage() {
 
         <div className="catalog-summary-row">
           {categories.map((item) => (
-            <Link className="catalog-summary-card catalog-summary-card-link" href={`#${categoryId(item)}`} key={item} scroll>
+            <Link className="catalog-summary-card" href={`#${categoryId(item)}`} key={item} scroll>
               <strong>{item}</strong>
               <span>{formations.filter((formation) => formation.category === item).length} formations</span>
             </Link>
