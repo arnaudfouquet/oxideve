@@ -2,7 +2,7 @@
 
 import { useEffect, useMemo, useState } from "react";
 import { Button } from "@/components/ui";
-import type { Article, Company, CrmInteraction, CrmTask, Formation, PendingSyncSession, Registration, Session } from "../../shared/types";
+import type { Article, BulletinInscriptionWithAttempts, Company, CrmInteraction, CrmTask, Formation, PendingSyncSession, Registration, Session } from "../../shared/types";
 
 type Props = {
   initialArticles: Article[];
@@ -12,9 +12,10 @@ type Props = {
   initialFormations: Formation[];
   initialSessions: Session[];
   initialRegistrations: Registration[];
+  initialBulletinInscriptions: BulletinInscriptionWithAttempts[];
 };
 
-type Section = "dashboard" | "companies" | "sessions" | "formations" | "editorial";
+type Section = "dashboard" | "companies" | "sessions" | "formations" | "editorial" | "bulletins";
 
 type FormationDraft = {
   slug: string;
@@ -312,6 +313,7 @@ export function AdminWorkspace({
   initialFormations,
   initialSessions,
   initialRegistrations,
+  initialBulletinInscriptions,
 }: Props) {
   const [section, setSection] = useState<Section>("dashboard");
   const [articles, setArticles] = useState(initialArticles);
@@ -321,11 +323,13 @@ export function AdminWorkspace({
   const [formations, setFormations] = useState(initialFormations);
   const [sessions, setSessions] = useState(initialSessions);
   const [registrations] = useState(initialRegistrations);
+  const [bulletinInscriptions] = useState(initialBulletinInscriptions);
 
   const [editingFormationSlug, setEditingFormationSlug] = useState(initialFormations[0]?.slug || "");
   const [editingSessionId, setEditingSessionId] = useState(initialSessions[0]?.id || "");
   const [editingArticleSlug, setEditingArticleSlug] = useState(initialArticles[0]?.slug || "");
   const [editingCompanyId, setEditingCompanyId] = useState(initialCompanies[0]?.id || "");
+  const [selectedBulletinId, setSelectedBulletinId] = useState(initialBulletinInscriptions[0]?.id || "");
 
   const [formationDraft, setFormationDraft] = useState(toFormationDraft(initialFormations[0]));
   const [sessionDraft, setSessionDraft] = useState(toSessionDraft(initialSessions[0]));
@@ -446,6 +450,12 @@ export function AdminWorkspace({
       .sort((left, right) => compareDateDesc(left.nextSessionDate || left.lastContactLabel, right.nextSessionDate || right.lastContactLabel));
   }, [companies, registrationDetails]);
 
+  const sortedBulletinInscriptions = useMemo(() => {
+    return [...bulletinInscriptions].sort((left, right) => compareDateDesc(left.createdAt, right.createdAt));
+  }, [bulletinInscriptions]);
+
+  const selectedBulletin = bulletinInscriptions.find((bulletin) => bulletin.id === selectedBulletinId);
+
   const currentCompany = companies.find((company) => company.id === editingCompanyId) || companies[0];
   const currentCompanyTasks = crmTasks.filter((task) => task.companyId === editingCompanyId).sort((left, right) => compareDate(left.dueDate, right.dueDate));
   const currentCompanyInteractions = crmInteractions
@@ -504,6 +514,11 @@ export function AdminWorkspace({
   function setError(message: string) {
     setFeedbackTone("error");
     setFeedback(message);
+  }
+
+  function selectBulletin(bulletinId: string) {
+    setSelectedBulletinId(bulletinId);
+    setFeedback("");
   }
 
   function selectCompany(companyId: string) {
@@ -941,6 +956,7 @@ export function AdminWorkspace({
             ["sessions", "Sessions"],
             ["formations", "Catalogue"],
             ["editorial", "Editorial"],
+            ["bulletins", "Bulletins d'inscription"],
           ].map(([value, label]) => (
             <button className={`admin-sidebar-link${section === value ? " active" : ""}`} key={value} onClick={() => setSection(value as Section)} type="button">
               {label}
@@ -1353,6 +1369,124 @@ export function AdminWorkspace({
               <Button disabled={saving} type="submit">{saving ? "Enregistrement..." : editingArticleSlug ? "Mettre à jour" : "Créer l'article"}</Button>
             </form>
           </section>
+        </div>
+      ) : null}
+
+      {section === "bulletins" ? (
+        <div className="admin-dual-pane">
+          <section className="admin-shell">
+            <div className="section-heading section-heading-tight">
+              <div>
+                <span className="eyebrow">Demandes</span>
+                <h2>Bulletins d&apos;inscription</h2>
+                <p>Consultez les bulletins reçus et le résultat de l&apos;auto-évaluation associée.</p>
+              </div>
+            </div>
+            <div className="admin-list admin-list-dense">
+              {sortedBulletinInscriptions.length === 0 ? <div className="admin-empty-state">Aucun bulletin d&apos;inscription reçu pour le moment.</div> : null}
+              {sortedBulletinInscriptions.map((bulletin) => {
+                const formation = formations.find((item) => item.slug === bulletin.formationSlug);
+                const hasQuizAttempt = bulletin.quizAttempts.length > 0;
+                return (
+                  <button className={`admin-list-item${selectedBulletinId === bulletin.id ? " active" : ""}`} key={bulletin.id} onClick={() => selectBulletin(bulletin.id)} type="button">
+                    <strong>{bulletin.learnerFullName}</strong>
+                    <span>{bulletin.companyName}</span>
+                    <span>{formation?.shortTitle || bulletin.formationSlug}</span>
+                    <span>{formatRegistrationDate(bulletin.createdAt)}</span>
+                    <span className={`stat-pill${hasQuizAttempt ? "" : " stat-pill-muted"}`}>
+                      {hasQuizAttempt ? "Auto-évaluation complétée" : "Pas d'auto-évaluation"}
+                    </span>
+                  </button>
+                );
+              })}
+            </div>
+          </section>
+
+          <div className="admin-detail-stack">
+            {selectedBulletin ? (
+              <>
+                <section className="admin-shell">
+                  <div className="section-heading section-heading-tight"><div><span className="eyebrow">Fiche</span><h2>{selectedBulletin.learnerFullName}</h2></div></div>
+
+                  <div className="admin-form-section">
+                    <h3>Formation et session</h3>
+                    <div className="form-grid">
+                      <label><span>Formation</span><p>{formations.find((item) => item.slug === selectedBulletin.formationSlug)?.title || selectedBulletin.formationSlug}</p></label>
+                      <label><span>Dates de session</span><p>{selectedBulletin.sessionDates || "Non renseignées"}</p></label>
+                      <label><span>Lieu de session</span><p>{selectedBulletin.sessionLocation || "Non renseigné"}</p></label>
+                      <label><span>Origine</span><p>{selectedBulletin.source || "Non renseignée"}</p></label>
+                      <label><span>Distributeur</span><p>{selectedBulletin.distributorName || "Non applicable"}</p></label>
+                      <label><span>Date de soumission</span><p>{formatRegistrationDate(selectedBulletin.createdAt)}</p></label>
+                    </div>
+                  </div>
+
+                  <div className="admin-form-section">
+                    <h3>Commanditaire de la formation</h3>
+                    <div className="form-grid">
+                      <label><span>Raison sociale</span><p>{selectedBulletin.companyName}</p></label>
+                      <label><span>SIRET</span><p>{selectedBulletin.siret || "Non renseigné"}</p></label>
+                      <label><span>Code APE</span><p>{selectedBulletin.apeCode || "Non renseigné"}</p></label>
+                      <label><span>Adresse</span><p>{selectedBulletin.companyAddress || "Non renseignée"}</p></label>
+                      <label><span>Prénom et nom</span><p>{selectedBulletin.sponsorFullName}</p></label>
+                      <label><span>Fonction</span><p>{selectedBulletin.sponsorRole || "Non renseignée"}</p></label>
+                      <label><span>Email</span><p>{selectedBulletin.sponsorEmail}</p></label>
+                      <label><span>Téléphone</span><p>{selectedBulletin.sponsorPhone}</p></label>
+                    </div>
+                  </div>
+
+                  <div className="admin-form-section">
+                    <h3>Apprenant</h3>
+                    <div className="form-grid">
+                      <label><span>Prénom et nom</span><p>{selectedBulletin.learnerFullName}</p></label>
+                      <label><span>Fonction</span><p>{selectedBulletin.learnerRole || "Non renseignée"}</p></label>
+                      <label><span>Téléphone</span><p>{selectedBulletin.learnerPhone || "Non renseigné"}</p></label>
+                      <label><span>Date de naissance</span><p>{formatDateLabel(selectedBulletin.learnerBirthDate)}</p></label>
+                      <label><span>Situation de handicap</span><p>{selectedBulletin.hasDisability ? "Oui" : "Non"}</p></label>
+                      {selectedBulletin.hasDisability ? <label><span>Précisions</span><p>{selectedBulletin.disabilityDetails || "Non renseignées"}</p></label> : null}
+                    </div>
+                  </div>
+                </section>
+
+                <section className="admin-shell">
+                  <div className="section-heading section-heading-tight"><div><span className="eyebrow">Auto-évaluation</span><h2>Résultat du quiz</h2></div></div>
+                  {selectedBulletin.quizAttempts.length === 0 ? (
+                    <p className="admin-empty-state">L&apos;apprenant n&apos;a pas encore réalisé son auto-évaluation.</p>
+                  ) : (
+                    <div className="admin-stack-grid">
+                      {selectedBulletin.quizAttempts.map((attempt) => (
+                        <div className="quiz-result" key={attempt.id}>
+                          <p><strong>Score : {attempt.scoreOn20} / 20</strong> · passé le {formatRegistrationDate(attempt.createdAt)}</p>
+                          {attempt.details ? (
+                            <div className="quiz-result-list">
+                              {attempt.details.map((detail) => (
+                                <div className={`quiz-result-item ${detail.isCorrect ? "is-correct" : "is-incorrect"}`} key={detail.questionId}>
+                                  <p className="quiz-result-question">{detail.question}</p>
+                                  <p>
+                                    Réponse soumise : <strong>{detail.submittedLabel || "Non répondu"}</strong>
+                                  </p>
+                                  {!detail.isCorrect ? (
+                                    <p>
+                                      Bonne réponse : <strong>{detail.correctLabel}</strong>
+                                    </p>
+                                  ) : null}
+                                </div>
+                              ))}
+                            </div>
+                          ) : (
+                            <p className="admin-empty-state">Le quiz associé à cette tentative n&apos;existe plus.</p>
+                          )}
+                        </div>
+                      ))}
+                    </div>
+                  )}
+                </section>
+              </>
+            ) : (
+              <section className="admin-shell">
+                <div className="admin-empty-state">Sélectionnez un bulletin d&apos;inscription pour afficher son détail.</div>
+              </section>
+            )}
+          </div>
         </div>
       ) : null}
       </div>

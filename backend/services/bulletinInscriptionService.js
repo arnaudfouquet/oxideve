@@ -87,6 +87,22 @@ async function createBulletinInscription(payload) {
   return normalizeBulletinInscription(fallbackBulletin);
 }
 
+async function listBulletinInscriptions() {
+  const prisma = getPrismaClient();
+
+  if (prisma) {
+    const bulletins = await prisma.bulletinInscription.findMany({
+      orderBy: { createdAt: "desc" },
+    });
+
+    return bulletins.map(normalizeBulletinInscription);
+  }
+
+  return [...inMemoryBulletinInscriptions]
+    .map(normalizeBulletinInscription)
+    .sort((left, right) => right.createdAt.localeCompare(left.createdAt));
+}
+
 async function getBulletinInscriptionById(id) {
   const prisma = getPrismaClient();
 
@@ -123,6 +139,7 @@ async function markConfirmationEmailSent(id) {
 
 module.exports = {
   createBulletinInscription,
+  listBulletinInscriptions,
   getBulletinInscriptionById,
   markConfirmationEmailSent,
 };

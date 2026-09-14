@@ -1,7 +1,6 @@
 "use client";
 
 import { FormEvent, useEffect, useState } from "react";
-import { Title } from "@/components/ui";
 
 type PublicQuizOption = {
   label: string;
@@ -106,6 +105,14 @@ export function QuizForm({ quizSlug, bulletinInscriptionId = "" }: Props) {
       }
     }
 
+    const selfRatings: Record<string, string> = {};
+    for (const domain of quiz.selfRatingDomains) {
+      const value = formData.get(`self-rating-${domain.id}`);
+      if (typeof value === "string") {
+        selfRatings[domain.id] = value;
+      }
+    }
+
     const payload = {
       bulletinInscriptionId,
       quizSlug: quiz.slug,
@@ -113,6 +120,7 @@ export function QuizForm({ quizSlug, bulletinInscriptionId = "" }: Props) {
       learnerEmail,
       companyName,
       answers,
+      selfRatings,
     };
 
     const response = await fetch("/api/quiz-attempt", {
@@ -142,12 +150,27 @@ export function QuizForm({ quizSlug, bulletinInscriptionId = "" }: Props) {
   }
 
   if (status === "success" && result) {
+    const scoreRatio = Math.max(0, Math.min(1, result.scoreOn20 / 20));
+
     return (
       <div className="quiz-result">
-        <Title as="h2" eyebrow="Résultat" title={`Votre score : ${result.scoreOn20} / 20`} />
-        <p>
-          {result.correctCount} bonne(s) réponse(s) sur {result.totalQuestions} question(s).
-        </p>
+        <div className="quiz-score-card">
+          <div
+            className="quiz-score-ring"
+            style={{ "--quiz-score-ratio": scoreRatio } as React.CSSProperties}
+          >
+            <span className="quiz-score-value">{result.scoreOn20}</span>
+            <span className="quiz-score-max">/ 20</span>
+          </div>
+          <div>
+            <h2 className="bulletin-form-block-title">
+              <span>✓</span> Auto-évaluation complétée
+            </h2>
+            <p>
+              {result.correctCount} bonne(s) réponse(s) sur {result.totalQuestions} question(s).
+            </p>
+          </div>
+        </div>
         <div className="quiz-result-list">
           {result.details.map((detail) => (
             <div key={detail.questionId} className={`quiz-result-item ${detail.isCorrect ? "is-correct" : "is-incorrect"}`}>
@@ -167,10 +190,14 @@ export function QuizForm({ quizSlug, bulletinInscriptionId = "" }: Props) {
     );
   }
 
+  const totalSteps = quiz.questions.length;
+
   return (
     <form className="contact-form quiz-form" onSubmit={handleSubmit}>
       <section className="bulletin-form-block">
-        <Title as="h2" eyebrow="Vos informations" title="Qui êtes-vous ?" />
+        <h2 className="bulletin-form-block-title">
+          <span>1</span> Qui êtes-vous ?
+        </h2>
         <div className="form-grid">
           <label>
             Prénom et nom
@@ -188,7 +215,9 @@ export function QuizForm({ quizSlug, bulletinInscriptionId = "" }: Props) {
       </section>
 
       <section className="bulletin-form-block">
-        <Title as="h2" eyebrow="Auto-positionnement" title="Situez vos connaissances" />
+        <h2 className="bulletin-form-block-title">
+          <span>2</span> Situez vos connaissances
+        </h2>
         <div className="quiz-self-rating-grid">
           {quiz.selfRatingDomains.map((domain) => (
             <fieldset className="quiz-self-rating-item" key={domain.id}>
@@ -207,12 +236,14 @@ export function QuizForm({ quizSlug, bulletinInscriptionId = "" }: Props) {
       </section>
 
       <section className="bulletin-form-block">
-        <Title as="h2" eyebrow="Questions" title="Testez vos connaissances" />
+        <h2 className="bulletin-form-block-title">
+          <span>3</span> Testez vos connaissances
+        </h2>
         <div className="quiz-question-list">
           {quiz.questions.map((question, index) => (
             <fieldset className="quiz-question" key={question.id}>
               <legend>
-                Question {index + 1} — {question.domain}
+                <span className="quiz-question-number">{index + 1}/{totalSteps}</span> {question.domain}
               </legend>
               <p className="quiz-question-text">{question.question}</p>
               <div className="quiz-question-options">

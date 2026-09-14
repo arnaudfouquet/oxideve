@@ -41,7 +41,7 @@ export default async function AutoEvaluationPage({ params, searchParams }: Props
           </p>
         </div>
 
-        <article className="contact-card contact-card-standalone">
+        <article className="contact-card bulletin-form-shell">
           <QuizForm quizSlug={quizSlug} bulletinInscriptionId={query?.bulletinInscriptionId || ""} />
         </article>
       </div>

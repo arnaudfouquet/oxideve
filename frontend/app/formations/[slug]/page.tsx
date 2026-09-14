@@ -3,7 +3,7 @@ import { notFound } from "next/navigation";
 import { FormationCard } from "@/components/FormationCard";
 import { FormationSessionBooking } from "@/components/FormationSessionBooking";
 import { Badge, ButtonLink, Container, Section, Text, Title } from "@/components/ui";
-import { formatDateRange, getFormationBySlug, getFormations, getSessionsForFormation, getSiteUrl } from "@/lib/content";
+import { getFormationBySlug, getFormations, getSessionsForFormation, getSiteUrl } from "@/lib/content";
 
 export const dynamic = "force-dynamic";
 
@@ -89,13 +89,11 @@ export default async function FormationDetailPage({ params }: Props) {
             </div>
           </div>
 
-          <div className="info-bar info-bar-with-cta">
-            <div><span>Prochaine session</span><strong>{sessions[0] ? formatDateRange(sessions[0].startDate, sessions[0].endDate) : "En preparation"}</strong></div>
+          <div className="info-bar">
             <div><span>Duree</span><strong>{formation.duration}</strong></div>
-            <div><span>Lieu</span><strong>{sessions[0]?.city || formation.location}</strong></div>
+            <div><span>Lieu</span><strong>{formation.location}</strong></div>
             <div><span>Tarif</span><strong>{formation.price}</strong></div>
             <div><span>Public</span><strong>{formation.audience}</strong></div>
-            <ButtonLink className="info-bar-cta" href="#inscription" variant="primary">Choisir cette session</ButtonLink>
           </div>
 
           {formation.rgeBadge ? (

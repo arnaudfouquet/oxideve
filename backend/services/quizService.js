@@ -14,6 +14,8 @@ function getQuizByFormationSlug(formationSlug) {
 }
 
 function normalizeQuizAttempt(attempt) {
+  const rawAnswers = attempt.answers || {};
+
   return {
     id: attempt.id,
     bulletinInscriptionId: attempt.bulletinInscriptionId,
@@ -21,7 +23,8 @@ function normalizeQuizAttempt(attempt) {
     learnerFullName: attempt.learnerFullName,
     learnerEmail: attempt.learnerEmail,
     companyName: attempt.companyName || "",
-    answers: attempt.answers,
+    answers: rawAnswers.answers || rawAnswers,
+    selfRatings: rawAnswers.selfRatings || {},
     scoreOn20: attempt.scoreOn20,
     createdAt:
       typeof attempt.createdAt === "string" ? attempt.createdAt : new Date(attempt.createdAt).toISOString(),
@@ -65,6 +68,7 @@ async function submitQuizAttempt(payload) {
   }
 
   const { details, scoreOn20, correctCount, totalQuestions } = scoreQuizAnswers(quiz, payload.answers);
+  const storedAnswers = { answers: payload.answers, selfRatings: payload.selfRatings || {} };
 
   const prisma = getPrismaClient();
 
@@ -86,7 +90,7 @@ async function submitQuizAttempt(payload) {
         learnerFullName: payload.learnerFullName,
         learnerEmail: payload.learnerEmail,
         companyName: payload.companyName || null,
-        answers: payload.answers,
+        answers: storedAnswers,
         scoreOn20,
       },
     });
@@ -102,6 +106,7 @@ async function submitQuizAttempt(payload) {
   const fallbackAttempt = {
     id: randomUUID(),
     ...payload,
+    answers: storedAnswers,
     scoreOn20,
     createdAt: new Date().toISOString(),
   };
@@ -114,6 +119,59 @@ async function submitQuizAttempt(payload) {
     correctCount,
     totalQuestions,
   };
+}
+
+/**
+ * Enrichit une tentative normalisée avec le détail correct/incorrect par question,
+ * recalculé à la volée à partir du quiz correspondant (pas de stockage du détail en base).
+ * Si le quiz n'existe plus (quizSlug orphelin), `details` est renvoyé à null sans planter.
+ */
+function buildQuizAttemptDetail(attempt) {
+  const quiz = getQuizBySlug(attempt.quizSlug);
+
+  if (!quiz) {
+    return { ...attempt, details: null, correctCount: null, totalQuestions: null };
+  }
+
+  const { details, correctCount, totalQuestions } = scoreQuizAnswers(quiz, attempt.answers);
+
+  return { ...attempt, details, correctCount, totalQuestions };
+}
+
+async function listQuizAttemptsByBulletinId(bulletinInscriptionId) {
+  const prisma = getPrismaClient();
+
+  if (prisma) {
+    const attempts = await prisma.quizAttempt.findMany({
+      where: { bulletinInscriptionId },
+      orderBy: { createdAt: "desc" },
+    });
+
+    return attempts.map(normalizeQuizAttempt).map(buildQuizAttemptDetail);
+  }
+
+  return inMemoryQuizAttempts
+    .filter((attempt) => attempt.bulletinInscriptionId === bulletinInscriptionId)
+    .map(normalizeQuizAttempt)
+    .sort((left, right) => right.createdAt.localeCompare(left.createdAt))
+    .map(buildQuizAttemptDetail);
+}
+
+async function listAllQuizAttempts() {
+  const prisma = getPrismaClient();
+
+  if (prisma) {
+    const attempts = await prisma.quizAttempt.findMany({
+      orderBy: { createdAt: "desc" },
+    });
+
+    return attempts.map(normalizeQuizAttempt).map(buildQuizAttemptDetail);
+  }
+
+  return [...inMemoryQuizAttempts]
+    .map(normalizeQuizAttempt)
+    .sort((left, right) => right.createdAt.localeCompare(left.createdAt))
+    .map(buildQuizAttemptDetail);
 }
 
 function toPublicQuiz(quiz) {
@@ -150,4 +208,7 @@ module.exports = {
   getPublicQuizByFormationSlug,
   getPublicQuizBySlug,
   submitQuizAttempt,
+  listQuizAttemptsByBulletinId,
+  listAllQuizAttempts,
+  buildQuizAttemptDetail,
 };

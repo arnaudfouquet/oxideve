@@ -163,10 +163,27 @@ export type QuizAttemptInput = {
   answers: Record<string, string>;
 };
 
+export type QuizAttemptDetail = {
+  questionId: string;
+  domain: string;
+  question: string;
+  submittedLabel: string | null;
+  correctLabel: string | null;
+  isCorrect: boolean;
+};
+
 export type QuizAttempt = QuizAttemptInput & {
   id: string;
   scoreOn20: number;
   createdAt: string;
+  /** Détail correct/incorrect par question, recalculé côté serveur. `null` si le quiz n'existe plus. */
+  details?: QuizAttemptDetail[] | null;
+  correctCount?: number | null;
+  totalQuestions?: number | null;
+};
+
+export type BulletinInscriptionWithAttempts = BulletinInscription & {
+  quizAttempts: QuizAttempt[];
 };
 
 export type Company = {

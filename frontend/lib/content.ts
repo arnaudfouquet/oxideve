@@ -1,6 +1,6 @@
 import "server-only";
 import catalogData from "../../shared/catalog-data.json";
-import type { Article, CatalogData, Company, CrmInteraction, CrmTask, Formation, Registration, Session } from "../../shared/types";
+import type { Article, BulletinInscriptionWithAttempts, CatalogData, Company, CrmInteraction, CrmTask, Formation, QuizAttempt, Registration, Session } from "../../shared/types";
 import { blogArticles } from "./editorial";
 
 const catalog = catalogData as CatalogData;
@@ -13,6 +13,14 @@ type CatalogServiceModule = {
 
 type RegistrationServiceModule = {
   listRegistrations: () => Promise<Registration[]>;
+};
+
+type BulletinInscriptionServiceModule = {
+  listBulletinInscriptions: () => Promise<BulletinInscriptionWithAttempts[]>;
+};
+
+type QuizServiceModule = {
+  listAllQuizAttempts: () => Promise<QuizAttempt[]>;
 };
 
 type CompanyServiceModule = {
@@ -46,6 +54,14 @@ function getCatalogService(): CatalogServiceModule {
 
 function getRegistrationService(): RegistrationServiceModule {
   return require("../../backend/services/registrationService.js") as RegistrationServiceModule;
+}
+
+function getBulletinInscriptionService(): BulletinInscriptionServiceModule {
+  return require("../../backend/services/bulletinInscriptionService.js") as BulletinInscriptionServiceModule;
+}
+
+function getQuizService(): QuizServiceModule {
+  return require("../../backend/services/quizService.js") as QuizServiceModule;
 }
 
 function getCompanyService(): CompanyServiceModule {
@@ -110,6 +126,24 @@ export async function getRegistrations(): Promise<Registration[]> {
   try {
     const service = getRegistrationService();
     return await service.listRegistrations();
+  } catch {
+    return [];
+  }
+}
+
+export async function getBulletinInscriptions(): Promise<BulletinInscriptionWithAttempts[]> {
+  try {
+    const bulletinService = getBulletinInscriptionService();
+    const quizService = getQuizService();
+    const [bulletins, quizAttempts] = await Promise.all([
+      bulletinService.listBulletinInscriptions(),
+      quizService.listAllQuizAttempts(),
+    ]);
+
+    return bulletins.map((bulletin) => ({
+      ...bulletin,
+      quizAttempts: quizAttempts.filter((attempt) => attempt.bulletinInscriptionId === bulletin.id),
+    }));
   } catch {
     return [];
   }

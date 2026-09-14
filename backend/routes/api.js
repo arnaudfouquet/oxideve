@@ -16,10 +16,15 @@ const { createCompany, listCompanies, updateCompany } = require("../services/com
 const { createCrmInteraction, createCrmTask, listCrmInteractions, listCrmTasks, updateCrmTask } = require("../services/crmService");
 const { createRegistration, listRegistrations } = require("../services/registrationService");
 const { syncQueovalCalendar, listPendingSyncSessions, resolvePendingSyncSession } = require("../services/queovalService");
-const { createBulletinInscription } = require("../services/bulletinInscriptionService");
+const { createBulletinInscription, listBulletinInscriptions } = require("../services/bulletinInscriptionService");
 const { generateBulletinPdf } = require("../services/pdfService");
 const { sendBulletinConfirmationEmail } = require("../services/mailService");
-const { getPublicQuizByFormationSlug, getPublicQuizBySlug, submitQuizAttempt } = require("../services/quizService");
+const {
+  getPublicQuizByFormationSlug,
+  getPublicQuizBySlug,
+  submitQuizAttempt,
+  listAllQuizAttempts,
+} = require("../services/quizService");
 
 const inscriptionSchema = z.object({
   company: z.string().min(2).max(120),
@@ -136,6 +141,7 @@ const quizAttemptSchema = z.object({
   learnerEmail: z.string().email(),
   companyName: z.string().max(200).optional(),
   answers: z.record(z.string(), z.string()),
+  selfRatings: z.record(z.string(), z.string()).optional(),
 });
 
 function asyncHandler(handler) {
@@ -301,6 +307,23 @@ function createApiRouter() {
       ]);
 
       res.json({ data: { formations, sessions, registrations, articles, companies, crmTasks, crmInteractions } });
+    })
+  );
+
+  router.get(
+    "/admin/bulletin-inscriptions",
+    asyncHandler(async (_req, res) => {
+      const [bulletins, quizAttempts] = await Promise.all([
+        listBulletinInscriptions(),
+        listAllQuizAttempts(),
+      ]);
+
+      const data = bulletins.map((bulletin) => ({
+        ...bulletin,
+        quizAttempts: quizAttempts.filter((attempt) => attempt.bulletinInscriptionId === bulletin.id),
+      }));
+
+      res.json({ data });
     })
   );
 
