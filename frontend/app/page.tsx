@@ -5,7 +5,7 @@ import { getFormations, getSessions } from "@/lib/content";
 
 export const dynamic = "force-dynamic";
 
-const heroImage = encodeURI("/assets/accueil/formation oxideve hero.webp");
+const heroImage = encodeURI("/assets/accueil/formation oxideve hero.jpg");
 const whiteLogoUrl = "https://oxideve.com/wp-content/uploads/2024/11/LOGO_OXIDEVE_BLANC_WEB_SVG.svg";
 const infoIconUrl = "/assets/info-icon.svg";
 const trustIconUrl = encodeURI("/assets/accueil/icone google avis oxideve.svg");

@@ -45,6 +45,9 @@ export function FormationSessionBooking({ formation, sessions }: Props) {
       ) : null}
       <div className="contact-card contact-card-form" ref={formRef}>
         <Title eyebrow="Inscription" title={`Préparer votre inscription à ${formation.shortTitle}`} />
+        <p className="contact-card-note">
+          Ceci constitue la première étape de votre inscription. Dès réception de votre demande, vous serez contactés pour valider celle-ci.
+        </p>
         {selectedSession ? (
           <p className="contact-card-session-summary">
             Session choisie : <strong>{selectedSession.city}</strong>, du {formatDateRange(selectedSession.startDate, selectedSession.endDate)}

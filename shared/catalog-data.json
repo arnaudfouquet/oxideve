@@ -3345,142 +3345,6 @@
       ]
     },
     {
-      "id": "autorisation-de-conduite-caces",
-      "slug": "autorisation-de-conduite-caces",
-      "title": "Autorisation de conduite",
-      "shortTitle": "CACES",
-      "category": "Sécurité au travail",
-      "duration": "3 jours",
-      "durationDetails": "3 jours, soit 21 heures de formation théorique et pratique, pour préparer l'autorisation de conduite d'engins de chantier.",
-      "location": "Montpellier",
-      "audience": "Conducteurs d'engins et personnels de chantier",
-      "summary": "Préparez votre autorisation de conduite d'engins avec une formation alliant théorie réglementaire et pratique sur engin.",
-      "description": "Cette formation prépare les candidats à la conduite en sécurité d'engins de chantier, avec des apports théoriques sur la réglementation et des exercices pratiques de conduite encadrés.",
-      "benefits": [
-        "Préparation complète théorique et pratique",
-        "Mise en situation sur engin réel",
-        "Réflexes de sécurité renforcés avant délivrance de l'autorisation"
-      ],
-      "objectives": [
-        "Connaître la réglementation liée à la conduite d'engins",
-        "Réaliser les manœuvres de conduite en sécurité",
-        "Obtenir l'autorisation de conduite délivrée par l'employeur"
-      ],
-      "prerequisites": [
-        "Être apte médicalement à la conduite d'engins.",
-        "Avoir un intérêt ou une expérience pour la conduite d'engins de chantier.",
-        "Maîtriser le français à l'écrit et à l'oral pour l'évaluation théorique."
-      ],
-      "modalities": [
-        "Formation avec apports théoriques et exercices pratiques sur engin.",
-        "Mises en situation encadrées par un formateur qualifié.",
-        "Évaluation théorique et pratique en fin de parcours."
-      ],
-      "programme": [
-        {
-          "title": "Réglementation et prévention des risques",
-          "sequences": [
-            {
-              "title": "Connaître la réglementation applicable",
-              "points": [
-                "Situer le cadre réglementaire de l'autorisation de conduite délivrée par l'employeur.",
-                "Identifier les responsabilités de l'employeur et du conducteur.",
-                "Repérer les catégories d'engins concernées par la formation."
-              ]
-            },
-            {
-              "title": "Identifier les risques liés à la conduite",
-              "points": [
-                "Repérer les risques de renversement, de collision et d'écrasement.",
-                "Identifier les zones à risque sur un chantier type.",
-                "Adopter les règles de circulation et de signalisation sur site."
-              ]
-            }
-          ]
-        },
-        {
-          "title": "Pratique de conduite en sécurité",
-          "sequences": [
-            {
-              "title": "Réaliser les vérifications de prise de poste",
-              "points": [
-                "Effectuer les contrôles visuels et fonctionnels avant utilisation de l'engin.",
-                "Vérifier les dispositifs de sécurité présents sur l'engin.",
-                "Identifier les anomalies justifiant l'arrêt de l'utilisation."
-              ]
-            },
-            {
-              "title": "S'entraîner aux manoeuvres en sécurité",
-              "points": [
-                "Réaliser des manoeuvres de conduite encadrées sur le terrain d'exercice.",
-                "Appliquer les règles de circulation et de stabilisation de l'engin.",
-                "Adapter sa conduite aux conditions du chantier et à la charge transportée."
-              ]
-            }
-          ]
-        },
-        {
-          "title": "Évaluation théorique et pratique",
-          "sequences": [
-            {
-              "title": "Valider les compétences acquises",
-              "points": [
-                "Répondre à un questionnaire théorique sur la réglementation et la sécurité.",
-                "Réaliser une évaluation pratique de conduite encadrée par le formateur.",
-                "Obtenir les éléments nécessaires à la délivrance de l'autorisation de conduite."
-              ]
-            }
-          ]
-        }
-      ],
-      "certification": "Formation préparant à l'autorisation de conduite d'engins délivrée par l'employeur.",
-      "price": "890 EUR",
-      "priceDetails": "Tarif indicatif par participant, location d'engin et supports inclus selon la session.",
-      "successRate": "Taux de réussite 2025 : 95 %",
-      "handicapPolicy": "Formation accessible après étude des besoins. Les modalités d'accueil, le rythme et les supports peuvent être adaptés en amont avec notre référent handicap.",
-      "seoTitle": "Formation CACES autorisation de conduite d'engins",
-      "seoDescription": "Préparez votre autorisation de conduite d'engins avec une formation théorique et pratique complète.",
-      "queovalIdentFOR": "CACES",
-      "videoUrl": null,
-      "rgeBadge": null,
-      "priceMemberLabel": null,
-      "priceMember": null,
-      "memberProgram": null,
-      "faq": [
-        {
-          "question": "Cette formation délivre-t-elle directement le CACES ?",
-          "answer": "La formation prépare à la conduite en sécurité et fournit les éléments d'évaluation nécessaires ; l'autorisation de conduite est ensuite délivrée par l'employeur sur la base de ces résultats."
-        },
-        {
-          "question": "Existe-t-il une visite médicale à prévoir ?",
-          "answer": "Oui, une aptitude médicale à la conduite d'engins est requise ; elle doit être vérifiée par l'employeur avant l'entrée en formation."
-        },
-        {
-          "question": "Cette formation est-elle finançable par mon OPCO ?",
-          "answer": "Oui, un devis peut être établi pour permettre une prise en charge par votre OPCO."
-        }
-      ],
-      "stats": {
-        "participantsLastYear": 68,
-        "successCount": 65
-      },
-      "gallery": [],
-      "relatedSlugs": [
-        {
-          "label": "Habilitation électrique BR P 3 jours",
-          "slug": "habilitation-electrique-br-p-3-jours"
-        },
-        {
-          "label": "SST Initial",
-          "slug": "sst-initial"
-        },
-        {
-          "label": "Prévention chutes de hauteur",
-          "slug": "prevention-chutes-hauteur-harnais-pont-fixe"
-        }
-      ]
-    },
-    {
       "id": "decouverte-de-l-electricite",
       "slug": "decouverte-de-l-electricite",
       "title": "Découverte de l'électricité",
@@ -3913,10 +3777,6 @@
       },
       "gallery": [],
       "relatedSlugs": [
-        {
-          "label": "Autorisation de conduite (CACES)",
-          "slug": "autorisation-de-conduite-caces"
-        },
         {
           "label": "SST Initial",
           "slug": "sst-initial"
@@ -5140,15 +5000,6 @@
       "endDate": "2027-04-10",
       "seatsLeft": 9,
       "mode": "Distanciel"
-    },
-    {
-      "id": "sess-autorisation-de-conduite-caces-1",
-      "formationSlug": "autorisation-de-conduite-caces",
-      "city": "Toulouse",
-      "startDate": "2027-04-19",
-      "endDate": "2027-04-21",
-      "seatsLeft": 10,
-      "mode": "Présentiel"
     },
     {
       "id": "sess-decouverte-de-l-electricite-1",

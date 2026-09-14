@@ -21,7 +21,7 @@ export function ContactForm({
   formations = [],
   sessions = [],
   showSelectors = false,
-  submitLabel = "Réserver un échange",
+  submitLabel = "J'envoie mes informations pour me pré-inscrire",
 }: Props) {
   const [status, setStatus] = useState<"idle" | "loading" | "success" | "error">("idle");
   const [message, setMessage] = useState("");

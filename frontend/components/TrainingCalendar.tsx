@@ -24,7 +24,6 @@ export function TrainingCalendar({ formations, sessions, compact = false }: Prop
               <div className="meta-row">
                 <span className="meta-pill">{session.mode}</span>
                 <span className="meta-pill">{session.city}</span>
-                <span className="meta-pill">{session.seatsLeft} places</span>
               </div>
               <h3>{formation?.title || session.formationSlug}</h3>
               <p>{formatDateRange(session.startDate, session.endDate)}</p>

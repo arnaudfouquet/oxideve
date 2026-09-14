@@ -71,7 +71,7 @@ const faqItems = [
     content: "Parce que les parcours relient exigences certification, préparation du dossier et réalité chantier dans une même logique pédagogique.",
   },
   {
-    title: "Formation BTP : Découvrez notre panel de formations",
+    title: "Découvrez notre panel de formations",
     content: "Les parcours couvrent le photovoltaïque, la pompe à chaleur, l’IRVE, la sécurité et les autres enjeux techniques du bâtiment.",
   },
 ];

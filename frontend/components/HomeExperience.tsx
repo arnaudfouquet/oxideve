@@ -17,8 +17,8 @@ const identitySteps = [
     note:
       "Nos formations courtes sont conçues pour transmettre des connaissances théoriques et permettre aux participants de manipuler les équipements sur des plateaux techniques.",
     description:
-      "Former et préparer les professionnels du BTP aux réglementations actuelles, à subsister face à la concurrence accrue grâce à nos formations en bâtiment.",
-    image: encodeURI("/assets/accueil/Notre visio.webp"),
+      "Former et préparer les professionnels aux réglementations actuelles, à subsister face à la concurrence accrue grâce à nos formations.",
+    image: encodeURI("/assets/accueil/Notre visio.jpg"),
   },
   {
     id: "2",
@@ -223,12 +223,12 @@ export function HomeCalendarSection({ formations, sessions }: Props) {
         <div className="home-calendar-heading">
           <h2>
             <span>Nos prochaines sessions</span>
-            <strong>de formation BTP</strong>
+            <strong>de formation</strong>
           </h2>
           <p>
             Inscrivez-vous à nos formations courtes et techniques
             <br />
-            pour les professionnels du bâtiment
+            pour les professionnels
           </p>
         </div>
 

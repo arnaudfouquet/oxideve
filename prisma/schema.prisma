@@ -102,6 +102,48 @@ model EmailLog {
   inscription   Inscription  @relation(fields: [inscriptionId], references: [id], onDelete: Cascade)
 }
 
+model BulletinInscription {
+  id                  String    @id @default(cuid())
+  formationSlug       String
+  sessionId           String?
+  sessionDates        String?
+  sessionLocation      String?
+  source              String?
+  distributorName     String?
+  companyName         String
+  siret               String?
+  apeCode             String?
+  companyAddress      String?
+  sponsorFullName     String
+  sponsorRole         String?
+  sponsorEmail        String
+  sponsorPhone        String
+  learnerFullName     String
+  learnerRole         String?
+  learnerPhone        String?
+  learnerBirthDate    DateTime?
+  hasDisability       Boolean   @default(false)
+  disabilityDetails   String?   @db.Text
+  status              String    @default("submitted")
+  confirmationEmailSentAt DateTime?
+  createdAt           DateTime  @default(now())
+  updatedAt           DateTime  @updatedAt
+  quizAttempts        QuizAttempt[]
+}
+
+model QuizAttempt {
+  id                     String    @id @default(cuid())
+  bulletinInscriptionId  String
+  quizSlug               String
+  learnerFullName        String
+  learnerEmail           String
+  companyName            String?
+  answers                Json
+  scoreOn20              Float
+  createdAt              DateTime  @default(now())
+  bulletinInscription    BulletinInscription @relation(fields: [bulletinInscriptionId], references: [id], onDelete: Cascade)
+}
+
 model Article {
   id                   String    @id @default(cuid())
   slug                 String    @unique

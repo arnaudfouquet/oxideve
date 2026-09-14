@@ -24,7 +24,6 @@ export function SessionCard({ session, formation, compact = false, isSelected = 
       <h3>{formation?.title || session.formationSlug}</h3>
       <Text tone="muted">Session organisée à {session.city}</Text>
       <div className="session-card-meta">
-        <span>{session.seatsLeft} places disponibles</span>
         <span>{session.mode}</span>
       </div>
       {onSelect ? (

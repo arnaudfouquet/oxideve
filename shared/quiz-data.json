@@ -1,0 +1,1111 @@
+[
+  {
+    "slug": "qualipv",
+    "formationSlug": "qualipv-36-generateur-photovoltaique-electricite",
+    "title": "Auto-évaluation Formation QualiPV",
+    "selfRatingDomains": [
+      {
+        "id": "unites",
+        "label": "Unités, formules, schémas"
+      },
+      {
+        "id": "reglementation",
+        "label": "Réglementation électrique"
+      },
+      {
+        "id": "protection",
+        "label": "Protection des biens et des personnes"
+      },
+      {
+        "id": "pv",
+        "label": "Connaissances en photovoltaïques (PV)"
+      }
+    ],
+    "questions": [
+      {
+        "id": "unites-1",
+        "domain": "Unités, formules, schémas",
+        "question": "Avec quoi mesure-t-on une intensité ?",
+        "options": [
+          {
+            "label": "V.A.T",
+            "isCorrect": false
+          },
+          {
+            "label": "Wattmètre",
+            "isCorrect": false
+          },
+          {
+            "label": "Voltmètre",
+            "isCorrect": false
+          },
+          {
+            "label": "Pince ampèremétrique",
+            "isCorrect": true
+          }
+        ]
+      },
+      {
+        "id": "reglementation-1",
+        "domain": "Réglementation électrique",
+        "question": "Quelle est la norme électrique de référence dans l'habitat individuel ?",
+        "options": [
+          {
+            "label": "EN 61000-3-3",
+            "isCorrect": false
+          },
+          {
+            "label": "RT 2012",
+            "isCorrect": false
+          },
+          {
+            "label": "DTU 60.1",
+            "isCorrect": false
+          },
+          {
+            "label": "NFC 15-100",
+            "isCorrect": true
+          }
+        ]
+      },
+      {
+        "id": "reglementation-2",
+        "domain": "Réglementation électrique",
+        "question": "A quoi correspond l'indice IP ?",
+        "options": [
+          {
+            "label": "Le degré de protection contre la pénétration de corps solides et de l'eau",
+            "isCorrect": true
+          },
+          {
+            "label": "Un Schéma de Liaison à la Terre (SLT)",
+            "isCorrect": false
+          },
+          {
+            "label": "Le degré de protection contre les impacts mécaniques externes",
+            "isCorrect": false
+          },
+          {
+            "label": "Une intensité et une puissance",
+            "isCorrect": false
+          }
+        ]
+      },
+      {
+        "id": "protection-1",
+        "domain": "Protection des biens et des personnes",
+        "question": "Ces propositions correspondent à des Schémas de Liaison à la Terre, sauf une. Laquelle ?",
+        "options": [
+          {
+            "label": "TT",
+            "isCorrect": false
+          },
+          {
+            "label": "IN",
+            "isCorrect": true
+          },
+          {
+            "label": "IT",
+            "isCorrect": false
+          },
+          {
+            "label": "TN",
+            "isCorrect": false
+          }
+        ]
+      },
+      {
+        "id": "protection-2",
+        "domain": "Protection des biens et des personnes",
+        "question": "Quelle solution permet d'assurer efficacement la protection des biens et des personnes ?",
+        "options": [
+          {
+            "label": "Disjoncteur de branchement 500 mA",
+            "isCorrect": false
+          },
+          {
+            "label": "Protection des biens : interrupteur différentiel 30 mA + circuit de mise à la terre, Protection des personnes : disjoncteur divisionnaire magnéto-thermique",
+            "isCorrect": false
+          },
+          {
+            "label": "Protection des biens : classe de protection 1 minimum, Protection des personnes : Tension inférieure à 500 V",
+            "isCorrect": false
+          },
+          {
+            "label": "Protection des biens : disjoncteur divisionnaire magnéto-thermique, Protection des personnes : interrupteur différentiel 30 mA + circuit de mise à la terre",
+            "isCorrect": true
+          }
+        ]
+      },
+      {
+        "id": "protection-3",
+        "domain": "Protection des biens et des personnes",
+        "question": "Quelle est la section du conducteur principal de terre (reliant la barrette de coupure au répartiteur de terre principal du tableau électrique) ?",
+        "options": [
+          {
+            "label": "10 mm²",
+            "isCorrect": false
+          },
+          {
+            "label": "18 mm²",
+            "isCorrect": false
+          },
+          {
+            "label": "10 ou 16 mm² (en fonction de la nature et de la section du conducteur actif du câble de branchement disjoncteur-tableau)",
+            "isCorrect": true
+          },
+          {
+            "label": "10 ou 18 mm² (en fonction de la nature et de la section du câble de branchement disjoncteur-tableau)",
+            "isCorrect": false
+          }
+        ]
+      },
+      {
+        "id": "pv-1",
+        "domain": "Connaissances en photovoltaïques (PV)",
+        "question": "Quel paramètre n'influence pas la production photovoltaïque ?",
+        "options": [
+          {
+            "label": "L'emplacement géographique",
+            "isCorrect": false
+          },
+          {
+            "label": "La consommation du client",
+            "isCorrect": true
+          },
+          {
+            "label": "L'orientation de mes capteurs",
+            "isCorrect": false
+          },
+          {
+            "label": "L'inclinaison de mes capteurs",
+            "isCorrect": false
+          }
+        ]
+      },
+      {
+        "id": "pv-2",
+        "domain": "Connaissances en photovoltaïques (PV)",
+        "question": "Quel outil est inutile pour faire mon relevé de masque ?",
+        "options": [
+          {
+            "label": "Caméra infrarouge",
+            "isCorrect": true
+          },
+          {
+            "label": "Boussole",
+            "isCorrect": false
+          },
+          {
+            "label": "Diagramme solaire",
+            "isCorrect": false
+          },
+          {
+            "label": "Clinomètre",
+            "isCorrect": false
+          }
+        ]
+      },
+      {
+        "id": "pv-3",
+        "domain": "Connaissances en photovoltaïques (PV)",
+        "question": "Quel organe sépare la partie \"Module PV\" et la partie \"Habitation\" ?",
+        "options": [
+          {
+            "label": "Disjoncteur différentiel 30 mA",
+            "isCorrect": false
+          },
+          {
+            "label": "Disjoncteur de branchement EDF",
+            "isCorrect": false
+          },
+          {
+            "label": "Interrupteur-sectionneur",
+            "isCorrect": true
+          },
+          {
+            "label": "Onduleur",
+            "isCorrect": false
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "slug": "qualipv-hp",
+    "formationSlug": "qualipv-hp-module-haute-puissance-500kva",
+    "title": "Auto-évaluation Formation QualiPV Haute Puissance",
+    "selfRatingDomains": [
+      {
+        "id": "unites",
+        "label": "Unités, formules, schémas"
+      },
+      {
+        "id": "reglementation",
+        "label": "Réglementation électrique"
+      },
+      {
+        "id": "protection",
+        "label": "Protection des biens et des personnes"
+      },
+      {
+        "id": "pv",
+        "label": "Connaissances en photovoltaïques (PV)"
+      }
+    ],
+    "questions": [
+      {
+        "id": "unites-1",
+        "domain": "Unités, formules, schémas",
+        "question": "Avec quoi mesure-t-on une intensité ?",
+        "options": [
+          {
+            "label": "V.A.T",
+            "isCorrect": false
+          },
+          {
+            "label": "Wattmètre",
+            "isCorrect": false
+          },
+          {
+            "label": "Voltmètre",
+            "isCorrect": false
+          },
+          {
+            "label": "Pince ampèremétrique",
+            "isCorrect": true
+          }
+        ]
+      },
+      {
+        "id": "reglementation-1",
+        "domain": "Réglementation électrique",
+        "question": "Quelle est la norme électrique de référence dans l'habitat individuel ?",
+        "options": [
+          {
+            "label": "EN 61000-3-3",
+            "isCorrect": false
+          },
+          {
+            "label": "RT 2012",
+            "isCorrect": false
+          },
+          {
+            "label": "DTU 60.1",
+            "isCorrect": false
+          },
+          {
+            "label": "NFC 15-100",
+            "isCorrect": true
+          }
+        ]
+      },
+      {
+        "id": "reglementation-2",
+        "domain": "Réglementation électrique",
+        "question": "A quoi correspond l'indice IP ?",
+        "options": [
+          {
+            "label": "Le degré de protection contre la pénétration de corps solides et de l'eau",
+            "isCorrect": true
+          },
+          {
+            "label": "Un Schéma de Liaison à la Terre (SLT)",
+            "isCorrect": false
+          },
+          {
+            "label": "Le degré de protection contre les impacts mécaniques externes",
+            "isCorrect": false
+          },
+          {
+            "label": "Une intensité et une puissance",
+            "isCorrect": false
+          }
+        ]
+      },
+      {
+        "id": "protection-1",
+        "domain": "Protection des biens et des personnes",
+        "question": "Ces propositions correspondent à des Schémas de Liaison à la Terre, sauf une. Laquelle ?",
+        "options": [
+          {
+            "label": "TT",
+            "isCorrect": false
+          },
+          {
+            "label": "IN",
+            "isCorrect": true
+          },
+          {
+            "label": "IT",
+            "isCorrect": false
+          },
+          {
+            "label": "TN",
+            "isCorrect": false
+          }
+        ]
+      },
+      {
+        "id": "protection-2",
+        "domain": "Protection des biens et des personnes",
+        "question": "Quelle solution permet d'assurer efficacement la protection des biens et des personnes ?",
+        "options": [
+          {
+            "label": "Disjoncteur de branchement 500 mA",
+            "isCorrect": false
+          },
+          {
+            "label": "Protection des biens : interrupteur différentiel 30 mA + circuit de mise à la terre, Protection des personnes : disjoncteur divisionnaire magnéto-thermique",
+            "isCorrect": false
+          },
+          {
+            "label": "Protection des biens : classe de protection 1 minimum, Protection des personnes : Tension inférieure à 500 V",
+            "isCorrect": false
+          },
+          {
+            "label": "Protection des biens : disjoncteur divisionnaire magnéto-thermique, Protection des personnes : interrupteur différentiel 30 mA + circuit de mise à la terre",
+            "isCorrect": true
+          }
+        ]
+      },
+      {
+        "id": "protection-3",
+        "domain": "Protection des biens et des personnes",
+        "question": "Quelle est la section du conducteur principal de terre (reliant la barrette de coupure au répartiteur de terre principal du tableau électrique) ?",
+        "options": [
+          {
+            "label": "10 mm²",
+            "isCorrect": false
+          },
+          {
+            "label": "18 mm²",
+            "isCorrect": false
+          },
+          {
+            "label": "10 ou 16 mm² (en fonction de la nature et de la section du conducteur actif du câble de branchement disjoncteur-tableau)",
+            "isCorrect": true
+          },
+          {
+            "label": "10 ou 18 mm² (en fonction de la nature et de la section du câble de branchement disjoncteur-tableau)",
+            "isCorrect": false
+          }
+        ]
+      },
+      {
+        "id": "pv-1",
+        "domain": "Connaissances en photovoltaïques (PV)",
+        "question": "Quel paramètre n'influence pas la production photovoltaïque ?",
+        "options": [
+          {
+            "label": "L'emplacement géographique",
+            "isCorrect": false
+          },
+          {
+            "label": "La consommation du client",
+            "isCorrect": true
+          },
+          {
+            "label": "L'orientation de mes capteurs",
+            "isCorrect": false
+          },
+          {
+            "label": "L'inclinaison de mes capteurs",
+            "isCorrect": false
+          }
+        ]
+      },
+      {
+        "id": "pv-2",
+        "domain": "Connaissances en photovoltaïques (PV)",
+        "question": "Quel outil est inutile pour faire mon relevé de masque ?",
+        "options": [
+          {
+            "label": "Caméra infrarouge",
+            "isCorrect": true
+          },
+          {
+            "label": "Boussole",
+            "isCorrect": false
+          },
+          {
+            "label": "Diagramme solaire",
+            "isCorrect": false
+          },
+          {
+            "label": "Clinomètre",
+            "isCorrect": false
+          }
+        ]
+      },
+      {
+        "id": "pv-3",
+        "domain": "Connaissances en photovoltaïques (PV)",
+        "question": "Quel organe sépare la partie \"Module PV\" et la partie \"Habitation\" ?",
+        "options": [
+          {
+            "label": "Disjoncteur différentiel 30 mA",
+            "isCorrect": false
+          },
+          {
+            "label": "Disjoncteur de branchement EDF",
+            "isCorrect": false
+          },
+          {
+            "label": "Interrupteur-sectionneur",
+            "isCorrect": true
+          },
+          {
+            "label": "Onduleur",
+            "isCorrect": false
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "slug": "qualipv-bati",
+    "formationSlug": "qualipv-bati-generateur-photovoltaique-competence-bati",
+    "title": "Auto-évaluation Formation QualiPV Bâti",
+    "selfRatingDomains": [
+      {
+        "id": "unites",
+        "label": "Unités, formules, schémas"
+      },
+      {
+        "id": "reglementation",
+        "label": "Réglementation électrique"
+      },
+      {
+        "id": "protection",
+        "label": "Protection des biens et des personnes"
+      },
+      {
+        "id": "pv",
+        "label": "Connaissances en photovoltaïques (PV)"
+      }
+    ],
+    "questions": [
+      {
+        "id": "unites-1",
+        "domain": "Unités, formules, schémas",
+        "question": "Avec quoi mesure-t-on une intensité ?",
+        "options": [
+          {
+            "label": "V.A.T",
+            "isCorrect": false
+          },
+          {
+            "label": "Wattmètre",
+            "isCorrect": false
+          },
+          {
+            "label": "Voltmètre",
+            "isCorrect": false
+          },
+          {
+            "label": "Pince ampèremétrique",
+            "isCorrect": true
+          }
+        ]
+      },
+      {
+        "id": "reglementation-1",
+        "domain": "Réglementation électrique",
+        "question": "Quelle est la norme électrique de référence dans l'habitat individuel ?",
+        "options": [
+          {
+            "label": "EN 61000-3-3",
+            "isCorrect": false
+          },
+          {
+            "label": "RT 2012",
+            "isCorrect": false
+          },
+          {
+            "label": "DTU 60.1",
+            "isCorrect": false
+          },
+          {
+            "label": "NFC 15-100",
+            "isCorrect": true
+          }
+        ]
+      },
+      {
+        "id": "reglementation-2",
+        "domain": "Réglementation électrique",
+        "question": "A quoi correspond l'indice IP ?",
+        "options": [
+          {
+            "label": "Le degré de protection contre la pénétration de corps solides et de l'eau",
+            "isCorrect": true
+          },
+          {
+            "label": "Un Schéma de Liaison à la Terre (SLT)",
+            "isCorrect": false
+          },
+          {
+            "label": "Le degré de protection contre les impacts mécaniques externes",
+            "isCorrect": false
+          },
+          {
+            "label": "Une intensité et une puissance",
+            "isCorrect": false
+          }
+        ]
+      },
+      {
+        "id": "protection-1",
+        "domain": "Protection des biens et des personnes",
+        "question": "Ces propositions correspondent à des Schémas de Liaison à la Terre, sauf une. Laquelle ?",
+        "options": [
+          {
+            "label": "TT",
+            "isCorrect": false
+          },
+          {
+            "label": "IN",
+            "isCorrect": true
+          },
+          {
+            "label": "IT",
+            "isCorrect": false
+          },
+          {
+            "label": "TN",
+            "isCorrect": false
+          }
+        ]
+      },
+      {
+        "id": "pv-1",
+        "domain": "Connaissances en photovoltaïques (PV)",
+        "question": "Quel paramètre n'influence pas la production photovoltaïque ?",
+        "options": [
+          {
+            "label": "L'emplacement géographique",
+            "isCorrect": false
+          },
+          {
+            "label": "La consommation du client",
+            "isCorrect": true
+          },
+          {
+            "label": "L'orientation de mes capteurs",
+            "isCorrect": false
+          },
+          {
+            "label": "L'inclinaison de mes capteurs",
+            "isCorrect": false
+          }
+        ]
+      },
+      {
+        "id": "pv-2",
+        "domain": "Connaissances en photovoltaïques (PV)",
+        "question": "Quel outil est inutile pour faire mon relevé de masque ?",
+        "options": [
+          {
+            "label": "Caméra infrarouge",
+            "isCorrect": true
+          },
+          {
+            "label": "Boussole",
+            "isCorrect": false
+          },
+          {
+            "label": "Diagramme solaire",
+            "isCorrect": false
+          },
+          {
+            "label": "Clinomètre",
+            "isCorrect": false
+          }
+        ]
+      },
+      {
+        "id": "pv-3",
+        "domain": "Connaissances en photovoltaïques (PV)",
+        "question": "Quel organe sépare la partie \"Module PV\" et la partie \"Habitation\" ?",
+        "options": [
+          {
+            "label": "Disjoncteur différentiel 30 mA",
+            "isCorrect": false
+          },
+          {
+            "label": "Disjoncteur de branchement EDF",
+            "isCorrect": false
+          },
+          {
+            "label": "Interrupteur-sectionneur",
+            "isCorrect": true
+          },
+          {
+            "label": "Onduleur",
+            "isCorrect": false
+          }
+        ]
+      },
+      {
+        "id": "pv-4",
+        "domain": "Connaissances en photovoltaïques (PV)",
+        "question": "Quelle fonction n'est pas réalisée par un écran de sous-toiture ?",
+        "note": "Question à compléter : les options exactes n'ont pas pu être récupérées depuis la page source, à vérifier avec un formateur.",
+        "options": [
+          {
+            "label": "Assurer l'étanchéité secondaire à l'eau",
+            "isCorrect": false
+          },
+          {
+            "label": "Assurer la ventilation de la toiture",
+            "isCorrect": true
+          },
+          {
+            "label": "Protéger l'isolant contre les infiltrations",
+            "isCorrect": false
+          },
+          {
+            "label": "Limiter les remontées de condensation",
+            "isCorrect": false
+          }
+        ]
+      },
+      {
+        "id": "pv-5",
+        "domain": "Connaissances en photovoltaïques (PV)",
+        "question": "Quelle technique de fixation permet la libre dilatation des modules ?",
+        "note": "Question à compléter : les options exactes n'ont pas pu être récupérées depuis la page source, à vérifier avec un formateur.",
+        "options": [
+          {
+            "label": "Fixation rigide sur chaque coin du module",
+            "isCorrect": false
+          },
+          {
+            "label": "Clips de fixation avec jeu de dilatation",
+            "isCorrect": true
+          },
+          {
+            "label": "Collage structurel continu",
+            "isCorrect": false
+          },
+          {
+            "label": "Vissage direct sans rondelle",
+            "isCorrect": false
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "slug": "qualipac",
+    "formationSlug": "qualipac-pompes-a-chaleur-habitat-individuel",
+    "title": "Auto-évaluation Formation QualiPAC",
+    "selfRatingDomains": [
+      {
+        "id": "unites",
+        "label": "Unités, formules, schémas"
+      },
+      {
+        "id": "deperditions",
+        "label": "Déperditions et dimensionnement"
+      },
+      {
+        "id": "fonctionnement",
+        "label": "Fonctionnement et composants de la PAC"
+      },
+      {
+        "id": "hydraulique",
+        "label": "Circuit hydraulique et équilibrage"
+      },
+      {
+        "id": "electrique",
+        "label": "Installation électrique"
+      },
+      {
+        "id": "aerothermie",
+        "label": "Aérothermie"
+      },
+      {
+        "id": "geothermie",
+        "label": "Géothermie"
+      }
+    ],
+    "questions": [
+      {
+        "id": "unites-1",
+        "domain": "Unités, formules, schémas",
+        "question": "0,5 m³ correspond à :",
+        "options": [
+          {
+            "label": "5 L",
+            "isCorrect": false
+          },
+          {
+            "label": "50 L",
+            "isCorrect": false
+          },
+          {
+            "label": "500 L",
+            "isCorrect": true
+          },
+          {
+            "label": "5000 L",
+            "isCorrect": false
+          }
+        ]
+      },
+      {
+        "id": "unites-2",
+        "domain": "Unités, formules, schémas",
+        "question": "Quelle formule permet de calculer un débit ?",
+        "note": "Question à compléter : les 4 formules exactes proposées n'ont pas pu être récupérées depuis la page source, à vérifier avec un formateur.",
+        "options": [
+          {
+            "label": "Q = V / t (volume / temps)",
+            "isCorrect": true
+          },
+          {
+            "label": "Q = P × t",
+            "isCorrect": false
+          },
+          {
+            "label": "Q = m × c × ΔT",
+            "isCorrect": false
+          },
+          {
+            "label": "Q = U × I",
+            "isCorrect": false
+          }
+        ]
+      },
+      {
+        "id": "deperditions-1",
+        "domain": "Déperditions et dimensionnement",
+        "question": "Quel élément n'est pas nécessaire pour un calcul de déperditions ?",
+        "note": "Question à compléter : les options exactes n'ont pas pu être récupérées depuis la page source, à vérifier avec un formateur.",
+        "options": [
+          {
+            "label": "La surface et le volume à chauffer",
+            "isCorrect": false
+          },
+          {
+            "label": "La couleur des murs extérieurs",
+            "isCorrect": true
+          },
+          {
+            "label": "La zone climatique et la température de base",
+            "isCorrect": false
+          },
+          {
+            "label": "Le niveau d'isolation des parois",
+            "isCorrect": false
+          }
+        ]
+      },
+      {
+        "id": "deperditions-2",
+        "domain": "Déperditions et dimensionnement",
+        "question": "Quelle réserve de puissance est recommandée lors du dimensionnement d'une PAC avec appoint ?",
+        "note": "Question à compléter : les options exactes n'ont pas pu être récupérées depuis la page source, à vérifier avec un formateur.",
+        "options": [
+          {
+            "label": "Aucune marge nécessaire",
+            "isCorrect": false
+          },
+          {
+            "label": "Une marge d'environ 10 à 20 %",
+            "isCorrect": true
+          },
+          {
+            "label": "Une marge de 100 %",
+            "isCorrect": false
+          },
+          {
+            "label": "Une marge de 300 %",
+            "isCorrect": false
+          }
+        ]
+      },
+      {
+        "id": "fonctionnement-1",
+        "domain": "Fonctionnement et composants de la PAC",
+        "question": "Quel type d'échangeur extérieur équipe une PAC split en mode chauffage ?",
+        "note": "Question à compléter : les options exactes n'ont pas pu être récupérées depuis la page source, à vérifier avec un formateur.",
+        "options": [
+          {
+            "label": "Évaporateur",
+            "isCorrect": true
+          },
+          {
+            "label": "Condenseur",
+            "isCorrect": false
+          },
+          {
+            "label": "Compresseur",
+            "isCorrect": false
+          },
+          {
+            "label": "Détendeur",
+            "isCorrect": false
+          }
+        ]
+      },
+      {
+        "id": "hydraulique-1",
+        "domain": "Circuit hydraulique et équilibrage",
+        "question": "Quelle est la fonction du vase d'expansion ?",
+        "options": [
+          {
+            "label": "Absorber la dilatation de l'eau du circuit lors de la montée en température",
+            "isCorrect": true
+          },
+          {
+            "label": "Filtrer les particules du circuit",
+            "isCorrect": false
+          },
+          {
+            "label": "Réguler le débit dans chaque émetteur",
+            "isCorrect": false
+          },
+          {
+            "label": "Purger l'air du circuit",
+            "isCorrect": false
+          }
+        ]
+      },
+      {
+        "id": "hydraulique-2",
+        "domain": "Circuit hydraulique et équilibrage",
+        "question": "Quel composant permet de régler les pertes de charge sur un réseau hydraulique ?",
+        "options": [
+          {
+            "label": "Le vase d'expansion",
+            "isCorrect": false
+          },
+          {
+            "label": "Le té d'équilibrage / vanne d'équilibrage",
+            "isCorrect": true
+          },
+          {
+            "label": "Le disconnecteur",
+            "isCorrect": false
+          },
+          {
+            "label": "Le groupe de sécurité",
+            "isCorrect": false
+          }
+        ]
+      },
+      {
+        "id": "electrique-1",
+        "domain": "Installation électrique",
+        "question": "A quelle norme électrique doit se conformer l'installation d'une PAC ?",
+        "options": [
+          {
+            "label": "NF C 15-100",
+            "isCorrect": true
+          },
+          {
+            "label": "RT 2012",
+            "isCorrect": false
+          },
+          {
+            "label": "DTU 60.1",
+            "isCorrect": false
+          },
+          {
+            "label": "EN 61000-3-3",
+            "isCorrect": false
+          }
+        ]
+      },
+      {
+        "id": "aerothermie-1",
+        "domain": "Aérothermie",
+        "question": "Quel est l'effet d'une baisse de la température d'air extérieur sur le COP d'une PAC air/eau ?",
+        "options": [
+          {
+            "label": "Le COP augmente",
+            "isCorrect": false
+          },
+          {
+            "label": "Le COP diminue",
+            "isCorrect": true
+          },
+          {
+            "label": "Le COP reste identique",
+            "isCorrect": false
+          },
+          {
+            "label": "Le COP devient négatif",
+            "isCorrect": false
+          }
+        ]
+      },
+      {
+        "id": "geothermie-1",
+        "domain": "Géothermie",
+        "question": "Quelle est la profondeur minimale d'enfouissement d'un capteur horizontal enterré ?",
+        "options": [
+          {
+            "label": "Environ 0,3 m",
+            "isCorrect": false
+          },
+          {
+            "label": "Environ 0,6 à 1,2 m",
+            "isCorrect": true
+          },
+          {
+            "label": "Environ 3 m",
+            "isCorrect": false
+          },
+          {
+            "label": "Environ 10 m",
+            "isCorrect": false
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "slug": "irve",
+    "formationSlug": "irve-niveau-1",
+    "title": "Auto-évaluation Formation IRVE",
+    "selfRatingDomains": [
+      {
+        "id": "unites",
+        "label": "Unités"
+      },
+      {
+        "id": "dimensionnement",
+        "label": "Choix et dimensionnement"
+      },
+      {
+        "id": "fonctionnement",
+        "label": "Fonctionnement d'une borne IRVE"
+      },
+      {
+        "id": "composants",
+        "label": "Composants du circuit d'alimentation"
+      }
+    ],
+    "questions": [
+      {
+        "id": "unites-1",
+        "domain": "Unités",
+        "question": "0,5 kW correspond à :",
+        "options": [
+          {
+            "label": "5 W",
+            "isCorrect": false
+          },
+          {
+            "label": "50 W",
+            "isCorrect": false
+          },
+          {
+            "label": "500 W",
+            "isCorrect": true
+          },
+          {
+            "label": "5000 W",
+            "isCorrect": false
+          }
+        ]
+      },
+      {
+        "id": "dimensionnement-1",
+        "domain": "Choix et dimensionnement",
+        "question": "Quel élément est inutile pour le choix et le dimensionnement de la borne IRVE ?",
+        "options": [
+          {
+            "label": "Le lieu d'installation",
+            "isCorrect": false
+          },
+          {
+            "label": "Le nombre de kilomètres parcourus",
+            "isCorrect": true
+          },
+          {
+            "label": "Le temps de charge",
+            "isCorrect": false
+          },
+          {
+            "label": "La qualité du réseau électrique",
+            "isCorrect": false
+          }
+        ]
+      },
+      {
+        "id": "fonctionnement-1",
+        "domain": "Fonctionnement d'une borne IRVE",
+        "question": "Sur une borne IRVE dite charge lente, de quel type de courant parle-t-on :",
+        "options": [
+          {
+            "label": "Courant continu 230V",
+            "isCorrect": false
+          },
+          {
+            "label": "Courant alternatif 230V",
+            "isCorrect": true
+          },
+          {
+            "label": "Courant alternatif 400V",
+            "isCorrect": false
+          },
+          {
+            "label": "Courant continu 400V",
+            "isCorrect": false
+          }
+        ]
+      },
+      {
+        "id": "composants-1",
+        "domain": "Composants du circuit d'alimentation",
+        "question": "Dans le résidentiel quel est le type du différentiel (au minimum) utilisé ?",
+        "options": [
+          {
+            "label": "30mA type A",
+            "isCorrect": true
+          },
+          {
+            "label": "30mA type AC",
+            "isCorrect": false
+          },
+          {
+            "label": "300mA type B",
+            "isCorrect": false
+          },
+          {
+            "label": "30mA type B",
+            "isCorrect": false
+          }
+        ]
+      },
+      {
+        "id": "composants-2",
+        "domain": "Composants du circuit d'alimentation",
+        "question": "A quelle norme électrique doit-on se conformer ?",
+        "options": [
+          {
+            "label": "EN 61000-3-3",
+            "isCorrect": false
+          },
+          {
+            "label": "RE 2020",
+            "isCorrect": false
+          },
+          {
+            "label": "DTU 60.15",
+            "isCorrect": false
+          },
+          {
+            "label": "NF C 15-100",
+            "isCorrect": true
+          }
+        ]
+      }
+    ]
+  }
+]

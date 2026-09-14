@@ -98,6 +98,77 @@ export type Registration = {
   source?: string;
 };
 
+export type BulletinInscriptionInput = {
+  formationSlug: string;
+  sessionId?: string;
+  sessionDates?: string;
+  sessionLocation?: string;
+  source?: string;
+  distributorName?: string;
+  companyName: string;
+  siret?: string;
+  apeCode?: string;
+  companyAddress?: string;
+  sponsorFullName: string;
+  sponsorRole?: string;
+  sponsorEmail: string;
+  sponsorPhone: string;
+  learnerFullName: string;
+  learnerRole?: string;
+  learnerPhone?: string;
+  learnerBirthDate?: string;
+  hasDisability: boolean;
+  disabilityDetails?: string;
+};
+
+export type BulletinInscription = BulletinInscriptionInput & {
+  id: string;
+  status: string;
+  confirmationEmailSentAt?: string | null;
+  createdAt: string;
+};
+
+export type QuizAnswerOption = {
+  label: string;
+  isCorrect: boolean;
+};
+
+export type QuizQuestion = {
+  id: string;
+  domain: string;
+  question: string;
+  options: QuizAnswerOption[];
+  note?: string;
+};
+
+export type QuizSelfRatingDomain = {
+  id: string;
+  label: string;
+};
+
+export type QuizDefinition = {
+  slug: string;
+  formationSlug: string;
+  title: string;
+  selfRatingDomains: QuizSelfRatingDomain[];
+  questions: QuizQuestion[];
+};
+
+export type QuizAttemptInput = {
+  bulletinInscriptionId: string;
+  quizSlug: string;
+  learnerFullName: string;
+  learnerEmail: string;
+  companyName?: string;
+  answers: Record<string, string>;
+};
+
+export type QuizAttempt = QuizAttemptInput & {
+  id: string;
+  scoreOn20: number;
+  createdAt: string;
+};
+
 export type Company = {
   id: string;
   name: string;

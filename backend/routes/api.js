@@ -16,6 +16,10 @@ const { createCompany, listCompanies, updateCompany } = require("../services/com
 const { createCrmInteraction, createCrmTask, listCrmInteractions, listCrmTasks, updateCrmTask } = require("../services/crmService");
 const { createRegistration, listRegistrations } = require("../services/registrationService");
 const { syncQueovalCalendar, listPendingSyncSessions, resolvePendingSyncSession } = require("../services/queovalService");
+const { createBulletinInscription } = require("../services/bulletinInscriptionService");
+const { generateBulletinPdf } = require("../services/pdfService");
+const { sendBulletinConfirmationEmail } = require("../services/mailService");
+const { getPublicQuizByFormationSlug, getPublicQuizBySlug, submitQuizAttempt } = require("../services/quizService");
 
 const inscriptionSchema = z.object({
   company: z.string().min(2).max(120),
@@ -102,6 +106,38 @@ const crmInteractionSchema = z.object({
   occurredAt: z.string().max(10).optional().or(z.literal("")),
 });
 
+const bulletinInscriptionSchema = z.object({
+  formationSlug: z.string().min(2).max(160),
+  sessionId: z.string().max(120).optional(),
+  sessionDates: z.string().max(160).optional(),
+  sessionLocation: z.string().max(160).optional(),
+  source: z.string().max(160).optional(),
+  distributorName: z.string().max(160).optional(),
+  companyName: z.string().min(2).max(200),
+  siret: z.string().max(20).optional(),
+  apeCode: z.string().max(10).optional(),
+  companyAddress: z.string().max(300).optional(),
+  sponsorFullName: z.string().min(2).max(160),
+  sponsorRole: z.string().max(160).optional(),
+  sponsorEmail: z.string().email(),
+  sponsorPhone: z.string().min(8).max(30),
+  learnerFullName: z.string().min(2).max(160),
+  learnerRole: z.string().max(160).optional(),
+  learnerPhone: z.string().max(30).optional(),
+  learnerBirthDate: z.string().max(10).optional(),
+  hasDisability: z.coerce.boolean().optional().default(false),
+  disabilityDetails: z.string().max(1000).optional(),
+});
+
+const quizAttemptSchema = z.object({
+  bulletinInscriptionId: z.string().min(2),
+  quizSlug: z.string().min(2).max(80),
+  learnerFullName: z.string().min(2).max(160),
+  learnerEmail: z.string().email(),
+  companyName: z.string().max(200).optional(),
+  answers: z.record(z.string(), z.string()),
+});
+
 function asyncHandler(handler) {
   return (req, res, next) => {
     Promise.resolve(handler(req, res, next)).catch(next);
@@ -168,6 +204,86 @@ function createApiRouter() {
       const payload = inscriptionSchema.parse(req.body);
       const registration = await createRegistration(payload);
       res.status(201).json({ data: registration, message: "Inscription enregistrée" });
+    })
+  );
+
+  router.post(
+    "/bulletin-inscription",
+    formLimiter,
+    asyncHandler(async (req, res) => {
+      const payload = bulletinInscriptionSchema.parse(req.body);
+      const bulletin = await createBulletinInscription(payload);
+
+      const [formation, sessions] = await Promise.all([
+        getFormationBySlug(bulletin.formationSlug),
+        listSessions(),
+      ]);
+      const session = sessions.find((item) => item.id === bulletin.sessionId) || null;
+
+      const pdfBuffer = await generateBulletinPdf(bulletin, formation, session);
+      const quiz = getPublicQuizByFormationSlug(bulletin.formationSlug);
+      const quizUrl = quiz
+        ? `${process.env.SITE_URL || "http://localhost:3000"}/auto-evaluation/${quiz.slug}?bulletinInscriptionId=${bulletin.id}`
+        : null;
+
+      const emailResult = await sendBulletinConfirmationEmail({
+        bulletin,
+        formation,
+        session,
+        pdfBuffer,
+        quizUrl,
+      });
+
+      res.status(201).json({
+        data: { id: bulletin.id, quizSlug: quiz ? quiz.slug : null },
+        message: emailResult.sent
+          ? "Bulletin d'inscription enregistré, un email de confirmation vous a été envoyé."
+          : "Bulletin d'inscription enregistré. L'envoi de l'email de confirmation n'est pas encore configuré.",
+      });
+    })
+  );
+
+  router.get(
+    "/quiz/:formationSlug",
+    asyncHandler(async (req, res) => {
+      const quiz = getPublicQuizByFormationSlug(req.params.formationSlug);
+
+      if (!quiz) {
+        return res.status(404).json({ error: "Aucune auto-évaluation pour cette formation" });
+      }
+
+      return res.json({ data: quiz });
+    })
+  );
+
+  router.get(
+    "/quiz-by-slug/:quizSlug",
+    asyncHandler(async (req, res) => {
+      const quiz = getPublicQuizBySlug(req.params.quizSlug);
+
+      if (!quiz) {
+        return res.status(404).json({ error: "Auto-évaluation introuvable" });
+      }
+
+      return res.json({ data: quiz });
+    })
+  );
+
+  router.post(
+    "/quiz-attempt",
+    formLimiter,
+    asyncHandler(async (req, res) => {
+      const payload = quizAttemptSchema.parse(req.body);
+      const result = await submitQuizAttempt(payload);
+      res.status(201).json({
+        data: {
+          scoreOn20: result.attempt.scoreOn20,
+          correctCount: result.correctCount,
+          totalQuestions: result.totalQuestions,
+          details: result.details,
+        },
+        message: "Auto-évaluation enregistrée",
+      });
     })
   );
 
