@@ -2,7 +2,7 @@
 
 import { useEffect, useMemo, useState } from "react";
 import { Button } from "@/components/ui";
-import type { Article, BulletinInscriptionWithAttempts, Company, CrmInteraction, CrmTask, Formation, Participant, PendingSyncSession, Registration, Session } from "../../shared/types";
+import type { Article, BulletinInscriptionWithAttempts, Company, CrmInteraction, CrmTask, Formation, Participant, PendingSyncSession, ProgrammeDay, Registration, Session } from "../../shared/types";
 
 type Props = {
   initialArticles: Article[];
@@ -33,7 +33,7 @@ type FormationDraft = {
   objectives: string;
   prerequisites: string;
   modalities: string;
-  programme: string;
+  programme: ProgrammeDay[];
   certification: string;
   price: string;
   priceDetails: string;
@@ -73,6 +73,14 @@ function splitLines(value: string) {
     .split(/\r?\n/)
     .map((item) => item.trim())
     .filter(Boolean);
+}
+
+function createProgrammeDay(): ProgrammeDay {
+  return { title: "", sequences: [] };
+}
+
+function createProgrammeSequence(): ProgrammeDay["sequences"][number] {
+  return { title: "", points: [] };
 }
 
 function formatDateLabel(value?: string) {
@@ -155,7 +163,7 @@ function toFormationDraft(formation?: Formation): FormationDraft {
       objectives: "",
       prerequisites: "",
       modalities: "",
-      programme: "",
+      programme: [],
       certification: "",
       price: "",
       priceDetails: "",
@@ -179,7 +187,7 @@ function toFormationDraft(formation?: Formation): FormationDraft {
     objectives: formation.objectives.join("\n"),
     prerequisites: formation.prerequisites.join("\n"),
     modalities: formation.modalities.join("\n"),
-    programme: formation.programme.join("\n"),
+    programme: formation.programme || [],
     certification: formation.certification,
     price: formation.price,
     priceDetails: formation.priceDetails,
@@ -261,6 +269,8 @@ export function AdminWorkspace({
 
   const [editingFormationSlug, setEditingFormationSlug] = useState(initialFormations[0]?.slug || "");
   const [editingSessionId, setEditingSessionId] = useState(initialSessions[0]?.id || "");
+  const [customCities, setCustomCities] = useState<string[]>([]);
+  const [newCityInput, setNewCityInput] = useState("");
   const [editingArticleSlug, setEditingArticleSlug] = useState(initialArticles[0]?.slug || "");
   const [selectedParticipantId, setSelectedParticipantId] = useState("");
 
@@ -393,6 +403,74 @@ export function AdminWorkspace({
     setEditingFormationSlug(slug);
     setFormationDraft(toFormationDraft(formation));
     setFeedback("");
+  }
+
+  function addProgrammeDay() {
+    setFormationDraft((current) => ({
+      ...current,
+      programme: [...current.programme, createProgrammeDay()],
+    }));
+  }
+
+  function removeProgrammeDay(dayIndex: number) {
+    setFormationDraft((current) => ({
+      ...current,
+      programme: current.programme.filter((_, index) => index !== dayIndex),
+    }));
+  }
+
+  function updateProgrammeDayTitle(dayIndex: number, title: string) {
+    setFormationDraft((current) => ({
+      ...current,
+      programme: current.programme.map((day, index) => (index === dayIndex ? { ...day, title } : day)),
+    }));
+  }
+
+  function addProgrammeSequence(dayIndex: number) {
+    setFormationDraft((current) => ({
+      ...current,
+      programme: current.programme.map((day, index) =>
+        index === dayIndex ? { ...day, sequences: [...day.sequences, createProgrammeSequence()] } : day,
+      ),
+    }));
+  }
+
+  function removeProgrammeSequence(dayIndex: number, sequenceIndex: number) {
+    setFormationDraft((current) => ({
+      ...current,
+      programme: current.programme.map((day, index) =>
+        index === dayIndex ? { ...day, sequences: day.sequences.filter((_, seqIndex) => seqIndex !== sequenceIndex) } : day,
+      ),
+    }));
+  }
+
+  function updateProgrammeSequenceTitle(dayIndex: number, sequenceIndex: number, title: string) {
+    setFormationDraft((current) => ({
+      ...current,
+      programme: current.programme.map((day, index) =>
+        index === dayIndex
+          ? {
+              ...day,
+              sequences: day.sequences.map((sequence, seqIndex) => (seqIndex === sequenceIndex ? { ...sequence, title } : sequence)),
+            }
+          : day,
+      ),
+    }));
+  }
+
+  function updateProgrammeSequencePoints(dayIndex: number, sequenceIndex: number, pointsText: string) {
+    const points = pointsText.split(/\r?\n/);
+    setFormationDraft((current) => ({
+      ...current,
+      programme: current.programme.map((day, index) =>
+        index === dayIndex
+          ? {
+              ...day,
+              sequences: day.sequences.map((sequence, seqIndex) => (seqIndex === sequenceIndex ? { ...sequence, points } : sequence)),
+            }
+          : day,
+      ),
+    }));
   }
 
   function selectArticle(slug: string) {
@@ -569,7 +647,7 @@ export function AdminWorkspace({
       objectives: splitLines(formationDraft.objectives),
       prerequisites: splitLines(formationDraft.prerequisites),
       modalities: splitLines(formationDraft.modalities),
-      programme: splitLines(formationDraft.programme),
+      programme: formationDraft.programme,
       certification: formationDraft.certification.trim(),
       price: formationDraft.price.trim(),
       priceDetails: formationDraft.priceDetails.trim(),
@@ -883,7 +961,65 @@ export function AdminWorkspace({
                   <label><span>Prérequis</span><textarea className="ui-field" rows={6} value={formationDraft.prerequisites} onChange={(event) => setFormationDraft((current) => ({ ...current, prerequisites: event.target.value }))} required /></label>
                   <label><span>Modalités</span><textarea className="ui-field" rows={6} value={formationDraft.modalities} onChange={(event) => setFormationDraft((current) => ({ ...current, modalities: event.target.value }))} required /></label>
                 </div>
-                <label><span>Programme</span><textarea className="ui-field" rows={8} value={formationDraft.programme} onChange={(event) => setFormationDraft((current) => ({ ...current, programme: event.target.value }))} required /></label>
+                <div className="admin-programme-editor">
+                  <div className="admin-programme-editor-header">
+                    <span>Programme</span>
+                    <Button variant="secondary" type="button" onClick={addProgrammeDay}>Ajouter un jour</Button>
+                  </div>
+                  {formationDraft.programme.length === 0 ? (
+                    <p className="admin-empty-state">Aucun jour de programme pour le moment.</p>
+                  ) : (
+                    formationDraft.programme.map((day, dayIndex) => (
+                      <div className="admin-programme-day" key={dayIndex}>
+                        <div className="admin-programme-row">
+                          <label className="admin-programme-title-field">
+                            <span>Titre du jour {dayIndex + 1}</span>
+                            <input
+                              className="ui-field"
+                              value={day.title}
+                              onChange={(event) => updateProgrammeDayTitle(dayIndex, event.target.value)}
+                              required
+                            />
+                          </label>
+                          <Button variant="ghost" type="button" onClick={() => removeProgrammeDay(dayIndex)}>Supprimer ce jour</Button>
+                        </div>
+
+                        <div className="admin-programme-sequences">
+                          {day.sequences.length === 0 ? (
+                            <p className="admin-empty-state">Aucune séquence pour ce jour.</p>
+                          ) : (
+                            day.sequences.map((sequence, sequenceIndex) => (
+                              <div className="admin-programme-sequence" key={sequenceIndex}>
+                                <div className="admin-programme-row">
+                                  <label className="admin-programme-title-field">
+                                    <span>Titre de la séquence {sequenceIndex + 1}</span>
+                                    <input
+                                      className="ui-field"
+                                      value={sequence.title}
+                                      onChange={(event) => updateProgrammeSequenceTitle(dayIndex, sequenceIndex, event.target.value)}
+                                      required
+                                    />
+                                  </label>
+                                  <Button variant="ghost" type="button" onClick={() => removeProgrammeSequence(dayIndex, sequenceIndex)}>Supprimer cette séquence</Button>
+                                </div>
+                                <label>
+                                  <span>Points (un par ligne)</span>
+                                  <textarea
+                                    className="ui-field"
+                                    rows={4}
+                                    value={sequence.points.join("\n")}
+                                    onChange={(event) => updateProgrammeSequencePoints(dayIndex, sequenceIndex, event.target.value)}
+                                  />
+                                </label>
+                              </div>
+                            ))
+                          )}
+                          <Button variant="secondary" type="button" onClick={() => addProgrammeSequence(dayIndex)}>Ajouter une séquence</Button>
+                        </div>
+                      </div>
+                    ))
+                  )}
+                </div>
               </div>
               <div className="admin-form-section"><h3>Infos pratiques</h3><div className="form-grid">
                 <label><span>Détails durée</span><textarea className="ui-field" rows={4} value={formationDraft.durationDetails} onChange={(event) => setFormationDraft((current) => ({ ...current, durationDetails: event.target.value }))} required /></label>

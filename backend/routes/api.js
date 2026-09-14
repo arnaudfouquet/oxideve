@@ -38,6 +38,16 @@ const inscriptionSchema = z.object({
   message: z.string().max(1000).optional().default(""),
 });
 
+const programmeSequenceSchema = z.object({
+  title: z.string().min(2).max(200),
+  points: z.array(z.string().min(2).max(400)).min(1).max(15),
+});
+
+const programmeDaySchema = z.object({
+  title: z.string().min(2).max(200),
+  sequences: z.array(programmeSequenceSchema).min(1).max(10),
+});
+
 const formationSchema = z.object({
   slug: z.string().min(3).max(120).regex(/^[a-z0-9-]+$/),
   title: z.string().min(3).max(160),
@@ -53,7 +63,7 @@ const formationSchema = z.object({
   objectives: z.array(z.string().min(2).max(200)).min(1).max(10),
   prerequisites: z.array(z.string().min(2).max(240)).min(1).max(12),
   modalities: z.array(z.string().min(2).max(240)).min(1).max(12),
-  programme: z.array(z.string().min(2).max(500)).min(1).max(20),
+  programme: z.array(programmeDaySchema).min(1).max(20),
   certification: z.string().min(10).max(1000),
   price: z.string().min(2).max(60),
   priceDetails: z.string().min(10).max(1000),
