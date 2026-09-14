@@ -2,7 +2,7 @@
 
 import { useEffect, useMemo, useState } from "react";
 import { Button } from "@/components/ui";
-import type { Article, BulletinInscriptionWithAttempts, Company, CrmInteraction, CrmTask, Formation, PendingSyncSession, Registration, Session } from "../../shared/types";
+import type { Article, BulletinInscriptionWithAttempts, Company, CrmInteraction, CrmTask, Formation, Participant, PendingSyncSession, Registration, Session } from "../../shared/types";
 
 type Props = {
   initialArticles: Article[];
@@ -13,9 +13,10 @@ type Props = {
   initialSessions: Session[];
   initialRegistrations: Registration[];
   initialBulletinInscriptions: BulletinInscriptionWithAttempts[];
+  initialParticipants: Participant[];
 };
 
-type Section = "dashboard" | "companies" | "sessions" | "formations" | "editorial" | "bulletins";
+type Section = "dashboard" | "companies" | "sessions" | "participants" | "formations" | "editorial";
 
 type FormationDraft = {
   slug: string;
@@ -314,6 +315,7 @@ export function AdminWorkspace({
   initialSessions,
   initialRegistrations,
   initialBulletinInscriptions,
+  initialParticipants,
 }: Props) {
   const [section, setSection] = useState<Section>("dashboard");
   const [articles, setArticles] = useState(initialArticles);
@@ -324,12 +326,17 @@ export function AdminWorkspace({
   const [sessions, setSessions] = useState(initialSessions);
   const [registrations] = useState(initialRegistrations);
   const [bulletinInscriptions] = useState(initialBulletinInscriptions);
+  const [participants] = useState(initialParticipants);
 
   const [editingFormationSlug, setEditingFormationSlug] = useState(initialFormations[0]?.slug || "");
   const [editingSessionId, setEditingSessionId] = useState(initialSessions[0]?.id || "");
   const [editingArticleSlug, setEditingArticleSlug] = useState(initialArticles[0]?.slug || "");
   const [editingCompanyId, setEditingCompanyId] = useState(initialCompanies[0]?.id || "");
-  const [selectedBulletinId, setSelectedBulletinId] = useState(initialBulletinInscriptions[0]?.id || "");
+  const [selectedParticipantId, setSelectedParticipantId] = useState("");
+
+  const [participantSearch, setParticipantSearch] = useState("");
+  const [participantFormationFilter, setParticipantFormationFilter] = useState("Toutes");
+  const [participantStatusFilter, setParticipantStatusFilter] = useState("Tous");
 
   const [formationDraft, setFormationDraft] = useState(toFormationDraft(initialFormations[0]));
   const [sessionDraft, setSessionDraft] = useState(toSessionDraft(initialSessions[0]));
@@ -467,11 +474,23 @@ export function AdminWorkspace({
       .sort((left, right) => compareDateDesc(left.nextSessionDate || left.lastContactLabel, right.nextSessionDate || right.lastContactLabel));
   }, [companies, registrationDetails]);
 
-  const sortedBulletinInscriptions = useMemo(() => {
-    return [...bulletinInscriptions].sort((left, right) => compareDateDesc(left.createdAt, right.createdAt));
-  }, [bulletinInscriptions]);
+  const filteredParticipants = useMemo(() => {
+    const search = participantSearch.trim().toLowerCase();
+    return participants
+      .filter((participant) => {
+        const matchesSearch =
+          !search || `${participant.fullName} ${participant.company} ${participant.email}`.toLowerCase().includes(search);
+        const matchesFormation = participantFormationFilter === "Toutes" || participant.formationSlug === participantFormationFilter;
+        const matchesStatus = participantStatusFilter === "Tous" || participant.status === participantStatusFilter;
+        return matchesSearch && matchesFormation && matchesStatus;
+      })
+      .sort((left, right) => compareDateDesc(left.firstContactAt, right.firstContactAt));
+  }, [participantFormationFilter, participantSearch, participantStatusFilter, participants]);
 
-  const selectedBulletin = bulletinInscriptions.find((bulletin) => bulletin.id === selectedBulletinId);
+  const selectedParticipant = participants.find((participant) => participant.id === selectedParticipantId);
+  const selectedParticipantBulletin = selectedParticipant?.bulletinInscriptionId
+    ? bulletinInscriptions.find((bulletin) => bulletin.id === selectedParticipant.bulletinInscriptionId)
+    : undefined;
 
   const currentCompany = companies.find((company) => company.id === editingCompanyId) || companies[0];
   const currentCompanyTasks = crmTasks.filter((task) => task.companyId === editingCompanyId).sort((left, right) => compareDate(left.dueDate, right.dueDate));
@@ -533,8 +552,8 @@ export function AdminWorkspace({
     setFeedback(message);
   }
 
-  function selectBulletin(bulletinId: string) {
-    setSelectedBulletinId(bulletinId);
+  function selectParticipant(participantId: string) {
+    setSelectedParticipantId((current) => (current === participantId ? "" : participantId));
     setFeedback("");
   }
 
@@ -970,9 +989,9 @@ export function AdminWorkspace({
             ["dashboard", "Dashboard"],
             ["companies", "CRM"],
             ["sessions", "Sessions"],
+            ["participants", "Inscrits"],
             ["formations", "Catalogue"],
             ["editorial", "Editorial"],
-            ["bulletins", "Bulletins d'inscription"],
           ].map(([value, label]) => (
             <button className={`admin-sidebar-link${section === value ? " active" : ""}`} key={value} onClick={() => setSection(value as Section)} type="button">
               {label}
@@ -1468,121 +1487,196 @@ export function AdminWorkspace({
         </div>
       ) : null}
 
-      {section === "bulletins" ? (
-        <div className="admin-dual-pane">
+      {section === "participants" ? (
+        <div className="admin-stack-grid">
           <section className="admin-shell">
             <div className="section-heading section-heading-tight">
               <div>
-                <span className="eyebrow">Demandes</span>
-                <h2>Bulletins d&apos;inscription</h2>
-                <p>Consultez les bulletins reçus et le résultat de l&apos;auto-évaluation associée.</p>
+                <span className="eyebrow">Inscrits</span>
+                <h2>Tous les inscrits</h2>
+                <p>Pré-inscriptions rapides et bulletins d&apos;inscription détaillés, fusionnés en une seule liste par personne.</p>
               </div>
             </div>
-            <div className="admin-list admin-list-dense">
-              {sortedBulletinInscriptions.length === 0 ? <div className="admin-empty-state">Aucun bulletin d&apos;inscription reçu pour le moment.</div> : null}
-              {sortedBulletinInscriptions.map((bulletin) => {
-                const formation = formations.find((item) => item.slug === bulletin.formationSlug);
-                const hasQuizAttempt = bulletin.quizAttempts.length > 0;
-                return (
-                  <button className={`admin-list-item${selectedBulletinId === bulletin.id ? " active" : ""}`} key={bulletin.id} onClick={() => selectBulletin(bulletin.id)} type="button">
-                    <strong>{bulletin.learnerFullName}</strong>
-                    <span>{bulletin.companyName}</span>
-                    <span>{formation?.shortTitle || bulletin.formationSlug}</span>
-                    <span>{formatRegistrationDate(bulletin.createdAt)}</span>
-                    <span className={`stat-pill${hasQuizAttempt ? "" : " stat-pill-muted"}`}>
-                      {hasQuizAttempt ? "Auto-évaluation complétée" : "Pas d'auto-évaluation"}
-                    </span>
-                  </button>
-                );
-              })}
+
+            <div className="admin-filter-grid admin-filter-grid-compact">
+              <label><span>Recherche</span><input className="ui-field" value={participantSearch} onChange={(event) => setParticipantSearch(event.target.value)} placeholder="Nom, entreprise, email..." /></label>
+              <label>
+                <span>Formation</span>
+                <select className="ui-field" value={participantFormationFilter} onChange={(event) => setParticipantFormationFilter(event.target.value)}>
+                  <option>Toutes</option>
+                  {formations.map((formation) => <option key={formation.slug} value={formation.slug}>{formation.shortTitle}</option>)}
+                </select>
+              </label>
+              <label>
+                <span>Statut</span>
+                <select className="ui-field" value={participantStatusFilter} onChange={(event) => setParticipantStatusFilter(event.target.value)}>
+                  <option>Tous</option>
+                  <option>Pré-inscrit seulement</option>
+                  <option>Bulletin complété</option>
+                  <option>Bulletin direct</option>
+                </select>
+              </label>
             </div>
+
+            {filteredParticipants.length === 0 ? (
+              <p className="admin-empty-state">Aucun inscrit ne correspond à ces filtres.</p>
+            ) : (
+              <div className="admin-table-shell admin-table-shell-solid">
+                <table className="data-table">
+                  <thead>
+                    <tr>
+                      <th>Nom</th>
+                      <th>Entreprise</th>
+                      <th>Formation</th>
+                      <th>Session</th>
+                      <th>Statut</th>
+                      <th>Auto-éval</th>
+                      <th>Actions</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {filteredParticipants.map((participant) => {
+                      const formation = formations.find((item) => item.slug === participant.formationSlug);
+                      const session = sessions.find((item) => item.id === participant.sessionId);
+                      const statusClassName =
+                        participant.status === "Bulletin complété"
+                          ? "ui-badge-accent"
+                          : participant.status === "Bulletin direct"
+                            ? "ui-badge-soft"
+                            : "ui-badge-default";
+
+                      return (
+                        <tr
+                          key={participant.id}
+                          className={selectedParticipantId === participant.id ? "admin-row-active" : undefined}
+                          onClick={() => selectParticipant(participant.id)}
+                        >
+                          <td>{participant.fullName}</td>
+                          <td>{participant.company}</td>
+                          <td>{formation?.shortTitle || participant.formationSlug}</td>
+                          <td>{session ? `${formatSessionRange(session.startDate, session.endDate)} · ${session.city}` : "Non renseignée"}</td>
+                          <td><span className={`ui-badge ${statusClassName}`}>{participant.status}</span></td>
+                          <td>{participant.quizAttempt ? `${participant.quizAttempt.scoreOn20} / 20` : "-"}</td>
+                          <td>
+                            <div className="admin-table-actions" onClick={(event) => event.stopPropagation()}>
+                              {participant.bulletinInscriptionId ? (
+                                <a
+                                  className="admin-copy-button"
+                                  href={`/api/admin/bulletin-inscriptions/${participant.bulletinInscriptionId}/pdf`}
+                                  target="_blank"
+                                  rel="noreferrer"
+                                >
+                                  PDF
+                                </a>
+                              ) : null}
+                              <button
+                                className="admin-copy-button"
+                                onClick={() =>
+                                  copyToClipboard(
+                                    participant.id,
+                                    `${participant.company} - ${participant.fullName} - ${participant.email} - ${participant.phone}`,
+                                  )
+                                }
+                                type="button"
+                              >
+                                {copiedKey === participant.id ? "Copié !" : "Copier"}
+                              </button>
+                            </div>
+                          </td>
+                        </tr>
+                      );
+                    })}
+                  </tbody>
+                </table>
+              </div>
+            )}
           </section>
 
-          <div className="admin-detail-stack">
-            {selectedBulletin ? (
-              <>
-                <section className="admin-shell">
-                  <div className="section-heading section-heading-tight"><div><span className="eyebrow">Fiche</span><h2>{selectedBulletin.learnerFullName}</h2></div></div>
+          {selectedParticipant ? (
+            <section className="admin-shell">
+              <div className="section-heading section-heading-tight">
+                <div>
+                  <span className="eyebrow">Détail</span>
+                  <h2>{selectedParticipant.fullName}</h2>
+                  <p>{selectedParticipant.status}</p>
+                </div>
+              </div>
 
+              <div className="admin-form-section">
+                <h3>Coordonnées</h3>
+                <div className="form-grid">
+                  <label><span>Nom</span><p>{selectedParticipant.fullName}</p></label>
+                  <label><span>Entreprise</span><p>{selectedParticipant.company}</p></label>
+                  <label><span>Email</span><p>{selectedParticipant.email}</p></label>
+                  <label><span>Téléphone</span><p>{selectedParticipant.phone}</p></label>
+                  <label><span>Formation</span><p>{formations.find((item) => item.slug === selectedParticipant.formationSlug)?.title || selectedParticipant.formationSlug}</p></label>
+                  <label><span>Premier contact</span><p>{formatRegistrationDate(selectedParticipant.firstContactAt)}</p></label>
+                </div>
+              </div>
+
+              {selectedParticipantBulletin ? (
+                <>
                   <div className="admin-form-section">
-                    <h3>Formation et session</h3>
+                    <h3>Bulletin d&apos;inscription</h3>
                     <div className="form-grid">
-                      <label><span>Formation</span><p>{formations.find((item) => item.slug === selectedBulletin.formationSlug)?.title || selectedBulletin.formationSlug}</p></label>
-                      <label><span>Dates de session</span><p>{selectedBulletin.sessionDates || "Non renseignées"}</p></label>
-                      <label><span>Lieu de session</span><p>{selectedBulletin.sessionLocation || "Non renseigné"}</p></label>
-                      <label><span>Origine</span><p>{selectedBulletin.source || "Non renseignée"}</p></label>
-                      <label><span>Distributeur</span><p>{selectedBulletin.distributorName || "Non applicable"}</p></label>
-                      <label><span>Date de soumission</span><p>{formatRegistrationDate(selectedBulletin.createdAt)}</p></label>
+                      <label><span>Dates de session</span><p>{selectedParticipantBulletin.sessionDates || "Non renseignées"}</p></label>
+                      <label><span>Lieu de session</span><p>{selectedParticipantBulletin.sessionLocation || "Non renseigné"}</p></label>
+                      <label><span>Origine</span><p>{selectedParticipantBulletin.source || "Non renseignée"}</p></label>
+                      <label><span>Raison sociale</span><p>{selectedParticipantBulletin.companyName}</p></label>
+                      <label><span>SIRET</span><p>{selectedParticipantBulletin.siret || "Non renseigné"}</p></label>
+                      <label><span>Commanditaire</span><p>{selectedParticipantBulletin.sponsorFullName} ({selectedParticipantBulletin.sponsorRole || "fonction non renseignée"})</p></label>
+                      <label><span>Apprenant</span><p>{selectedParticipantBulletin.learnerFullName}</p></label>
+                      <label><span>Situation de handicap</span><p>{selectedParticipantBulletin.hasDisability ? "Oui" : "Non"}</p></label>
                     </div>
+                    <a
+                      className="admin-copy-button"
+                      href={`/api/admin/bulletin-inscriptions/${selectedParticipantBulletin.id}/pdf`}
+                      target="_blank"
+                      rel="noreferrer"
+                    >
+                      Télécharger le PDF du bulletin
+                    </a>
                   </div>
 
                   <div className="admin-form-section">
-                    <h3>Commanditaire de la formation</h3>
-                    <div className="form-grid">
-                      <label><span>Raison sociale</span><p>{selectedBulletin.companyName}</p></label>
-                      <label><span>SIRET</span><p>{selectedBulletin.siret || "Non renseigné"}</p></label>
-                      <label><span>Code APE</span><p>{selectedBulletin.apeCode || "Non renseigné"}</p></label>
-                      <label><span>Adresse</span><p>{selectedBulletin.companyAddress || "Non renseignée"}</p></label>
-                      <label><span>Prénom et nom</span><p>{selectedBulletin.sponsorFullName}</p></label>
-                      <label><span>Fonction</span><p>{selectedBulletin.sponsorRole || "Non renseignée"}</p></label>
-                      <label><span>Email</span><p>{selectedBulletin.sponsorEmail}</p></label>
-                      <label><span>Téléphone</span><p>{selectedBulletin.sponsorPhone}</p></label>
-                    </div>
-                  </div>
-
-                  <div className="admin-form-section">
-                    <h3>Apprenant</h3>
-                    <div className="form-grid">
-                      <label><span>Prénom et nom</span><p>{selectedBulletin.learnerFullName}</p></label>
-                      <label><span>Fonction</span><p>{selectedBulletin.learnerRole || "Non renseignée"}</p></label>
-                      <label><span>Téléphone</span><p>{selectedBulletin.learnerPhone || "Non renseigné"}</p></label>
-                      <label><span>Date de naissance</span><p>{formatDateLabel(selectedBulletin.learnerBirthDate)}</p></label>
-                      <label><span>Situation de handicap</span><p>{selectedBulletin.hasDisability ? "Oui" : "Non"}</p></label>
-                      {selectedBulletin.hasDisability ? <label><span>Précisions</span><p>{selectedBulletin.disabilityDetails || "Non renseignées"}</p></label> : null}
-                    </div>
-                  </div>
-                </section>
-
-                <section className="admin-shell">
-                  <div className="section-heading section-heading-tight"><div><span className="eyebrow">Auto-évaluation</span><h2>Résultat du quiz</h2></div></div>
-                  {selectedBulletin.quizAttempts.length === 0 ? (
-                    <p className="admin-empty-state">L&apos;apprenant n&apos;a pas encore réalisé son auto-évaluation.</p>
-                  ) : (
-                    <div className="admin-stack-grid">
-                      {selectedBulletin.quizAttempts.map((attempt) => (
-                        <div className="quiz-result" key={attempt.id}>
-                          <p><strong>Score : {attempt.scoreOn20} / 20</strong> · passé le {formatRegistrationDate(attempt.createdAt)}</p>
-                          {attempt.details ? (
-                            <div className="quiz-result-list">
-                              {attempt.details.map((detail) => (
-                                <div className={`quiz-result-item ${detail.isCorrect ? "is-correct" : "is-incorrect"}`} key={detail.questionId}>
-                                  <p className="quiz-result-question">{detail.question}</p>
-                                  <p>
-                                    Réponse soumise : <strong>{detail.submittedLabel || "Non répondu"}</strong>
-                                  </p>
-                                  {!detail.isCorrect ? (
+                    <h3>Auto-évaluation</h3>
+                    {selectedParticipantBulletin.quizAttempts.length === 0 ? (
+                      <p className="admin-empty-state">L&apos;apprenant n&apos;a pas encore réalisé son auto-évaluation.</p>
+                    ) : (
+                      <div className="admin-stack-grid">
+                        {selectedParticipantBulletin.quizAttempts.map((attempt) => (
+                          <div className="quiz-result" key={attempt.id}>
+                            <p><strong>Score : {attempt.scoreOn20} / 20</strong> · passé le {formatRegistrationDate(attempt.createdAt)}</p>
+                            {attempt.details ? (
+                              <div className="quiz-result-list">
+                                {attempt.details.map((detail) => (
+                                  <div className={`quiz-result-item ${detail.isCorrect ? "is-correct" : "is-incorrect"}`} key={detail.questionId}>
+                                    <p className="quiz-result-question">{detail.question}</p>
                                     <p>
-                                      Bonne réponse : <strong>{detail.correctLabel}</strong>
+                                      Réponse soumise : <strong>{detail.submittedLabel || "Non répondu"}</strong>
                                     </p>
-                                  ) : null}
-                                </div>
-                              ))}
-                            </div>
-                          ) : (
-                            <p className="admin-empty-state">Le quiz associé à cette tentative n&apos;existe plus.</p>
-                          )}
-                        </div>
-                      ))}
-                    </div>
-                  )}
-                </section>
-              </>
-            ) : (
-              <section className="admin-shell">
-                <div className="admin-empty-state">Sélectionnez un bulletin d&apos;inscription pour afficher son détail.</div>
-              </section>
-            )}
-          </div>
+                                    {!detail.isCorrect ? (
+                                      <p>
+                                        Bonne réponse : <strong>{detail.correctLabel}</strong>
+                                      </p>
+                                    ) : null}
+                                  </div>
+                                ))}
+                              </div>
+                            ) : (
+                              <p className="admin-empty-state">Le quiz associé à cette tentative n&apos;existe plus.</p>
+                            )}
+                          </div>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+                </>
+              ) : (
+                <p className="admin-empty-state">Cette personne n&apos;a pas encore complété de bulletin d&apos;inscription détaillé.</p>
+              )}
+            </section>
+          ) : null}
         </div>
       ) : null}
       </div>

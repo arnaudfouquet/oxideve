@@ -2425,6 +2425,26 @@ main {
   border-bottom: 1px solid var(--border-subtle);
 }
 
+.data-table tbody tr {
+  cursor: pointer;
+  transition: background-color 180ms ease;
+}
+
+.data-table tbody tr:hover {
+  background: rgba(0, 156, 220, 0.06);
+}
+
+.data-table tbody tr.admin-row-active {
+  background: rgba(0, 156, 220, 0.12);
+}
+
+.admin-table-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  align-items: center;
+}
+
 .site-footer {
   padding: 42px 0 60px;
 }

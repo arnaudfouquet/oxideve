@@ -16,7 +16,8 @@ const { createCompany, listCompanies, updateCompany } = require("../services/com
 const { createCrmInteraction, createCrmTask, listCrmInteractions, listCrmTasks, updateCrmTask } = require("../services/crmService");
 const { createRegistration, listRegistrations } = require("../services/registrationService");
 const { syncQueovalCalendar, listPendingSyncSessions, resolvePendingSyncSession } = require("../services/queovalService");
-const { createBulletinInscription, listBulletinInscriptions } = require("../services/bulletinInscriptionService");
+const { createBulletinInscription, listBulletinInscriptions, getBulletinInscriptionById } = require("../services/bulletinInscriptionService");
+const { listParticipants } = require("../services/participantsService");
 const { generateBulletinPdf, generateQuizPdf } = require("../services/pdfService");
 const { sendBulletinConfirmationEmail, sendQuizResultEmail } = require("../services/mailService");
 const {
@@ -330,6 +331,37 @@ function createApiRouter() {
       }));
 
       res.json({ data });
+    })
+  );
+
+  router.get(
+    "/admin/participants",
+    asyncHandler(async (_req, res) => {
+      const participants = await listParticipants();
+      res.json({ data: participants });
+    })
+  );
+
+  router.get(
+    "/admin/bulletin-inscriptions/:id/pdf",
+    asyncHandler(async (req, res) => {
+      const bulletin = await getBulletinInscriptionById(req.params.id);
+
+      if (!bulletin) {
+        return res.status(404).json({ error: "Bulletin d'inscription introuvable" });
+      }
+
+      const [formation, sessions] = await Promise.all([
+        getFormationBySlug(bulletin.formationSlug),
+        listSessions(),
+      ]);
+      const session = sessions.find((item) => item.id === bulletin.sessionId) || null;
+
+      const pdfBuffer = await generateBulletinPdf(bulletin, formation, session);
+
+      res.set("Content-Type", "application/pdf");
+      res.set("Content-Disposition", `attachment; filename="bulletin-${bulletin.id}.pdf"`);
+      return res.send(pdfBuffer);
     })
   );
 

@@ -238,6 +238,29 @@ export type Article = {
   featuredFormationSlug?: string;
 };
 
+export type ParticipantStatus = "Pré-inscrit seulement" | "Bulletin complété" | "Bulletin direct";
+
+export type ParticipantQuizSummary = {
+  id: string;
+  scoreOn20: number;
+  createdAt: string;
+};
+
+export type Participant = {
+  id: string;
+  fullName: string;
+  email: string;
+  company: string;
+  phone: string;
+  formationSlug: string;
+  sessionId: string | null;
+  firstContactAt: string;
+  status: ParticipantStatus;
+  registrationId: string | null;
+  bulletinInscriptionId: string | null;
+  quizAttempt: ParticipantQuizSummary | null;
+};
+
 export type CatalogData = {
   formations: Formation[];
   sessions: Session[];

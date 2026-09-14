@@ -1,6 +1,6 @@
 import "server-only";
 import catalogData from "../../shared/catalog-data.json";
-import type { Article, BulletinInscriptionWithAttempts, CatalogData, Company, CrmInteraction, CrmTask, Formation, QuizAttempt, Registration, Session } from "../../shared/types";
+import type { Article, BulletinInscriptionWithAttempts, CatalogData, Company, CrmInteraction, CrmTask, Formation, Participant, QuizAttempt, Registration, Session } from "../../shared/types";
 import { blogArticles } from "./editorial";
 
 const catalog = catalogData as CatalogData;
@@ -21,6 +21,10 @@ type BulletinInscriptionServiceModule = {
 
 type QuizServiceModule = {
   listAllQuizAttempts: () => Promise<QuizAttempt[]>;
+};
+
+type ParticipantsServiceModule = {
+  listParticipants: () => Promise<Participant[]>;
 };
 
 type CompanyServiceModule = {
@@ -62,6 +66,10 @@ function getBulletinInscriptionService(): BulletinInscriptionServiceModule {
 
 function getQuizService(): QuizServiceModule {
   return require("../../backend/services/quizService.js") as QuizServiceModule;
+}
+
+function getParticipantsService(): ParticipantsServiceModule {
+  return require("../../backend/services/participantsService.js") as ParticipantsServiceModule;
 }
 
 function getCompanyService(): CompanyServiceModule {
@@ -144,6 +152,15 @@ export async function getBulletinInscriptions(): Promise<BulletinInscriptionWith
       ...bulletin,
       quizAttempts: quizAttempts.filter((attempt) => attempt.bulletinInscriptionId === bulletin.id),
     }));
+  } catch {
+    return [];
+  }
+}
+
+export async function getParticipants(): Promise<Participant[]> {
+  try {
+    const service = getParticipantsService();
+    return await service.listParticipants();
   } catch {
     return [];
   }
