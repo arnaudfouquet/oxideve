@@ -2,50 +2,62 @@
 
 import { FormEvent, useMemo, useState } from "react";
 import type { Formation, Session } from "../../shared/types";
-import { Title } from "@/components/ui";
+import { formatDateRange } from "@/lib/dates";
 
 type Props = {
   formations: Formation[];
   sessions: Session[];
   defaultFormationSlug?: string;
   defaultSessionId?: string;
-  defaultSessionDates?: string;
-  defaultSessionLocation?: string;
 };
 
-export function BulletinInscriptionForm({
-  formations,
-  sessions,
-  defaultFormationSlug = "",
-  defaultSessionId = "",
-  defaultSessionDates = "",
-  defaultSessionLocation = "",
-}: Props) {
+const sourceOptions = ["Bouche à oreille", "Moteur de recherche", "Votre distributeur", "Nouvel Horizon", "Réseaux sociaux"];
+const distributorOptions = ["Solipac", "Tereva", "Nouvel Horizon"];
+
+export function BulletinInscriptionForm({ formations, sessions, defaultFormationSlug = "", defaultSessionId = "" }: Props) {
   const [status, setStatus] = useState<"idle" | "loading" | "success" | "error">("idle");
   const [message, setMessage] = useState("");
   const [quizSlug, setQuizSlug] = useState<string | null>(null);
   const [bulletinId, setBulletinId] = useState<string | null>(null);
   const [selectedFormationSlug, setSelectedFormationSlug] = useState(defaultFormationSlug);
+  const [selectedSessionId, setSelectedSessionId] = useState(defaultSessionId);
+  const [source, setSource] = useState("");
+  const [distributorName, setDistributorName] = useState("");
   const [hasDisability, setHasDisability] = useState(false);
 
   const isFormationLocked = Boolean(defaultFormationSlug);
-  const isSessionLocked = Boolean(defaultSessionId);
 
   const categories = useMemo(
     () => Array.from(new Set(formations.map((formation) => formation.category))),
     [formations],
   );
 
-  const selectedFormation = formations.find((formation) => formation.slug === selectedFormationSlug);
+  const formationSessions = useMemo(
+    () => sessions.filter((session) => session.formationSlug === selectedFormationSlug),
+    [sessions, selectedFormationSlug],
+  );
+
+  const selectedSession =
+    formationSessions.find((session) => session.id === selectedSessionId) || formationSessions[0];
+
+  function handleFormationChange(slug: string) {
+    setSelectedFormationSlug(slug);
+    const nextSessions = sessions.filter((session) => session.formationSlug === slug);
+    setSelectedSessionId(nextSessions[0]?.id || "");
+  }
 
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
     setStatus("loading");
     setMessage("");
 
-    const formData = new FormData(event.currentTarget);
+    const form = event.currentTarget;
+    const formData = new FormData(form);
     const payload: Record<string, unknown> = Object.fromEntries(formData.entries());
     payload.hasDisability = formData.get("hasDisability") === "on";
+    payload.sessionId = selectedSession?.id || "";
+    payload.sessionDates = selectedSession ? formatDateRange(selectedSession.startDate, selectedSession.endDate) : "";
+    payload.sessionLocation = selectedSession?.city || "";
 
     const response = await fetch("/api/bulletin-inscription", {
       method: "POST",
@@ -67,8 +79,10 @@ export function BulletinInscriptionForm({
     } | null;
     setQuizSlug(data?.data?.quizSlug || null);
     setBulletinId(data?.data?.id || null);
-    event.currentTarget.reset();
+    form.reset();
     setHasDisability(false);
+    setSource("");
+    setDistributorName("");
     setStatus("success");
     setMessage("Votre bulletin d'inscription a bien été enregistré. Un email de confirmation avec le récapitulatif vous a été envoyé.");
   }
@@ -76,7 +90,9 @@ export function BulletinInscriptionForm({
   if (status === "success") {
     return (
       <div className="bulletin-success">
-        <Title eyebrow="Merci" title="Bulletin d'inscription enregistré" />
+        <h2 className="bulletin-form-block-title">
+          <span>✓</span> Bulletin d&apos;inscription enregistré
+        </h2>
         <p>{message}</p>
         {quizSlug ? (
           <p>
@@ -97,7 +113,9 @@ export function BulletinInscriptionForm({
   return (
     <form className="contact-form bulletin-form" onSubmit={handleSubmit}>
       <section className="bulletin-form-block">
-        <Title as="h2" eyebrow="1. Formation" title="Formation choisie" />
+        <h2 className="bulletin-form-block-title">
+          <span>1</span> Formation
+        </h2>
         <div className="form-grid">
           <label>
             Formation
@@ -105,7 +123,7 @@ export function BulletinInscriptionForm({
               className="ui-field"
               name="formationSlug"
               value={selectedFormationSlug}
-              onChange={(event) => setSelectedFormationSlug(event.target.value)}
+              onChange={(event) => handleFormationChange(event.target.value)}
               disabled={isFormationLocked}
               required
             >
@@ -126,42 +144,83 @@ export function BulletinInscriptionForm({
             </select>
             {isFormationLocked ? <input type="hidden" name="formationSlug" value={selectedFormationSlug} /> : null}
           </label>
+          {formationSessions.length > 1 ? (
+            <label>
+              Session
+              <select
+                className="ui-field"
+                value={selectedSessionId}
+                onChange={(event) => setSelectedSessionId(event.target.value)}
+                required
+              >
+                <option disabled value="">
+                  Choisir une session
+                </option>
+                {formationSessions.map((session) => (
+                  <option key={session.id} value={session.id}>
+                    {session.city} - {formatDateRange(session.startDate, session.endDate)}
+                  </option>
+                ))}
+              </select>
+            </label>
+          ) : (
+            <>
+              <label>
+                Dates de la session
+                <input
+                  className="ui-field"
+                  type="text"
+                  readOnly
+                  value={selectedSession ? formatDateRange(selectedSession.startDate, selectedSession.endDate) : ""}
+                  placeholder="Choisissez d'abord une formation"
+                />
+              </label>
+              <label>
+                Lieu de la session
+                <input
+                  className="ui-field"
+                  type="text"
+                  readOnly
+                  value={selectedSession?.city || ""}
+                  placeholder="Choisissez d'abord une formation"
+                />
+              </label>
+            </>
+          )}
           <label>
             Comment avez-vous connu la formation ?
-            <input className="ui-field" name="source" type="text" placeholder="Site internet, distributeur, bouche-à-oreille..." />
-          </label>
-          <label>
-            Dates de la session
-            <input
-              className="ui-field"
-              name="sessionDates"
-              type="text"
-              defaultValue={defaultSessionDates}
-              readOnly={isSessionLocked}
-              placeholder="Ex : 12 au 14 mars 2026"
-            />
-          </label>
-          <label>
-            Lieu de la session
-            <input
-              className="ui-field"
-              name="sessionLocation"
-              type="text"
-              defaultValue={defaultSessionLocation || selectedFormation?.location || ""}
-              readOnly={isSessionLocked}
-              placeholder="Ville / lieu de la formation"
-            />
+            <select className="ui-field" name="source" value={source} onChange={(event) => setSource(event.target.value)}>
+              <option value="">Sélectionner</option>
+              {sourceOptions.map((option) => (
+                <option key={option} value={option}>
+                  {option}
+                </option>
+              ))}
+            </select>
           </label>
           <label>
             Nom du distributeur (optionnel)
-            <input className="ui-field" name="distributorName" type="text" placeholder="Nom du distributeur, si applicable" />
+            <select
+              className="ui-field"
+              name="distributorName"
+              value={distributorName}
+              onChange={(event) => setDistributorName(event.target.value)}
+            >
+              <option value="">Non applicable</option>
+              {distributorOptions.map((option) => (
+                <option key={option} value={option}>
+                  {option}
+                </option>
+              ))}
+            </select>
           </label>
         </div>
-        {isSessionLocked ? <input type="hidden" name="sessionId" value={defaultSessionId} /> : null}
       </section>
 
       <section className="bulletin-form-block">
-        <Title as="h2" eyebrow="2. Commanditaire" title="Commanditaire de la formation" />
+        <h2 className="bulletin-form-block-title">
+          <span>2</span> Commanditaire de la formation
+        </h2>
         <div className="form-grid">
           <label>
             Raison sociale
@@ -199,7 +258,9 @@ export function BulletinInscriptionForm({
       </section>
 
       <section className="bulletin-form-block">
-        <Title as="h2" eyebrow="3. Apprenant" title="Informations sur l'apprenant" />
+        <h2 className="bulletin-form-block-title">
+          <span>3</span> Apprenant
+        </h2>
         <div className="form-grid">
           <label>
             Prénom et nom

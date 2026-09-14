@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import { BulletinInscriptionForm } from "@/components/BulletinInscriptionForm";
 import { getFormations, getSessions } from "@/lib/content";
-import { formatDateRange } from "@/lib/dates";
 
 export const dynamic = "force-dynamic";
 
@@ -29,9 +28,6 @@ export default async function BulletinInscriptionPage({ searchParams }: Props) {
       ? scopedSessions.find((session) => session.id === params.sessionId)
       : undefined;
 
-  const defaultSessionDates = defaultSession ? formatDateRange(defaultSession.startDate, defaultSession.endDate) : "";
-  const defaultSessionLocation = defaultSession?.city || "";
-
   return (
     <section className="section">
       <div className="container">
@@ -44,14 +40,12 @@ export default async function BulletinInscriptionPage({ searchParams }: Props) {
           </p>
         </div>
 
-        <article className="contact-card contact-card-standalone">
+        <article className="contact-card bulletin-form-shell">
           <BulletinInscriptionForm
             formations={formations}
             sessions={sessions}
             defaultFormationSlug={defaultFormationSlug}
             defaultSessionId={defaultSession?.id || ""}
-            defaultSessionDates={defaultSessionDates}
-            defaultSessionLocation={defaultSessionLocation}
           />
         </article>
       </div>

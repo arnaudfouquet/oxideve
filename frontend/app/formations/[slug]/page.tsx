@@ -80,28 +80,22 @@ export default async function FormationDetailPage({ params }: Props) {
       <Section>
         <Container>
         <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
-          <div className="formation-hero">
-            <div className="formation-hero-main">
-              <Badge tone="accent">{formation.category}</Badge>
-              <Title as="h1" title={formation.title} description={formation.summary} />
-              <div className="formation-hero-actions">
-                <ButtonLink href="#inscription" variant="primary">Je m'inscris</ButtonLink>
-                <ButtonLink href="/contact" variant="secondary">Parler a l'equipe</ButtonLink>
-              </div>
+          <div className="formation-hero-full">
+            <Badge tone="accent">{formation.category}</Badge>
+            <Title as="h1" title={formation.title} description={formation.summary} />
+            <div className="formation-hero-actions">
+              <ButtonLink href="#inscription" variant="primary">Je m'inscris</ButtonLink>
+              <ButtonLink href="/contact" variant="secondary">Parler a l'equipe</ButtonLink>
             </div>
-            <aside className="sticky-cta-card">
-              <strong>Prochaine session</strong>
-              <p>{sessions[0] ? formatDateRange(sessions[0].startDate, sessions[0].endDate) : "Calendrier en preparation"}</p>
-              <span>{sessions[0]?.city || formation.location}</span>
-              <ButtonLink href="#inscription" variant="primary">Choisir cette session</ButtonLink>
-            </aside>
           </div>
 
-          <div className="info-bar">
+          <div className="info-bar info-bar-with-cta">
+            <div><span>Prochaine session</span><strong>{sessions[0] ? formatDateRange(sessions[0].startDate, sessions[0].endDate) : "En preparation"}</strong></div>
             <div><span>Duree</span><strong>{formation.duration}</strong></div>
-            <div><span>Lieu</span><strong>{formation.location}</strong></div>
+            <div><span>Lieu</span><strong>{sessions[0]?.city || formation.location}</strong></div>
             <div><span>Tarif</span><strong>{formation.price}</strong></div>
             <div><span>Public</span><strong>{formation.audience}</strong></div>
+            <ButtonLink className="info-bar-cta" href="#inscription" variant="primary">Choisir cette session</ButtonLink>
           </div>
 
           {formation.rgeBadge ? (

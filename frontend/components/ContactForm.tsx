@@ -58,7 +58,8 @@ export function ContactForm({
     setStatus("loading");
     setMessage("");
 
-    const formData = new FormData(event.currentTarget);
+    const form = event.currentTarget;
+    const formData = new FormData(form);
     const payload = Object.fromEntries(formData.entries());
 
     const response = await fetch("/api/inscription", {
@@ -76,7 +77,7 @@ export function ContactForm({
       return;
     }
 
-    event.currentTarget.reset();
+    form.reset();
     if (showSelectors) {
       setSelectedFormationSlug(defaultFormationSlug || formations[0]?.slug || "");
       setSelectedSessionId(defaultSessionId || sessions[0]?.id || "");

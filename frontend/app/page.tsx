@@ -9,7 +9,6 @@ const heroImage = encodeURI("/assets/accueil/formation oxideve hero.jpg");
 const whiteLogoUrl = "https://oxideve.com/wp-content/uploads/2024/11/LOGO_OXIDEVE_BLANC_WEB_SVG.svg";
 const infoIconUrl = "/assets/info-icon.svg";
 const trustIconUrl = encodeURI("/assets/accueil/icone google avis oxideve.svg");
-const rgeHighlightImage = encodeURI("/assets/accueil/formation qualipv qualipac recharge elec oxideve.svg");
 const dayTypeImage = encodeURI("/assets/accueil/journée type formation oxideve.svg");
 
 function categoryAnchor(category: string) {
@@ -97,6 +96,10 @@ export default async function HomePage() {
         </Container>
       </Section>
 
+      <Section className="landing-section landing-testimonials-section">
+        <TestimonialCarousel />
+      </Section>
+
       <Section className="landing-section">
         <Container>
           <HomeIdentitySection />
@@ -116,12 +119,6 @@ export default async function HomePage() {
           <div className="landing-center-cta">
             <ButtonLink className="ui-button-card" href="/inscriptions" variant="secondary">Vous aussi, formez-vous avec Oxideve</ButtonLink>
           </div>
-        </Container>
-      </Section>
-
-      <Section className="landing-section landing-sessions-block">
-        <Container>
-          <HomeCalendarSection formations={formations} sessions={sessions} />
         </Container>
       </Section>
 
@@ -158,10 +155,6 @@ export default async function HomePage() {
         </Container>
       </Section>
 
-      <Section className="landing-section landing-testimonials-section">
-        <TestimonialCarousel />
-      </Section>
-
       <Section className="landing-section">
         <Container>
           <div className="day-type-card">
@@ -175,7 +168,7 @@ export default async function HomePage() {
                 <li>Bureautique</li>
                 <li>Management</li>
                 <li>Photovoltaïque &amp; pompe à chaleur</li>
-                <li>Habilitations &amp; CACES</li>
+                <li>Habilitations électriques</li>
               </ul>
             </div>
             <div className="day-type-visual">
@@ -198,20 +191,6 @@ export default async function HomePage() {
             </div>
           </div>
 
-          <div className="rge-highlight-card">
-            <div>
-              <h2>TOUT SAVOIR SUR LES CERTIFICATIONS RGE</h2>
-              <h3>Une expertise reconnaissable grâce à votre certification</h3>
-              <p>Nos formations QualiPV, QualiPAC et IRVE préparent vos équipes à la qualification RGE.</p>
-              <ButtonLink className="ui-button-blue" href="/rge" variant="primary">Devenir artisan RGE</ButtonLink>
-            </div>
-            <div className="rge-badges">
-              <div className="rge-highlight-media">
-                <img alt="Formations QualiPV, QualiPAC et Recharge Elec+" src={rgeHighlightImage} />
-              </div>
-            </div>
-          </div>
-
           <div className="funding-card funding-card-last">
             <div>
               <h2>Aide financière formation</h2>
@@ -220,6 +199,12 @@ export default async function HomePage() {
             </div>
             <ButtonLink className="ui-button-card" href="/actualites" variant="secondary">Découvrir</ButtonLink>
           </div>
+        </Container>
+      </Section>
+
+      <Section className="landing-section landing-sessions-block">
+        <Container>
+          <HomeCalendarSection formations={formations} sessions={sessions} />
         </Container>
       </Section>
     </>
