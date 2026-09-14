@@ -16,7 +16,7 @@ type Props = {
   initialParticipants: Participant[];
 };
 
-type Section = "dashboard" | "companies" | "sessions" | "participants" | "formations" | "editorial";
+type Section = "dashboard" | "sessions" | "participants" | "formations" | "editorial";
 
 type FormationDraft = {
   slug: string;
@@ -60,59 +60,6 @@ type ArticleDraft = {
   readingTime: string;
   publishedAt: string;
   featuredFormationSlug: string;
-};
-
-type CompanyDraft = {
-  id: string;
-  name: string;
-  contactName: string;
-  email: string;
-  phone: string;
-  status: string;
-  source: string;
-  priority: string;
-  owner: string;
-  nextFollowUpAt: string;
-  lastContactAt: string;
-  notes: string;
-};
-
-type TaskDraft = {
-  id: string;
-  companyId: string;
-  title: string;
-  description: string;
-  status: string;
-  dueDate: string;
-  owner: string;
-};
-
-type InteractionDraft = {
-  companyId: string;
-  type: string;
-  channel: string;
-  summary: string;
-  owner: string;
-  occurredAt: string;
-};
-
-type CompanySummary = {
-  id: string;
-  name: string;
-  contactName: string;
-  email: string;
-  phone: string;
-  status: string;
-  source: string;
-  priority: string;
-  owner: string;
-  notes: string;
-  registrations: number;
-  formations: string[];
-  nextSessionLabel: string;
-  nextSessionDate?: string;
-  lastContactLabel: string;
-  followUpLabel: string;
 };
 
 type RegistrationDetail = {
@@ -266,44 +213,31 @@ function toArticleDraft(article?: Article): ArticleDraft {
   };
 }
 
-function toCompanyDraft(company?: Company): CompanyDraft {
-  return {
-    id: company?.id || "",
-    name: company?.name || "",
-    contactName: company?.contactName || "",
-    email: company?.email || "",
-    phone: company?.phone || "",
-    status: company?.status || "Prospect",
-    source: company?.source || "Inbound",
-    priority: company?.priority || "Normale",
-    owner: company?.owner || "",
-    nextFollowUpAt: company?.nextFollowUpAt?.slice(0, 10) || "",
-    lastContactAt: company?.lastContactAt?.slice(0, 10) || "",
-    notes: company?.notes || "",
-  };
-}
+type DetailFieldProps = {
+  label: string;
+  value: string;
+  copyKey: string;
+  copiedKey: string;
+  copyToClipboard: (key: string, text: string) => void;
+};
 
-function toTaskDraft(task?: CrmTask, companyId = ""): TaskDraft {
-  return {
-    id: task?.id || "",
-    companyId: task?.companyId || companyId,
-    title: task?.title || "",
-    description: task?.description || "",
-    status: task?.status || "A faire",
-    dueDate: task?.dueDate?.slice(0, 10) || "",
-    owner: task?.owner || "",
-  };
-}
-
-function toInteractionDraft(companyId = ""): InteractionDraft {
-  return {
-    companyId,
-    type: "Appel",
-    channel: "Téléphone",
-    summary: "",
-    owner: "",
-    occurredAt: new Date().toISOString().slice(0, 10),
-  };
+function DetailField({ label, value, copyKey, copiedKey, copyToClipboard }: DetailFieldProps) {
+  return (
+    <div className="admin-detail-field">
+      <span>{label}</span>
+      <div className="admin-field-row">
+        <p>{value}</p>
+        <button
+          className={`admin-field-copy${copiedKey === copyKey ? " is-copied" : ""}`}
+          onClick={() => copyToClipboard(copyKey, value)}
+          title="Copier"
+          type="button"
+        >
+          {copiedKey === copyKey ? "✓" : "⧉"}
+        </button>
+      </div>
+    </div>
+  );
 }
 
 export function AdminWorkspace({
@@ -319,9 +253,6 @@ export function AdminWorkspace({
 }: Props) {
   const [section, setSection] = useState<Section>("dashboard");
   const [articles, setArticles] = useState(initialArticles);
-  const [companies, setCompanies] = useState(initialCompanies);
-  const [crmInteractions, setCrmInteractions] = useState(initialCrmInteractions);
-  const [crmTasks, setCrmTasks] = useState(initialCrmTasks);
   const [formations, setFormations] = useState(initialFormations);
   const [sessions, setSessions] = useState(initialSessions);
   const [registrations] = useState(initialRegistrations);
@@ -331,7 +262,6 @@ export function AdminWorkspace({
   const [editingFormationSlug, setEditingFormationSlug] = useState(initialFormations[0]?.slug || "");
   const [editingSessionId, setEditingSessionId] = useState(initialSessions[0]?.id || "");
   const [editingArticleSlug, setEditingArticleSlug] = useState(initialArticles[0]?.slug || "");
-  const [editingCompanyId, setEditingCompanyId] = useState(initialCompanies[0]?.id || "");
   const [selectedParticipantId, setSelectedParticipantId] = useState("");
 
   const [participantSearch, setParticipantSearch] = useState("");
@@ -341,18 +271,6 @@ export function AdminWorkspace({
   const [formationDraft, setFormationDraft] = useState(toFormationDraft(initialFormations[0]));
   const [sessionDraft, setSessionDraft] = useState(toSessionDraft(initialSessions[0]));
   const [articleDraft, setArticleDraft] = useState(toArticleDraft(initialArticles[0]));
-  const [companyDraft, setCompanyDraft] = useState(toCompanyDraft(initialCompanies[0]));
-  const [taskDraft, setTaskDraft] = useState(toTaskDraft(undefined, initialCompanies[0]?.id || ""));
-  const [interactionDraft, setInteractionDraft] = useState(toInteractionDraft(initialCompanies[0]?.id || ""));
-
-  const [companySearch, setCompanySearch] = useState("");
-  const [companyStatusFilter, setCompanyStatusFilter] = useState("Tous");
-  const [companyOwnerFilter, setCompanyOwnerFilter] = useState("Tous");
-  const [selectedCompanyIds, setSelectedCompanyIds] = useState<string[]>([]);
-  const [bulkCompanyStatus, setBulkCompanyStatus] = useState("");
-  const [bulkCompanyOwner, setBulkCompanyOwner] = useState("");
-  const [bulkCompanyPriority, setBulkCompanyPriority] = useState("");
-  const [bulkCompanyFollowUp, setBulkCompanyFollowUp] = useState("");
 
   const [sessionSearch, setSessionSearch] = useState("");
   const [sessionStateFilter, setSessionStateFilter] = useState("Tous");
@@ -400,28 +318,6 @@ export function AdminWorkspace({
     }
   }
 
-  const owners = useMemo(() => {
-    const values = new Set<string>();
-    for (const company of companies) {
-      if (company.owner) values.add(company.owner);
-    }
-    for (const task of crmTasks) {
-      if (task.owner) values.add(task.owner);
-    }
-    for (const interaction of crmInteractions) {
-      if (interaction.owner) values.add(interaction.owner);
-    }
-    return [...values].sort((left, right) => left.localeCompare(right, "fr"));
-  }, [companies, crmInteractions, crmTasks]);
-
-  const registrationDetails = useMemo<RegistrationDetail[]>(() => {
-    return registrations.map((registration) => ({
-      registration,
-      formation: formations.find((formation) => formation.slug === registration.formationSlug),
-      session: sessions.find((session) => session.id === registration.sessionId),
-    }));
-  }, [formations, registrations, sessions]);
-
   const registrationsBySession = useMemo(() => {
     return registrations.reduce<Record<string, number>>((accumulator, registration) => {
       accumulator[registration.sessionId] = (accumulator[registration.sessionId] || 0) + 1;
@@ -441,39 +337,6 @@ export function AdminWorkspace({
     }, {});
   }, [registrations]);
 
-  const companySummaries = useMemo<CompanySummary[]>(() => {
-    return companies
-      .map((company) => {
-        const details = registrationDetails.filter((detail) => detail.registration.companyId === company.id);
-        const formationsForCompany = Array.from(new Set(details.map((detail) => detail.formation?.shortTitle || detail.registration.formationSlug)));
-        const nextSession = details
-          .filter((detail) => isUpcoming(detail.session))
-          .map((detail) => detail.session)
-          .filter(Boolean)
-          .sort((left, right) => compareDate(left?.startDate, right?.startDate))[0];
-
-        return {
-          id: company.id,
-          name: company.name,
-          contactName: company.contactName,
-          email: company.email,
-          phone: company.phone,
-          status: company.status,
-          source: company.source,
-          priority: company.priority,
-          owner: company.owner || "Non affecté",
-          notes: company.notes,
-          registrations: details.length,
-          formations: formationsForCompany,
-          nextSessionDate: nextSession?.startDate,
-          nextSessionLabel: nextSession ? formatDateLabel(nextSession.startDate) : "Aucune session future",
-          lastContactLabel: formatDateLabel(company.lastContactAt),
-          followUpLabel: formatDateLabel(company.nextFollowUpAt),
-        };
-      })
-      .sort((left, right) => compareDateDesc(left.nextSessionDate || left.lastContactLabel, right.nextSessionDate || right.lastContactLabel));
-  }, [companies, registrationDetails]);
-
   const filteredParticipants = useMemo(() => {
     const search = participantSearch.trim().toLowerCase();
     return participants
@@ -492,19 +355,6 @@ export function AdminWorkspace({
     ? bulletinInscriptions.find((bulletin) => bulletin.id === selectedParticipant.bulletinInscriptionId)
     : undefined;
 
-  const currentCompany = companies.find((company) => company.id === editingCompanyId) || companies[0];
-  const currentCompanyTasks = crmTasks.filter((task) => task.companyId === editingCompanyId).sort((left, right) => compareDate(left.dueDate, right.dueDate));
-  const currentCompanyInteractions = crmInteractions
-    .filter((interaction) => interaction.companyId === editingCompanyId)
-    .sort((left, right) => compareDateDesc(left.occurredAt, right.occurredAt));
-
-  const filteredCompanies = companySummaries.filter((company) => {
-    const matchesSearch = !companySearch.trim() || `${company.name} ${company.contactName} ${company.email} ${company.formations.join(" ")}`.toLowerCase().includes(companySearch.trim().toLowerCase());
-    const matchesStatus = companyStatusFilter === "Tous" || company.status === companyStatusFilter;
-    const matchesOwner = companyOwnerFilter === "Tous" || (company.owner || "") === companyOwnerFilter;
-    return matchesSearch && matchesStatus && matchesOwner;
-  });
-
   const filteredSessions = sessions.filter((session) => {
     const formation = formations.find((item) => item.slug === session.formationSlug);
     const state = getSessionState(session);
@@ -513,32 +363,6 @@ export function AdminWorkspace({
     const matchesCategory = sessionCategoryFilter === "Toutes" || formation?.category === sessionCategoryFilter;
     return matchesSearch && matchesState && matchesCategory;
   });
-
-  const pipeline = useMemo(() => {
-    const counters = new Map<string, number>();
-    for (const company of companies) {
-      counters.set(company.status, (counters.get(company.status) || 0) + 1);
-    }
-    return [...counters.entries()].map(([status, count]) => ({ status, count }));
-  }, [companies]);
-
-  const dueTodayTasks = useMemo(() => {
-    const today = new Date().toISOString().slice(0, 10);
-    return crmTasks.filter((task) => task.dueDate?.slice(0, 10) === today && task.status !== "Terminé");
-  }, [crmTasks]);
-
-  const dueFollowUpsToday = useMemo(() => {
-    const today = new Date().toISOString().slice(0, 10);
-    return companies.filter((company) => company.nextFollowUpAt?.slice(0, 10) === today);
-  }, [companies]);
-
-  const ownerLoads = useMemo(() => {
-    return owners.map((owner) => ({
-      owner,
-      companies: companies.filter((company) => company.owner === owner).length,
-      tasks: crmTasks.filter((task) => task.owner === owner && task.status !== "Terminé").length,
-    }));
-  }, [companies, crmTasks, owners]);
 
   const totalSeatsLeft = sessions.reduce((total, session) => total + session.seatsLeft, 0);
 
@@ -554,15 +378,6 @@ export function AdminWorkspace({
 
   function selectParticipant(participantId: string) {
     setSelectedParticipantId((current) => (current === participantId ? "" : participantId));
-    setFeedback("");
-  }
-
-  function selectCompany(companyId: string) {
-    const company = companies.find((item) => item.id === companyId);
-    setEditingCompanyId(companyId);
-    setCompanyDraft(toCompanyDraft(company));
-    setTaskDraft(toTaskDraft(undefined, companyId));
-    setInteractionDraft(toInteractionDraft(companyId));
     setFeedback("");
   }
 
@@ -585,165 +400,6 @@ export function AdminWorkspace({
     setEditingArticleSlug(slug);
     setArticleDraft(toArticleDraft(article));
     setFeedback("");
-  }
-
-  async function handleCompanySubmit(event: React.FormEvent<HTMLFormElement>) {
-    event.preventDefault();
-    setSaving(true);
-    setFeedback("");
-
-    const payload = {
-      name: companyDraft.name.trim(),
-      contactName: companyDraft.contactName.trim(),
-      email: companyDraft.email.trim(),
-      phone: companyDraft.phone.trim(),
-      status: companyDraft.status.trim(),
-      source: companyDraft.source.trim(),
-      priority: companyDraft.priority.trim(),
-      owner: companyDraft.owner.trim(),
-      notes: companyDraft.notes.trim(),
-      nextFollowUpAt: companyDraft.nextFollowUpAt,
-      lastContactAt: companyDraft.lastContactAt,
-    };
-
-    const isEditing = Boolean(editingCompanyId);
-    const response = await fetch(isEditing ? `/api/admin/companies/${editingCompanyId}` : "/api/admin/companies", {
-      method: isEditing ? "PATCH" : "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(payload),
-    });
-
-    const result = (await response.json().catch(() => null)) as { data?: Company; error?: string; message?: string } | null;
-    if (!response.ok || !result?.data) {
-      setSaving(false);
-      setError(result?.error || "La fiche entreprise n'a pas pu être enregistrée.");
-      return;
-    }
-
-    const saved = result.data;
-    setCompanies((current) => [...current.filter((item) => item.id !== saved.id), saved]);
-    selectCompany(saved.id);
-    setSaving(false);
-    setSuccess(result.message || "Fiche entreprise enregistrée.");
-  }
-
-  async function handleTaskSubmit(event: React.FormEvent<HTMLFormElement>) {
-    event.preventDefault();
-    if (!editingCompanyId) return;
-    setSaving(true);
-    setFeedback("");
-
-    const payload = {
-      companyId: editingCompanyId,
-      title: taskDraft.title.trim(),
-      description: taskDraft.description.trim(),
-      status: taskDraft.status.trim(),
-      dueDate: taskDraft.dueDate,
-      owner: taskDraft.owner.trim(),
-    };
-
-    const isEditing = Boolean(taskDraft.id);
-    const response = await fetch(isEditing ? `/api/admin/crm/tasks/${taskDraft.id}` : "/api/admin/crm/tasks", {
-      method: isEditing ? "PATCH" : "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(payload),
-    });
-    const result = (await response.json().catch(() => null)) as { data?: CrmTask; error?: string; message?: string } | null;
-
-    if (!response.ok || !result?.data) {
-      setSaving(false);
-      setError(result?.error || "La tâche n'a pas pu être enregistrée.");
-      return;
-    }
-
-    const saved = result.data;
-    setCrmTasks((current) => [...current.filter((item) => item.id !== saved.id), saved]);
-    setTaskDraft(toTaskDraft(undefined, editingCompanyId));
-    setSaving(false);
-    setSuccess(result.message || "Tâche CRM enregistrée.");
-  }
-
-  async function handleInteractionSubmit(event: React.FormEvent<HTMLFormElement>) {
-    event.preventDefault();
-    if (!editingCompanyId) return;
-    setSaving(true);
-    setFeedback("");
-
-    const payload = {
-      companyId: editingCompanyId,
-      type: interactionDraft.type.trim(),
-      channel: interactionDraft.channel.trim(),
-      summary: interactionDraft.summary.trim(),
-      owner: interactionDraft.owner.trim(),
-      occurredAt: interactionDraft.occurredAt,
-    };
-
-    const response = await fetch("/api/admin/crm/interactions", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(payload),
-    });
-    const result = (await response.json().catch(() => null)) as { data?: CrmInteraction; error?: string; message?: string } | null;
-
-    if (!response.ok || !result?.data) {
-      setSaving(false);
-      setError(result?.error || "L'échange n'a pas pu être enregistré.");
-      return;
-    }
-
-    setCrmInteractions((current) => [result.data as CrmInteraction, ...current]);
-    setInteractionDraft(toInteractionDraft(editingCompanyId));
-    setSaving(false);
-    setSuccess(result.message || "Échange enregistré.");
-  }
-
-  async function handleBulkCompanyApply() {
-    if (!selectedCompanyIds.length) return;
-    setSaving(true);
-    setFeedback("");
-
-    try {
-      await Promise.all(
-        selectedCompanyIds.map(async (companyId) => {
-          const company = companies.find((item) => item.id === companyId);
-          if (!company) return;
-
-          const payload = {
-            name: company.name,
-            contactName: company.contactName,
-            email: company.email,
-            phone: company.phone,
-            status: bulkCompanyStatus || company.status,
-            source: company.source,
-            priority: bulkCompanyPriority || company.priority,
-            owner: bulkCompanyOwner || company.owner || "",
-            notes: company.notes,
-            nextFollowUpAt: bulkCompanyFollowUp || company.nextFollowUpAt?.slice(0, 10) || "",
-            lastContactAt: company.lastContactAt?.slice(0, 10) || "",
-          };
-
-          const response = await fetch(`/api/admin/companies/${companyId}`, {
-            method: "PATCH",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify(payload),
-          });
-
-          if (!response.ok) {
-            throw new Error("Bulk company update failed");
-          }
-
-          const result = (await response.json()) as { data: Company };
-          setCompanies((current) => [...current.filter((item) => item.id !== companyId), result.data]);
-        }),
-      );
-
-      setSelectedCompanyIds([]);
-      setSuccess("Actions de masse entreprises appliquées.");
-    } catch {
-      setError("Impossible d'appliquer les actions de masse entreprises.");
-    } finally {
-      setSaving(false);
-    }
   }
 
   async function handleSessionSubmit(event: React.FormEvent<HTMLFormElement>) {
@@ -980,14 +636,9 @@ export function AdminWorkspace({
   return (
     <div className="admin-workspace admin-workspace-shell">
       <nav className="admin-sidebar">
-        <div className="admin-sidebar-brand">
-          <span className="eyebrow">Pilotage</span>
-          <h2>Mini CMS Oxideve</h2>
-        </div>
         <div className="admin-sidebar-nav">
           {[
             ["dashboard", "Dashboard"],
-            ["companies", "CRM"],
             ["sessions", "Sessions"],
             ["participants", "Inscrits"],
             ["formations", "Catalogue"],
@@ -1008,222 +659,15 @@ export function AdminWorkspace({
           <section className="admin-shell admin-shell-hero">
             <div className="section-heading section-heading-tight">
               <div>
-                <span className="eyebrow">Commercial</span>
-                <h2>Vue commerciale</h2>
-                <p>Pipeline, relances du jour, charge par propriétaire et pression sur les prochaines sessions.</p>
+                <span className="eyebrow">Vue d&apos;ensemble</span>
+                <h2>Dashboard</h2>
+                <p>Catalogue de formations, sessions à venir et disponibilités.</p>
               </div>
             </div>
             <div className="admin-metric-grid">
               <article className="admin-metric-card"><span>Catalogue</span><strong>{formations.length}</strong><small>formations</small></article>
               <article className="admin-metric-card"><span>Sessions</span><strong>{sessions.filter((session) => isUpcoming(session)).length}</strong><small>à venir</small></article>
-              <article className="admin-metric-card"><span>Entreprises</span><strong>{companies.length}</strong><small>en portefeuille</small></article>
-              <article className="admin-metric-card"><span>Tâches</span><strong>{crmTasks.filter((task) => task.status !== "Terminé").length}</strong><small>ouvertes</small></article>
               <article className="admin-metric-card"><span>Places</span><strong>{totalSeatsLeft}</strong><small>encore disponibles</small></article>
-            </div>
-          </section>
-
-          <div className="admin-grid admin-grid-wide">
-            <section className="admin-shell">
-              <div className="section-heading section-heading-tight"><div><span className="eyebrow">Pipeline</span><h2>Statuts du pipeline</h2></div></div>
-              <div className="admin-pipeline-grid">
-                {pipeline.map((item) => (
-                  <article className="admin-pipeline-card" key={item.status}>
-                    <strong>{item.count}</strong>
-                    <span>{item.status}</span>
-                  </article>
-                ))}
-              </div>
-            </section>
-
-            <section className="admin-shell">
-              <div className="section-heading section-heading-tight"><div><span className="eyebrow">Relances</span><h2>À traiter aujourd'hui</h2></div></div>
-              <div className="admin-timeline-list">
-                {dueFollowUpsToday.length === 0 ? <div className="admin-empty-state">Aucune relance planifiée aujourd'hui.</div> : null}
-                {dueFollowUpsToday.map((company) => (
-                  <button className="admin-timeline-card" key={company.id} onClick={() => { setSection("companies"); selectCompany(company.id); }} type="button">
-                    <strong>{company.name}</strong>
-                    <span>{company.contactName}</span>
-                    <span>{company.owner || "Non affecté"}</span>
-                  </button>
-                ))}
-              </div>
-            </section>
-          </div>
-
-          <div className="admin-grid admin-grid-wide">
-            <section className="admin-shell">
-              <div className="section-heading section-heading-tight"><div><span className="eyebrow">Tâches</span><h2>Tâches du jour</h2></div></div>
-              <div className="admin-task-list">
-                {dueTodayTasks.length === 0 ? <div className="admin-empty-state">Aucune tâche à échéance aujourd'hui.</div> : null}
-                {dueTodayTasks.map((task) => (
-                  <article className="admin-task-card" key={task.id}>
-                    <strong>{task.title}</strong>
-                    <span>{companies.find((company) => company.id === task.companyId)?.name || "Entreprise"}</span>
-                    <span>{task.owner || "Non affecté"} · {task.status}</span>
-                  </article>
-                ))}
-              </div>
-            </section>
-
-            <section className="admin-shell">
-              <div className="section-heading section-heading-tight"><div><span className="eyebrow">Owners</span><h2>Charge par propriétaire</h2></div></div>
-              <div className="admin-owner-grid">
-                {ownerLoads.length === 0 ? <div className="admin-empty-state">Aucun propriétaire commercial défini.</div> : null}
-                {ownerLoads.map((item) => (
-                  <article className="admin-owner-card" key={item.owner}>
-                    <strong>{item.owner}</strong>
-                    <span>{item.companies} entreprises</span>
-                    <span>{item.tasks} tâches ouvertes</span>
-                  </article>
-                ))}
-              </div>
-            </section>
-          </div>
-        </div>
-      ) : null}
-
-      {section === "companies" ? (
-        <div className="admin-stack-grid">
-          <section className="admin-shell">
-            <div className="section-heading section-heading-tight">
-              <div>
-                <span className="eyebrow">CRM</span>
-                <h2>Portefeuille entreprises</h2>
-                <p>Filtrez, sélectionnez en masse, affectez un owner et suivez tâches et échanges au même endroit.</p>
-              </div>
-              <Button variant="secondary" onClick={() => {
-                setEditingCompanyId("");
-                setCompanyDraft(toCompanyDraft());
-                setTaskDraft(toTaskDraft());
-                setInteractionDraft(toInteractionDraft());
-              }}>Nouvelle fiche</Button>
-            </div>
-
-            <div className="admin-filter-grid">
-              <label><span>Recherche</span><input className="ui-field" value={companySearch} onChange={(event) => setCompanySearch(event.target.value)} placeholder="Entreprise, contact, parcours..." /></label>
-              <label><span>Statut</span><select className="ui-field" value={companyStatusFilter} onChange={(event) => setCompanyStatusFilter(event.target.value)}><option>Tous</option><option>Prospect</option><option>Qualifié</option><option>Client</option><option>Perdu</option></select></label>
-              <label><span>Owner</span><select className="ui-field" value={companyOwnerFilter} onChange={(event) => setCompanyOwnerFilter(event.target.value)}><option>Tous</option>{owners.map((owner) => <option key={owner}>{owner}</option>)}</select></label>
-            </div>
-
-            <div className="admin-bulk-grid">
-              <label><span>Statut masse</span><select className="ui-field" value={bulkCompanyStatus} onChange={(event) => setBulkCompanyStatus(event.target.value)}><option value="">Conserver</option><option>Prospect</option><option>Qualifié</option><option>Client</option><option>Perdu</option></select></label>
-              <label><span>Owner masse</span><input className="ui-field" value={bulkCompanyOwner} onChange={(event) => setBulkCompanyOwner(event.target.value)} placeholder="Camille, Arnaud..." /></label>
-              <label><span>Priorité masse</span><select className="ui-field" value={bulkCompanyPriority} onChange={(event) => setBulkCompanyPriority(event.target.value)}><option value="">Conserver</option><option>Basse</option><option>Normale</option><option>Haute</option></select></label>
-              <label><span>Relance masse</span><input className="ui-field" type="date" value={bulkCompanyFollowUp} onChange={(event) => setBulkCompanyFollowUp(event.target.value)} /></label>
-              <Button onClick={handleBulkCompanyApply} disabled={saving || !selectedCompanyIds.length}>Appliquer à {selectedCompanyIds.length || 0} entreprise(s)</Button>
-            </div>
-          </section>
-
-          <div className="admin-dual-pane">
-            <section className="admin-shell">
-              <div className="admin-list admin-list-dense">
-                {filteredCompanies.map((company) => (
-                  <button className={`admin-list-item admin-selectable-item${editingCompanyId === company.id ? " active" : ""}`} key={company.id} onClick={() => selectCompany(company.id)} type="button">
-                    <span className="admin-check-line" onClick={(event) => event.stopPropagation()}>
-                      <input checked={selectedCompanyIds.includes(company.id)} onChange={(event) => {
-                        setSelectedCompanyIds((current) => event.target.checked ? [...current, company.id] : current.filter((item) => item !== company.id));
-                      }} type="checkbox" />
-                    </span>
-                    <strong>{company.name}</strong>
-                    <span>{company.contactName} · {company.status} · {company.priority}</span>
-                    <span>{company.formations.join(", ") || "Aucun parcours"}</span>
-                    <span>{company.owner} · Relance {company.followUpLabel}</span>
-                  </button>
-                ))}
-              </div>
-            </section>
-
-            <div className="admin-detail-stack">
-              <section className="admin-shell">
-                <div className="section-heading section-heading-tight"><div><span className="eyebrow">Fiche</span><h2>{editingCompanyId ? "Modifier l'entreprise" : "Créer une entreprise"}</h2></div></div>
-                <form className="contact-form" onSubmit={handleCompanySubmit}>
-                  <div className="form-grid">
-                    <label><span>Entreprise</span><input className="ui-field" value={companyDraft.name} onChange={(event) => setCompanyDraft((current) => ({ ...current, name: event.target.value }))} required /></label>
-                    <label><span>Contact</span><input className="ui-field" value={companyDraft.contactName} onChange={(event) => setCompanyDraft((current) => ({ ...current, contactName: event.target.value }))} required /></label>
-                    <label><span>Email</span><input className="ui-field" type="email" value={companyDraft.email} onChange={(event) => setCompanyDraft((current) => ({ ...current, email: event.target.value }))} required /></label>
-                    <label><span>Téléphone</span><input className="ui-field" value={companyDraft.phone} onChange={(event) => setCompanyDraft((current) => ({ ...current, phone: event.target.value }))} required /></label>
-                    <label><span>Statut</span><select className="ui-field" value={companyDraft.status} onChange={(event) => setCompanyDraft((current) => ({ ...current, status: event.target.value }))}><option>Prospect</option><option>Qualifié</option><option>Client</option><option>Perdu</option></select></label>
-                    <label><span>Source</span><select className="ui-field" value={companyDraft.source} onChange={(event) => setCompanyDraft((current) => ({ ...current, source: event.target.value }))}><option>Inbound</option><option>Relance</option><option>Partenaire</option><option>Réseau</option><option>Manuel</option></select></label>
-                    <label><span>Priorité</span><select className="ui-field" value={companyDraft.priority} onChange={(event) => setCompanyDraft((current) => ({ ...current, priority: event.target.value }))}><option>Basse</option><option>Normale</option><option>Haute</option></select></label>
-                    <label><span>Owner commercial</span><input className="ui-field" value={companyDraft.owner} onChange={(event) => setCompanyDraft((current) => ({ ...current, owner: event.target.value }))} placeholder="Camille, Arnaud..." /></label>
-                    <label><span>Dernier contact</span><input className="ui-field" type="date" value={companyDraft.lastContactAt} onChange={(event) => setCompanyDraft((current) => ({ ...current, lastContactAt: event.target.value }))} /></label>
-                    <label><span>Prochaine relance</span><input className="ui-field" type="date" value={companyDraft.nextFollowUpAt} onChange={(event) => setCompanyDraft((current) => ({ ...current, nextFollowUpAt: event.target.value }))} /></label>
-                  </div>
-                  <label><span>Notes</span><textarea className="ui-field" rows={5} value={companyDraft.notes} onChange={(event) => setCompanyDraft((current) => ({ ...current, notes: event.target.value }))} /></label>
-                  <Button disabled={saving} type="submit">{saving ? "Enregistrement..." : editingCompanyId ? "Mettre à jour la fiche" : "Créer la fiche"}</Button>
-                </form>
-              </section>
-
-              <div className="admin-grid admin-grid-wide">
-                <section className="admin-shell">
-                  <div className="section-heading section-heading-tight"><div><span className="eyebrow">Tâches</span><h2>Tâches CRM</h2></div></div>
-                  <form className="contact-form" onSubmit={handleTaskSubmit}>
-                    <label><span>Tâche</span><input className="ui-field" value={taskDraft.title} onChange={(event) => setTaskDraft((current) => ({ ...current, title: event.target.value }))} required /></label>
-                    <div className="form-grid">
-                      <label><span>Statut</span><select className="ui-field" value={taskDraft.status} onChange={(event) => setTaskDraft((current) => ({ ...current, status: event.target.value }))}><option>A faire</option><option>En cours</option><option>Bloqué</option><option>Terminé</option></select></label>
-                      <label><span>Owner</span><input className="ui-field" value={taskDraft.owner} onChange={(event) => setTaskDraft((current) => ({ ...current, owner: event.target.value }))} /></label>
-                      <label><span>Échéance</span><input className="ui-field" type="date" value={taskDraft.dueDate} onChange={(event) => setTaskDraft((current) => ({ ...current, dueDate: event.target.value }))} /></label>
-                    </div>
-                    <label><span>Description</span><textarea className="ui-field" rows={4} value={taskDraft.description} onChange={(event) => setTaskDraft((current) => ({ ...current, description: event.target.value }))} /></label>
-                    <Button disabled={saving || !editingCompanyId} type="submit">Ajouter la tâche</Button>
-                  </form>
-                  <div className="admin-task-list">
-                    {currentCompanyTasks.map((task) => (
-                      <article className="admin-task-card" key={task.id}>
-                        <strong>{task.title}</strong>
-                        <span>{task.status} · {task.owner || "Non affecté"}</span>
-                        <span>{formatDateLabel(task.dueDate)}</span>
-                      </article>
-                    ))}
-                  </div>
-                </section>
-
-                <section className="admin-shell">
-                  <div className="section-heading section-heading-tight"><div><span className="eyebrow">Historique</span><h2>Échanges</h2></div></div>
-                  <form className="contact-form" onSubmit={handleInteractionSubmit}>
-                    <div className="form-grid">
-                      <label><span>Type</span><select className="ui-field" value={interactionDraft.type} onChange={(event) => setInteractionDraft((current) => ({ ...current, type: event.target.value }))}><option>Appel</option><option>Email</option><option>Rendez-vous</option><option>Relance</option><option>Note interne</option></select></label>
-                      <label><span>Canal</span><input className="ui-field" value={interactionDraft.channel} onChange={(event) => setInteractionDraft((current) => ({ ...current, channel: event.target.value }))} /></label>
-                      <label><span>Owner</span><input className="ui-field" value={interactionDraft.owner} onChange={(event) => setInteractionDraft((current) => ({ ...current, owner: event.target.value }))} /></label>
-                      <label><span>Date</span><input className="ui-field" type="date" value={interactionDraft.occurredAt} onChange={(event) => setInteractionDraft((current) => ({ ...current, occurredAt: event.target.value }))} /></label>
-                    </div>
-                    <label><span>Résumé</span><textarea className="ui-field" rows={4} value={interactionDraft.summary} onChange={(event) => setInteractionDraft((current) => ({ ...current, summary: event.target.value }))} required /></label>
-                    <Button disabled={saving || !editingCompanyId} type="submit">Ajouter l'échange</Button>
-                  </form>
-                  <div className="admin-timeline-list">
-                    {currentCompanyInteractions.map((interaction) => (
-                      <article className="admin-timeline-card" key={interaction.id}>
-                        <strong>{interaction.type}</strong>
-                        <span>{interaction.channel || "Canal non renseigné"}</span>
-                        <span>{interaction.summary}</span>
-                        <span>{formatDateLabel(interaction.occurredAt)} · {interaction.owner || "Non affecté"}</span>
-                      </article>
-                    ))}
-                  </div>
-                </section>
-              </div>
-            </div>
-          </div>
-
-          <section className="admin-shell">
-            <div className="section-heading section-heading-tight"><div><span className="eyebrow">Demandes</span><h2>Dernières inscriptions</h2></div></div>
-            <div className="data-table admin-table-shell admin-table-shell-solid">
-              <table>
-                <thead>
-                  <tr><th>Date</th><th>Entreprise</th><th>Contact</th><th>Formation</th><th>Session</th></tr>
-                </thead>
-                <tbody>
-                  {registrationDetails.map((detail) => (
-                    <tr key={detail.registration.id}>
-                      <td>{formatRegistrationDate(detail.registration.createdAt)}</td>
-                      <td>{detail.registration.company}</td>
-                      <td>{detail.registration.contactName}<br />{detail.registration.email}</td>
-                      <td>{detail.formation?.shortTitle || detail.registration.formationSlug}</td>
-                      <td>{detail.session ? formatSessionRange(detail.session.startDate, detail.session.endDate) : detail.registration.sessionId}</td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
             </div>
           </section>
         </div>
@@ -1566,21 +1010,9 @@ export function AdminWorkspace({
                                   target="_blank"
                                   rel="noreferrer"
                                 >
-                                  PDF
+                                  Voir le PDF
                                 </a>
                               ) : null}
-                              <button
-                                className="admin-copy-button"
-                                onClick={() =>
-                                  copyToClipboard(
-                                    participant.id,
-                                    `${participant.company} - ${participant.fullName} - ${participant.email} - ${participant.phone}`,
-                                  )
-                                }
-                                type="button"
-                              >
-                                {copiedKey === participant.id ? "Copié !" : "Copier"}
-                              </button>
                             </div>
                           </td>
                         </tr>
@@ -1605,37 +1037,39 @@ export function AdminWorkspace({
               <div className="admin-form-section">
                 <h3>Coordonnées</h3>
                 <div className="form-grid">
-                  <label><span>Nom</span><p>{selectedParticipant.fullName}</p></label>
-                  <label><span>Entreprise</span><p>{selectedParticipant.company}</p></label>
-                  <label><span>Email</span><p>{selectedParticipant.email}</p></label>
-                  <label><span>Téléphone</span><p>{selectedParticipant.phone}</p></label>
-                  <label><span>Formation</span><p>{formations.find((item) => item.slug === selectedParticipant.formationSlug)?.title || selectedParticipant.formationSlug}</p></label>
-                  <label><span>Premier contact</span><p>{formatRegistrationDate(selectedParticipant.firstContactAt)}</p></label>
+                  <DetailField label="Nom" value={selectedParticipant.fullName} copyKey="p-name" copyToClipboard={copyToClipboard} copiedKey={copiedKey} />
+                  <DetailField label="Entreprise" value={selectedParticipant.company} copyKey="p-company" copyToClipboard={copyToClipboard} copiedKey={copiedKey} />
+                  <DetailField label="Email" value={selectedParticipant.email} copyKey="p-email" copyToClipboard={copyToClipboard} copiedKey={copiedKey} />
+                  <DetailField label="Téléphone" value={selectedParticipant.phone} copyKey="p-phone" copyToClipboard={copyToClipboard} copiedKey={copiedKey} />
+                  <DetailField label="Formation" value={formations.find((item) => item.slug === selectedParticipant.formationSlug)?.title || selectedParticipant.formationSlug} copyKey="p-formation" copyToClipboard={copyToClipboard} copiedKey={copiedKey} />
+                  <DetailField label="Premier contact" value={formatRegistrationDate(selectedParticipant.firstContactAt)} copyKey="p-firstcontact" copyToClipboard={copyToClipboard} copiedKey={copiedKey} />
                 </div>
               </div>
 
               {selectedParticipantBulletin ? (
                 <>
                   <div className="admin-form-section">
-                    <h3>Bulletin d&apos;inscription</h3>
-                    <div className="form-grid">
-                      <label><span>Dates de session</span><p>{selectedParticipantBulletin.sessionDates || "Non renseignées"}</p></label>
-                      <label><span>Lieu de session</span><p>{selectedParticipantBulletin.sessionLocation || "Non renseigné"}</p></label>
-                      <label><span>Origine</span><p>{selectedParticipantBulletin.source || "Non renseignée"}</p></label>
-                      <label><span>Raison sociale</span><p>{selectedParticipantBulletin.companyName}</p></label>
-                      <label><span>SIRET</span><p>{selectedParticipantBulletin.siret || "Non renseigné"}</p></label>
-                      <label><span>Commanditaire</span><p>{selectedParticipantBulletin.sponsorFullName} ({selectedParticipantBulletin.sponsorRole || "fonction non renseignée"})</p></label>
-                      <label><span>Apprenant</span><p>{selectedParticipantBulletin.learnerFullName}</p></label>
-                      <label><span>Situation de handicap</span><p>{selectedParticipantBulletin.hasDisability ? "Oui" : "Non"}</p></label>
+                    <div className="section-heading section-heading-tight">
+                      <h3>Bulletin d&apos;inscription</h3>
+                      <a
+                        className="admin-copy-button"
+                        href={`/api/admin/bulletin-inscriptions/${selectedParticipantBulletin.id}/pdf`}
+                        target="_blank"
+                        rel="noreferrer"
+                      >
+                        Voir le PDF
+                      </a>
                     </div>
-                    <a
-                      className="admin-copy-button"
-                      href={`/api/admin/bulletin-inscriptions/${selectedParticipantBulletin.id}/pdf`}
-                      target="_blank"
-                      rel="noreferrer"
-                    >
-                      Télécharger le PDF du bulletin
-                    </a>
+                    <div className="form-grid">
+                      <DetailField label="Dates de session" value={selectedParticipantBulletin.sessionDates || "Non renseignées"} copyKey="b-dates" copyToClipboard={copyToClipboard} copiedKey={copiedKey} />
+                      <DetailField label="Lieu de session" value={selectedParticipantBulletin.sessionLocation || "Non renseigné"} copyKey="b-location" copyToClipboard={copyToClipboard} copiedKey={copiedKey} />
+                      <DetailField label="Origine" value={selectedParticipantBulletin.source || "Non renseignée"} copyKey="b-source" copyToClipboard={copyToClipboard} copiedKey={copiedKey} />
+                      <DetailField label="Raison sociale" value={selectedParticipantBulletin.companyName} copyKey="b-company" copyToClipboard={copyToClipboard} copiedKey={copiedKey} />
+                      <DetailField label="SIRET" value={selectedParticipantBulletin.siret || "Non renseigné"} copyKey="b-siret" copyToClipboard={copyToClipboard} copiedKey={copiedKey} />
+                      <DetailField label="Commanditaire" value={`${selectedParticipantBulletin.sponsorFullName} (${selectedParticipantBulletin.sponsorRole || "fonction non renseignée"})`} copyKey="b-sponsor" copyToClipboard={copyToClipboard} copiedKey={copiedKey} />
+                      <DetailField label="Apprenant" value={selectedParticipantBulletin.learnerFullName} copyKey="b-learner" copyToClipboard={copyToClipboard} copiedKey={copiedKey} />
+                      <DetailField label="Situation de handicap" value={selectedParticipantBulletin.hasDisability ? "Oui" : "Non"} copyKey="b-disability" copyToClipboard={copyToClipboard} copiedKey={copiedKey} />
+                    </div>
                   </div>
 
                   <div className="admin-form-section">
@@ -1643,29 +1077,11 @@ export function AdminWorkspace({
                     {selectedParticipantBulletin.quizAttempts.length === 0 ? (
                       <p className="admin-empty-state">L&apos;apprenant n&apos;a pas encore réalisé son auto-évaluation.</p>
                     ) : (
-                      <div className="admin-stack-grid">
+                      <div className="admin-list admin-list-dense">
                         {selectedParticipantBulletin.quizAttempts.map((attempt) => (
-                          <div className="quiz-result" key={attempt.id}>
-                            <p><strong>Score : {attempt.scoreOn20} / 20</strong> · passé le {formatRegistrationDate(attempt.createdAt)}</p>
-                            {attempt.details ? (
-                              <div className="quiz-result-list">
-                                {attempt.details.map((detail) => (
-                                  <div className={`quiz-result-item ${detail.isCorrect ? "is-correct" : "is-incorrect"}`} key={detail.questionId}>
-                                    <p className="quiz-result-question">{detail.question}</p>
-                                    <p>
-                                      Réponse soumise : <strong>{detail.submittedLabel || "Non répondu"}</strong>
-                                    </p>
-                                    {!detail.isCorrect ? (
-                                      <p>
-                                        Bonne réponse : <strong>{detail.correctLabel}</strong>
-                                      </p>
-                                    ) : null}
-                                  </div>
-                                ))}
-                              </div>
-                            ) : (
-                              <p className="admin-empty-state">Le quiz associé à cette tentative n&apos;existe plus.</p>
-                            )}
+                          <div className="admin-list-item" key={attempt.id}>
+                            <strong>Score : {attempt.scoreOn20} / 20</strong>
+                            <span>Passé le {formatRegistrationDate(attempt.createdAt)}</span>
                           </div>
                         ))}
                       </div>

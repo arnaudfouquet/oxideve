@@ -1,16 +1,20 @@
+const fs = require("fs");
 const path = require("path");
 const PDFDocument = require("pdfkit");
 
 const LOGO_PATH = path.join(__dirname, "..", "assets", "oxideve-logo.png");
+const hasLogo = fs.existsSync(LOGO_PATH);
 
 function drawHeader(doc, title) {
-  try {
-    doc.image(LOGO_PATH, doc.page.margins.left, doc.page.margins.top, { width: 90 });
-  } catch {
-    // Le logo est optionnel : si le fichier est absent, on continue sans casser la génération du PDF.
+  if (hasLogo) {
+    try {
+      doc.image(LOGO_PATH, doc.page.margins.left, doc.page.margins.top, { width: 90 });
+    } catch (error) {
+      console.error("[pdfService] Échec du chargement du logo, PDF généré sans logo", error);
+    }
   }
 
-  const textLeft = doc.page.margins.left + 100;
+  const textLeft = hasLogo ? doc.page.margins.left + 100 : doc.page.margins.left;
   doc
     .fillColor("#004d6d")
     .fontSize(20)

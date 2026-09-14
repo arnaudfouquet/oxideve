@@ -220,6 +220,12 @@ function createApiRouter() {
     formLimiter,
     asyncHandler(async (req, res) => {
       const payload = bulletinInscriptionSchema.parse(req.body);
+      const formationBeforeCreate = await getFormationBySlug(payload.formationSlug);
+
+      if (!formationBeforeCreate) {
+        return res.status(400).json({ error: "Formation inconnue." });
+      }
+
       const bulletin = await createBulletinInscription(payload);
 
       const [formation, sessions] = await Promise.all([
@@ -360,7 +366,7 @@ function createApiRouter() {
       const pdfBuffer = await generateBulletinPdf(bulletin, formation, session);
 
       res.set("Content-Type", "application/pdf");
-      res.set("Content-Disposition", `attachment; filename="bulletin-${bulletin.id}.pdf"`);
+      res.set("Content-Disposition", `inline; filename="bulletin-${bulletin.id}.pdf"`);
       return res.send(pdfBuffer);
     })
   );

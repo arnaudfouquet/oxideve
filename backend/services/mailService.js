@@ -1,8 +1,14 @@
+const fs = require("fs");
 const path = require("path");
 const nodemailer = require("nodemailer");
 
 const LOGO_PATH = path.join(__dirname, "..", "assets", "oxideve-logo.png");
 const LOGO_CID = "oxideve-logo";
+const hasLogo = fs.existsSync(LOGO_PATH);
+
+function logoAttachment() {
+  return hasLogo ? [{ filename: "oxideve-logo.png", path: LOGO_PATH, cid: LOGO_CID }] : [];
+}
 
 let transporterSingleton = null;
 let warnedMissingConfig = false;
@@ -121,11 +127,7 @@ async function sendBulletinConfirmationEmail({ bulletin, formation, session, pdf
       subject: `Confirmation de votre inscription - ${formation?.title || bulletin.formationSlug}`,
       html,
       attachments: [
-        {
-          filename: "oxideve-logo.png",
-          path: LOGO_PATH,
-          cid: LOGO_CID,
-        },
+        ...logoAttachment(),
         {
           filename: "bulletin-inscription.pdf",
           content: pdfBuffer,
@@ -191,11 +193,7 @@ async function sendQuizResultEmail({ quizTitle, attempt, pdfBuffer }) {
       subject: `Résultat de votre auto-évaluation - ${quizTitle}`,
       html,
       attachments: [
-        {
-          filename: "oxideve-logo.png",
-          path: LOGO_PATH,
-          cid: LOGO_CID,
-        },
+        ...logoAttachment(),
         {
           filename: "auto-evaluation.pdf",
           content: pdfBuffer,
