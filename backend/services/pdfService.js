@@ -1,4 +1,26 @@
+const path = require("path");
 const PDFDocument = require("pdfkit");
+
+const LOGO_PATH = path.join(__dirname, "..", "assets", "oxideve-logo.png");
+
+function drawHeader(doc, title) {
+  try {
+    doc.image(LOGO_PATH, doc.page.margins.left, doc.page.margins.top, { width: 90 });
+  } catch {
+    // Le logo est optionnel : si le fichier est absent, on continue sans casser la génération du PDF.
+  }
+
+  const textLeft = doc.page.margins.left + 100;
+  doc
+    .fillColor("#004d6d")
+    .fontSize(20)
+    .font("Helvetica-Bold")
+    .text(title, textLeft, doc.page.margins.top + 6, { align: "left" });
+  doc.fillColor("#4d6a78").fontSize(10).font("Helvetica").text("Oxideve - Organisme de formation professionnelle", textLeft);
+
+  doc.y = doc.page.margins.top + 90;
+  doc.x = doc.page.margins.left;
+}
 
 function formatDate(value) {
   if (!value) {
@@ -44,9 +66,7 @@ function generateBulletinPdf(bulletin, formation, session) {
       doc.on("end", () => resolve(Buffer.concat(chunks)));
       doc.on("error", reject);
 
-      doc.fillColor("#004d6d").fontSize(20).font("Helvetica-Bold").text("Bulletin d'inscription", { align: "left" });
-      doc.fillColor("#4d6a78").fontSize(10).font("Helvetica").text("Oxideve - Organisme de formation professionnelle");
-      doc.moveDown(0.3);
+      drawHeader(doc, "Bulletin d'inscription");
       doc.fillColor("#4d6a78").fontSize(9).text(`Récapitulatif généré le ${formatDate(new Date())}`);
 
       drawSectionTitle(doc, "Formation");
@@ -93,6 +113,61 @@ function generateBulletinPdf(bulletin, formation, session) {
   });
 }
 
+/**
+ * Génère un PDF récapitulatif d'une tentative d'auto-évaluation : score, et détail
+ * correct/incorrect par question. Retourne une Promise<Buffer>.
+ */
+function generateQuizPdf(quiz, attemptResult) {
+  return new Promise((resolve, reject) => {
+    try {
+      const doc = new PDFDocument({ size: "A4", margin: 50 });
+      const chunks = [];
+
+      doc.on("data", (chunk) => chunks.push(chunk));
+      doc.on("end", () => resolve(Buffer.concat(chunks)));
+      doc.on("error", reject);
+
+      drawHeader(doc, "Résultat de l'auto-évaluation");
+      doc.fillColor("#4d6a78").fontSize(9).text(`Généré le ${formatDate(new Date())}`);
+
+      drawSectionTitle(doc, quiz?.title || "Auto-évaluation");
+      drawField(doc, "Candidat", attemptResult.attempt.learnerFullName);
+      drawField(doc, "Email", attemptResult.attempt.learnerEmail);
+      drawField(doc, "Entreprise", attemptResult.attempt.companyName);
+      drawField(doc, "Score", `${attemptResult.attempt.scoreOn20} / 20`);
+      drawField(doc, "Bonnes réponses", `${attemptResult.correctCount} / ${attemptResult.totalQuestions}`);
+
+      drawSectionTitle(doc, "Détail des réponses");
+
+      for (const [index, detail] of attemptResult.details.entries()) {
+        doc.font("Helvetica-Bold").fillColor("#111111").fontSize(10.5).text(`${index + 1}. ${detail.question}`);
+        doc
+          .font("Helvetica")
+          .fillColor(detail.isCorrect ? "#0b6a4d" : "#a93b3b")
+          .text(`Réponse donnée : ${detail.submittedLabel || "Non répondu"}`);
+
+        if (!detail.isCorrect) {
+          doc.fillColor("#4d6a78").text(`Bonne réponse : ${detail.correctLabel || "-"}`);
+        }
+
+        doc.moveDown(0.5);
+      }
+
+      doc.fillColor("#111111");
+      doc.moveDown(1);
+      doc
+        .fillColor("#4d6a78")
+        .fontSize(8.5)
+        .text("Ce document est un support pédagogique destiné à préparer la formation, il n'a pas de valeur certificative.");
+
+      doc.end();
+    } catch (error) {
+      reject(error);
+    }
+  });
+}
+
 module.exports = {
   generateBulletinPdf,
+  generateQuizPdf,
 };

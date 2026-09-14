@@ -17,9 +17,10 @@ const { createCrmInteraction, createCrmTask, listCrmInteractions, listCrmTasks, 
 const { createRegistration, listRegistrations } = require("../services/registrationService");
 const { syncQueovalCalendar, listPendingSyncSessions, resolvePendingSyncSession } = require("../services/queovalService");
 const { createBulletinInscription, listBulletinInscriptions } = require("../services/bulletinInscriptionService");
-const { generateBulletinPdf } = require("../services/pdfService");
-const { sendBulletinConfirmationEmail } = require("../services/mailService");
+const { generateBulletinPdf, generateQuizPdf } = require("../services/pdfService");
+const { sendBulletinConfirmationEmail, sendQuizResultEmail } = require("../services/mailService");
 const {
+  getQuizBySlug,
   getPublicQuizByFormationSlug,
   getPublicQuizBySlug,
   submitQuizAttempt,
@@ -281,6 +282,11 @@ function createApiRouter() {
     asyncHandler(async (req, res) => {
       const payload = quizAttemptSchema.parse(req.body);
       const result = await submitQuizAttempt(payload);
+      const quiz = getQuizBySlug(payload.quizSlug);
+
+      const pdfBuffer = await generateQuizPdf(quiz, result);
+      await sendQuizResultEmail({ quizTitle: quiz?.title || payload.quizSlug, attempt: result.attempt, pdfBuffer });
+
       res.status(201).json({
         data: {
           scoreOn20: result.attempt.scoreOn20,

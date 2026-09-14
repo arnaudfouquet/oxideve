@@ -245,14 +245,16 @@ export function QuizForm({ quizSlug, bulletinInscriptionId = "" }: Props) {
               <legend>
                 <span className="quiz-question-number">{index + 1}/{totalSteps}</span> {question.domain}
               </legend>
-              <p className="quiz-question-text">{question.question}</p>
-              <div className="quiz-question-options">
-                {question.options.map((option) => (
-                  <label className="quiz-radio-option" key={option.label}>
-                    <input name={`question-${question.id}`} type="radio" value={option.label} required />
-                    {option.label}
-                  </label>
-                ))}
+              <div className="quiz-question-body">
+                <p className="quiz-question-text">{question.question}</p>
+                <div className="quiz-question-options">
+                  {question.options.map((option) => (
+                    <label className="quiz-radio-option" key={option.label}>
+                      <input name={`question-${question.id}`} type="radio" value={option.label} required />
+                      {option.label}
+                    </label>
+                  ))}
+                </div>
               </div>
             </fieldset>
           ))}

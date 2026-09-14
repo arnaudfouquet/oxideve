@@ -75,6 +75,9 @@ export default async function FormationDetailPage({ params }: Props) {
     .map((link) => ({ link, formation: allFormations.find((item) => item.slug === link.slug) }))
     .filter((entry) => entry.formation);
 
+  const sessionCities = Array.from(new Set(sessions.map((session) => session.city)));
+  const displayLocation = sessionCities.length === 1 ? sessionCities[0] : sessionCities.length > 1 ? "Plusieurs villes" : formation.location;
+
   return (
     <>
       <Section>
@@ -91,7 +94,7 @@ export default async function FormationDetailPage({ params }: Props) {
 
           <div className="info-bar">
             <div><span>Duree</span><strong>{formation.duration}</strong></div>
-            <div><span>Lieu</span><strong>{formation.location}</strong></div>
+            <div><span>Lieu</span><strong>{displayLocation}</strong></div>
             <div><span>Tarif</span><strong>{formation.price}</strong></div>
             <div><span>Public</span><strong>{formation.audience}</strong></div>
           </div>

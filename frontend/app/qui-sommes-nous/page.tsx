@@ -52,7 +52,7 @@ export default async function QuiSommesNousPage() {
       </section>
 
       <section className="section">
-        <div className="container about-intro-grid">
+        <div className="container about-intro-grid about-intro-grid-single">
           <div>
             <h2>Pourquoi vous former avec OXIDEVE ?</h2>
             <p>Oxideve accompagne les professionnels qui souhaitent renforcer leurs compétences, quel que soit leur métier : sécurité, bureautique, management, habilitations ou énergies renouvelables.</p>
@@ -62,16 +62,6 @@ export default async function QuiSommesNousPage() {
               <li>Plateaux techniques et cas concrets</li>
               <li>Accompagnement sur plusieurs univers professionnels</li>
             </ul>
-          </div>
-          <div className="about-wheel">
-            <div className="day-type-wheel">
-              <span title="Sécurité">⛑</span>
-              <span title="Bureautique">💻</span>
-              <span title="Management">🧭</span>
-              <span title="Énergies renouvelables">☀</span>
-              <strong>+</strong>
-            </div>
-            <p className="about-wheel-caption">Sécurité · Bureautique · Management · Énergies renouvelables et plus encore</p>
           </div>
         </div>
       </section>

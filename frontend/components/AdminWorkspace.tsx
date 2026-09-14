@@ -380,6 +380,18 @@ export function AdminWorkspace({
   const [saving, setSaving] = useState(false);
   const [feedback, setFeedback] = useState("");
   const [feedbackTone, setFeedbackTone] = useState<"success" | "error">("success");
+  const [copiedKey, setCopiedKey] = useState("");
+
+  async function copyToClipboard(key: string, text: string) {
+    try {
+      await navigator.clipboard.writeText(text);
+      setCopiedKey(key);
+      setTimeout(() => setCopiedKey((current) => (current === key ? "" : current)), 1800);
+    } catch {
+      setFeedback("Impossible de copier dans le presse-papiers.");
+      setFeedbackTone("error");
+    }
+  }
 
   const owners = useMemo(() => {
     const values = new Set<string>();
@@ -409,6 +421,11 @@ export function AdminWorkspace({
       return accumulator;
     }, {});
   }, [registrations]);
+
+  const editingSessionRegistrations = useMemo(
+    () => registrations.filter((registration) => registration.sessionId === editingSessionId),
+    [registrations, editingSessionId],
+  );
 
   const registrationsByFormation = useMemo(() => {
     return registrations.reduce<Record<string, number>>((accumulator, registration) => {
@@ -943,11 +960,10 @@ export function AdminWorkspace({
 
   return (
     <div className="admin-workspace admin-workspace-shell">
-      <aside className="admin-sidebar">
+      <nav className="admin-sidebar">
         <div className="admin-sidebar-brand">
           <span className="eyebrow">Pilotage</span>
           <h2>Mini CMS Oxideve</h2>
-          <p>Dashboard, CRM, sessions, catalogue et éditorial regroupés dans une navigation fixe à gauche.</p>
         </div>
         <div className="admin-sidebar-nav">
           {[
@@ -963,7 +979,7 @@ export function AdminWorkspace({
             </button>
           ))}
         </div>
-      </aside>
+      </nav>
 
       <div className="admin-workspace-content">
         {feedback ? <p className={`form-status ${feedbackTone}`}>{feedback}</p> : null}
@@ -1196,69 +1212,21 @@ export function AdminWorkspace({
 
       {section === "sessions" ? (
         <div className="admin-stack-grid">
-          <section className="admin-shell">
-            <div className="section-heading section-heading-tight">
-              <div><span className="eyebrow">Queoval</span><h2>Synchronisation du calendrier</h2><p>Colle les identifiants de stage Queoval (visibles dans l'URL de la fiche stage, ex. stage-detail/191738) séparés par des virgules ou espaces.</p></div>
-            </div>
-            <div className="admin-bulk-grid">
-              <label><span>Identifiants de stage</span><input className="ui-field" value={queovalStageIds} onChange={(event) => setQueovalStageIds(event.target.value)} placeholder="191738, 192274, 192282..." /></label>
-              <Button onClick={handleQueovalSync} disabled={queovalSyncing}>{queovalSyncing ? "Synchronisation..." : "Synchroniser Queoval"}</Button>
-            </div>
-            {pendingSessions.length ? (
-              <div className="admin-list admin-list-dense">
-                {pendingSessions.map((pending) => (
-                  <div className="admin-list-item" key={pending.id}>
-                    <strong>{pending.externalTitle}</strong>
-                    <span>{formatSessionRange(pending.startDate, pending.endDate)} · {pending.city || "À distance"}</span>
-                    <div className="admin-bulk-grid">
-                      <select
-                        className="ui-field"
-                        value={pendingFormationChoice[pending.id] || ""}
-                        onChange={(event) => setPendingFormationChoice((current) => ({ ...current, [pending.id]: event.target.value }))}
-                      >
-                        <option value="">Choisir la formation</option>
-                        {formations.map((formation) => <option key={formation.slug} value={formation.slug}>{formation.title}</option>)}
-                      </select>
-                      <Button onClick={() => handleResolvePendingSession(pending.id)} disabled={saving || !pendingFormationChoice[pending.id]}>Rattacher</Button>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            ) : (
-              <p className="admin-empty-state">Aucune session Queoval en attente de rattachement.</p>
-            )}
-          </section>
-
-          <section className="admin-shell">
-            <div className="section-heading section-heading-tight"><div><span className="eyebrow">Planning</span><h2>Filtres et actions de masse</h2><p>Filtrez le planning puis appliquez une modification à une sélection de sessions.</p></div></div>
-            <div className="admin-filter-grid">
-              <label><span>Recherche</span><input className="ui-field" value={sessionSearch} onChange={(event) => setSessionSearch(event.target.value)} placeholder="Formation, ville, mode..." /></label>
-              <label><span>État</span><select className="ui-field" value={sessionStateFilter} onChange={(event) => setSessionStateFilter(event.target.value)}><option>Tous</option><option>À venir</option><option>Dernières places</option><option>Complet</option><option>Passée</option></select></label>
-              <label><span>Catégorie</span><select className="ui-field" value={sessionCategoryFilter} onChange={(event) => setSessionCategoryFilter(event.target.value)}><option>Toutes</option>{Array.from(new Set(formations.map((formation) => formation.category))).sort((a, b) => a.localeCompare(b, "fr")).map((category) => <option key={category}>{category}</option>)}</select></label>
-            </div>
-            <div className="admin-bulk-grid">
-              <label><span>Mode masse</span><input className="ui-field" value={bulkSessionMode} onChange={(event) => setBulkSessionMode(event.target.value)} placeholder="Présentiel, Distanciel..." /></label>
-              <label><span>Ville masse</span><input className="ui-field" value={bulkSessionCity} onChange={(event) => setBulkSessionCity(event.target.value)} placeholder="Rouen, Paris..." /></label>
-              <label><span>Places restantes</span><input className="ui-field" type="number" min="0" value={bulkSessionSeats} onChange={(event) => setBulkSessionSeats(event.target.value)} placeholder="10" /></label>
-              <Button onClick={handleBulkSessionApply} disabled={saving || !selectedSessionIds.length}>Appliquer à {selectedSessionIds.length || 0} session(s)</Button>
-            </div>
-          </section>
-
           <div className="admin-dual-pane">
             <section className="admin-shell">
+              <div className="section-heading section-heading-tight"><div><span className="eyebrow">Planning</span><h2>Sessions</h2></div></div>
+              <div className="admin-filter-grid admin-filter-grid-compact">
+                <label><span>Recherche</span><input className="ui-field" value={sessionSearch} onChange={(event) => setSessionSearch(event.target.value)} placeholder="Formation, ville, mode..." /></label>
+                <label><span>État</span><select className="ui-field" value={sessionStateFilter} onChange={(event) => setSessionStateFilter(event.target.value)}><option>Tous</option><option>À venir</option><option>Dernières places</option><option>Complet</option><option>Passée</option></select></label>
+              </div>
               <div className="admin-list admin-list-dense">
                 {filteredSessions.map((session) => {
                   const formation = formations.find((item) => item.slug === session.formationSlug);
                   return (
                     <button className={`admin-list-item admin-selectable-item${editingSessionId === session.id ? " active" : ""}`} key={session.id} onClick={() => selectSession(session.id)} type="button">
-                      <span className="admin-check-line" onClick={(event) => event.stopPropagation()}>
-                        <input checked={selectedSessionIds.includes(session.id)} onChange={(event) => {
-                          setSelectedSessionIds((current) => event.target.checked ? [...current, session.id] : current.filter((item) => item !== session.id));
-                        }} type="checkbox" />
-                      </span>
                       <strong>{formation?.shortTitle || session.formationSlug}</strong>
-                      <span>{formatSessionRange(session.startDate, session.endDate)}</span>
-                      <span>{formation?.category || "Catégorie"} · {session.city} · {getSessionState(session)}</span>
+                      <span>{formatSessionRange(session.startDate, session.endDate)} · {session.city}</span>
+                      <span className="admin-list-item-meta">{getSessionState(session)} · {registrationsBySession[session.id] || 0} inscrit(s)</span>
                     </button>
                   );
                 })}
@@ -1266,7 +1234,7 @@ export function AdminWorkspace({
             </section>
 
             <section className="admin-shell">
-              <div className="section-heading section-heading-tight"><div><span className="eyebrow">Edition</span><h2>{editingSessionId ? "Modifier la session" : "Créer une session"}</h2></div></div>
+              <div className="section-heading section-heading-tight"><div><span className="eyebrow">Édition</span><h2>{editingSessionId ? "Modifier la session" : "Créer une session"}</h2></div></div>
               <form className="contact-form" onSubmit={handleSessionSubmit}>
                 <div className="form-grid">
                   <label><span>Formation</span><select className="ui-field" value={sessionDraft.formationSlug} onChange={(event) => setSessionDraft((current) => ({ ...current, formationSlug: event.target.value }))} required><option value="">Choisir</option>{formations.map((formation) => <option key={formation.slug} value={formation.slug}>{formation.title}</option>)}</select></label>
@@ -1281,10 +1249,138 @@ export function AdminWorkspace({
                   <div><span>Inscrits</span><strong>{registrationsBySession[editingSessionId] || 0}</strong></div>
                   <div><span>Places restantes</span><strong>{sessionDraft.seatsLeft || "0"}</strong></div>
                 </div>
-                <Button disabled={saving} type="submit">{saving ? "Enregistrement..." : editingSessionId ? "Mettre à jour" : "Créer la session"}</Button>
+                <div className="admin-form-actions">
+                  <Button disabled={saving} type="submit">{saving ? "Enregistrement..." : editingSessionId ? "Mettre à jour" : "Créer la session"}</Button>
+                  {editingSessionId ? <Button variant="secondary" type="button" onClick={() => selectSession("")}>Nouvelle session</Button> : null}
+                </div>
               </form>
             </section>
           </div>
+
+          {editingSessionId ? (
+            <section className="admin-shell">
+              <div className="section-heading section-heading-tight">
+                <div><span className="eyebrow">Inscrits</span><h2>Participants de cette session</h2></div>
+                {editingSessionRegistrations.length ? (
+                  <Button
+                    variant="secondary"
+                    onClick={() =>
+                      copyToClipboard(
+                        "session-all",
+                        editingSessionRegistrations
+                          .map((registration) => `${registration.company}\t${registration.contactName}\t${registration.email}\t${registration.phone}`)
+                          .join("\n"),
+                      )
+                    }
+                  >
+                    {copiedKey === "session-all" ? "Copié !" : "Copier la liste"}
+                  </Button>
+                ) : null}
+              </div>
+              {editingSessionRegistrations.length ? (
+                <div className="admin-table-shell admin-table-shell-solid">
+                  <table className="data-table">
+                    <thead>
+                      <tr>
+                        <th>Société</th>
+                        <th>Contact</th>
+                        <th>Email</th>
+                        <th>Téléphone</th>
+                        <th>Inscrit le</th>
+                        <th></th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {editingSessionRegistrations.map((registration) => (
+                        <tr key={registration.id}>
+                          <td>{registration.company}</td>
+                          <td>{registration.contactName}</td>
+                          <td>{registration.email}</td>
+                          <td>{registration.phone}</td>
+                          <td>{formatRegistrationDate(registration.createdAt)}</td>
+                          <td>
+                            <button
+                              className="admin-copy-button"
+                              onClick={() =>
+                                copyToClipboard(
+                                  registration.id,
+                                  `${registration.company} - ${registration.contactName} - ${registration.email} - ${registration.phone}`,
+                                )
+                              }
+                              type="button"
+                            >
+                              {copiedKey === registration.id ? "Copié !" : "Copier"}
+                            </button>
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              ) : (
+                <p className="admin-empty-state">Aucun inscrit pour cette session pour le moment.</p>
+              )}
+            </section>
+          ) : null}
+
+          <section className="admin-shell">
+            <div className="section-heading section-heading-tight"><div><span className="eyebrow">Planning</span><h2>Actions de masse</h2><p>Sélectionnez des sessions dans la liste puis appliquez une modification groupée.</p></div></div>
+            <div className="admin-filter-grid admin-filter-grid-compact">
+              <label><span>Catégorie</span><select className="ui-field" value={sessionCategoryFilter} onChange={(event) => setSessionCategoryFilter(event.target.value)}><option>Toutes</option>{Array.from(new Set(formations.map((formation) => formation.category))).sort((a, b) => a.localeCompare(b, "fr")).map((category) => <option key={category}>{category}</option>)}</select></label>
+            </div>
+            <div className="admin-list admin-list-dense">
+              {filteredSessions.map((session) => (
+                <label className="admin-checkbox-item admin-list-item" key={session.id}>
+                  <input checked={selectedSessionIds.includes(session.id)} onChange={(event) => {
+                    setSelectedSessionIds((current) => event.target.checked ? [...current, session.id] : current.filter((item) => item !== session.id));
+                  }} type="checkbox" />
+                  <span>{formations.find((item) => item.slug === session.formationSlug)?.shortTitle || session.formationSlug} · {session.city}</span>
+                </label>
+              ))}
+            </div>
+            <div className="admin-bulk-grid">
+              <label><span>Mode masse</span><input className="ui-field" value={bulkSessionMode} onChange={(event) => setBulkSessionMode(event.target.value)} placeholder="Présentiel, Distanciel..." /></label>
+              <label><span>Ville masse</span><input className="ui-field" value={bulkSessionCity} onChange={(event) => setBulkSessionCity(event.target.value)} placeholder="Rouen, Paris..." /></label>
+              <label><span>Places restantes</span><input className="ui-field" type="number" min="0" value={bulkSessionSeats} onChange={(event) => setBulkSessionSeats(event.target.value)} placeholder="10" /></label>
+              <Button onClick={handleBulkSessionApply} disabled={saving || !selectedSessionIds.length}>Appliquer à {selectedSessionIds.length || 0} session(s)</Button>
+            </div>
+          </section>
+
+          <details className="admin-collapsible">
+            <summary>Synchronisation Queoval (optionnel)</summary>
+            <section className="admin-shell">
+              <div className="section-heading section-heading-tight">
+                <div><span className="eyebrow">Queoval</span><h2>Synchronisation du calendrier</h2><p>Colle les identifiants de stage Queoval (visibles dans l'URL de la fiche stage, ex. stage-detail/191738) séparés par des virgules ou espaces.</p></div>
+              </div>
+              <div className="admin-bulk-grid">
+                <label><span>Identifiants de stage</span><input className="ui-field" value={queovalStageIds} onChange={(event) => setQueovalStageIds(event.target.value)} placeholder="191738, 192274, 192282..." /></label>
+                <Button onClick={handleQueovalSync} disabled={queovalSyncing}>{queovalSyncing ? "Synchronisation..." : "Synchroniser Queoval"}</Button>
+              </div>
+              {pendingSessions.length ? (
+                <div className="admin-list admin-list-dense">
+                  {pendingSessions.map((pending) => (
+                    <div className="admin-list-item" key={pending.id}>
+                      <strong>{pending.externalTitle}</strong>
+                      <span>{formatSessionRange(pending.startDate, pending.endDate)} · {pending.city || "À distance"}</span>
+                      <div className="admin-bulk-grid">
+                        <select
+                          className="ui-field"
+                          value={pendingFormationChoice[pending.id] || ""}
+                          onChange={(event) => setPendingFormationChoice((current) => ({ ...current, [pending.id]: event.target.value }))}
+                        >
+                          <option value="">Choisir la formation</option>
+                          {formations.map((formation) => <option key={formation.slug} value={formation.slug}>{formation.title}</option>)}
+                        </select>
+                        <Button onClick={() => handleResolvePendingSession(pending.id)} disabled={saving || !pendingFormationChoice[pending.id]}>Rattacher</Button>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              ) : (
+                <p className="admin-empty-state">Aucune session Queoval en attente de rattachement.</p>
+              )}
+            </section>
+          </details>
         </div>
       ) : null}
 

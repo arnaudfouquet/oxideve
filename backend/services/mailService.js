@@ -1,4 +1,8 @@
+const path = require("path");
 const nodemailer = require("nodemailer");
+
+const LOGO_PATH = path.join(__dirname, "..", "assets", "oxideve-logo.png");
+const LOGO_CID = "oxideve-logo";
 
 let transporterSingleton = null;
 let warnedMissingConfig = false;
@@ -40,6 +44,14 @@ function formatDate(value) {
   return new Intl.DateTimeFormat("fr-FR", { day: "2-digit", month: "2-digit", year: "numeric" }).format(new Date(value));
 }
 
+function buildEmailLogoHeader() {
+  return `
+    <div style="text-align: left; margin-bottom: 16px;">
+      <img src="cid:${LOGO_CID}" alt="Oxideve" height="48" style="height: 48px;" />
+    </div>
+  `;
+}
+
 function buildEmailHtml({ bulletin, formation, session, quizUrl }) {
   const formationTitle = formation?.title || bulletin.formationSlug;
   const sessionSummary =
@@ -47,6 +59,7 @@ function buildEmailHtml({ bulletin, formation, session, quizUrl }) {
 
   return `
     <div style="font-family: Arial, sans-serif; color: #004d6d; max-width: 560px; margin: 0 auto;">
+      ${buildEmailLogoHeader()}
       <h2 style="color: #004d6d;">Confirmation de votre demande d'inscription</h2>
       <p>Bonjour,</p>
       <p>
@@ -109,6 +122,11 @@ async function sendBulletinConfirmationEmail({ bulletin, formation, session, pdf
       html,
       attachments: [
         {
+          filename: "oxideve-logo.png",
+          path: LOGO_PATH,
+          cid: LOGO_CID,
+        },
+        {
           filename: "bulletin-inscription.pdf",
           content: pdfBuffer,
           contentType: "application/pdf",
@@ -123,7 +141,78 @@ async function sendBulletinConfirmationEmail({ bulletin, formation, session, pdf
   }
 }
 
+function buildQuizResultHtml({ quizTitle, attempt }) {
+  return `
+    <div style="font-family: Arial, sans-serif; color: #004d6d; max-width: 560px; margin: 0 auto;">
+      ${buildEmailLogoHeader()}
+      <h2 style="color: #004d6d;">Résultat de votre auto-évaluation</h2>
+      <p>Bonjour,</p>
+      <p>
+        Voici le résultat de votre auto-évaluation <strong>${quizTitle}</strong> :
+        <strong>${attempt.scoreOn20} / 20</strong>.
+      </p>
+      <p>Vous trouverez le détail complet de vos réponses en pièce jointe (PDF).</p>
+      <p>Cette auto-évaluation n'est pas notée pour votre dossier : elle sert uniquement à adapter l'accompagnement pédagogique.</p>
+      <p style="margin-top: 32px; color: #4d6a78; font-size: 0.85rem;">Oxideve - Organisme de formation professionnelle</p>
+    </div>
+  `;
+}
+
+/**
+ * Envoie le résultat d'une auto-évaluation (score + détail) au candidat par email,
+ * avec le PDF récapitulatif en pièce jointe. Mode dégradé identique à
+ * sendBulletinConfirmationEmail si SMTP_HOST n'est pas configuré.
+ */
+async function sendQuizResultEmail({ quizTitle, attempt, pdfBuffer }) {
+  const transporter = getTransporter();
+
+  if (!transporter) {
+    if (!warnedMissingConfig) {
+      console.warn(
+        "[mailService] SMTP_HOST non configuré : envoi d'email désactivé (mode dégradé). Le résultat reste enregistré en base.",
+      );
+      warnedMissingConfig = true;
+    }
+
+    return { sent: false, reason: "smtp_not_configured" };
+  }
+
+  if (!attempt.learnerEmail) {
+    return { sent: false, reason: "missing_recipient" };
+  }
+
+  const from = process.env.MAIL_FROM || "no-reply@oxideve.fr";
+  const html = buildQuizResultHtml({ quizTitle, attempt });
+
+  try {
+    await transporter.sendMail({
+      from,
+      to: attempt.learnerEmail,
+      subject: `Résultat de votre auto-évaluation - ${quizTitle}`,
+      html,
+      attachments: [
+        {
+          filename: "oxideve-logo.png",
+          path: LOGO_PATH,
+          cid: LOGO_CID,
+        },
+        {
+          filename: "auto-evaluation.pdf",
+          content: pdfBuffer,
+          contentType: "application/pdf",
+        },
+      ],
+    });
+
+    return { sent: true };
+  } catch (error) {
+    console.error("[mailService] Échec de l'envoi de l'email de résultat d'auto-évaluation", error);
+    return { sent: false, reason: "send_error" };
+  }
+}
+
 module.exports = {
   isSmtpConfigured,
   sendBulletinConfirmationEmail,
+  sendQuizResultEmail,
 };
