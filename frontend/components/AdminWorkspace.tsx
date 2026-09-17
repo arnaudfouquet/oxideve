@@ -2,7 +2,8 @@
 
 import { useEffect, useMemo, useState } from "react";
 import { Button } from "@/components/ui";
-import type { Article, BulletinInscriptionWithAttempts, Company, CrmInteraction, CrmTask, Formation, Participant, PendingSyncSession, ProgrammeDay, Registration, Session } from "../../shared/types";
+import { DataTable, type DataTableColumn } from "@/components/admin/DataTable";
+import type { AdminUser, Article, BulletinInscriptionWithAttempts, Company, CrmInteraction, CrmTask, Formation, Participant, PendingSyncSession, ProgrammeDay, Registration, Session } from "../../shared/types";
 
 type Props = {
   initialArticles: Article[];
@@ -16,7 +17,7 @@ type Props = {
   initialParticipants: Participant[];
 };
 
-type Section = "dashboard" | "sessions" | "participants" | "formations" | "editorial";
+type Section = "dashboard" | "sessions" | "participants" | "formations" | "editorial" | "accounts";
 
 type FormationDraft = {
   slug: string;
@@ -221,6 +222,19 @@ type DetailFieldProps = {
   copyToClipboard: (key: string, text: string) => void;
 };
 
+const NAV_ITEMS: { value: Section; label: string; icon: string }[] = [
+  { value: "dashboard", label: "Dashboard", icon: "◧" },
+  { value: "sessions", label: "Sessions", icon: "◷" },
+  { value: "participants", label: "Inscrits", icon: "◍" },
+  { value: "formations", label: "Catalogue", icon: "▤" },
+  { value: "editorial", label: "Editorial", icon: "✎" },
+  { value: "accounts", label: "Comptes", icon: "◉" },
+];
+
+function StatusBadge({ label, tone = "default" }: { label: string; tone?: "default" | "accent" | "soft" }) {
+  return <span className={`admin-status-badge admin-status-badge-${tone}`}>{label}</span>;
+}
+
 function DetailField({ label, value, copyKey, copiedKey, copyToClipboard }: DetailFieldProps) {
   return (
     <div className="admin-detail-field">
@@ -310,6 +324,72 @@ export function AdminWorkspace({
   const [feedback, setFeedback] = useState("");
   const [feedbackTone, setFeedbackTone] = useState<"success" | "error">("success");
   const [copiedKey, setCopiedKey] = useState("");
+
+  const [adminUsers, setAdminUsers] = useState<AdminUser[]>([]);
+  const [newAdminEmail, setNewAdminEmail] = useState("");
+  const [newAdminName, setNewAdminName] = useState("");
+  const [newAdminPassword, setNewAdminPassword] = useState("");
+  const [creatingAdmin, setCreatingAdmin] = useState(false);
+
+  useEffect(() => {
+    if (section !== "accounts") return;
+
+    let cancelled = false;
+
+    fetch("/api/admin/users")
+      .then((response) => response.json())
+      .then((result: { data?: AdminUser[] }) => {
+        if (!cancelled && result?.data) setAdminUsers(result.data);
+      })
+      .catch(() => undefined);
+
+    return () => {
+      cancelled = true;
+    };
+  }, [section]);
+
+  async function handleCreateAdminUser(event: React.FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    setCreatingAdmin(true);
+    setFeedback("");
+
+    try {
+      const response = await fetch("/api/admin/users", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email: newAdminEmail, password: newAdminPassword, name: newAdminName }),
+      });
+      const result = (await response.json()) as { data?: AdminUser; error?: string };
+
+      if (!response.ok || !result.data) {
+        setFeedback(result.error || "Impossible de créer ce compte.");
+        setFeedbackTone("error");
+        return;
+      }
+
+      setAdminUsers((current) => [...current, result.data as AdminUser]);
+      setNewAdminEmail("");
+      setNewAdminName("");
+      setNewAdminPassword("");
+      setFeedback("Compte administrateur créé.");
+      setFeedbackTone("success");
+    } finally {
+      setCreatingAdmin(false);
+    }
+  }
+
+  async function handleDeleteAdminUser(id: string) {
+    const previous = adminUsers;
+    setAdminUsers((current) => current.filter((user) => user.id !== id));
+
+    const response = await fetch(`/api/admin/users/${id}`, { method: "DELETE" });
+    if (!response.ok) {
+      const result = (await response.json().catch(() => null)) as { error?: string } | null;
+      setAdminUsers(previous);
+      setFeedback(result?.error || "Impossible de supprimer ce compte.");
+      setFeedbackTone("error");
+    }
+  }
 
   async function copyToClipboard(key: string, text: string) {
     try {
@@ -753,30 +833,81 @@ export function AdminWorkspace({
     setSuccess(result.message || "Article enregistré.");
   }
 
+  const registrationColumns: DataTableColumn<Registration>[] = [
+    { key: "contact", label: "Contact", sortable: true, sortValue: (row) => row.contactName, render: (row) => row.contactName },
+    { key: "company", label: "Entreprise", sortable: true, sortValue: (row) => row.company, render: (row) => row.company },
+    { key: "email", label: "Email", render: (row) => row.email },
+    { key: "phone", label: "Téléphone", render: (row) => row.phone },
+    {
+      key: "formation",
+      label: "Formation",
+      sortable: true,
+      sortValue: (row) => formations.find((item) => item.slug === row.formationSlug)?.shortTitle || row.formationSlug,
+      render: (row) => formations.find((item) => item.slug === row.formationSlug)?.shortTitle || row.formationSlug,
+    },
+    {
+      key: "session",
+      label: "Session",
+      render: (row) => {
+        const session = sessions.find((item) => item.id === row.sessionId);
+        return session ? `${formatSessionRange(session.startDate, session.endDate)} · ${session.city}` : "Non renseignée";
+      },
+    },
+    {
+      key: "status",
+      label: "Statut",
+      sortable: true,
+      sortValue: (row) => row.status,
+      width: "170px",
+      render: (row) => (
+        <select
+          className="ui-field admin-inline-select"
+          value={row.status}
+          onChange={(event) => handleRegistrationStatusChange(row.id, event.target.value)}
+        >
+          {REGISTRATION_STATUS_OPTIONS.map((status) => (
+            <option key={status} value={status}>{status}</option>
+          ))}
+        </select>
+      ),
+    },
+    {
+      key: "actions",
+      label: "Actions",
+      width: "190px",
+      render: (row) => (
+        <button className="admin-copy-button" onClick={() => copyBulletinLink(row.id, row.formationSlug)} type="button">
+          {copiedKey === `registration-bulletin-${row.id}` ? "Copié !" : "Copier le lien"}
+        </button>
+      ),
+    },
+  ];
+
   return (
-    <div className="admin-workspace admin-workspace-shell">
-      <nav className="admin-sidebar">
-        <div className="admin-sidebar-nav">
-          {[
-            ["dashboard", "Dashboard"],
-            ["sessions", "Sessions"],
-            ["participants", "Inscrits"],
-            ["formations", "Catalogue"],
-            ["editorial", "Editorial"],
-          ].map(([value, label]) => (
-            <button className={`admin-sidebar-link${section === value ? " active" : ""}`} key={value} onClick={() => setSection(value as Section)} type="button">
-              {label}
+    <div className="admin-shell-v2">
+      <nav className="admin-shell-v2-sidebar">
+        <div className="admin-shell-v2-brand">Oxideve</div>
+        <div className="admin-shell-v2-nav">
+          {NAV_ITEMS.map((item) => (
+            <button
+              className={`admin-shell-v2-link${section === item.value ? " active" : ""}`}
+              key={item.value}
+              onClick={() => setSection(item.value)}
+              type="button"
+            >
+              <span className="admin-shell-v2-link-icon">{item.icon}</span>
+              <span>{item.label}</span>
             </button>
           ))}
         </div>
       </nav>
 
-      <div className="admin-workspace-content">
-        {feedback ? <p className={`form-status ${feedbackTone}`}>{feedback}</p> : null}
+      <div className="admin-shell-v2-main">
+        {feedback ? <p className={`form-status admin-shell-v2-feedback ${feedbackTone}`}>{feedback}</p> : null}
 
       {section === "dashboard" ? (
         <div className="admin-stack-grid">
-          <section className="admin-shell admin-shell-hero">
+          <section className="admin-shell">
             <div className="section-heading section-heading-tight">
               <div>
                 <span className="eyebrow">Vue d&apos;ensemble</span>
@@ -787,6 +918,8 @@ export function AdminWorkspace({
             <div className="admin-metric-grid">
               <article className="admin-metric-card"><span>Catalogue</span><strong>{formations.length}</strong><small>formations</small></article>
               <article className="admin-metric-card"><span>Sessions</span><strong>{sessions.filter((session) => isUpcoming(session)).length}</strong><small>à venir</small></article>
+              <article className="admin-metric-card"><span>Entreprises</span><strong>{initialCompanies.length}</strong><small>au total</small></article>
+              <article className="admin-metric-card"><span>Articles</span><strong>{articles.length}</strong><small>publiés</small></article>
               <article className="admin-metric-card"><span>Pré-inscriptions</span><strong>{registrations.length}</strong><small>au total</small></article>
             </div>
           </section>
@@ -813,63 +946,13 @@ export function AdminWorkspace({
               </label>
             </div>
 
-            {filteredRegistrations.length === 0 ? (
-              <p className="admin-empty-state">Aucune pré-inscription ne correspond à ces filtres.</p>
-            ) : (
-              <div className="admin-table-shell admin-table-shell-solid">
-                <table className="data-table">
-                  <thead>
-                    <tr>
-                      <th>Contact</th>
-                      <th>Entreprise</th>
-                      <th>Email</th>
-                      <th>Téléphone</th>
-                      <th>Formation</th>
-                      <th>Session</th>
-                      <th>Statut</th>
-                      <th>Actions</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {filteredRegistrations.map((registration) => {
-                      const formation = formations.find((item) => item.slug === registration.formationSlug);
-                      const session = sessions.find((item) => item.id === registration.sessionId);
-
-                      return (
-                        <tr key={registration.id}>
-                          <td>{registration.contactName}</td>
-                          <td>{registration.company}</td>
-                          <td>{registration.email}</td>
-                          <td>{registration.phone}</td>
-                          <td>{formation?.shortTitle || registration.formationSlug}</td>
-                          <td>{session ? `${formatSessionRange(session.startDate, session.endDate)} · ${session.city}` : "Non renseignée"}</td>
-                          <td>
-                            <select
-                              className="ui-field"
-                              value={registration.status}
-                              onChange={(event) => handleRegistrationStatusChange(registration.id, event.target.value)}
-                            >
-                              {REGISTRATION_STATUS_OPTIONS.map((status) => (
-                                <option key={status} value={status}>{status}</option>
-                              ))}
-                            </select>
-                          </td>
-                          <td>
-                            <button
-                              className="admin-copy-button"
-                              onClick={() => copyBulletinLink(registration.id, registration.formationSlug)}
-                              type="button"
-                            >
-                              {copiedKey === `registration-bulletin-${registration.id}` ? "Copié !" : "Copier le lien du bulletin"}
-                            </button>
-                          </td>
-                        </tr>
-                      );
-                    })}
-                  </tbody>
-                </table>
-              </div>
-            )}
+            <DataTable
+              columns={registrationColumns}
+              rows={filteredRegistrations}
+              getRowKey={(row) => row.id}
+              emptyLabel="Aucune pré-inscription ne correspond à ces filtres."
+              pageSize={15}
+            />
           </section>
         </div>
       ) : null}
@@ -980,49 +1063,41 @@ export function AdminWorkspace({
                   </Button>
                 ) : null}
               </div>
-              {editingSessionRegistrations.length ? (
-                <div className="admin-table-shell admin-table-shell-solid">
-                  <table className="data-table">
-                    <thead>
-                      <tr>
-                        <th>Société</th>
-                        <th>Contact</th>
-                        <th>Email</th>
-                        <th>Téléphone</th>
-                        <th>Inscrit le</th>
-                        <th></th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {editingSessionRegistrations.map((registration) => (
-                        <tr key={registration.id}>
-                          <td>{registration.company}</td>
-                          <td>{registration.contactName}</td>
-                          <td>{registration.email}</td>
-                          <td>{registration.phone}</td>
-                          <td>{formatRegistrationDate(registration.createdAt)}</td>
-                          <td>
-                            <button
-                              className="admin-copy-button"
-                              onClick={() =>
-                                copyToClipboard(
-                                  registration.id,
-                                  `${registration.company} - ${registration.contactName} - ${registration.email} - ${registration.phone}`,
-                                )
-                              }
-                              type="button"
-                            >
-                              {copiedKey === registration.id ? "Copié !" : "Copier"}
-                            </button>
-                          </td>
-                        </tr>
-                      ))}
-                    </tbody>
-                  </table>
-                </div>
-              ) : (
-                <p className="admin-empty-state">Aucun inscrit pour cette session pour le moment.</p>
-              )}
+              <DataTable
+                columns={[
+                  { key: "company", label: "Société", sortable: true, sortValue: (row) => row.company, render: (row) => row.company },
+                  { key: "contact", label: "Contact", sortable: true, sortValue: (row) => row.contactName, render: (row) => row.contactName },
+                  { key: "email", label: "Email", render: (row) => row.email },
+                  { key: "phone", label: "Téléphone", render: (row) => row.phone },
+                  {
+                    key: "createdAt",
+                    label: "Inscrit le",
+                    sortable: true,
+                    sortValue: (row) => row.createdAt,
+                    render: (row) => formatRegistrationDate(row.createdAt),
+                  },
+                  {
+                    key: "actions",
+                    label: "",
+                    width: "110px",
+                    render: (row) => (
+                      <button
+                        className="admin-copy-button"
+                        onClick={() =>
+                          copyToClipboard(row.id, `${row.company} - ${row.contactName} - ${row.email} - ${row.phone}`)
+                        }
+                        type="button"
+                      >
+                        {copiedKey === row.id ? "Copié !" : "Copier"}
+                      </button>
+                    ),
+                  },
+                ]}
+                rows={editingSessionRegistrations}
+                getRowKey={(row) => row.id}
+                emptyLabel="Aucun inscrit pour cette session pour le moment."
+                pageSize={10}
+              />
             </section>
           ) : null}
 
@@ -1105,7 +1180,7 @@ export function AdminWorkspace({
       {section === "formations" ? (
         <div className="admin-dual-pane">
           <section className="admin-shell">
-            <div className="section-heading section-heading-tight"><div><span className="eyebrow">Catalogue</span><h2>Formations</h2></div><Button variant="secondary" onClick={() => { setEditingFormationSlug(""); setFormationDraft(toFormationDraft()); }}>Nouvelle formation</Button></div>
+            <div className="section-heading section-heading-tight"><div><span className="eyebrow">Catalogue</span><h2>Formations</h2></div><Button onClick={() => { setEditingFormationSlug(""); setFormationDraft(toFormationDraft()); }}>Nouvelle formation</Button></div>
             <div className="admin-list admin-list-dense">
               {formations.sort((a, b) => a.title.localeCompare(b.title, "fr")).map((formation) => (
                 <button className={`admin-list-item${editingFormationSlug === formation.slug ? " active" : ""}`} key={formation.slug} onClick={() => selectFormation(formation.slug)} type="button">
@@ -1244,6 +1319,70 @@ export function AdminWorkspace({
         </div>
       ) : null}
 
+      {section === "accounts" ? (
+        <div className="admin-stack-grid">
+          <section className="admin-shell">
+            <div className="section-heading section-heading-tight">
+              <div>
+                <span className="eyebrow">Sécurité</span>
+                <h2>Comptes administrateurs</h2>
+                <p>Créez un identifiant pour chaque personne qui gère le site. Chacun se connecte avec son propre email et mot de passe.</p>
+              </div>
+            </div>
+            <form className="contact-form" onSubmit={handleCreateAdminUser}>
+              <div className="form-grid">
+                <label>
+                  <span>Nom</span>
+                  <input className="ui-field" value={newAdminName} onChange={(event) => setNewAdminName(event.target.value)} placeholder="Prénom Nom" />
+                </label>
+                <label>
+                  <span>Email</span>
+                  <input className="ui-field" type="email" value={newAdminEmail} onChange={(event) => setNewAdminEmail(event.target.value)} required placeholder="prenom@oxideve.com" />
+                </label>
+                <label>
+                  <span>Mot de passe</span>
+                  <input className="ui-field" type="password" value={newAdminPassword} onChange={(event) => setNewAdminPassword(event.target.value)} required minLength={8} placeholder="8 caractères minimum" />
+                </label>
+              </div>
+              <Button disabled={creatingAdmin} type="submit">{creatingAdmin ? "Création..." : "Créer le compte"}</Button>
+            </form>
+          </section>
+
+          <section className="admin-shell">
+            <div className="section-heading section-heading-tight">
+              <div>
+                <span className="eyebrow">Accès</span>
+                <h2>Comptes existants</h2>
+              </div>
+            </div>
+            <DataTable<AdminUser>
+              rows={adminUsers}
+              getRowKey={(user) => user.id}
+              emptyLabel="Aucun compte administrateur pour le moment."
+              columns={[
+                { key: "name", label: "Nom", render: (user) => user.name || "—" },
+                { key: "email", label: "Email", render: (user) => user.email },
+                {
+                  key: "lastLoginAt",
+                  label: "Dernière connexion",
+                  render: (user) => (user.lastLoginAt ? formatDateLabel(user.lastLoginAt) : "Jamais"),
+                },
+                {
+                  key: "actions",
+                  label: "Actions",
+                  width: "120px",
+                  render: (user) => (
+                    <button className="ui-button ui-button-ghost" type="button" onClick={() => handleDeleteAdminUser(user.id)}>
+                      Supprimer
+                    </button>
+                  ),
+                },
+              ]}
+            />
+          </section>
+        </div>
+      ) : null}
+
       {section === "participants" ? (
         <div className="admin-stack-grid">
           <section className="admin-shell">
@@ -1275,66 +1414,69 @@ export function AdminWorkspace({
               </label>
             </div>
 
-            {filteredParticipants.length === 0 ? (
-              <p className="admin-empty-state">Aucun inscrit ne correspond à ces filtres.</p>
-            ) : (
-              <div className="admin-table-shell admin-table-shell-solid">
-                <table className="data-table">
-                  <thead>
-                    <tr>
-                      <th>Nom</th>
-                      <th>Entreprise</th>
-                      <th>Formation</th>
-                      <th>Session</th>
-                      <th>Statut</th>
-                      <th>Auto-éval</th>
-                      <th>Actions</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {filteredParticipants.map((participant) => {
-                      const formation = formations.find((item) => item.slug === participant.formationSlug);
-                      const session = sessions.find((item) => item.id === participant.sessionId);
-                      const statusClassName =
-                        participant.status === "Bulletin complété"
-                          ? "ui-badge-accent"
-                          : participant.status === "Bulletin direct"
-                            ? "ui-badge-soft"
-                            : "ui-badge-default";
-
-                      return (
-                        <tr
-                          key={participant.id}
-                          className={selectedParticipantId === participant.id ? "admin-row-active" : undefined}
-                          onClick={() => selectParticipant(participant.id)}
-                        >
-                          <td>{participant.fullName}</td>
-                          <td>{participant.company}</td>
-                          <td>{formation?.shortTitle || participant.formationSlug}</td>
-                          <td>{session ? `${formatSessionRange(session.startDate, session.endDate)} · ${session.city}` : "Non renseignée"}</td>
-                          <td><span className={`ui-badge ${statusClassName}`}>{participant.status}</span></td>
-                          <td>{participant.quizAttempt ? `${participant.quizAttempt.scoreOn20} / 20` : "-"}</td>
-                          <td>
-                            <div className="admin-table-actions" onClick={(event) => event.stopPropagation()}>
-                              {participant.bulletinInscriptionId ? (
-                                <a
-                                  className="admin-copy-button"
-                                  href={`/api/admin/bulletin-inscriptions/${participant.bulletinInscriptionId}/pdf`}
-                                  target="_blank"
-                                  rel="noreferrer"
-                                >
-                                  Voir le PDF
-                                </a>
-                              ) : null}
-                            </div>
-                          </td>
-                        </tr>
-                      );
-                    })}
-                  </tbody>
-                </table>
-              </div>
-            )}
+            <DataTable
+              columns={[
+                { key: "fullName", label: "Nom", sortable: true, sortValue: (row) => row.fullName, render: (row) => row.fullName },
+                { key: "company", label: "Entreprise", sortable: true, sortValue: (row) => row.company, render: (row) => row.company },
+                {
+                  key: "formation",
+                  label: "Formation",
+                  sortable: true,
+                  sortValue: (row) => formations.find((item) => item.slug === row.formationSlug)?.shortTitle || row.formationSlug,
+                  render: (row) => formations.find((item) => item.slug === row.formationSlug)?.shortTitle || row.formationSlug,
+                },
+                {
+                  key: "session",
+                  label: "Session",
+                  render: (row) => {
+                    const session = sessions.find((item) => item.id === row.sessionId);
+                    return session ? `${formatSessionRange(session.startDate, session.endDate)} · ${session.city}` : "Non renseignée";
+                  },
+                },
+                {
+                  key: "status",
+                  label: "Statut",
+                  sortable: true,
+                  sortValue: (row) => row.status,
+                  render: (row) => (
+                    <StatusBadge
+                      label={row.status}
+                      tone={row.status === "Bulletin complété" ? "accent" : row.status === "Bulletin direct" ? "soft" : "default"}
+                    />
+                  ),
+                },
+                {
+                  key: "quiz",
+                  label: "Auto-éval",
+                  sortable: true,
+                  sortValue: (row) => row.quizAttempt?.scoreOn20 ?? -1,
+                  render: (row) => (row.quizAttempt ? `${row.quizAttempt.scoreOn20} / 20` : "-"),
+                },
+                {
+                  key: "actions",
+                  label: "Actions",
+                  width: "140px",
+                  render: (row) =>
+                    row.bulletinInscriptionId ? (
+                      <a
+                        className="admin-copy-button"
+                        href={`/api/admin/bulletin-inscriptions/${row.bulletinInscriptionId}/pdf`}
+                        target="_blank"
+                        rel="noreferrer"
+                        onClick={(event) => event.stopPropagation()}
+                      >
+                        Voir le PDF
+                      </a>
+                    ) : null,
+                },
+              ]}
+              rows={filteredParticipants}
+              getRowKey={(row) => row.id}
+              emptyLabel="Aucun inscrit ne correspond à ces filtres."
+              onRowClick={(row) => selectParticipant(row.id)}
+              isRowActive={(row) => selectedParticipantId === row.id}
+              pageSize={15}
+            />
           </section>
 
           {selectedParticipant ? (

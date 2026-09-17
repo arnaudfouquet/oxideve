@@ -26,6 +26,14 @@ const {
   sendInternalBulletinNotification,
 } = require("../services/mailService");
 const {
+  listAdminUsers,
+  createAdminUser,
+  deleteAdminUser,
+  verifyAdminCredentials,
+  countAdminUsers,
+} = require("../services/adminUserService");
+const { setSessionCookie, clearSessionCookie } = require("../services/adminSession");
+const {
   getQuizBySlug,
   getPublicQuizByFormationSlug,
   getPublicQuizBySlug,
@@ -85,6 +93,17 @@ const sessionSchema = z.object({
 });
 
 const registrationStatusSchema = z.object({ status: z.string().min(2).max(40) });
+
+const adminLoginSchema = z.object({
+  email: z.string().email(),
+  password: z.string().min(1).max(200),
+});
+
+const adminUserCreateSchema = z.object({
+  email: z.string().email(),
+  password: z.string().min(8).max(200),
+  name: z.string().max(160).optional(),
+});
 
 const articleSchema = z.object({
   slug: z.string().min(3).max(160).regex(/^[a-z0-9-]+$/),
@@ -594,6 +613,76 @@ function createApiRouter() {
       const payload = z.object({ formationSlug: z.string().min(2) }).parse(req.body);
       const session = await resolvePendingSyncSession(req.params.id, payload.formationSlug);
       res.status(201).json({ data: session, message: "Session rattachée au calendrier" });
+    })
+  );
+
+  router.post(
+    "/admin/login",
+    asyncHandler(async (req, res) => {
+      const payload = adminLoginSchema.parse(req.body);
+      const existingAccounts = await countAdminUsers();
+
+      if (existingAccounts === 0) {
+        const bootstrapUser = process.env.ADMIN_USERNAME;
+        const bootstrapPassword = process.env.ADMIN_PASSWORD;
+        const bootstrapEmail = (bootstrapUser || "").includes("@") ? bootstrapUser : `${bootstrapUser}@oxideve.com`;
+
+        if (
+          bootstrapUser &&
+          bootstrapPassword &&
+          payload.password === bootstrapPassword &&
+          payload.email.toLowerCase() === (bootstrapEmail || "").toLowerCase()
+        ) {
+          const created = await createAdminUser({
+            email: bootstrapEmail,
+            password: bootstrapPassword,
+            name: "Administrateur",
+          });
+          setSessionCookie(res, created.id);
+          return res.json({ data: created, message: "Connexion réussie" });
+        }
+      }
+
+      const user = await verifyAdminCredentials(payload.email, payload.password);
+      if (!user) {
+        return res.status(401).json({ error: "Identifiants incorrects." });
+      }
+
+      setSessionCookie(res, user.id);
+      return res.json({ data: user, message: "Connexion réussie" });
+    })
+  );
+
+  router.post("/admin/logout", (_req, res) => {
+    clearSessionCookie(res);
+    res.json({ message: "Déconnexion réussie" });
+  });
+
+  router.get(
+    "/admin/users",
+    asyncHandler(async (_req, res) => {
+      const users = await listAdminUsers();
+      res.json({ data: users });
+    })
+  );
+
+  router.post(
+    "/admin/users",
+    asyncHandler(async (req, res) => {
+      const payload = adminUserCreateSchema.parse(req.body);
+      const user = await createAdminUser(payload);
+      res.status(201).json({ data: user, message: "Compte créé" });
+    })
+  );
+
+  router.delete(
+    "/admin/users/:id",
+    asyncHandler(async (req, res) => {
+      if (req.adminUserId === req.params.id) {
+        return res.status(400).json({ error: "Impossible de supprimer votre propre compte pendant que vous êtes connecté." });
+      }
+      await deleteAdminUser(req.params.id);
+      res.json({ message: "Compte supprimé" });
     })
   );
 

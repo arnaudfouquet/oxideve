@@ -97,6 +97,14 @@ export type Registration = {
   source?: string;
 };
 
+export type AdminUser = {
+  id: string;
+  email: string;
+  name: string;
+  createdAt: string;
+  lastLoginAt: string | null;
+};
+
 export type LearnerInput = {
   fullName: string;
   role?: string;

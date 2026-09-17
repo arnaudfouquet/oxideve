@@ -22,28 +22,16 @@ export default async function AdminPage() {
     getParticipants(),
   ]);
   return (
-    <section className="admin-page-shell">
-      <div className="admin-page-container">
-        <div className="stats-strip">
-          <span className="stat-pill">{formations.length} formations</span>
-          <span className="stat-pill">{sessions.length} sessions</span>
-          <span className="stat-pill">{companies.length} entreprises</span>
-          <span className="stat-pill">{articles.length} articles</span>
-          <span className="stat-pill">{registrations.length} pré-inscriptions</span>
-        </div>
-
-        <AdminWorkspace
-          initialArticles={articles}
-          initialCompanies={companies}
-          initialCrmInteractions={crmInteractions}
-          initialCrmTasks={crmTasks}
-          initialFormations={formations}
-          initialSessions={sessions}
-          initialRegistrations={registrations}
-          initialBulletinInscriptions={bulletinInscriptions}
-          initialParticipants={participants}
-        />
-      </div>
-    </section>
+    <AdminWorkspace
+      initialArticles={articles}
+      initialCompanies={companies}
+      initialCrmInteractions={crmInteractions}
+      initialCrmTasks={crmTasks}
+      initialFormations={formations}
+      initialSessions={sessions}
+      initialRegistrations={registrations}
+      initialBulletinInscriptions={bulletinInscriptions}
+      initialParticipants={participants}
+    />
   );
 }
