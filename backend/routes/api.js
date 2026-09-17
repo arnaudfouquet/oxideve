@@ -529,16 +529,6 @@ function createApiRouter() {
 
       const formation = await getFormationBySlug(session.formationSlug);
 
-      res.set("Content-Type", "application/zip");
-      res.set("Content-Disposition", `attachment; filename="documents-session-${session.id}.zip"`);
-
-      const archive = archiver("zip", { zlib: { level: 9 } });
-      archive.on("error", (error) => {
-        console.error("[api] Échec de la génération de l'archive ZIP", error);
-        res.destroy(error);
-      });
-      archive.pipe(res);
-
       const usedNames = new Set();
       function uniqueName(baseName) {
         let candidate = baseName;
@@ -552,18 +542,24 @@ function createApiRouter() {
       }
 
       function slugifyName(value) {
-        return String(value || "")
-          .normalize("NFD")
-          .replace(/[̀-ͯ]/g, "")
-          .replace(/[^a-zA-Z0-9]+/g, "-")
-          .replace(/^-+|-+$/g, "")
-          .toLowerCase() || "sans-nom";
+        return (
+          String(value || "")
+            .normalize("NFD")
+            .replace(/[̀-ͯ]/g, "")
+            .replace(/[^a-zA-Z0-9]+/g, "-")
+            .replace(/^-+|-+$/g, "")
+            .toLowerCase() || "sans-nom"
+        );
       }
 
+      // On génère tous les PDF AVANT d'envoyer le moindre header : si l'un d'eux plante,
+      // on peut encore répondre avec une erreur JSON propre au lieu de corrompre un flux
+      // déjà entamé (ce qui provoquait ERR_INVALID_RESPONSE côté navigateur).
+      const files = [];
       for (const bulletin of sessionBulletins) {
         const bulletinPdf = await generateBulletinPdf(bulletin, formation, session);
         const companySlug = slugifyName(bulletin.companyName);
-        archive.append(bulletinPdf, { name: uniqueName(`bulletin-${companySlug}.pdf`) });
+        files.push({ name: uniqueName(`bulletin-${companySlug}.pdf`), buffer: bulletinPdf });
 
         const learners = Array.isArray(bulletin.learners) ? bulletin.learners : [];
         for (const learner of learners) {
@@ -578,8 +574,22 @@ function createApiRouter() {
           const attemptResult = await getQuizAttemptById(attempt.id);
           const quizPdf = await generateQuizPdf(quiz, attemptResult);
           const learnerSlug = slugifyName(learner.fullName);
-          archive.append(quizPdf, { name: uniqueName(`autoeval-${companySlug}-${learnerSlug}.pdf`) });
+          files.push({ name: uniqueName(`autoeval-${companySlug}-${learnerSlug}.pdf`), buffer: quizPdf });
         }
+      }
+
+      res.set("Content-Type", "application/zip");
+      res.set("Content-Disposition", `attachment; filename="documents-session-${session.id}.zip"`);
+
+      const archive = archiver("zip", { zlib: { level: 9 } });
+      archive.on("error", (error) => {
+        console.error("[api] Échec de la génération de l'archive ZIP", error);
+        res.destroy(error);
+      });
+      archive.pipe(res);
+
+      for (const file of files) {
+        archive.append(file.buffer, { name: file.name });
       }
 
       await archive.finalize();
