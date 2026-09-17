@@ -4,6 +4,25 @@ const { getPrismaClient } = require("./prismaClient");
 const inMemoryFormations = catalog.formations.map((formation) => normalizeFormation(formation));
 const inMemorySessions = catalog.sessions.map((session) => normalizeSession(session));
 
+function normalizeProgramme(programme) {
+  if (!Array.isArray(programme)) return [];
+
+  return programme.filter(
+    (day) =>
+      day &&
+      typeof day === "object" &&
+      typeof day.title === "string" &&
+      Array.isArray(day.sequences) &&
+      day.sequences.every(
+        (sequence) =>
+          sequence &&
+          typeof sequence === "object" &&
+          typeof sequence.title === "string" &&
+          Array.isArray(sequence.points)
+      )
+  );
+}
+
 function normalizeFormation(formation) {
   return {
     id: formation.id,
@@ -21,7 +40,7 @@ function normalizeFormation(formation) {
     objectives: Array.isArray(formation.objectives) ? formation.objectives : [],
     prerequisites: Array.isArray(formation.prerequisites) ? formation.prerequisites : [],
     modalities: Array.isArray(formation.modalities) ? formation.modalities : [],
-    programme: Array.isArray(formation.programme) ? formation.programme : [],
+    programme: normalizeProgramme(formation.programme),
     certification: formation.certification || "",
     price: formation.price,
     priceDetails: formation.priceDetails || "",
