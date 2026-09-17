@@ -4634,3 +4634,125 @@ main {
     animation-duration: 28s;
   }
 }
+
+/* Admin drawer — right-sliding panel used by the admin workspace (Sessions, Inscrits). */
+.admin-drawer-root {
+  position: fixed;
+  inset: 0;
+  z-index: 500;
+  visibility: hidden;
+  pointer-events: none;
+}
+
+.admin-drawer-root.is-open {
+  visibility: visible;
+  pointer-events: auto;
+}
+
+.admin-drawer-overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(15, 27, 33, 0.45);
+  opacity: 0;
+  transition: opacity 200ms ease;
+}
+
+.admin-drawer-root.is-open .admin-drawer-overlay {
+  opacity: 1;
+}
+
+.admin-drawer-panel {
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  width: 540px;
+  max-width: 100vw;
+  background: #ffffff;
+  box-shadow: -12px 0 32px rgba(15, 27, 33, 0.16);
+  display: flex;
+  flex-direction: column;
+  transform: translateX(100%);
+  transition: transform 220ms ease;
+}
+
+.admin-drawer-root.is-open .admin-drawer-panel {
+  transform: translateX(0);
+}
+
+.admin-drawer-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 20px 24px;
+  border-bottom: 1px solid rgba(20, 45, 58, 0.08);
+}
+
+.admin-drawer-header h2 {
+  margin: 0;
+  font-size: 1.05rem;
+  color: var(--color-navy);
+}
+
+.admin-drawer-close {
+  display: inline-grid;
+  place-items: center;
+  width: 32px;
+  height: 32px;
+  border: 0;
+  border-radius: 8px;
+  background: transparent;
+  color: var(--color-muted);
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background-color 150ms ease, color 150ms ease;
+}
+
+.admin-drawer-close:hover {
+  background: rgba(20, 45, 58, 0.08);
+  color: var(--color-navy);
+}
+
+.admin-drawer-body {
+  flex: 1;
+  overflow-y: auto;
+  padding: 24px;
+  display: grid;
+  gap: 24px;
+}
+
+@media (max-width: 640px) {
+  .admin-drawer-panel {
+    width: 100vw;
+  }
+}
+
+/* Admin data table row checkbox + bulk action bar for Sessions/Inscrits tables. */
+.admin-data-table-checkbox-cell {
+  width: 40px;
+}
+
+.admin-bulk-actions-bar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  gap: 16px;
+  padding: 16px;
+  border-radius: 12px;
+  background: rgba(0, 156, 220, 0.06);
+  border: 1px solid rgba(0, 156, 220, 0.18);
+}
+
+.admin-bulk-actions-bar-label {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--color-navy);
+  margin-right: auto;
+}
+
+.admin-field-hint {
+  margin: 4px 0 0;
+  font-size: 0.8rem;
+  color: var(--color-muted);
+}

@@ -5,6 +5,7 @@ import { useMemo, useState } from "react";
 export type DataTableColumn<T> = {
   key: string;
   label: string;
+  headerRender?: () => React.ReactNode;
   sortable?: boolean;
   render: (row: T) => React.ReactNode;
   width?: string;
@@ -101,7 +102,7 @@ export function DataTable<T>({
                     onClick={() => handleSort(column)}
                   >
                     <span className="admin-data-table-th-content">
-                      {column.label}
+                      {column.headerRender ? column.headerRender() : column.label}
                       {column.sortable ? (
                         <span className={`admin-data-table-sort-icon${isSorted ? " is-active" : ""}`}>
                           {isSorted ? (sort?.direction === "asc" ? "▲" : "▼") : "⇅"}

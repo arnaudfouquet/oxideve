@@ -3,6 +3,7 @@
 import { useEffect, useMemo, useState } from "react";
 import { Button } from "@/components/ui";
 import { DataTable, type DataTableColumn } from "@/components/admin/DataTable";
+import { Drawer } from "@/components/admin/Drawer";
 import type { AdminUser, Article, BulletinInscriptionWithAttempts, Company, CrmInteraction, CrmTask, Formation, Participant, PendingSyncSession, ProgrammeDay, Registration, Session } from "../../shared/types";
 
 type Props = {
@@ -297,6 +298,13 @@ export function AdminWorkspace({
   const [selectedSessionIds, setSelectedSessionIds] = useState<string[]>([]);
   const [bulkSessionMode, setBulkSessionMode] = useState("");
   const [bulkSessionCity, setBulkSessionCity] = useState("");
+  const [sessionDrawerOpen, setSessionDrawerOpen] = useState(false);
+
+  const [customCategories, setCustomCategories] = useState<string[]>([]);
+  const [newCategoryInput, setNewCategoryInput] = useState("");
+  const [isAddingCategory, setIsAddingCategory] = useState(false);
+
+  const [participantDrawerOpen, setParticipantDrawerOpen] = useState(false);
 
   const [queovalSyncing, setQueovalSyncing] = useState(false);
   const [queovalStageIds, setQueovalStageIds] = useState("");
@@ -455,6 +463,23 @@ export function AdminWorkspace({
     setNewCityInput("");
   }
 
+  const availableCategories = useMemo(
+    () =>
+      Array.from(new Set([...formations.map((formation) => formation.category), ...customCategories]))
+        .filter(Boolean)
+        .sort((a, b) => a.localeCompare(b, "fr")),
+    [formations, customCategories],
+  );
+
+  function handleAddCustomCategory() {
+    const category = newCategoryInput.trim();
+    if (!category) return;
+    setCustomCategories((current) => (current.includes(category) ? current : [...current, category]));
+    setFormationDraft((current) => ({ ...current, category }));
+    setNewCategoryInput("");
+    setIsAddingCategory(false);
+  }
+
   const filteredSessions = sessions.filter((session) => {
     const formation = formations.find((item) => item.slug === session.formationSlug);
     const state = getSessionState(session);
@@ -511,8 +536,13 @@ export function AdminWorkspace({
   }
 
   function selectParticipant(participantId: string) {
-    setSelectedParticipantId((current) => (current === participantId ? "" : participantId));
+    setSelectedParticipantId(participantId);
+    setParticipantDrawerOpen(true);
     setFeedback("");
+  }
+
+  function closeParticipantDrawer() {
+    setParticipantDrawerOpen(false);
   }
 
   function selectSession(sessionId: string) {
@@ -520,6 +550,20 @@ export function AdminWorkspace({
     setEditingSessionId(sessionId);
     setSessionDraft(toSessionDraft(session));
     setFeedback("");
+  }
+
+  function openSessionDrawer(sessionId: string) {
+    selectSession(sessionId);
+    setSessionDrawerOpen(true);
+  }
+
+  function openNewSessionDrawer() {
+    selectSession("");
+    setSessionDrawerOpen(true);
+  }
+
+  function closeSessionDrawer() {
+    setSessionDrawerOpen(false);
   }
 
   function selectFormation(slug: string) {
@@ -634,6 +678,7 @@ export function AdminWorkspace({
     setSessions((current) => [...current.filter((item) => item.id !== result.data?.id), result.data as Session]);
     selectSession((result.data as Session).id);
     setSaving(false);
+    setSessionDrawerOpen(false);
     setSuccess(result.message || "Session enregistrée.");
   }
 
@@ -959,184 +1004,118 @@ export function AdminWorkspace({
 
       {section === "sessions" ? (
         <div className="admin-stack-grid">
-          <div className="admin-dual-pane">
-            <section className="admin-shell">
-              <div className="section-heading section-heading-tight"><div><span className="eyebrow">Planning</span><h2>Sessions</h2></div></div>
-              <div className="admin-filter-grid admin-filter-grid-compact">
-                <label><span>Recherche</span><input className="ui-field" value={sessionSearch} onChange={(event) => setSessionSearch(event.target.value)} placeholder="Formation, ville, mode..." /></label>
-                <label><span>État</span><select className="ui-field" value={sessionStateFilter} onChange={(event) => setSessionStateFilter(event.target.value)}><option>Tous</option><option>À venir</option><option>Passée</option></select></label>
-              </div>
-              <div className="admin-list admin-list-dense">
-                {filteredSessions.map((session) => {
-                  const formation = formations.find((item) => item.slug === session.formationSlug);
-                  return (
-                    <button className={`admin-list-item admin-selectable-item${editingSessionId === session.id ? " active" : ""}`} key={session.id} onClick={() => selectSession(session.id)} type="button">
-                      <strong>{formation?.shortTitle || session.formationSlug}</strong>
-                      <span>{formatSessionRange(session.startDate, session.endDate)} · {session.city}</span>
-                      <span className="admin-list-item-meta">{getSessionState(session)} · {registrationsBySession[session.id] || 0} inscrit(s)</span>
-                    </button>
-                  );
-                })}
-              </div>
-            </section>
-
-            <section className="admin-shell">
-              <div className="section-heading section-heading-tight"><div><span className="eyebrow">Édition</span><h2>{editingSessionId ? "Modifier la session" : "Créer une session"}</h2></div></div>
-              <form className="contact-form" onSubmit={handleSessionSubmit}>
-                <div className="form-grid">
-                  <label><span>Formation</span><select className="ui-field" value={sessionDraft.formationSlug} onChange={(event) => setSessionDraft((current) => ({ ...current, formationSlug: event.target.value }))} required><option value="">Choisir</option>{formations.map((formation) => <option key={formation.slug} value={formation.slug}>{formation.title}</option>)}</select></label>
-                  <label>
-                    <span>Ville</span>
-                    <select
-                      className="ui-field"
-                      value={availableCities.includes(sessionDraft.city) ? sessionDraft.city : ""}
-                      onChange={(event) => {
-                        if (event.target.value === "__new__") return;
-                        setSessionDraft((current) => ({ ...current, city: event.target.value }));
-                      }}
-                      required
-                    >
-                      <option value="">Choisir</option>
-                      {availableCities.map((city) => (
-                        <option key={city} value={city}>{city}</option>
-                      ))}
-                      <option value="__new__">+ Ajouter une nouvelle ville</option>
-                    </select>
-                  </label>
-                  <label><span>Début</span><input className="ui-field" type="date" value={sessionDraft.startDate} onChange={(event) => setSessionDraft((current) => ({ ...current, startDate: event.target.value }))} required /></label>
-                  <label><span>Fin</span><input className="ui-field" type="date" value={sessionDraft.endDate} onChange={(event) => setSessionDraft((current) => ({ ...current, endDate: event.target.value }))} required /></label>
-                  <label>
-                    <span>Mode</span>
-                    <select className="ui-field" value={sessionDraft.mode} onChange={(event) => setSessionDraft((current) => ({ ...current, mode: event.target.value }))} required>
-                      <option value="">Choisir</option>
-                      {SESSION_MODE_OPTIONS.map((mode) => (
-                        <option key={mode} value={mode}>{mode}</option>
-                      ))}
-                    </select>
-                  </label>
-                </div>
-                <div className="form-grid">
-                  <label>
-                    <span>Nouvelle ville</span>
-                    <div className="admin-bulk-grid">
-                      <input
-                        className="ui-field"
-                        value={newCityInput}
-                        onChange={(event) => setNewCityInput(event.target.value)}
-                        placeholder="Nom de la ville"
-                      />
-                      <Button type="button" variant="secondary" onClick={handleAddCustomCity} disabled={!newCityInput.trim()}>
-                        Ajouter
-                      </Button>
-                    </div>
-                  </label>
-                </div>
-                <div className="admin-session-overview">
-                  <div><span>État</span><strong>{editingSessionId ? getSessionState(sessions.find((item) => item.id === editingSessionId) || sessions[0]) : "Nouvelle"}</strong></div>
-                  <div><span>Inscrits</span><strong>{registrationsBySession[editingSessionId] || 0}</strong></div>
-                </div>
-                <div className="admin-form-actions">
-                  <Button disabled={saving} type="submit">{saving ? "Enregistrement..." : editingSessionId ? "Mettre à jour" : "Créer la session"}</Button>
-                  {editingSessionId ? <Button variant="secondary" type="button" onClick={() => selectSession("")}>Nouvelle session</Button> : null}
-                </div>
-              </form>
-            </section>
-          </div>
-
-          {editingSessionId ? (
-            <section className="admin-shell">
-              <div className="section-heading section-heading-tight">
-                <div><span className="eyebrow">Inscrits</span><h2>Participants de cette session</h2></div>
-                {editingSessionRegistrations.length ? (
-                  <Button
-                    variant="secondary"
-                    onClick={() =>
-                      copyToClipboard(
-                        "session-all",
-                        editingSessionRegistrations
-                          .map((registration) => `${registration.company}\t${registration.contactName}\t${registration.email}\t${registration.phone}`)
-                          .join("\n"),
-                      )
-                    }
-                  >
-                    {copiedKey === "session-all" ? "Copié !" : "Copier la liste"}
-                  </Button>
-                ) : null}
-              </div>
-              <DataTable
-                columns={[
-                  { key: "company", label: "Société", sortable: true, sortValue: (row) => row.company, render: (row) => row.company },
-                  { key: "contact", label: "Contact", sortable: true, sortValue: (row) => row.contactName, render: (row) => row.contactName },
-                  { key: "email", label: "Email", render: (row) => row.email },
-                  { key: "phone", label: "Téléphone", render: (row) => row.phone },
-                  {
-                    key: "createdAt",
-                    label: "Inscrit le",
-                    sortable: true,
-                    sortValue: (row) => row.createdAt,
-                    render: (row) => formatRegistrationDate(row.createdAt),
-                  },
-                  {
-                    key: "actions",
-                    label: "",
-                    width: "110px",
-                    render: (row) => (
-                      <button
-                        className="admin-copy-button"
-                        onClick={() =>
-                          copyToClipboard(row.id, `${row.company} - ${row.contactName} - ${row.email} - ${row.phone}`)
-                        }
-                        type="button"
-                      >
-                        {copiedKey === row.id ? "Copié !" : "Copier"}
-                      </button>
-                    ),
-                  },
-                ]}
-                rows={editingSessionRegistrations}
-                getRowKey={(row) => row.id}
-                emptyLabel="Aucun inscrit pour cette session pour le moment."
-                pageSize={10}
-              />
-            </section>
-          ) : null}
-
           <section className="admin-shell">
-            <div className="section-heading section-heading-tight"><div><span className="eyebrow">Planning</span><h2>Actions de masse</h2><p>Sélectionnez des sessions dans la liste puis appliquez une modification groupée.</p></div></div>
+            <div className="section-heading section-heading-tight">
+              <div><span className="eyebrow">Planning</span><h2>Sessions</h2></div>
+              <Button onClick={openNewSessionDrawer}>Nouvelle session</Button>
+            </div>
             <div className="admin-filter-grid admin-filter-grid-compact">
+              <label><span>Recherche</span><input className="ui-field" value={sessionSearch} onChange={(event) => setSessionSearch(event.target.value)} placeholder="Formation, ville, mode..." /></label>
+              <label><span>État</span><select className="ui-field" value={sessionStateFilter} onChange={(event) => setSessionStateFilter(event.target.value)}><option>Tous</option><option>À venir</option><option>Passée</option></select></label>
               <label><span>Catégorie</span><select className="ui-field" value={sessionCategoryFilter} onChange={(event) => setSessionCategoryFilter(event.target.value)}><option>Toutes</option>{Array.from(new Set(formations.map((formation) => formation.category))).sort((a, b) => a.localeCompare(b, "fr")).map((category) => <option key={category}>{category}</option>)}</select></label>
             </div>
-            <div className="admin-list admin-list-dense">
-              {filteredSessions.map((session) => (
-                <label className="admin-checkbox-item admin-list-item" key={session.id}>
-                  <input checked={selectedSessionIds.includes(session.id)} onChange={(event) => {
-                    setSelectedSessionIds((current) => event.target.checked ? [...current, session.id] : current.filter((item) => item !== session.id));
-                  }} type="checkbox" />
-                  <span>{formations.find((item) => item.slug === session.formationSlug)?.shortTitle || session.formationSlug} · {session.city}</span>
+
+            {selectedSessionIds.length > 0 ? (
+              <div className="admin-bulk-actions-bar">
+                <span className="admin-bulk-actions-bar-label">{selectedSessionIds.length} session(s) sélectionnée(s)</span>
+                <label>
+                  <span>Mode masse</span>
+                  <select className="ui-field" value={bulkSessionMode} onChange={(event) => setBulkSessionMode(event.target.value)}>
+                    <option value="">Ne pas modifier</option>
+                    {SESSION_MODE_OPTIONS.map((mode) => (
+                      <option key={mode} value={mode}>{mode}</option>
+                    ))}
+                  </select>
                 </label>
-              ))}
-            </div>
-            <div className="admin-bulk-grid">
-              <label>
-                <span>Mode masse</span>
-                <select className="ui-field" value={bulkSessionMode} onChange={(event) => setBulkSessionMode(event.target.value)}>
-                  <option value="">Ne pas modifier</option>
-                  {SESSION_MODE_OPTIONS.map((mode) => (
-                    <option key={mode} value={mode}>{mode}</option>
-                  ))}
-                </select>
-              </label>
-              <label>
-                <span>Ville masse</span>
-                <select className="ui-field" value={bulkSessionCity} onChange={(event) => setBulkSessionCity(event.target.value)}>
-                  <option value="">Ne pas modifier</option>
-                  {availableCities.map((city) => (
-                    <option key={city} value={city}>{city}</option>
-                  ))}
-                </select>
-              </label>
-              <Button onClick={handleBulkSessionApply} disabled={saving || !selectedSessionIds.length}>Appliquer à {selectedSessionIds.length || 0} session(s)</Button>
-            </div>
+                <label>
+                  <span>Ville masse</span>
+                  <select className="ui-field" value={bulkSessionCity} onChange={(event) => setBulkSessionCity(event.target.value)}>
+                    <option value="">Ne pas modifier</option>
+                    {availableCities.map((city) => (
+                      <option key={city} value={city}>{city}</option>
+                    ))}
+                  </select>
+                </label>
+                <Button onClick={handleBulkSessionApply} disabled={saving || !selectedSessionIds.length}>Appliquer à {selectedSessionIds.length} session(s)</Button>
+              </div>
+            ) : null}
+
+            <DataTable
+              columns={[
+                {
+                  key: "select",
+                  label: "",
+                  width: "40px",
+                  headerRender: () => (
+                    <input
+                      type="checkbox"
+                      checked={filteredSessions.length > 0 && filteredSessions.every((session) => selectedSessionIds.includes(session.id))}
+                      onChange={(event) => {
+                        setSelectedSessionIds(event.target.checked ? filteredSessions.map((session) => session.id) : []);
+                      }}
+                    />
+                  ),
+                  render: (row) => (
+                    <input
+                      type="checkbox"
+                      checked={selectedSessionIds.includes(row.id)}
+                      onClick={(event) => event.stopPropagation()}
+                      onChange={(event) => {
+                        setSelectedSessionIds((current) =>
+                          event.target.checked ? [...current, row.id] : current.filter((item) => item !== row.id),
+                        );
+                      }}
+                    />
+                  ),
+                },
+                {
+                  key: "formation",
+                  label: "Formation",
+                  sortable: true,
+                  sortValue: (row) => formations.find((item) => item.slug === row.formationSlug)?.shortTitle || row.formationSlug,
+                  render: (row) => formations.find((item) => item.slug === row.formationSlug)?.shortTitle || row.formationSlug,
+                },
+                { key: "city", label: "Ville", sortable: true, sortValue: (row) => row.city, render: (row) => row.city },
+                {
+                  key: "dates",
+                  label: "Dates",
+                  sortable: true,
+                  sortValue: (row) => row.startDate || "",
+                  render: (row) => formatSessionRange(row.startDate, row.endDate),
+                },
+                { key: "mode", label: "Mode", sortable: true, sortValue: (row) => row.mode, render: (row) => row.mode },
+                {
+                  key: "state",
+                  label: "État",
+                  sortable: true,
+                  sortValue: (row) => getSessionState(row),
+                  render: (row) => <StatusBadge label={getSessionState(row)} tone={isUpcoming(row) ? "accent" : "default"} />,
+                },
+                {
+                  key: "registrations",
+                  label: "Inscrits",
+                  sortable: true,
+                  sortValue: (row) => registrationsBySession[row.id] || 0,
+                  render: (row) => registrationsBySession[row.id] || 0,
+                },
+                {
+                  key: "actions",
+                  label: "Actions",
+                  width: "120px",
+                  render: (row) => (
+                    <button className="admin-copy-button" onClick={(event) => { event.stopPropagation(); openSessionDrawer(row.id); }} type="button">
+                      Modifier
+                    </button>
+                  ),
+                },
+              ]}
+              rows={filteredSessions}
+              getRowKey={(row) => row.id}
+              emptyLabel="Aucune session ne correspond à ces filtres."
+              onRowClick={(row) => openSessionDrawer(row.id)}
+              isRowActive={(row) => editingSessionId === row.id && sessionDrawerOpen}
+              pageSize={15}
+            />
           </section>
 
           <details className="admin-collapsible">
@@ -1174,6 +1153,128 @@ export function AdminWorkspace({
               )}
             </section>
           </details>
+
+          <Drawer
+            open={sessionDrawerOpen}
+            onClose={closeSessionDrawer}
+            title={editingSessionId ? "Modifier la session" : "Créer une session"}
+          >
+            <form className="contact-form" onSubmit={handleSessionSubmit}>
+              <div className="form-grid">
+                <label><span>Formation</span><select className="ui-field" value={sessionDraft.formationSlug} onChange={(event) => setSessionDraft((current) => ({ ...current, formationSlug: event.target.value }))} required><option value="">Choisir</option>{formations.map((formation) => <option key={formation.slug} value={formation.slug}>{formation.title}</option>)}</select></label>
+                <label>
+                  <span>Ville</span>
+                  <select
+                    className="ui-field"
+                    value={availableCities.includes(sessionDraft.city) ? sessionDraft.city : ""}
+                    onChange={(event) => {
+                      if (event.target.value === "__new__") return;
+                      setSessionDraft((current) => ({ ...current, city: event.target.value }));
+                    }}
+                    required
+                  >
+                    <option value="">Choisir</option>
+                    {availableCities.map((city) => (
+                      <option key={city} value={city}>{city}</option>
+                    ))}
+                    <option value="__new__">+ Ajouter une nouvelle ville</option>
+                  </select>
+                </label>
+                <label><span>Début</span><input className="ui-field" type="date" value={sessionDraft.startDate} onChange={(event) => setSessionDraft((current) => ({ ...current, startDate: event.target.value }))} required /></label>
+                <label><span>Fin</span><input className="ui-field" type="date" value={sessionDraft.endDate} onChange={(event) => setSessionDraft((current) => ({ ...current, endDate: event.target.value }))} required /></label>
+                <label>
+                  <span>Mode</span>
+                  <select className="ui-field" value={sessionDraft.mode} onChange={(event) => setSessionDraft((current) => ({ ...current, mode: event.target.value }))} required>
+                    <option value="">Choisir</option>
+                    {SESSION_MODE_OPTIONS.map((mode) => (
+                      <option key={mode} value={mode}>{mode}</option>
+                    ))}
+                  </select>
+                </label>
+              </div>
+              <div className="form-grid">
+                <label>
+                  <span>Nouvelle ville</span>
+                  <div className="admin-bulk-grid">
+                    <input
+                      className="ui-field"
+                      value={newCityInput}
+                      onChange={(event) => setNewCityInput(event.target.value)}
+                      placeholder="Nom de la ville"
+                    />
+                    <Button type="button" variant="secondary" onClick={handleAddCustomCity} disabled={!newCityInput.trim()}>
+                      Ajouter
+                    </Button>
+                  </div>
+                </label>
+              </div>
+              <div className="admin-session-overview">
+                <div><span>État</span><strong>{editingSessionId ? getSessionState(sessions.find((item) => item.id === editingSessionId) || sessions[0]) : "Nouvelle"}</strong></div>
+                <div><span>Inscrits</span><strong>{registrationsBySession[editingSessionId] || 0}</strong></div>
+              </div>
+              <div className="admin-form-actions">
+                <Button disabled={saving} type="submit">{saving ? "Enregistrement..." : editingSessionId ? "Mettre à jour" : "Créer la session"}</Button>
+              </div>
+            </form>
+
+            {editingSessionId ? (
+              <div className="admin-form-section">
+                <div className="section-heading section-heading-tight">
+                  <h3>Inscrits à cette session</h3>
+                  {editingSessionRegistrations.length ? (
+                    <Button
+                      variant="secondary"
+                      onClick={() =>
+                        copyToClipboard(
+                          "session-all",
+                          editingSessionRegistrations
+                            .map((registration) => `${registration.company}\t${registration.contactName}\t${registration.email}\t${registration.phone}`)
+                            .join("\n"),
+                        )
+                      }
+                    >
+                      {copiedKey === "session-all" ? "Copié !" : "Copier la liste"}
+                    </Button>
+                  ) : null}
+                </div>
+                <DataTable
+                  columns={[
+                    { key: "company", label: "Société", sortable: true, sortValue: (row) => row.company, render: (row) => row.company },
+                    { key: "contact", label: "Contact", sortable: true, sortValue: (row) => row.contactName, render: (row) => row.contactName },
+                    { key: "email", label: "Email", render: (row) => row.email },
+                    { key: "phone", label: "Téléphone", render: (row) => row.phone },
+                    {
+                      key: "createdAt",
+                      label: "Inscrit le",
+                      sortable: true,
+                      sortValue: (row) => row.createdAt,
+                      render: (row) => formatRegistrationDate(row.createdAt),
+                    },
+                    {
+                      key: "actions",
+                      label: "",
+                      width: "110px",
+                      render: (row) => (
+                        <button
+                          className="admin-copy-button"
+                          onClick={() =>
+                            copyToClipboard(row.id, `${row.company} - ${row.contactName} - ${row.email} - ${row.phone}`)
+                          }
+                          type="button"
+                        >
+                          {copiedKey === row.id ? "Copié !" : "Copier"}
+                        </button>
+                      ),
+                    },
+                  ]}
+                  rows={editingSessionRegistrations}
+                  getRowKey={(row) => row.id}
+                  emptyLabel="Aucun inscrit pour cette session pour le moment."
+                  pageSize={10}
+                />
+              </div>
+            ) : null}
+          </Drawer>
         </div>
       ) : null}
 
@@ -1198,9 +1299,48 @@ export function AdminWorkspace({
                 <label><span>Slug</span><input className="ui-field" disabled={Boolean(editingFormationSlug)} value={formationDraft.slug} onChange={(event) => setFormationDraft((current) => ({ ...current, slug: event.target.value }))} required /></label>
                 <label><span>Nom complet</span><input className="ui-field" value={formationDraft.title} onChange={(event) => setFormationDraft((current) => ({ ...current, title: event.target.value }))} required /></label>
                 <label><span>Nom court</span><input className="ui-field" value={formationDraft.shortTitle} onChange={(event) => setFormationDraft((current) => ({ ...current, shortTitle: event.target.value }))} required /></label>
-                <label><span>Catégorie</span><input className="ui-field" value={formationDraft.category} onChange={(event) => setFormationDraft((current) => ({ ...current, category: event.target.value }))} required /></label>
+                <label>
+                  <span>Catégorie</span>
+                  {isAddingCategory ? (
+                    <div className="admin-bulk-grid">
+                      <input
+                        className="ui-field"
+                        value={newCategoryInput}
+                        onChange={(event) => setNewCategoryInput(event.target.value)}
+                        placeholder="Nom de la catégorie"
+                        autoFocus
+                      />
+                      <Button type="button" variant="secondary" onClick={handleAddCustomCategory} disabled={!newCategoryInput.trim()}>
+                        Ajouter
+                      </Button>
+                    </div>
+                  ) : (
+                    <select
+                      className="ui-field"
+                      value={availableCategories.includes(formationDraft.category) ? formationDraft.category : ""}
+                      onChange={(event) => {
+                        if (event.target.value === "__new__") {
+                          setIsAddingCategory(true);
+                          return;
+                        }
+                        setFormationDraft((current) => ({ ...current, category: event.target.value }));
+                      }}
+                      required
+                    >
+                      <option value="">Choisir</option>
+                      {availableCategories.map((category) => (
+                        <option key={category} value={category}>{category}</option>
+                      ))}
+                      <option value="__new__">+ Ajouter une nouvelle catégorie</option>
+                    </select>
+                  )}
+                </label>
                 <label><span>Durée</span><input className="ui-field" value={formationDraft.duration} onChange={(event) => setFormationDraft((current) => ({ ...current, duration: event.target.value }))} required /></label>
-                <label><span>Lieu</span><input className="ui-field" value={formationDraft.location} onChange={(event) => setFormationDraft((current) => ({ ...current, location: event.target.value }))} required /></label>
+                <label>
+                  <span>Lieu par défaut (si aucune session programmée)</span>
+                  <input className="ui-field" value={formationDraft.location} onChange={(event) => setFormationDraft((current) => ({ ...current, location: event.target.value }))} required />
+                  <p className="admin-field-hint">Affiché sur la fiche publique tant qu&apos;aucune session n&apos;est planifiée. Dès qu&apos;une session existe, sa ville réelle prend le dessus automatiquement.</p>
+                </label>
                 <label><span>Public</span><input className="ui-field" value={formationDraft.audience} onChange={(event) => setFormationDraft((current) => ({ ...current, audience: event.target.value }))} required /></label>
                 <label><span>Tarif</span><input className="ui-field" value={formationDraft.price} onChange={(event) => setFormationDraft((current) => ({ ...current, price: event.target.value }))} required /></label>
               </div></div>
@@ -1479,17 +1619,15 @@ export function AdminWorkspace({
             />
           </section>
 
-          {selectedParticipant ? (
-            <section className="admin-shell">
-              <div className="section-heading section-heading-tight">
-                <div>
-                  <span className="eyebrow">Détail</span>
-                  <h2>{selectedParticipant.fullName}</h2>
-                  <p>{selectedParticipant.status}</p>
-                </div>
-              </div>
-
+          <Drawer
+            open={participantDrawerOpen && Boolean(selectedParticipant)}
+            onClose={closeParticipantDrawer}
+            title={selectedParticipant ? selectedParticipant.fullName : "Détail de l'inscrit"}
+          >
+            {selectedParticipant ? (
+              <>
               <div className="admin-form-section">
+                <p className="admin-list-item-meta">{selectedParticipant.status}</p>
                 <h3>Coordonnées</h3>
                 <div className="form-grid">
                   <DetailField label="Nom" value={selectedParticipant.fullName} copyKey="p-name" copyToClipboard={copyToClipboard} copiedKey={copiedKey} />
@@ -1560,8 +1698,9 @@ export function AdminWorkspace({
               ) : (
                 <p className="admin-empty-state">Cette personne n&apos;a pas encore complété de bulletin d&apos;inscription détaillé.</p>
               )}
-            </section>
-          ) : null}
+              </>
+            ) : null}
+          </Drawer>
         </div>
       ) : null}
       </div>
