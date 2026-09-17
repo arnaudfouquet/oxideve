@@ -117,7 +117,7 @@ model BulletinInscription {
   sponsorRole         String?
   sponsorEmail        String
   sponsorPhone        String
-  learners            Json
+  learners            Json      @default("[]")
   status              String    @default("submitted")
   confirmationEmailSentAt DateTime?
   createdAt           DateTime  @default(now())
