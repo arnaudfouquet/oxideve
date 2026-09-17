@@ -274,8 +274,40 @@ export function AdminWorkspace({
   const [registrationSearch, setRegistrationSearch] = useState("");
   const [registrationStatusFilter, setRegistrationStatusFilter] = useState("Tous");
   const REGISTRATION_STATUS_OPTIONS = ["Nouveau", "Intéressé", "Non intéressé"];
-  const [bulletinInscriptions] = useState(initialBulletinInscriptions);
-  const [participants] = useState(initialParticipants);
+  const [bulletinInscriptions, setBulletinInscriptions] = useState(initialBulletinInscriptions);
+  const [participants, setParticipants] = useState(initialParticipants);
+  const [refreshing, setRefreshing] = useState(false);
+
+  async function refreshAdminData() {
+    setRefreshing(true);
+    setFeedback("");
+
+    try {
+      const [registrationsResponse, bulletinsResponse, participantsResponse] = await Promise.all([
+        fetch("/api/admin/registrations"),
+        fetch("/api/admin/bulletin-inscriptions"),
+        fetch("/api/admin/participants"),
+      ]);
+
+      const [registrationsResult, bulletinsResult, participantsResult] = await Promise.all([
+        registrationsResponse.json(),
+        bulletinsResponse.json(),
+        participantsResponse.json(),
+      ]);
+
+      if (registrationsResponse.ok && registrationsResult?.data) setRegistrations(registrationsResult.data);
+      if (bulletinsResponse.ok && bulletinsResult?.data) setBulletinInscriptions(bulletinsResult.data);
+      if (participantsResponse.ok && participantsResult?.data) setParticipants(participantsResult.data);
+
+      setFeedback("Données à jour.");
+      setFeedbackTone("success");
+    } catch {
+      setFeedback("Impossible de rafraîchir les données pour le moment.");
+      setFeedbackTone("error");
+    } finally {
+      setRefreshing(false);
+    }
+  }
 
   const [editingFormationSlug, setEditingFormationSlug] = useState(initialFormations[0]?.slug || "");
   const [editingSessionId, setEditingSessionId] = useState(initialSessions[0]?.id || "");
@@ -989,6 +1021,9 @@ export function AdminWorkspace({
                 <h2>Dashboard</h2>
                 <p>Catalogue de formations, sessions à venir et disponibilités.</p>
               </div>
+              <Button variant="secondary" onClick={refreshAdminData} disabled={refreshing}>
+                {refreshing ? "Actualisation..." : "Rafraîchir"}
+              </Button>
             </div>
             <div className="admin-metric-grid">
               <article className="admin-metric-card"><span>Catalogue</span><strong>{formations.length}</strong><small>formations</small></article>
