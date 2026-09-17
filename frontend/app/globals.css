@@ -2246,7 +2246,42 @@ main {
 
 .bulletin-success {
   display: grid;
+  justify-items: center;
   gap: var(--space-2);
+  padding: 12px 8px 4px;
+  text-align: center;
+}
+
+.bulletin-success-icon {
+  display: inline-grid;
+  place-items: center;
+  width: 56px;
+  height: 56px;
+  border-radius: 999px;
+  background: linear-gradient(135deg, #0b6a4d, #09cf65);
+  color: #ffffff;
+  font-size: 1.6rem;
+  font-weight: 700;
+  margin-bottom: 4px;
+}
+
+.bulletin-success-title {
+  margin: 0;
+  font-family: var(--font-display), sans-serif;
+  font-size: 1.4rem;
+  color: var(--color-navy);
+}
+
+.bulletin-success-message {
+  max-width: 480px;
+  margin: 0;
+  color: var(--color-muted);
+}
+
+.quiz-result-links-intro {
+  max-width: 480px;
+  margin: 0 auto;
+  color: var(--color-muted);
 }
 
 .quiz-self-rating-grid {
@@ -3080,6 +3115,12 @@ main {
 .landing-session-list-advanced {
   display: grid;
   gap: 14px;
+}
+
+.quiz-result-links {
+  width: 100%;
+  max-width: 420px;
+  margin-top: 6px;
 }
 
 .admin-selectable-item {

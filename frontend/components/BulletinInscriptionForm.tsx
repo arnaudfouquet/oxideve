@@ -105,16 +105,15 @@ export function BulletinInscriptionForm({ formations, sessions, defaultFormation
   if (status === "success") {
     return (
       <div className="bulletin-success">
-        <h2 className="bulletin-form-block-title">
-          <span>✓</span> Bulletin d&apos;inscription enregistré
-        </h2>
-        <p>{message}</p>
+        <div className="bulletin-success-icon" aria-hidden="true">✓</div>
+        <h2 className="bulletin-success-title">Bulletin d&apos;inscription enregistré</h2>
+        <p className="bulletin-success-message">{message}</p>
         {quizLinks.length ? (
           <div className="quiz-result-links">
-            <p>
+            <p className="quiz-result-links-intro">
               {quizLinks.length > 1
-                ? "Prochaine étape : chaque apprenant peut réaliser dès maintenant son auto-évaluation."
-                : "Prochaine étape : l'apprenant peut réaliser dès maintenant son auto-évaluation."}
+                ? "Prochaine étape : chaque apprenant peut réaliser dès maintenant son auto-évaluation. Ce lien lui a également été envoyé par email."
+                : "Prochaine étape : l'apprenant peut réaliser dès maintenant son auto-évaluation. Ce lien lui a également été envoyé par email."}
             </p>
             {quizLinks.map((link) => (
               <a key={link.url} className="ui-button ui-button-primary" href={link.url}>
