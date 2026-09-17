@@ -47,6 +47,20 @@ async function listAdminUsers() {
   return inMemoryAdminUsers.map(normalizeAdminUser);
 }
 
+async function getAdminUserById(id) {
+  if (!id) return null;
+
+  const prisma = getPrismaClient();
+
+  if (prisma) {
+    const user = await prisma.adminUser.findUnique({ where: { id } });
+    return user ? normalizeAdminUser(user) : null;
+  }
+
+  const user = inMemoryAdminUsers.find((item) => item.id === id);
+  return user ? normalizeAdminUser(user) : null;
+}
+
 async function createAdminUser({ email, password, name }) {
   const normalizedEmail = email.trim().toLowerCase();
   const passwordHash = hashPassword(password);
@@ -114,6 +128,7 @@ async function countAdminUsers() {
 
 module.exports = {
   listAdminUsers,
+  getAdminUserById,
   createAdminUser,
   deleteAdminUser,
   verifyAdminCredentials,

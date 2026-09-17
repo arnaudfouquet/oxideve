@@ -63,7 +63,6 @@ async function listParticipants() {
       registrationId: registration.id,
       bulletinInscriptionId: bulletin ? bulletin.id : null,
       message: registration.message || null,
-      notes: registration.notes || "",
       hasQuiz: Boolean(bulletin) && Boolean(getPublicQuizByFormationSlug(registration.formationSlug)),
       quizAttempt: latestQuizAttempt
         ? { id: latestQuizAttempt.id, scoreOn20: latestQuizAttempt.scoreOn20, createdAt: latestQuizAttempt.createdAt }
@@ -89,7 +88,6 @@ async function listParticipants() {
       registrationId: null,
       bulletinInscriptionId: bulletin.id,
       message: null,
-      notes: "",
       hasQuiz: Boolean(getPublicQuizByFormationSlug(bulletin.formationSlug)),
       quizAttempt: latestQuizAttempt
         ? { id: latestQuizAttempt.id, scoreOn20: latestQuizAttempt.scoreOn20, createdAt: latestQuizAttempt.createdAt }

@@ -4,7 +4,7 @@ import { useEffect, useMemo, useState } from "react";
 import { Button } from "@/components/ui";
 import { DataTable } from "@/components/admin/DataTable";
 import { Drawer } from "@/components/admin/Drawer";
-import type { AdminUser, Article, BulletinInscriptionWithAttempts, Company, CrmInteraction, CrmTask, Formation, Participant, PendingSyncSession, ProgrammeDay, Registration, Session } from "../../shared/types";
+import type { AdminUser, Article, BulletinInscriptionWithAttempts, Company, CrmInteraction, CrmTask, Formation, Participant, PendingSyncSession, ProgrammeDay, Registration, RegistrationNote, Session } from "../../shared/types";
 
 type Props = {
   initialArticles: Article[];
@@ -383,7 +383,8 @@ export function AdminWorkspace({
   const [formationSearch, setFormationSearch] = useState("");
 
   const [participantDrawerOpen, setParticipantDrawerOpen] = useState(false);
-  const [participantNotesDraft, setParticipantNotesDraft] = useState("");
+  const [participantNotes, setParticipantNotes] = useState<RegistrationNote[]>([]);
+  const [newParticipantNote, setNewParticipantNote] = useState("");
   const [savingParticipantNotes, setSavingParticipantNotes] = useState(false);
 
   const [queovalSyncing, setQueovalSyncing] = useState(false);
@@ -647,32 +648,44 @@ export function AdminWorkspace({
     setSelectedParticipantId(participantId);
     setParticipantDrawerOpen(true);
     setFeedback("");
+    setNewParticipantNote("");
+    setParticipantNotes([]);
+
     const participant = participants.find((item) => item.id === participantId);
-    setParticipantNotesDraft(participant?.notes || "");
+    if (!participant?.registrationId) return;
+
+    const registrationId = participant.registrationId;
+    fetch(`/api/admin/registrations/${registrationId}/notes`)
+      .then((response) => response.json())
+      .then((result: { data?: RegistrationNote[] }) => {
+        if (result?.data) setParticipantNotes(result.data);
+      })
+      .catch(() => undefined);
   }
 
-  async function saveParticipantNotes() {
-    if (!selectedParticipant?.registrationId) return;
+  async function addParticipantNote() {
+    if (!selectedParticipant?.registrationId || !newParticipantNote.trim()) return;
 
     setSavingParticipantNotes(true);
     const registrationId = selectedParticipant.registrationId;
 
     try {
       const response = await fetch(`/api/admin/registrations/${registrationId}/notes`, {
-        method: "PATCH",
+        method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ notes: participantNotesDraft }),
+        body: JSON.stringify({ text: newParticipantNote.trim() }),
       });
 
-      if (!response.ok) {
-        setError("Impossible d'enregistrer la note.");
+      const result = (await response.json().catch(() => null)) as { data?: RegistrationNote; error?: string } | null;
+
+      if (!response.ok || !result?.data) {
+        setError(result?.error || "Impossible d'enregistrer la note.");
         return;
       }
 
-      setParticipants((current) =>
-        current.map((item) => (item.registrationId === registrationId ? { ...item, notes: participantNotesDraft } : item)),
-      );
-      setSuccess("Note enregistrée.");
+      setParticipantNotes((current) => [result.data as RegistrationNote, ...current]);
+      setNewParticipantNote("");
+      setSuccess("Note ajoutée.");
     } finally {
       setSavingParticipantNotes(false);
     }
@@ -1882,15 +1895,29 @@ export function AdminWorkspace({
                 {selectedParticipant.registrationId ? (
                   <div className="admin-notes-block">
                     <span>Notes</span>
+                    {participantNotes.length ? (
+                      <div className="admin-notes-history">
+                        {participantNotes.map((note) => (
+                          <div className="admin-notes-history-item" key={note.id}>
+                            <p>{note.text}</p>
+                            <span className="admin-list-item-meta">
+                              {note.authorName} · {formatShortDateTimeFr(note.createdAt)}
+                            </span>
+                          </div>
+                        ))}
+                      </div>
+                    ) : (
+                      <p className="admin-empty-state">Aucune note pour le moment.</p>
+                    )}
                     <textarea
                       className="ui-field"
-                      rows={3}
-                      value={participantNotesDraft}
-                      onChange={(event) => setParticipantNotesDraft(event.target.value)}
+                      rows={2}
+                      value={newParticipantNote}
+                      onChange={(event) => setNewParticipantNote(event.target.value)}
                       placeholder="Ex. : relancé le 12/09, en attente de retour du client..."
                     />
-                    <Button variant="secondary" onClick={saveParticipantNotes} disabled={savingParticipantNotes}>
-                      {savingParticipantNotes ? "Enregistrement..." : "Enregistrer la note"}
+                    <Button variant="secondary" onClick={addParticipantNote} disabled={savingParticipantNotes || !newParticipantNote.trim()}>
+                      {savingParticipantNotes ? "Enregistrement..." : "Ajouter la note"}
                     </Button>
                   </div>
                 ) : null}

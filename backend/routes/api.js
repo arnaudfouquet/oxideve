@@ -20,7 +20,8 @@ const {
   createRegistration,
   listRegistrations,
   updateRegistrationStatus,
-  updateRegistrationNotes,
+  listRegistrationNotes,
+  addRegistrationNote,
   linkOrCreateRegistrationForBulletin,
   markRegistrationCompleteForBulletin,
   MANUAL_STATUSES,
@@ -38,6 +39,7 @@ const {
 } = require("../services/mailService");
 const {
   listAdminUsers,
+  getAdminUserById,
   createAdminUser,
   deleteAdminUser,
   verifyAdminCredentials,
@@ -428,13 +430,24 @@ function createApiRouter() {
     })
   );
 
-  router.patch(
+  router.get(
     "/admin/registrations/:id/notes",
     asyncHandler(async (req, res) => {
-      const { notes } = z.object({ notes: z.string().max(4000).optional().default("") }).parse(req.body);
-      const updated = await updateRegistrationNotes(req.params.id, notes);
-      if (!updated) return res.status(404).json({ error: "Inscription introuvable" });
-      return res.json({ data: updated });
+      const notes = await listRegistrationNotes(req.params.id);
+      return res.json({ data: notes });
+    })
+  );
+
+  router.post(
+    "/admin/registrations/:id/notes",
+    asyncHandler(async (req, res) => {
+      const { text } = z.object({ text: z.string().min(1).max(2000) }).parse(req.body);
+      const adminUser = await getAdminUserById(req.adminUserId);
+      const authorName = adminUser?.name || adminUser?.email || "Administrateur";
+
+      const created = await addRegistrationNote(req.params.id, { authorName, text });
+      if (!created) return res.status(404).json({ error: "Inscription introuvable" });
+      return res.status(201).json({ data: created });
     })
   );
 

@@ -2956,6 +2956,28 @@ main {
   resize: vertical;
 }
 
+.admin-notes-history {
+  display: grid;
+  gap: 8px;
+  max-height: 220px;
+  overflow-y: auto;
+}
+
+.admin-notes-history-item {
+  display: grid;
+  gap: 2px;
+  padding: 8px 10px;
+  border-radius: var(--radius-md, 10px);
+  background: var(--color-white);
+  border: 1px solid var(--border-subtle);
+}
+
+.admin-notes-history-item p {
+  margin: 0;
+  font-size: 0.9rem;
+  color: var(--color-navy);
+}
+
 .admin-inline-select {
   min-height: 36px;
   padding: 6px 10px;

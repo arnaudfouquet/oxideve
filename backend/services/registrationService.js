@@ -40,7 +40,6 @@ function normalizeRegistration(registration) {
     status: registration.status || REGISTRATION_STATUS.TO_QUALIFY,
     origin: registration.origin || REGISTRATION_ORIGIN.SITE_FORM,
     bulletinInscriptionId: registration.bulletinInscriptionId || null,
-    notes: registration.notes || "",
     createdAt:
       typeof registration.createdAt === "string"
         ? registration.createdAt
@@ -138,21 +137,61 @@ async function updateRegistrationStatus(id, status) {
   return normalizeRegistration(target);
 }
 
-async function updateRegistrationNotes(id, notes) {
+function normalizeRegistrationNote(note) {
+  return {
+    id: note.id,
+    registrationId: note.registrationId,
+    authorName: note.authorName,
+    text: note.text,
+    createdAt:
+      typeof note.createdAt === "string" ? note.createdAt : new Date(note.createdAt).toISOString(),
+  };
+}
+
+const inMemoryRegistrationNotes = [];
+
+async function listRegistrationNotes(registrationId) {
   const prisma = getPrismaClient();
 
   if (prisma) {
-    const updated = await prisma.inscription.update({
-      where: { id },
-      data: { notes },
+    const notes = await prisma.registrationNote.findMany({
+      where: { registrationId },
+      orderBy: { createdAt: "desc" },
     });
-    return normalizeRegistration(updated);
+    return notes.map(normalizeRegistrationNote);
   }
 
-  const target = inMemoryRegistrations.find((item) => item.id === id);
-  if (!target) return null;
-  target.notes = notes;
-  return normalizeRegistration(target);
+  return inMemoryRegistrationNotes
+    .filter((note) => note.registrationId === registrationId)
+    .map(normalizeRegistrationNote)
+    .sort((left, right) => right.createdAt.localeCompare(left.createdAt));
+}
+
+async function addRegistrationNote(registrationId, { authorName, text }) {
+  const prisma = getPrismaClient();
+
+  if (prisma) {
+    const registration = await prisma.inscription.findUnique({ where: { id: registrationId } });
+    if (!registration) return null;
+
+    const created = await prisma.registrationNote.create({
+      data: { registrationId, authorName, text },
+    });
+    return normalizeRegistrationNote(created);
+  }
+
+  const registration = inMemoryRegistrations.find((item) => item.id === registrationId);
+  if (!registration) return null;
+
+  const created = {
+    id: randomUUID(),
+    registrationId,
+    authorName,
+    text,
+    createdAt: new Date().toISOString(),
+  };
+  inMemoryRegistrationNotes.push(created);
+  return normalizeRegistrationNote(created);
 }
 
 function normalizeMatchKey(formationSlug, email) {
@@ -284,7 +323,8 @@ module.exports = {
   createRegistration,
   listRegistrations,
   updateRegistrationStatus,
-  updateRegistrationNotes,
+  listRegistrationNotes,
+  addRegistrationNote,
   linkOrCreateRegistrationForBulletin,
   markRegistrationCompleteForBulletin,
 };
