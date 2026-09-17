@@ -81,11 +81,24 @@ async function listBulletinInscriptions() {
   const prisma = getPrismaClient();
 
   if (prisma) {
-    const bulletins = await prisma.bulletinInscription.findMany({
-      orderBy: { createdAt: "desc" },
-    });
+    // Un champ Json invalide/NULL en base (bulletins créés avant l'ajout de `learners`)
+    // fait planter le parsing automatique de Prisma sur TOUTE la requête. On récupère donc
+    // ce champ en texte brut via SQL et on le parse nous-mêmes avec tolérance de panne.
+    const bulletins = await prisma.$queryRawUnsafe(
+      'SELECT *, CAST(learners AS CHAR) AS learnersRaw FROM BulletinInscription ORDER BY createdAt DESC'
+    );
 
-    return bulletins.map(normalizeBulletinInscription);
+    return bulletins.map((bulletin) => {
+      let learners = [];
+      try {
+        const parsed = bulletin.learnersRaw ? JSON.parse(bulletin.learnersRaw) : [];
+        if (Array.isArray(parsed)) learners = parsed;
+      } catch {
+        learners = [];
+      }
+
+      return normalizeBulletinInscription({ ...bulletin, learners });
+    });
   }
 
   return [...inMemoryBulletinInscriptions]
@@ -97,8 +110,22 @@ async function getBulletinInscriptionById(id) {
   const prisma = getPrismaClient();
 
   if (prisma) {
-    const bulletin = await prisma.bulletinInscription.findUnique({ where: { id } });
-    return bulletin ? normalizeBulletinInscription(bulletin) : null;
+    const rows = await prisma.$queryRawUnsafe(
+      'SELECT *, CAST(learners AS CHAR) AS learnersRaw FROM BulletinInscription WHERE id = ? LIMIT 1',
+      id
+    );
+    const bulletin = rows[0];
+    if (!bulletin) return null;
+
+    let learners = [];
+    try {
+      const parsed = bulletin.learnersRaw ? JSON.parse(bulletin.learnersRaw) : [];
+      if (Array.isArray(parsed)) learners = parsed;
+    } catch {
+      learners = [];
+    }
+
+    return normalizeBulletinInscription({ ...bulletin, learners });
   }
 
   const bulletin = inMemoryBulletinInscriptions.find((item) => item.id === id);
