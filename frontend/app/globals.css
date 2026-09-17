@@ -3186,10 +3186,9 @@ main {
   background: linear-gradient(135deg, #0b6a4d, #09cf65);
 }
 
-.quiz-result-links a {
-  padding: 12px 14px;
-  border-radius: 16px;
-  background: rgba(9, 207, 101, 0.08);
+.quiz-result-links a.ui-button-primary {
+  display: block;
+  text-align: center;
 }
 
 .landing-calendar-toolbar,

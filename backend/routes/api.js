@@ -1,6 +1,7 @@
 const express = require("express");
 const { z } = require("zod");
 const { formLimiter } = require("../middleware/security");
+const { isDatabaseConnected } = require("../services/prismaClient");
 const {
   listFormations,
   getFormationBySlug,
@@ -428,6 +429,10 @@ function createApiRouter() {
       res.json({ data: participants });
     })
   );
+
+  router.get("/admin/system-status", (_req, res) => {
+    res.json({ data: { databaseConnected: isDatabaseConnected() } });
+  });
 
   router.get(
     "/admin/bulletin-inscriptions/:id/pdf",

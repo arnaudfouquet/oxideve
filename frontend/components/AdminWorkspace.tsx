@@ -290,17 +290,38 @@ export function AdminWorkspace({
       ]);
 
       const [registrationsResult, bulletinsResult, participantsResult] = await Promise.all([
-        registrationsResponse.json(),
-        bulletinsResponse.json(),
-        participantsResponse.json(),
+        registrationsResponse.json().catch(() => null),
+        bulletinsResponse.json().catch(() => null),
+        participantsResponse.json().catch(() => null),
       ]);
 
-      if (registrationsResponse.ok && registrationsResult?.data) setRegistrations(registrationsResult.data);
-      if (bulletinsResponse.ok && bulletinsResult?.data) setBulletinInscriptions(bulletinsResult.data);
-      if (participantsResponse.ok && participantsResult?.data) setParticipants(participantsResult.data);
+      const failures: string[] = [];
 
-      setFeedback("Données à jour.");
-      setFeedbackTone("success");
+      if (registrationsResponse.ok && registrationsResult?.data) {
+        setRegistrations(registrationsResult.data);
+      } else {
+        failures.push("pré-inscriptions");
+      }
+
+      if (bulletinsResponse.ok && bulletinsResult?.data) {
+        setBulletinInscriptions(bulletinsResult.data);
+      } else {
+        failures.push("bulletins");
+      }
+
+      if (participantsResponse.ok && participantsResult?.data) {
+        setParticipants(participantsResult.data);
+      } else {
+        failures.push("inscrits");
+      }
+
+      if (failures.length) {
+        setFeedback(`Échec du rafraîchissement pour : ${failures.join(", ")}.`);
+        setFeedbackTone("error");
+      } else {
+        setFeedback("Données à jour.");
+        setFeedbackTone("success");
+      }
     } catch {
       setFeedback("Impossible de rafraîchir les données pour le moment.");
       setFeedbackTone("error");
@@ -371,6 +392,25 @@ export function AdminWorkspace({
       cancelled = true;
     };
   }, [section]);
+
+  const [databaseConnected, setDatabaseConnected] = useState<boolean | null>(null);
+
+  useEffect(() => {
+    let cancelled = false;
+
+    fetch("/api/admin/system-status")
+      .then((response) => response.json())
+      .then((result: { data?: { databaseConnected?: boolean } }) => {
+        if (!cancelled && typeof result?.data?.databaseConnected === "boolean") {
+          setDatabaseConnected(result.data.databaseConnected);
+        }
+      })
+      .catch(() => undefined);
+
+    return () => {
+      cancelled = true;
+    };
+  }, []);
 
   const [saving, setSaving] = useState(false);
   const [feedback, setFeedback] = useState("");
@@ -1010,6 +1050,11 @@ export function AdminWorkspace({
       </nav>
 
       <div className="admin-shell-v2-main">
+        {databaseConnected === false ? (
+          <p className="form-status admin-shell-v2-feedback error">
+            Attention : la base de données n&apos;est pas connectée. Les données créées maintenant ne seront pas conservées après le prochain redémarrage du serveur.
+          </p>
+        ) : null}
         {feedback ? <p className={`form-status admin-shell-v2-feedback ${feedbackTone}`}>{feedback}</p> : null}
 
       {section === "dashboard" ? (
