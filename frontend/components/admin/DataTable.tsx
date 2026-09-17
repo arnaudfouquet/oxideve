@@ -20,6 +20,7 @@ export type DataTableProps<T> = {
   pageSize?: number;
   onRowClick?: (row: T) => void;
   isRowActive?: (row: T) => boolean;
+  getRowClassName?: (row: T) => string;
 };
 
 type SortState = {
@@ -35,6 +36,7 @@ export function DataTable<T>({
   pageSize = 15,
   onRowClick,
   isRowActive,
+  getRowClassName,
 }: DataTableProps<T>) {
   const [sort, setSort] = useState<SortState | null>(null);
   const [page, setPage] = useState(0);
@@ -118,10 +120,11 @@ export function DataTable<T>({
             {pageRows.map((row) => {
               const key = getRowKey(row);
               const active = isRowActive?.(row);
+              const extraClassName = getRowClassName?.(row) || "";
               return (
                 <tr
                   key={key}
-                  className={`${onRowClick ? "admin-data-table-row-clickable" : ""}${active ? " admin-data-table-row-active" : ""}`}
+                  className={`${onRowClick ? "admin-data-table-row-clickable" : ""}${active ? " admin-data-table-row-active" : ""}${extraClassName ? ` ${extraClassName}` : ""}`}
                   onClick={onRowClick ? () => onRowClick(row) : undefined}
                 >
                   {columns.map((column) => (

@@ -2951,6 +2951,29 @@ main {
   background: rgba(0, 156, 220, 0.1);
 }
 
+.admin-data-table-row-new {
+  background: rgba(255, 196, 0, 0.1);
+}
+
+.admin-data-table-row-new:hover {
+  background: rgba(255, 196, 0, 0.16);
+}
+
+.admin-shell-v2-link-badge {
+  display: inline-grid;
+  place-items: center;
+  min-width: 18px;
+  height: 18px;
+  padding: 0 5px;
+  border-radius: 999px;
+  background: #009cdc;
+  color: #ffffff;
+  font-size: 0.7rem;
+  font-weight: 700;
+  line-height: 1;
+  margin-left: auto;
+}
+
 .admin-data-table-pagination {
   display: flex;
   align-items: center;

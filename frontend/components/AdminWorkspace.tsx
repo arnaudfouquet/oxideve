@@ -306,6 +306,18 @@ export function AdminWorkspace({
 
   const [participantDrawerOpen, setParticipantDrawerOpen] = useState(false);
 
+  const [selectedRegistrationId, setSelectedRegistrationId] = useState("");
+  const [registrationDrawerOpen, setRegistrationDrawerOpen] = useState(false);
+
+  function openRegistrationDrawer(id: string) {
+    setSelectedRegistrationId(id);
+    setRegistrationDrawerOpen(true);
+  }
+
+  function closeRegistrationDrawer() {
+    setRegistrationDrawerOpen(false);
+  }
+
   const [queovalSyncing, setQueovalSyncing] = useState(false);
   const [queovalStageIds, setQueovalStageIds] = useState("");
   const [pendingSessions, setPendingSessions] = useState<PendingSyncSession[]>([]);
@@ -878,11 +890,18 @@ export function AdminWorkspace({
     setSuccess(result.message || "Article enregistré.");
   }
 
+  const selectedRegistration = registrations.find((item) => item.id === selectedRegistrationId) || null;
+  const selectedRegistrationDetail: RegistrationDetail | null = selectedRegistration
+    ? {
+        registration: selectedRegistration,
+        formation: formations.find((item) => item.slug === selectedRegistration.formationSlug),
+        session: sessions.find((item) => item.id === selectedRegistration.sessionId),
+      }
+    : null;
+
   const registrationColumns: DataTableColumn<Registration>[] = [
     { key: "contact", label: "Contact", sortable: true, sortValue: (row) => row.contactName, render: (row) => row.contactName },
     { key: "company", label: "Entreprise", sortable: true, sortValue: (row) => row.company, render: (row) => row.company },
-    { key: "email", label: "Email", render: (row) => row.email },
-    { key: "phone", label: "Téléphone", render: (row) => row.phone },
     {
       key: "formation",
       label: "Formation",
@@ -891,12 +910,11 @@ export function AdminWorkspace({
       render: (row) => formations.find((item) => item.slug === row.formationSlug)?.shortTitle || row.formationSlug,
     },
     {
-      key: "session",
-      label: "Session",
-      render: (row) => {
-        const session = sessions.find((item) => item.id === row.sessionId);
-        return session ? `${formatSessionRange(session.startDate, session.endDate)} · ${session.city}` : "Non renseignée";
-      },
+      key: "createdAt",
+      label: "Soumis le",
+      sortable: true,
+      sortValue: (row) => row.createdAt,
+      render: (row) => formatRegistrationDate(row.createdAt),
     },
     {
       key: "status",
@@ -908,6 +926,7 @@ export function AdminWorkspace({
         <select
           className="ui-field admin-inline-select"
           value={row.status}
+          onClick={(event) => event.stopPropagation()}
           onChange={(event) => handleRegistrationStatusChange(row.id, event.target.value)}
         >
           {REGISTRATION_STATUS_OPTIONS.map((status) => (
@@ -921,7 +940,14 @@ export function AdminWorkspace({
       label: "Actions",
       width: "190px",
       render: (row) => (
-        <button className="admin-copy-button" onClick={() => copyBulletinLink(row.id, row.formationSlug)} type="button">
+        <button
+          className="admin-copy-button"
+          onClick={(event) => {
+            event.stopPropagation();
+            copyBulletinLink(row.id, row.formationSlug);
+          }}
+          type="button"
+        >
           {copiedKey === `registration-bulletin-${row.id}` ? "Copié !" : "Copier le lien"}
         </button>
       ),
@@ -933,17 +959,21 @@ export function AdminWorkspace({
       <nav className="admin-shell-v2-sidebar">
         <div className="admin-shell-v2-brand">Oxideve</div>
         <div className="admin-shell-v2-nav">
-          {NAV_ITEMS.map((item) => (
-            <button
-              className={`admin-shell-v2-link${section === item.value ? " active" : ""}`}
-              key={item.value}
-              onClick={() => setSection(item.value)}
-              type="button"
-            >
-              <span className="admin-shell-v2-link-icon">{item.icon}</span>
-              <span>{item.label}</span>
-            </button>
-          ))}
+          {NAV_ITEMS.map((item) => {
+            const newRegistrationsCount = item.value === "dashboard" ? registrations.filter((registration) => registration.status === "Nouveau").length : 0;
+            return (
+              <button
+                className={`admin-shell-v2-link${section === item.value ? " active" : ""}`}
+                key={item.value}
+                onClick={() => setSection(item.value)}
+                type="button"
+              >
+                <span className="admin-shell-v2-link-icon">{item.icon}</span>
+                <span>{item.label}</span>
+                {newRegistrationsCount > 0 ? <span className="admin-shell-v2-link-badge">{newRegistrationsCount}</span> : null}
+              </button>
+            );
+          })}
         </div>
       </nav>
 
@@ -997,8 +1027,48 @@ export function AdminWorkspace({
               getRowKey={(row) => row.id}
               emptyLabel="Aucune pré-inscription ne correspond à ces filtres."
               pageSize={15}
+              onRowClick={(row) => openRegistrationDrawer(row.id)}
+              isRowActive={(row) => selectedRegistrationId === row.id && registrationDrawerOpen}
+              getRowClassName={(row) => (row.status === "Nouveau" ? "admin-data-table-row-new" : "")}
             />
           </section>
+
+          <Drawer
+            open={registrationDrawerOpen}
+            onClose={closeRegistrationDrawer}
+            title="Détail de la pré-inscription"
+          >
+            {selectedRegistrationDetail ? (
+              <>
+                <DetailField label="Contact" value={selectedRegistrationDetail.registration.contactName} copyKey="reg-contact" copyToClipboard={copyToClipboard} copiedKey={copiedKey} />
+                <DetailField label="Entreprise" value={selectedRegistrationDetail.registration.company} copyKey="reg-company" copyToClipboard={copyToClipboard} copiedKey={copiedKey} />
+                <DetailField label="Email" value={selectedRegistrationDetail.registration.email} copyKey="reg-email" copyToClipboard={copyToClipboard} copiedKey={copiedKey} />
+                <DetailField label="Téléphone" value={selectedRegistrationDetail.registration.phone} copyKey="reg-phone" copyToClipboard={copyToClipboard} copiedKey={copiedKey} />
+                <DetailField label="Formation" value={selectedRegistrationDetail.formation?.title || selectedRegistrationDetail.registration.formationSlug} copyKey="reg-formation" copyToClipboard={copyToClipboard} copiedKey={copiedKey} />
+                <DetailField
+                  label="Session"
+                  value={
+                    selectedRegistrationDetail.session
+                      ? `${formatSessionRange(selectedRegistrationDetail.session.startDate, selectedRegistrationDetail.session.endDate)} · ${selectedRegistrationDetail.session.city}`
+                      : "Non renseignée"
+                  }
+                  copyKey="reg-session"
+                  copyToClipboard={copyToClipboard}
+                  copiedKey={copiedKey}
+                />
+                <DetailField label="Soumis le" value={formatRegistrationDate(selectedRegistrationDetail.registration.createdAt)} copyKey="reg-createdat" copyToClipboard={copyToClipboard} copiedKey={copiedKey} />
+                <DetailField label="Besoin" value={selectedRegistrationDetail.registration.message || "Non renseigné"} copyKey="reg-message" copyToClipboard={copyToClipboard} copiedKey={copiedKey} />
+                <div className="admin-form-actions">
+                  <Button
+                    variant="secondary"
+                    onClick={() => copyBulletinLink(selectedRegistrationDetail.registration.id, selectedRegistrationDetail.registration.formationSlug)}
+                  >
+                    {copiedKey === `registration-bulletin-${selectedRegistrationDetail.registration.id}` ? "Copié !" : "Copier le lien du bulletin"}
+                  </Button>
+                </div>
+              </>
+            ) : null}
+          </Drawer>
         </div>
       ) : null}
 
@@ -1636,6 +1706,9 @@ export function AdminWorkspace({
                   <DetailField label="Téléphone" value={selectedParticipant.phone} copyKey="p-phone" copyToClipboard={copyToClipboard} copiedKey={copiedKey} />
                   <DetailField label="Formation" value={formations.find((item) => item.slug === selectedParticipant.formationSlug)?.title || selectedParticipant.formationSlug} copyKey="p-formation" copyToClipboard={copyToClipboard} copiedKey={copiedKey} />
                   <DetailField label="Premier contact" value={formatRegistrationDate(selectedParticipant.firstContactAt)} copyKey="p-firstcontact" copyToClipboard={copyToClipboard} copiedKey={copiedKey} />
+                  {selectedParticipant.message ? (
+                    <DetailField label="Besoin" value={selectedParticipant.message} copyKey="p-message" copyToClipboard={copyToClipboard} copiedKey={copiedKey} />
+                  ) : null}
                 </div>
               </div>
 

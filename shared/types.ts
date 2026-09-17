@@ -269,6 +269,7 @@ export type Participant = {
   status: ParticipantStatus;
   registrationId: string | null;
   bulletinInscriptionId: string | null;
+  message: string | null;
   quizAttempt: ParticipantQuizSummary | null;
 };
 

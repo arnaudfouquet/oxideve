@@ -45,6 +45,7 @@ function buildParticipantFromRegistration(registration, matchingBulletin, quizAt
     status: matchingBulletin ? PARTICIPANT_STATUS.COMPLETE : PARTICIPANT_STATUS.PROSPECT,
     registrationId: registration.id,
     bulletinInscriptionId: matchingBulletin ? matchingBulletin.id : null,
+    message: registration.message || null,
     quizAttempt: latestQuizAttempt
       ? { id: latestQuizAttempt.id, scoreOn20: latestQuizAttempt.scoreOn20, createdAt: latestQuizAttempt.createdAt }
       : null,
@@ -72,6 +73,7 @@ function buildParticipantFromBulletin(bulletin, quizAttempts) {
     status: PARTICIPANT_STATUS.BULLETIN_DIRECT,
     registrationId: null,
     bulletinInscriptionId: bulletin.id,
+    message: null,
     quizAttempt: latestQuizAttempt
       ? { id: latestQuizAttempt.id, scoreOn20: latestQuizAttempt.scoreOn20, createdAt: latestQuizAttempt.createdAt }
       : null,
