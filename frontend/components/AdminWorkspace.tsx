@@ -1900,6 +1900,14 @@ export function AdminWorkspace({
                           <div className="admin-list-item" key={attempt.id}>
                             <strong>{attempt.learnerFullName || "Apprenant non renseigné"} — Score : {attempt.scoreOn20} / 20</strong>
                             <span>Passé le {formatRegistrationDate(attempt.createdAt)}</span>
+                            <a
+                              className="admin-copy-button"
+                              href={`/api/admin/quiz-attempts/${attempt.id}/pdf`}
+                              target="_blank"
+                              rel="noreferrer"
+                            >
+                              Voir le PDF
+                            </a>
                           </div>
                         ))}
                       </div>

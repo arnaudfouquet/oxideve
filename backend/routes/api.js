@@ -47,6 +47,7 @@ const {
   getPublicQuizBySlug,
   submitQuizAttempt,
   listAllQuizAttempts,
+  getQuizAttemptById,
 } = require("../services/quizService");
 
 const inscriptionSchema = z.object({
@@ -472,6 +473,24 @@ function createApiRouter() {
 
       res.set("Content-Type", "application/pdf");
       res.set("Content-Disposition", `inline; filename="bulletin-${bulletin.id}.pdf"`);
+      return res.send(pdfBuffer);
+    })
+  );
+
+  router.get(
+    "/admin/quiz-attempts/:id/pdf",
+    asyncHandler(async (req, res) => {
+      const attemptResult = await getQuizAttemptById(req.params.id);
+
+      if (!attemptResult) {
+        return res.status(404).json({ error: "Auto-évaluation introuvable" });
+      }
+
+      const quiz = getQuizBySlug(attemptResult.attempt.quizSlug);
+      const pdfBuffer = await generateQuizPdf(quiz, attemptResult);
+
+      res.set("Content-Type", "application/pdf");
+      res.set("Content-Disposition", `inline; filename="auto-evaluation-${attemptResult.attempt.id}.pdf"`);
       return res.send(pdfBuffer);
     })
   );

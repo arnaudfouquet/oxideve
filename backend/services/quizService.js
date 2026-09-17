@@ -138,6 +138,21 @@ function buildQuizAttemptDetail(attempt) {
   return { ...attempt, details, correctCount, totalQuestions };
 }
 
+async function getQuizAttemptById(id) {
+  const prisma = getPrismaClient();
+
+  const attempt = prisma
+    ? await prisma.quizAttempt.findUnique({ where: { id } })
+    : inMemoryQuizAttempts.find((item) => item.id === id);
+
+  if (!attempt) return null;
+
+  const normalized = normalizeQuizAttempt(attempt);
+  const { details, correctCount, totalQuestions } = buildQuizAttemptDetail(normalized);
+
+  return { attempt: normalized, details, correctCount, totalQuestions };
+}
+
 async function listQuizAttemptsByBulletinId(bulletinInscriptionId) {
   const prisma = getPrismaClient();
 
@@ -211,4 +226,5 @@ module.exports = {
   listQuizAttemptsByBulletinId,
   listAllQuizAttempts,
   buildQuizAttemptDetail,
+  getQuizAttemptById,
 };
