@@ -4,6 +4,26 @@ const { findOrCreateCompanyFromRegistration, listCompanies } = require("./compan
 
 const inMemoryRegistrations = [];
 
+/**
+ * Statuts possibles, dans l'ordre du cycle de vie normal. Les 3 premiers sont fixés
+ * manuellement par la personne qui gère les inscriptions ; les 2 derniers sont posés
+ * automatiquement par le système (soumission de bulletin, complétion de quiz).
+ */
+const REGISTRATION_STATUS = {
+  TO_QUALIFY: "Pré-inscription (à qualifier)",
+  NOT_INTERESTED: "Non intéressé",
+  BULLETIN_SENT: "BI envoyé",
+  AWAITING_QUIZ: "En attente auto-éval",
+  COMPLETE: "Inscription complétée",
+};
+
+const MANUAL_STATUSES = [REGISTRATION_STATUS.TO_QUALIFY, REGISTRATION_STATUS.NOT_INTERESTED, REGISTRATION_STATUS.BULLETIN_SENT];
+
+const REGISTRATION_ORIGIN = {
+  SITE_FORM: "Formulaire pré-inscription site",
+  DIRECT_CONTACT: "Contact direct (lien BI envoyé)",
+};
+
 function normalizeRegistration(registration) {
   return {
     id: registration.id,
@@ -15,7 +35,9 @@ function normalizeRegistration(registration) {
     formationSlug: registration.formationSlug,
     sessionId: registration.sessionId,
     message: registration.message,
-    status: registration.status || "Nouveau",
+    status: registration.status || REGISTRATION_STATUS.TO_QUALIFY,
+    origin: registration.origin || REGISTRATION_ORIGIN.SITE_FORM,
+    bulletinInscriptionId: registration.bulletinInscriptionId || null,
     createdAt:
       typeof registration.createdAt === "string"
         ? registration.createdAt
@@ -57,7 +79,9 @@ async function createRegistration(payload) {
   const fallbackRegistration = {
     id: randomUUID(),
     ...payload,
-    status: "Nouveau",
+    status: REGISTRATION_STATUS.TO_QUALIFY,
+    origin: REGISTRATION_ORIGIN.SITE_FORM,
+    bulletinInscriptionId: null,
     createdAt: now,
     source: "memory",
   };
@@ -74,7 +98,7 @@ async function listRegistrations() {
 
     const registrations = await prisma.inscription.findMany({
       orderBy: { createdAt: "desc" },
-      take: 50,
+      take: 200,
     });
 
     return registrations.map(normalizeRegistration);
@@ -84,6 +108,13 @@ async function listRegistrations() {
 }
 
 async function updateRegistrationStatus(id, status) {
+  if (!MANUAL_STATUSES.includes(status)) {
+    const error = new Error("Ce statut ne peut pas être défini manuellement.");
+    error.statusCode = 400;
+    error.expose = true;
+    throw error;
+  }
+
   const prisma = getPrismaClient();
 
   if (prisma) {
@@ -100,8 +131,112 @@ async function updateRegistrationStatus(id, status) {
   return normalizeRegistration(target);
 }
 
+function normalizeMatchKey(formationSlug, email) {
+  return `${(formationSlug || "").trim().toLowerCase()}::${(email || "").trim().toLowerCase()}`;
+}
+
+/**
+ * Appelée à la soumission d'un bulletin d'inscription. Rattache le bulletin à une
+ * pré-inscription existante (même formation + même email) si elle existe, ou crée une
+ * ligne Inscription "en coulisses" (origine "Contact direct") sinon — pour que le bulletin
+ * direct ait, lui aussi, un statut suivi dans le même système. Fait progresser le statut
+ * automatiquement vers "En attente auto-éval" (formation avec quiz) ou "Inscription
+ * complétée" (formation sans quiz).
+ */
+async function linkOrCreateRegistrationForBulletin(bulletin, { hasQuiz }) {
+  const nextStatus = hasQuiz ? REGISTRATION_STATUS.AWAITING_QUIZ : REGISTRATION_STATUS.COMPLETE;
+  const prisma = getPrismaClient();
+
+  if (prisma) {
+    const matchKey = normalizeMatchKey(bulletin.formationSlug, bulletin.sponsorEmail);
+    const candidates = await prisma.inscription.findMany({
+      where: { formationSlug: bulletin.formationSlug, bulletinInscriptionId: null },
+    });
+    const matching = candidates.find(
+      (candidate) => normalizeMatchKey(candidate.formationSlug, candidate.email) === matchKey
+    );
+
+    if (matching) {
+      const updated = await prisma.inscription.update({
+        where: { id: matching.id },
+        data: { status: nextStatus, bulletinInscriptionId: bulletin.id },
+      });
+      return normalizeRegistration(updated);
+    }
+
+    const created = await prisma.inscription.create({
+      data: {
+        company: bulletin.companyName,
+        contactName: bulletin.sponsorFullName,
+        email: bulletin.sponsorEmail,
+        phone: bulletin.sponsorPhone,
+        formationSlug: bulletin.formationSlug,
+        sessionId: bulletin.sessionId || null,
+        status: nextStatus,
+        origin: REGISTRATION_ORIGIN.DIRECT_CONTACT,
+        bulletinInscriptionId: bulletin.id,
+      },
+    });
+    return normalizeRegistration(created);
+  }
+
+  const matchKey = normalizeMatchKey(bulletin.formationSlug, bulletin.sponsorEmail);
+  const matching = inMemoryRegistrations.find(
+    (item) => !item.bulletinInscriptionId && normalizeMatchKey(item.formationSlug, item.email) === matchKey
+  );
+
+  if (matching) {
+    matching.status = nextStatus;
+    matching.bulletinInscriptionId = bulletin.id;
+    return normalizeRegistration(matching);
+  }
+
+  const created = {
+    id: randomUUID(),
+    company: bulletin.companyName,
+    contactName: bulletin.sponsorFullName,
+    email: bulletin.sponsorEmail,
+    phone: bulletin.sponsorPhone,
+    formationSlug: bulletin.formationSlug,
+    sessionId: bulletin.sessionId || null,
+    status: nextStatus,
+    origin: REGISTRATION_ORIGIN.DIRECT_CONTACT,
+    bulletinInscriptionId: bulletin.id,
+    createdAt: new Date().toISOString(),
+    source: "memory",
+  };
+  inMemoryRegistrations.push(created);
+  return normalizeRegistration(created);
+}
+
+/**
+ * Appelée à la complétion d'une auto-évaluation. Fait passer le statut de la pré-inscription
+ * liée (via bulletinInscriptionId) de "En attente auto-éval" à "Inscription complétée".
+ */
+async function markRegistrationCompleteForBulletin(bulletinInscriptionId) {
+  const prisma = getPrismaClient();
+
+  if (prisma) {
+    await prisma.inscription.updateMany({
+      where: { bulletinInscriptionId, status: REGISTRATION_STATUS.AWAITING_QUIZ },
+      data: { status: REGISTRATION_STATUS.COMPLETE },
+    });
+    return;
+  }
+
+  const target = inMemoryRegistrations.find(
+    (item) => item.bulletinInscriptionId === bulletinInscriptionId && item.status === REGISTRATION_STATUS.AWAITING_QUIZ
+  );
+  if (target) target.status = REGISTRATION_STATUS.COMPLETE;
+}
+
 module.exports = {
+  REGISTRATION_STATUS,
+  REGISTRATION_ORIGIN,
+  MANUAL_STATUSES,
   createRegistration,
   listRegistrations,
   updateRegistrationStatus,
+  linkOrCreateRegistrationForBulletin,
+  markRegistrationCompleteForBulletin,
 };

@@ -90,9 +90,11 @@ export type Registration = {
   email: string;
   phone: string;
   formationSlug: string;
-  sessionId: string;
+  sessionId: string | null;
   message?: string | null;
   status: string;
+  origin: string;
+  bulletinInscriptionId: string | null;
   createdAt: string;
   source?: string;
 };
@@ -249,8 +251,6 @@ export type Article = {
   featuredFormationSlug?: string;
 };
 
-export type ParticipantStatus = "Pré-inscription (à qualifier)" | "Inscrit (via pré-inscription)" | "Inscrit (bulletin direct)";
-
 export type ParticipantQuizSummary = {
   id: string;
   scoreOn20: number;
@@ -266,7 +266,8 @@ export type Participant = {
   formationSlug: string;
   sessionId: string | null;
   firstContactAt: string;
-  status: ParticipantStatus;
+  status: string;
+  origin: string;
   registrationId: string | null;
   bulletinInscriptionId: string | null;
   message: string | null;

@@ -4863,6 +4863,7 @@ main {
 .admin-drawer-body .admin-bulk-grid {
   grid-template-columns: 1fr auto;
   align-items: end;
+  margin-top: 6px;
 }
 
 .admin-drawer-body .admin-bulk-grid .ui-button {

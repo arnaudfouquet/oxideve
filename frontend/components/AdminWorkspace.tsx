@@ -275,7 +275,8 @@ export function AdminWorkspace({
   const [registrations, setRegistrations] = useState(initialRegistrations);
   const [registrationSearch, setRegistrationSearch] = useState("");
   const [registrationStatusFilter, setRegistrationStatusFilter] = useState("Tous");
-  const REGISTRATION_STATUS_OPTIONS = ["Nouveau", "Intéressé", "Non intéressé"];
+  const MANUAL_REGISTRATION_STATUSES = ["Pré-inscription (à qualifier)", "Non intéressé", "BI envoyé"];
+  const AUTOMATIC_REGISTRATION_STATUSES = ["En attente auto-éval", "Inscription complétée"];
   const [bulletinInscriptions, setBulletinInscriptions] = useState(initialBulletinInscriptions);
   const [participants, setParticipants] = useState(initialParticipants);
   const [refreshing, setRefreshing] = useState(false);
@@ -506,6 +507,7 @@ export function AdminWorkspace({
 
   const registrationsBySession = useMemo(() => {
     return registrations.reduce<Record<string, number>>((accumulator, registration) => {
+      if (!registration.sessionId) return accumulator;
       accumulator[registration.sessionId] = (accumulator[registration.sessionId] || 0) + 1;
       return accumulator;
     }, {});
@@ -1043,19 +1045,22 @@ export function AdminWorkspace({
       label: "Statut",
       sortable: true,
       sortValue: (row) => row.status,
-      width: "170px",
-      render: (row) => (
-        <select
-          className="ui-field admin-inline-select"
-          value={row.status}
-          onClick={(event) => event.stopPropagation()}
-          onChange={(event) => handleRegistrationStatusChange(row.id, event.target.value)}
-        >
-          {REGISTRATION_STATUS_OPTIONS.map((status) => (
-            <option key={status} value={status}>{status}</option>
-          ))}
-        </select>
-      ),
+      width: "190px",
+      render: (row) =>
+        AUTOMATIC_REGISTRATION_STATUSES.includes(row.status) ? (
+          <StatusBadge label={row.status} tone="accent" />
+        ) : (
+          <select
+            className="ui-field admin-inline-select"
+            value={row.status}
+            onClick={(event) => event.stopPropagation()}
+            onChange={(event) => handleRegistrationStatusChange(row.id, event.target.value)}
+          >
+            {MANUAL_REGISTRATION_STATUSES.map((status) => (
+              <option key={status} value={status}>{status}</option>
+            ))}
+          </select>
+        ),
     },
     {
       key: "actions",
@@ -1082,7 +1087,7 @@ export function AdminWorkspace({
         <div className="admin-shell-v2-brand">Oxideve</div>
         <div className="admin-shell-v2-nav">
           {NAV_ITEMS.map((item) => {
-            const newRegistrationsCount = item.value === "dashboard" ? registrations.filter((registration) => registration.status === "Nouveau").length : 0;
+            const newRegistrationsCount = item.value === "dashboard" ? registrations.filter((registration) => registration.status === "Pré-inscription (à qualifier)").length : 0;
             return (
               <button
                 className={`admin-shell-v2-link${section === item.value ? " active" : ""}`}
@@ -1144,7 +1149,7 @@ export function AdminWorkspace({
                 <span>Statut</span>
                 <select className="ui-field" value={registrationStatusFilter} onChange={(event) => setRegistrationStatusFilter(event.target.value)}>
                   <option>Tous</option>
-                  {REGISTRATION_STATUS_OPTIONS.map((status) => (
+                  {[...MANUAL_REGISTRATION_STATUSES, ...AUTOMATIC_REGISTRATION_STATUSES].map((status) => (
                     <option key={status}>{status}</option>
                   ))}
                 </select>
@@ -1159,7 +1164,7 @@ export function AdminWorkspace({
               pageSize={15}
               onRowClick={(row) => openRegistrationDrawer(row.id)}
               isRowActive={(row) => selectedRegistrationId === row.id && registrationDrawerOpen}
-              getRowClassName={(row) => (row.status === "Nouveau" ? "admin-data-table-row-new" : "")}
+              getRowClassName={(row) => (row.status === "Pré-inscription (à qualifier)" ? "admin-data-table-row-new" : "")}
             />
           </section>
 
@@ -1170,6 +1175,7 @@ export function AdminWorkspace({
           >
             {selectedRegistrationDetail ? (
               <>
+                <DetailField label="Origine" value={selectedRegistrationDetail.registration.origin} copyKey="reg-origin" copyToClipboard={copyToClipboard} copiedKey={copiedKey} />
                 <DetailField label="Contact" value={selectedRegistrationDetail.registration.contactName} copyKey="reg-contact" copyToClipboard={copyToClipboard} copiedKey={copiedKey} />
                 <DetailField label="Entreprise" value={selectedRegistrationDetail.registration.company} copyKey="reg-company" copyToClipboard={copyToClipboard} copiedKey={copiedKey} />
                 <DetailField label="Email" value={selectedRegistrationDetail.registration.email} copyKey="reg-email" copyToClipboard={copyToClipboard} copiedKey={copiedKey} />
@@ -1392,22 +1398,20 @@ export function AdminWorkspace({
                   </select>
                 </label>
               </div>
-              <div className="form-grid">
-                <label>
-                  <span>Nouvelle ville</span>
-                  <div className="admin-bulk-grid">
-                    <input
-                      className="ui-field"
-                      value={newCityInput}
-                      onChange={(event) => setNewCityInput(event.target.value)}
-                      placeholder="Nom de la ville"
-                    />
-                    <Button type="button" variant="secondary" onClick={handleAddCustomCity} disabled={!newCityInput.trim()}>
-                      Ajouter
-                    </Button>
-                  </div>
-                </label>
-              </div>
+              <label>
+                <span>Nouvelle ville</span>
+                <div className="admin-bulk-grid">
+                  <input
+                    className="ui-field"
+                    value={newCityInput}
+                    onChange={(event) => setNewCityInput(event.target.value)}
+                    placeholder="Nom de la ville"
+                  />
+                  <Button type="button" variant="secondary" onClick={handleAddCustomCity} disabled={!newCityInput.trim()}>
+                    Ajouter
+                  </Button>
+                </div>
+              </label>
               <div className="admin-session-overview">
                 <div><span>État</span><strong>{editingSessionId ? getSessionState(sessions.find((item) => item.id === editingSessionId) || sessions[0]) : "Nouvelle"}</strong></div>
                 <div><span>Inscrits</span><strong>{registrationsBySession[editingSessionId] || 0}</strong></div>
@@ -1818,12 +1822,12 @@ export function AdminWorkspace({
                 </select>
               </label>
               <label>
-                <span>Origine</span>
+                <span>Statut</span>
                 <select className="ui-field" value={participantStatusFilter} onChange={(event) => setParticipantStatusFilter(event.target.value)}>
                   <option>Tous</option>
-                  <option>Pré-inscription (à qualifier)</option>
-                  <option>Inscrit (via pré-inscription)</option>
-                  <option>Inscrit (bulletin direct)</option>
+                  {[...MANUAL_REGISTRATION_STATUSES, ...AUTOMATIC_REGISTRATION_STATUSES].map((status) => (
+                    <option key={status}>{status}</option>
+                  ))}
                 </select>
               </label>
             </div>
@@ -1849,13 +1853,13 @@ export function AdminWorkspace({
                 },
                 {
                   key: "status",
-                  label: "Origine",
+                  label: "Statut",
                   sortable: true,
                   sortValue: (row) => row.status,
                   render: (row) => (
                     <StatusBadge
                       label={row.status}
-                      tone={row.status === "Inscrit (via pré-inscription)" ? "accent" : row.status === "Inscrit (bulletin direct)" ? "soft" : "default"}
+                      tone={AUTOMATIC_REGISTRATION_STATUSES.includes(row.status) ? "accent" : row.status === "Non intéressé" ? "soft" : "default"}
                     />
                   ),
                 },
@@ -1916,6 +1920,7 @@ export function AdminWorkspace({
                 </p>
                 <h3>Coordonnées</h3>
                 <div className="form-grid">
+                  <DetailField label="Origine" value={selectedParticipant.origin} copyKey="p-origin" copyToClipboard={copyToClipboard} copiedKey={copiedKey} />
                   <DetailField label="Nom" value={selectedParticipant.fullName} copyKey="p-name" copyToClipboard={copyToClipboard} copiedKey={copiedKey} />
                   <DetailField label="Entreprise" value={selectedParticipant.company} copyKey="p-company" copyToClipboard={copyToClipboard} copiedKey={copiedKey} />
                   <DetailField label="Email" value={selectedParticipant.email} copyKey="p-email" copyToClipboard={copyToClipboard} copiedKey={copiedKey} />

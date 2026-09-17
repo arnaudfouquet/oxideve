@@ -15,7 +15,14 @@ const {
 const { createArticle, deleteArticle, getArticleBySlug, listArticles, updateArticle } = require("../services/editorialService");
 const { createCompany, listCompanies, updateCompany } = require("../services/companyService");
 const { createCrmInteraction, createCrmTask, listCrmInteractions, listCrmTasks, updateCrmTask } = require("../services/crmService");
-const { createRegistration, listRegistrations, updateRegistrationStatus } = require("../services/registrationService");
+const {
+  createRegistration,
+  listRegistrations,
+  updateRegistrationStatus,
+  linkOrCreateRegistrationForBulletin,
+  markRegistrationCompleteForBulletin,
+  MANUAL_STATUSES,
+} = require("../services/registrationService");
 const { syncQueovalCalendar, listPendingSyncSessions, resolvePendingSyncSession } = require("../services/queovalService");
 const { createBulletinInscription, listBulletinInscriptions, getBulletinInscriptionById } = require("../services/bulletinInscriptionService");
 const { listParticipants } = require("../services/participantsService");
@@ -312,6 +319,12 @@ function createApiRouter() {
         console.error("[api] Échec de l'envoi de la notification interne de bulletin d'inscription", error);
       }
 
+      try {
+        await linkOrCreateRegistrationForBulletin(bulletin, { hasQuiz: Boolean(quiz) });
+      } catch (error) {
+        console.error("[api] Échec du rattachement du bulletin à une pré-inscription", error);
+      }
+
       res.status(201).json({
         data: { id: bulletin.id, quizSlug: quiz ? quiz.slug : null, quizLinks },
         message: emailResult.sent
@@ -357,6 +370,12 @@ function createApiRouter() {
 
       const pdfBuffer = await generateQuizPdf(quiz, result);
       await sendQuizResultEmail({ quizTitle: quiz?.title || payload.quizSlug, attempt: result.attempt, pdfBuffer });
+
+      try {
+        await markRegistrationCompleteForBulletin(payload.bulletinInscriptionId);
+      } catch (error) {
+        console.error("[api] Échec de la mise à jour du statut suite à l'auto-évaluation", error);
+      }
 
       res.status(201).json({
         data: {
