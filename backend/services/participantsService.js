@@ -1,17 +1,23 @@
 const { listRegistrations } = require("./registrationService");
 const { listBulletinInscriptions } = require("./bulletinInscriptionService");
-const { listAllQuizAttempts } = require("./quizService");
+const { listAllQuizAttempts, getPublicQuizByFormationSlug } = require("./quizService");
 
 /**
- * Statuts possibles d'un participant fusionné, dans l'ordre attendu à l'affichage.
- * - "prospect" : une pré-inscription rapide (Inscription) sans bulletin détaillé correspondant.
- * - "complet" : une pré-inscription ET un bulletin détaillé se rapportent à la même personne/formation.
- * - "bulletin" : un bulletin détaillé (BulletinInscription) sans pré-inscription correspondante.
+ * Statuts d'ORIGINE d'un participant fusionné : comment la demande est arrivée, indépendamment
+ * de l'état de l'auto-évaluation (géré séparément via `hasQuiz`/`quizAttempt`).
+ * - PROSPECT : une pré-inscription rapide (Inscription) existe, sans bulletin d'inscription
+ *   correspondant pour la même formation/le même email. Lead capté, pas encore transformé en
+ *   inscription officielle.
+ * - COMPLETE : une pré-inscription ET un bulletin d'inscription se rapportent à la même
+ *   personne/formation (rapprochés par email) : le lead a été transformé en inscription officielle.
+ * - BULLETIN_DIRECT : un bulletin d'inscription existe sans pré-inscription rapide correspondante
+ *   (bulletin envoyé/rempli directement, sans étape de qualification préalable). C'est une
+ *   inscription tout aussi officielle que COMPLETE, juste arrivée par un autre chemin.
  */
 const PARTICIPANT_STATUS = {
-  PROSPECT: "Pré-inscrit seulement",
-  COMPLETE: "Bulletin complété",
-  BULLETIN_DIRECT: "Bulletin direct",
+  PROSPECT: "Pré-inscription (à qualifier)",
+  COMPLETE: "Inscrit (via pré-inscription)",
+  BULLETIN_DIRECT: "Inscrit (bulletin direct)",
 };
 
 function normalizeMatchKey(formationSlug, email) {
@@ -46,6 +52,7 @@ function buildParticipantFromRegistration(registration, matchingBulletin, quizAt
     registrationId: registration.id,
     bulletinInscriptionId: matchingBulletin ? matchingBulletin.id : null,
     message: registration.message || null,
+    hasQuiz: Boolean(getPublicQuizByFormationSlug(registration.formationSlug)),
     quizAttempt: latestQuizAttempt
       ? { id: latestQuizAttempt.id, scoreOn20: latestQuizAttempt.scoreOn20, createdAt: latestQuizAttempt.createdAt }
       : null,
@@ -74,6 +81,7 @@ function buildParticipantFromBulletin(bulletin, quizAttempts) {
     registrationId: null,
     bulletinInscriptionId: bulletin.id,
     message: null,
+    hasQuiz: Boolean(getPublicQuizByFormationSlug(bulletin.formationSlug)),
     quizAttempt: latestQuizAttempt
       ? { id: latestQuizAttempt.id, scoreOn20: latestQuizAttempt.scoreOn20, createdAt: latestQuizAttempt.createdAt }
       : null,

@@ -59,7 +59,6 @@ type ArticleDraft = {
   title: string;
   category: string;
   excerpt: string;
-  body: string;
   readingTime: string;
   publishedAt: string;
   featuredFormationSlug: string;
@@ -208,11 +207,14 @@ function toArticleDraft(article?: Article): ArticleDraft {
     title: article?.title || "",
     category: article?.category || "",
     excerpt: article?.excerpt || "",
-    body: article?.body.join("\n\n") || "",
     readingTime: article?.readingTime || "",
     publishedAt: article?.publishedAt || "",
     featuredFormationSlug: article?.featuredFormationSlug || "",
   };
+}
+
+function toArticleBodyParagraphs(article?: Article): string[] {
+  return article?.body && article.body.length > 0 ? [...article.body] : [""];
 }
 
 type DetailFieldProps = {
@@ -344,6 +346,8 @@ export function AdminWorkspace({
   const [formationDraft, setFormationDraft] = useState(toFormationDraft(initialFormations[0]));
   const [sessionDraft, setSessionDraft] = useState(toSessionDraft(initialSessions[0]));
   const [articleDraft, setArticleDraft] = useState(toArticleDraft(initialArticles[0]));
+  const [articleBodyParagraphs, setArticleBodyParagraphs] = useState<string[]>(toArticleBodyParagraphs(initialArticles[0]));
+  const [articleSearch, setArticleSearch] = useState("");
 
   const [sessionSearch, setSessionSearch] = useState("");
   const [sessionStateFilter, setSessionStateFilter] = useState("Tous");
@@ -356,6 +360,12 @@ export function AdminWorkspace({
   const [customCategories, setCustomCategories] = useState<string[]>([]);
   const [newCategoryInput, setNewCategoryInput] = useState("");
   const [isAddingCategory, setIsAddingCategory] = useState(false);
+
+  const [customArticleCategories, setCustomArticleCategories] = useState<string[]>([]);
+  const [newArticleCategoryInput, setNewArticleCategoryInput] = useState("");
+  const [isAddingArticleCategory, setIsAddingArticleCategory] = useState(false);
+
+  const [formationSearch, setFormationSearch] = useState("");
 
   const [participantDrawerOpen, setParticipantDrawerOpen] = useState(false);
 
@@ -564,6 +574,23 @@ export function AdminWorkspace({
     setIsAddingCategory(false);
   }
 
+  const availableArticleCategories = useMemo(
+    () =>
+      Array.from(new Set([...articles.map((article) => article.category), ...customArticleCategories]))
+        .filter(Boolean)
+        .sort((a, b) => a.localeCompare(b, "fr")),
+    [articles, customArticleCategories],
+  );
+
+  function handleAddCustomArticleCategory() {
+    const category = newArticleCategoryInput.trim();
+    if (!category) return;
+    setCustomArticleCategories((current) => (current.includes(category) ? current : [...current, category]));
+    setArticleDraft((current) => ({ ...current, category }));
+    setNewArticleCategoryInput("");
+    setIsAddingArticleCategory(false);
+  }
+
   const filteredSessions = sessions.filter((session) => {
     const formation = formations.find((item) => item.slug === session.formationSlug);
     const state = getSessionState(session);
@@ -729,7 +756,30 @@ export function AdminWorkspace({
     const article = articles.find((item) => item.slug === slug);
     setEditingArticleSlug(slug);
     setArticleDraft(toArticleDraft(article));
+    setArticleBodyParagraphs(toArticleBodyParagraphs(article));
     setFeedback("");
+  }
+
+  function addArticleParagraph() {
+    setArticleBodyParagraphs((current) => [...current, ""]);
+  }
+
+  function removeArticleParagraph(index: number) {
+    setArticleBodyParagraphs((current) => (current.length > 1 ? current.filter((_, i) => i !== index) : current));
+  }
+
+  function updateArticleParagraph(index: number, value: string) {
+    setArticleBodyParagraphs((current) => current.map((paragraph, i) => (i === index ? value : paragraph)));
+  }
+
+  function moveArticleParagraph(index: number, direction: -1 | 1) {
+    setArticleBodyParagraphs((current) => {
+      const target = index + direction;
+      if (target < 0 || target >= current.length) return current;
+      const next = [...current];
+      [next[index], next[target]] = [next[target], next[index]];
+      return next;
+    });
   }
 
   async function handleSessionSubmit(event: React.FormEvent<HTMLFormElement>) {
@@ -936,7 +986,7 @@ export function AdminWorkspace({
       title: articleDraft.title.trim(),
       category: articleDraft.category.trim(),
       excerpt: articleDraft.excerpt.trim(),
-      body: articleDraft.body.split(/\n\s*\n/).map((item) => item.trim()).filter(Boolean),
+      body: articleBodyParagraphs.map((paragraph) => paragraph.trim()).filter(Boolean),
       readingTime: articleDraft.readingTime.trim(),
       publishedAt: articleDraft.publishedAt.trim(),
       featuredFormationSlug: articleDraft.featuredFormationSlug.trim(),
@@ -1432,8 +1482,13 @@ export function AdminWorkspace({
         <div className="admin-dual-pane">
           <section className="admin-shell">
             <div className="section-heading section-heading-tight"><div><span className="eyebrow">Catalogue</span><h2>Formations</h2></div><Button onClick={() => { setEditingFormationSlug(""); setFormationDraft(toFormationDraft()); }}>Nouvelle formation</Button></div>
+            <div className="admin-filter-grid admin-filter-grid-compact">
+              <label><span>Recherche</span><input className="ui-field" value={formationSearch} onChange={(event) => setFormationSearch(event.target.value)} placeholder="Nom, catégorie..." /></label>
+            </div>
             <div className="admin-list admin-list-dense">
-              {formations.sort((a, b) => a.title.localeCompare(b.title, "fr")).map((formation) => (
+              {formations
+                .filter((formation) => !formationSearch.trim() || `${formation.title} ${formation.category}`.toLowerCase().includes(formationSearch.trim().toLowerCase()))
+                .sort((a, b) => a.title.localeCompare(b.title, "fr")).map((formation) => (
                 <button className={`admin-list-item${editingFormationSlug === formation.slug ? " active" : ""}`} key={formation.slug} onClick={() => selectFormation(formation.slug)} type="button">
                   <strong>{formation.title}</strong>
                   <span>{formation.category}</span>
@@ -1444,8 +1499,13 @@ export function AdminWorkspace({
           </section>
           <section className="admin-shell">
             <div className="section-heading section-heading-tight"><div><span className="eyebrow">Edition</span><h2>{editingFormationSlug ? "Modifier la formation" : "Créer une formation"}</h2></div></div>
+            <nav className="admin-form-toc">
+              <a href="#formation-section-identite">Identité</a>
+              <a href="#formation-section-contenu">Contenu</a>
+              <a href="#formation-section-pratique">Infos pratiques</a>
+            </nav>
             <form className="contact-form" onSubmit={handleFormationSubmit}>
-              <div className="admin-form-section"><h3>Identité</h3><div className="form-grid">
+              <div className="admin-form-section" id="formation-section-identite"><h3>Identité</h3><div className="form-grid">
                 <label><span>Slug</span><input className="ui-field" disabled={Boolean(editingFormationSlug)} value={formationDraft.slug} onChange={(event) => setFormationDraft((current) => ({ ...current, slug: event.target.value }))} required /></label>
                 <label><span>Nom complet</span><input className="ui-field" value={formationDraft.title} onChange={(event) => setFormationDraft((current) => ({ ...current, title: event.target.value }))} required /></label>
                 <label><span>Nom court</span><input className="ui-field" value={formationDraft.shortTitle} onChange={(event) => setFormationDraft((current) => ({ ...current, shortTitle: event.target.value }))} required /></label>
@@ -1494,7 +1554,7 @@ export function AdminWorkspace({
                 <label><span>Public</span><input className="ui-field" value={formationDraft.audience} onChange={(event) => setFormationDraft((current) => ({ ...current, audience: event.target.value }))} required /></label>
                 <label><span>Tarif</span><input className="ui-field" value={formationDraft.price} onChange={(event) => setFormationDraft((current) => ({ ...current, price: event.target.value }))} required /></label>
               </div></div>
-              <div className="admin-form-section"><h3>Contenu</h3>
+              <div className="admin-form-section" id="formation-section-contenu"><h3>Contenu</h3>
                 <label><span>Résumé</span><textarea className="ui-field" rows={3} value={formationDraft.summary} onChange={(event) => setFormationDraft((current) => ({ ...current, summary: event.target.value }))} required /></label>
                 <label><span>Description</span><textarea className="ui-field" rows={5} value={formationDraft.description} onChange={(event) => setFormationDraft((current) => ({ ...current, description: event.target.value }))} required /></label>
                 <div className="form-grid">
@@ -1563,13 +1623,14 @@ export function AdminWorkspace({
                   )}
                 </div>
               </div>
-              <div className="admin-form-section"><h3>Infos pratiques</h3><div className="form-grid">
+              <div className="admin-form-section" id="formation-section-pratique"><h3>Infos pratiques</h3><div className="form-grid">
                 <label><span>Détails durée</span><textarea className="ui-field" rows={4} value={formationDraft.durationDetails} onChange={(event) => setFormationDraft((current) => ({ ...current, durationDetails: event.target.value }))} required /></label>
                 <label><span>Détails tarif</span><textarea className="ui-field" rows={4} value={formationDraft.priceDetails} onChange={(event) => setFormationDraft((current) => ({ ...current, priceDetails: event.target.value }))} required /></label>
                 <label><span>Taux de réussite</span><input className="ui-field" value={formationDraft.successRate} onChange={(event) => setFormationDraft((current) => ({ ...current, successRate: event.target.value }))} required /></label>
                 <label><span>Accessibilité</span><textarea className="ui-field" rows={4} value={formationDraft.handicapPolicy} onChange={(event) => setFormationDraft((current) => ({ ...current, handicapPolicy: event.target.value }))} required /></label>
-              </div></div>
-              <label><span>Finalité / certification</span><textarea className="ui-field" rows={3} value={formationDraft.certification} onChange={(event) => setFormationDraft((current) => ({ ...current, certification: event.target.value }))} required /></label>
+              </div>
+                <label><span>Finalité / certification</span><textarea className="ui-field" rows={3} value={formationDraft.certification} onChange={(event) => setFormationDraft((current) => ({ ...current, certification: event.target.value }))} required /></label>
+              </div>
               <Button disabled={saving} type="submit">{saving ? "Enregistrement..." : editingFormationSlug ? "Mettre à jour" : "Créer la formation"}</Button>
             </form>
           </section>
@@ -1579,9 +1640,12 @@ export function AdminWorkspace({
       {section === "editorial" ? (
         <div className="admin-dual-pane">
           <section className="admin-shell">
-            <div className="section-heading section-heading-tight"><div><span className="eyebrow">Editorial</span><h2>Articles</h2></div><Button variant="secondary" onClick={() => { setEditingArticleSlug(""); setArticleDraft(toArticleDraft()); }}>Nouvel article</Button></div>
+            <div className="section-heading section-heading-tight"><div><span className="eyebrow">Editorial</span><h2>Articles</h2></div><Button variant="secondary" onClick={() => { setEditingArticleSlug(""); setArticleDraft(toArticleDraft()); setArticleBodyParagraphs(toArticleBodyParagraphs()); }}>Nouvel article</Button></div>
+            <label className="admin-list-search"><span>Recherche</span><input className="ui-field" value={articleSearch} onChange={(event) => setArticleSearch(event.target.value)} placeholder="Titre, catégorie..." /></label>
             <div className="admin-list admin-list-dense">
-              {articles.sort((a, b) => compareDateDesc(a.publishedAt, b.publishedAt)).map((article) => (
+              {articles
+                .filter((article) => !articleSearch.trim() || `${article.title} ${article.category}`.toLowerCase().includes(articleSearch.trim().toLowerCase()))
+                .sort((a, b) => compareDateDesc(a.publishedAt, b.publishedAt)).map((article) => (
                 <button className={`admin-list-item${editingArticleSlug === article.slug ? " active" : ""}`} key={article.slug} onClick={() => selectArticle(article.slug)} type="button">
                   <strong>{article.title}</strong>
                   <span>{article.category}</span>
@@ -1596,13 +1660,73 @@ export function AdminWorkspace({
               <div className="form-grid">
                 <label><span>Slug</span><input className="ui-field" disabled={Boolean(editingArticleSlug)} value={articleDraft.slug} onChange={(event) => setArticleDraft((current) => ({ ...current, slug: event.target.value }))} required /></label>
                 <label><span>Titre</span><input className="ui-field" value={articleDraft.title} onChange={(event) => setArticleDraft((current) => ({ ...current, title: event.target.value }))} required /></label>
-                <label><span>Catégorie</span><input className="ui-field" value={articleDraft.category} onChange={(event) => setArticleDraft((current) => ({ ...current, category: event.target.value }))} required /></label>
+                <label>
+                  <span>Catégorie</span>
+                  {isAddingArticleCategory ? (
+                    <div className="admin-bulk-grid">
+                      <input
+                        className="ui-field"
+                        value={newArticleCategoryInput}
+                        onChange={(event) => setNewArticleCategoryInput(event.target.value)}
+                        placeholder="Nom de la catégorie"
+                        autoFocus
+                      />
+                      <Button type="button" variant="secondary" onClick={handleAddCustomArticleCategory} disabled={!newArticleCategoryInput.trim()}>
+                        Ajouter
+                      </Button>
+                    </div>
+                  ) : (
+                    <select
+                      className="ui-field"
+                      value={availableArticleCategories.includes(articleDraft.category) ? articleDraft.category : ""}
+                      onChange={(event) => {
+                        if (event.target.value === "__new__") {
+                          setIsAddingArticleCategory(true);
+                          return;
+                        }
+                        setArticleDraft((current) => ({ ...current, category: event.target.value }));
+                      }}
+                      required
+                    >
+                      <option value="">Choisir</option>
+                      {availableArticleCategories.map((category) => (
+                        <option key={category} value={category}>{category}</option>
+                      ))}
+                      <option value="__new__">+ Ajouter une nouvelle catégorie</option>
+                    </select>
+                  )}
+                </label>
                 <label><span>Lecture</span><input className="ui-field" value={articleDraft.readingTime} onChange={(event) => setArticleDraft((current) => ({ ...current, readingTime: event.target.value }))} required /></label>
                 <label><span>Publication</span><input className="ui-field" type="date" value={articleDraft.publishedAt} onChange={(event) => setArticleDraft((current) => ({ ...current, publishedAt: event.target.value }))} required /></label>
                 <label><span>Formation liée</span><select className="ui-field" value={articleDraft.featuredFormationSlug} onChange={(event) => setArticleDraft((current) => ({ ...current, featuredFormationSlug: event.target.value }))}><option value="">Aucune</option>{formations.map((formation) => <option key={formation.slug} value={formation.slug}>{formation.title}</option>)}</select></label>
               </div>
               <label><span>Extrait</span><textarea className="ui-field" rows={4} value={articleDraft.excerpt} onChange={(event) => setArticleDraft((current) => ({ ...current, excerpt: event.target.value }))} required /></label>
-              <label><span>Corps</span><textarea className="ui-field" rows={12} value={articleDraft.body} onChange={(event) => setArticleDraft((current) => ({ ...current, body: event.target.value }))} required /></label>
+              <div className="admin-programme-editor">
+                <div className="admin-programme-editor-header">
+                  <span>Corps de l&apos;article</span>
+                  <Button variant="secondary" type="button" onClick={addArticleParagraph}>Ajouter un paragraphe</Button>
+                </div>
+                {articleBodyParagraphs.map((paragraph, index) => (
+                  <div className="admin-article-paragraph" key={index}>
+                    <div className="admin-programme-row">
+                      <label className="admin-programme-title-field">
+                        <span>Paragraphe {index + 1}</span>
+                        <textarea
+                          className="ui-field"
+                          rows={4}
+                          value={paragraph}
+                          onChange={(event) => updateArticleParagraph(index, event.target.value)}
+                        />
+                      </label>
+                      <div className="admin-article-paragraph-actions">
+                        <Button variant="ghost" type="button" onClick={() => moveArticleParagraph(index, -1)} disabled={index === 0}>Monter</Button>
+                        <Button variant="ghost" type="button" onClick={() => moveArticleParagraph(index, 1)} disabled={index === articleBodyParagraphs.length - 1}>Descendre</Button>
+                        <Button variant="ghost" type="button" onClick={() => removeArticleParagraph(index)} disabled={articleBodyParagraphs.length <= 1}>Supprimer ce paragraphe</Button>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
               <Button disabled={saving} type="submit">{saving ? "Enregistrement..." : editingArticleSlug ? "Mettre à jour" : "Créer l'article"}</Button>
             </form>
           </section>
@@ -1694,12 +1818,12 @@ export function AdminWorkspace({
                 </select>
               </label>
               <label>
-                <span>Statut</span>
+                <span>Origine</span>
                 <select className="ui-field" value={participantStatusFilter} onChange={(event) => setParticipantStatusFilter(event.target.value)}>
                   <option>Tous</option>
-                  <option>Pré-inscrit seulement</option>
-                  <option>Bulletin complété</option>
-                  <option>Bulletin direct</option>
+                  <option>Pré-inscription (à qualifier)</option>
+                  <option>Inscrit (via pré-inscription)</option>
+                  <option>Inscrit (bulletin direct)</option>
                 </select>
               </label>
             </div>
@@ -1725,13 +1849,13 @@ export function AdminWorkspace({
                 },
                 {
                   key: "status",
-                  label: "Statut",
+                  label: "Origine",
                   sortable: true,
                   sortValue: (row) => row.status,
                   render: (row) => (
                     <StatusBadge
                       label={row.status}
-                      tone={row.status === "Bulletin complété" ? "accent" : row.status === "Bulletin direct" ? "soft" : "default"}
+                      tone={row.status === "Inscrit (via pré-inscription)" ? "accent" : row.status === "Inscrit (bulletin direct)" ? "soft" : "default"}
                     />
                   ),
                 },
@@ -1739,8 +1863,12 @@ export function AdminWorkspace({
                   key: "quiz",
                   label: "Auto-éval",
                   sortable: true,
-                  sortValue: (row) => row.quizAttempt?.scoreOn20 ?? -1,
-                  render: (row) => (row.quizAttempt ? `${row.quizAttempt.scoreOn20} / 20` : "-"),
+                  sortValue: (row) => (row.quizAttempt ? row.quizAttempt.scoreOn20 : row.hasQuiz ? -1 : -2),
+                  render: (row) => {
+                    if (!row.hasQuiz) return <span className="admin-list-item-meta">Non applicable</span>;
+                    if (row.quizAttempt) return `${row.quizAttempt.scoreOn20} / 20`;
+                    return <span className="admin-list-item-meta">En attente</span>;
+                  },
                 },
                 {
                   key: "actions",
@@ -1777,7 +1905,15 @@ export function AdminWorkspace({
             {selectedParticipant ? (
               <>
               <div className="admin-form-section">
-                <p className="admin-list-item-meta">{selectedParticipant.status}</p>
+                <p className="admin-list-item-meta">
+                  {selectedParticipant.status}
+                  {" · Auto-évaluation : "}
+                  {!selectedParticipant.hasQuiz
+                    ? "non applicable à cette formation"
+                    : selectedParticipant.quizAttempt
+                      ? `${selectedParticipant.quizAttempt.scoreOn20} / 20`
+                      : "en attente"}
+                </p>
                 <h3>Coordonnées</h3>
                 <div className="form-grid">
                   <DetailField label="Nom" value={selectedParticipant.fullName} copyKey="p-name" copyToClipboard={copyToClipboard} copiedKey={copiedKey} />

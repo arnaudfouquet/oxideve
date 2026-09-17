@@ -2712,13 +2712,44 @@ main {
 .admin-form-section {
   display: grid;
   gap: 16px;
-  padding: 18px;
+  padding: 20px;
   border-radius: 20px;
+  border: 1px solid var(--border-subtle);
   background: rgba(0, 77, 109, 0.04);
+}
+
+.admin-form-section + .admin-form-section {
+  margin-top: 4px;
 }
 
 .admin-form-section h3 {
   margin: 0;
+  padding-bottom: 10px;
+  border-bottom: 1px solid var(--border-subtle);
+}
+
+.admin-form-toc {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 4px 0 18px;
+}
+
+.admin-form-toc a {
+  padding: 6px 14px;
+  border-radius: 999px;
+  border: 1px solid var(--border-subtle);
+  background: rgba(248, 253, 255, 0.94);
+  color: var(--color-navy);
+  font-weight: 700;
+  font-size: 0.85rem;
+  text-decoration: none;
+  transition: border-color 180ms ease, background-color 180ms ease;
+}
+
+.admin-form-toc a:hover {
+  border-color: rgba(0, 156, 220, 0.4);
+  background: rgba(222, 244, 255, 0.6);
 }
 
 .admin-programme-editor {
@@ -2768,6 +2799,25 @@ main {
 
 .admin-programme-title-field {
   flex: 1 1 auto;
+}
+
+.admin-article-paragraph {
+  padding: 14px;
+  border: 1px solid var(--border-subtle);
+  border-radius: 14px;
+  background: var(--color-white);
+}
+
+.admin-article-paragraph-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  flex: 0 0 auto;
+}
+
+.admin-list-search {
+  display: block;
+  margin-top: 16px;
 }
 
 .footer-grid {

@@ -249,7 +249,7 @@ export type Article = {
   featuredFormationSlug?: string;
 };
 
-export type ParticipantStatus = "Pré-inscrit seulement" | "Bulletin complété" | "Bulletin direct";
+export type ParticipantStatus = "Pré-inscription (à qualifier)" | "Inscrit (via pré-inscription)" | "Inscrit (bulletin direct)";
 
 export type ParticipantQuizSummary = {
   id: string;
@@ -270,6 +270,7 @@ export type Participant = {
   registrationId: string | null;
   bulletinInscriptionId: string | null;
   message: string | null;
+  hasQuiz: boolean;
   quizAttempt: ParticipantQuizSummary | null;
 };
 
