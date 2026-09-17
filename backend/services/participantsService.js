@@ -63,7 +63,7 @@ async function listParticipants() {
       registrationId: registration.id,
       bulletinInscriptionId: bulletin ? bulletin.id : null,
       message: registration.message || null,
-      hasQuiz: Boolean(getPublicQuizByFormationSlug(registration.formationSlug)),
+      hasQuiz: Boolean(bulletin) && Boolean(getPublicQuizByFormationSlug(registration.formationSlug)),
       quizAttempt: latestQuizAttempt
         ? { id: latestQuizAttempt.id, scoreOn20: latestQuizAttempt.scoreOn20, createdAt: latestQuizAttempt.createdAt }
         : null,

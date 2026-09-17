@@ -595,8 +595,10 @@ export function AdminWorkspace({
   });
 
   async function handleRegistrationStatusChange(registrationId: string, status: string) {
-    const previous = registrations;
+    const previousRegistrations = registrations;
+    const previousParticipants = participants;
     setRegistrations((current) => current.map((item) => (item.id === registrationId ? { ...item, status } : item)));
+    setParticipants((current) => current.map((item) => (item.registrationId === registrationId ? { ...item, status } : item)));
 
     const response = await fetch(`/api/admin/registrations/${registrationId}/status`, {
       method: "PATCH",
@@ -605,7 +607,8 @@ export function AdminWorkspace({
     });
 
     if (!response.ok) {
-      setRegistrations(previous);
+      setRegistrations(previousRegistrations);
+      setParticipants(previousParticipants);
       setError("Impossible de mettre à jour le statut de cette pré-inscription.");
       return;
     }
