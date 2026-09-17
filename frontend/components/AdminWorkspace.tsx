@@ -97,6 +97,18 @@ function formatDateLabel(value?: string) {
   }).format(new Date(value));
 }
 
+function formatShortDateFr(value?: string | null) {
+  if (!value) {
+    return "Non renseignée";
+  }
+
+  return new Intl.DateTimeFormat("fr-FR", {
+    day: "2-digit",
+    month: "2-digit",
+    year: "numeric",
+  }).format(new Date(value));
+}
+
 function formatRegistrationDate(value: string) {
   const date = new Date(value);
   const day = String(date.getUTCDate()).padStart(2, "0");
@@ -1967,7 +1979,7 @@ export function AdminWorkspace({
                         <DetailField label="Nom" value={learner.fullName} copyKey={`b-learner-name-${index}`} copyToClipboard={copyToClipboard} copiedKey={copiedKey} />
                         <DetailField label="Fonction" value={learner.role || "Non renseignée"} copyKey={`b-learner-role-${index}`} copyToClipboard={copyToClipboard} copiedKey={copiedKey} />
                         <DetailField label="Téléphone" value={learner.phone || "Non renseigné"} copyKey={`b-learner-phone-${index}`} copyToClipboard={copyToClipboard} copiedKey={copiedKey} />
-                        <DetailField label="Date de naissance" value={learner.birthDate || "Non renseignée"} copyKey={`b-learner-birth-${index}`} copyToClipboard={copyToClipboard} copiedKey={copiedKey} />
+                        <DetailField label="Date de naissance" value={formatShortDateFr(learner.birthDate)} copyKey={`b-learner-birth-${index}`} copyToClipboard={copyToClipboard} copiedKey={copiedKey} />
                         <DetailField label="Situation de handicap" value={learner.hasDisability ? "Oui" : "Non"} copyKey={`b-learner-disability-${index}`} copyToClipboard={copyToClipboard} copiedKey={copiedKey} />
                       </div>
                     ))}
