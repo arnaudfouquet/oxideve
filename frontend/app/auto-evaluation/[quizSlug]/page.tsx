@@ -7,7 +7,12 @@ export const dynamic = "force-dynamic";
 
 type Props = {
   params: Promise<{ quizSlug: string }>;
-  searchParams?: Promise<{ bulletinInscriptionId?: string }>;
+  searchParams?: Promise<{
+    bulletinInscriptionId?: string;
+    learnerFullName?: string;
+    learnerEmail?: string;
+    companyName?: string;
+  }>;
 };
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
@@ -42,7 +47,13 @@ export default async function AutoEvaluationPage({ params, searchParams }: Props
         </div>
 
         <article className="contact-card bulletin-form-shell">
-          <QuizForm quizSlug={quizSlug} bulletinInscriptionId={query?.bulletinInscriptionId || ""} />
+          <QuizForm
+            quizSlug={quizSlug}
+            bulletinInscriptionId={query?.bulletinInscriptionId || ""}
+            defaultLearnerFullName={query?.learnerFullName || ""}
+            defaultLearnerEmail={query?.learnerEmail || ""}
+            defaultCompanyName={query?.companyName || ""}
+          />
         </article>
       </div>
     </section>

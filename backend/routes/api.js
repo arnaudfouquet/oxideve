@@ -287,16 +287,22 @@ function createApiRouter() {
 
       const pdfBuffer = await generateBulletinPdf(bulletin, formation, session);
       const quiz = getPublicQuizByFormationSlug(bulletin.formationSlug);
-      const quizUrl = quiz
-        ? `${process.env.SITE_URL || "http://localhost:3000"}/auto-evaluation/${quiz.slug}?bulletinInscriptionId=${bulletin.id}`
-        : null;
+      // Un bulletin peut porter plusieurs apprenants (1 à 3) : chacun doit faire sa propre
+      // auto-évaluation, donc on génère un lien par apprenant avec son nom et l'entreprise
+      // du bulletin verrouillés en query params (voir QuizForm.tsx pour les noms de champs).
+      const quizLinks = quiz
+        ? bulletin.learners.map((learner) => ({
+            learnerFullName: learner.fullName,
+            url: `${process.env.SITE_URL || "http://localhost:3000"}/auto-evaluation/${quiz.slug}?bulletinInscriptionId=${bulletin.id}&learnerFullName=${encodeURIComponent(learner.fullName)}&companyName=${encodeURIComponent(bulletin.companyName)}`,
+          }))
+        : [];
 
       const emailResult = await sendBulletinConfirmationEmail({
         bulletin,
         formation,
         session,
         pdfBuffer,
-        quizUrl,
+        quizLinks,
       });
 
       try {
@@ -306,7 +312,7 @@ function createApiRouter() {
       }
 
       res.status(201).json({
-        data: { id: bulletin.id, quizSlug: quiz ? quiz.slug : null },
+        data: { id: bulletin.id, quizSlug: quiz ? quiz.slug : null, quizLinks },
         message: emailResult.sent
           ? "Bulletin d'inscription enregistré, un email de confirmation vous a été envoyé."
           : "Bulletin d'inscription enregistré. L'envoi de l'email de confirmation n'est pas encore configuré.",

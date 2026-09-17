@@ -260,6 +260,12 @@ main {
   color: var(--color-ink);
 }
 
+.ui-field-locked {
+  background: rgba(20, 45, 58, 0.06);
+  color: var(--color-muted);
+  cursor: not-allowed;
+}
+
 .site-header {
   position: sticky;
   top: 0;
@@ -4743,6 +4749,34 @@ main {
   padding: 24px;
   display: grid;
   gap: 24px;
+}
+
+/* Le drawer (540px) est plus étroit que les formulaires publics qui utilisent .form-grid :
+   on garde 2 colonnes mais avec un minmax plus permissif pour éviter tout débordement,
+   et on resserre l'espacement vertical entre les groupes de champs du formulaire. */
+.admin-drawer-body .contact-form {
+  gap: 20px;
+}
+
+.admin-drawer-body .form-grid {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 14px 16px;
+}
+
+.admin-drawer-body .form-grid:has(> :only-child) {
+  grid-template-columns: 1fr;
+}
+
+/* Bloc "Nouvelle ville" : l'input doit prendre toute la place disponible et le bouton
+   garder sa largeur naturelle (auparavant admin-bulk-grid forçait 4/5 colonnes égales,
+   ce qui écrasait le bouton "Ajouter" jusqu'à ne plus afficher qu'un rond tronqué). */
+.admin-drawer-body .admin-bulk-grid {
+  grid-template-columns: 1fr auto;
+  align-items: end;
+}
+
+.admin-drawer-body .admin-bulk-grid .ui-button {
+  white-space: nowrap;
 }
 
 @media (max-width: 640px) {

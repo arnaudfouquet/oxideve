@@ -42,14 +42,26 @@ const SELF_RATING_LEVELS = ["Jamais vu", "Vu les bases", "Utilisé parfois", "Ma
 type Props = {
   quizSlug: string;
   bulletinInscriptionId?: string;
+  defaultLearnerFullName?: string;
+  defaultLearnerEmail?: string;
+  defaultCompanyName?: string;
 };
 
-export function QuizForm({ quizSlug, bulletinInscriptionId = "" }: Props) {
+export function QuizForm({
+  quizSlug,
+  bulletinInscriptionId = "",
+  defaultLearnerFullName = "",
+  defaultLearnerEmail = "",
+  defaultCompanyName = "",
+}: Props) {
   const [quiz, setQuiz] = useState<PublicQuiz | null>(null);
   const [loadError, setLoadError] = useState("");
   const [status, setStatus] = useState<"idle" | "loading" | "success" | "error">("idle");
   const [message, setMessage] = useState("");
   const [result, setResult] = useState<QuizAttemptResult | null>(null);
+  const isLearnerFullNameLocked = Boolean(defaultLearnerFullName);
+  const isLearnerEmailLocked = Boolean(defaultLearnerEmail);
+  const isCompanyNameLocked = Boolean(defaultCompanyName);
 
   useEffect(() => {
     let cancelled = false;
@@ -201,15 +213,37 @@ export function QuizForm({ quizSlug, bulletinInscriptionId = "" }: Props) {
         <div className="form-grid">
           <label>
             Prénom et nom
-            <input className="ui-field" name="learnerFullName" type="text" required placeholder="Prénom Nom" />
+            <input
+              className={isLearnerFullNameLocked ? "ui-field ui-field-locked" : "ui-field"}
+              name="learnerFullName"
+              type="text"
+              required
+              placeholder="Prénom Nom"
+              {...(isLearnerFullNameLocked
+                ? { value: defaultLearnerFullName, readOnly: true }
+                : { defaultValue: "" })}
+            />
           </label>
           <label>
             Email
-            <input className="ui-field" name="learnerEmail" type="email" required placeholder="vous@entreprise.fr" />
+            <input
+              className={isLearnerEmailLocked ? "ui-field ui-field-locked" : "ui-field"}
+              name="learnerEmail"
+              type="email"
+              required
+              placeholder="vous@entreprise.fr"
+              {...(isLearnerEmailLocked ? { value: defaultLearnerEmail, readOnly: true } : { defaultValue: "" })}
+            />
           </label>
           <label>
             Entreprise
-            <input className="ui-field" name="companyName" type="text" placeholder="Nom de l'entreprise" />
+            <input
+              className={isCompanyNameLocked ? "ui-field ui-field-locked" : "ui-field"}
+              name="companyName"
+              type="text"
+              placeholder="Nom de l'entreprise"
+              {...(isCompanyNameLocked ? { value: defaultCompanyName, readOnly: true } : { defaultValue: "" })}
+            />
           </label>
         </div>
       </section>

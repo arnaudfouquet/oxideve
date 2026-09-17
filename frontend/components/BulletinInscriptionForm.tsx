@@ -21,8 +21,7 @@ const distributorOptions = ["Solipac", "Tereva", "Nouvel Horizon"];
 export function BulletinInscriptionForm({ formations, sessions, defaultFormationSlug = "", defaultSessionId = "" }: Props) {
   const [status, setStatus] = useState<"idle" | "loading" | "success" | "error">("idle");
   const [message, setMessage] = useState("");
-  const [quizSlug, setQuizSlug] = useState<string | null>(null);
-  const [bulletinId, setBulletinId] = useState<string | null>(null);
+  const [quizLinks, setQuizLinks] = useState<{ learnerFullName: string; url: string }[]>([]);
   const [selectedFormationSlug, setSelectedFormationSlug] = useState(defaultFormationSlug);
   const [selectedSessionId, setSelectedSessionId] = useState(defaultSessionId);
   const [source, setSource] = useState("");
@@ -92,10 +91,9 @@ export function BulletinInscriptionForm({ formations, sessions, defaultFormation
     }
 
     const data = (await response.json().catch(() => null)) as {
-      data?: { id?: string; quizSlug?: string | null };
+      data?: { id?: string; quizSlug?: string | null; quizLinks?: { learnerFullName: string; url: string }[] };
     } | null;
-    setQuizSlug(data?.data?.quizSlug || null);
-    setBulletinId(data?.data?.id || null);
+    setQuizLinks(data?.data?.quizLinks || []);
     form.reset();
     setLearners([createEmptyLearner()]);
     setSource("");
@@ -111,17 +109,19 @@ export function BulletinInscriptionForm({ formations, sessions, defaultFormation
           <span>✓</span> Bulletin d&apos;inscription enregistré
         </h2>
         <p>{message}</p>
-        {quizSlug ? (
-          <p>
-            Prochaine étape : l&apos;apprenant peut réaliser dès maintenant son{" "}
-            <a
-              className="ui-button ui-button-primary"
-              href={`/auto-evaluation/${quizSlug}${bulletinId ? `?bulletinInscriptionId=${bulletinId}` : ""}`}
-            >
-              auto-évaluation
-            </a>
-            .
-          </p>
+        {quizLinks.length ? (
+          <div className="quiz-result-links">
+            <p>
+              {quizLinks.length > 1
+                ? "Prochaine étape : chaque apprenant peut réaliser dès maintenant son auto-évaluation."
+                : "Prochaine étape : l'apprenant peut réaliser dès maintenant son auto-évaluation."}
+            </p>
+            {quizLinks.map((link) => (
+              <a key={link.url} className="ui-button ui-button-primary" href={link.url}>
+                Auto-évaluation de {link.learnerFullName}
+              </a>
+            ))}
+          </div>
         ) : null}
       </div>
     );

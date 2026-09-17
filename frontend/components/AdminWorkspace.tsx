@@ -1795,7 +1795,7 @@ export function AdminWorkspace({
                       <div className="admin-list admin-list-dense">
                         {selectedParticipantBulletin.quizAttempts.map((attempt) => (
                           <div className="admin-list-item" key={attempt.id}>
-                            <strong>Score : {attempt.scoreOn20} / 20</strong>
+                            <strong>{attempt.learnerFullName || "Apprenant non renseigné"} — Score : {attempt.scoreOn20} / 20</strong>
                             <span>Passé le {formatRegistrationDate(attempt.createdAt)}</span>
                           </div>
                         ))}

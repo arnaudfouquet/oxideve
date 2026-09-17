@@ -58,10 +58,22 @@ function buildEmailLogoHeader() {
   `;
 }
 
-function buildEmailHtml({ bulletin, formation, session, quizUrl }) {
+function buildEmailHtml({ bulletin, formation, session, quizLinks = [] }) {
   const formationTitle = formation?.title || bulletin.formationSlug;
   const sessionSummary =
     bulletin.sessionDates || (session ? `${formatDate(session.startDate)} - ${formatDate(session.endDate)}` : null);
+  const isPlural = quizLinks.length > 1;
+
+  const quizButtons = quizLinks
+    .map(
+      (link) => `
+            <p>
+              <a href="${link.url}" style="display: inline-block; background: #09cf65; color: #ffffff; padding: 12px 20px; border-radius: 999px; text-decoration: none; font-weight: bold;">
+                Auto-évaluation de ${link.learnerFullName} →
+              </a>
+            </p>`,
+    )
+    .join("");
 
   return `
     <div style="font-family: Arial, sans-serif; color: #004d6d; max-width: 560px; margin: 0 auto;">
@@ -75,19 +87,19 @@ function buildEmailHtml({ bulletin, formation, session, quizUrl }) {
       <p>Vous trouverez le récapitulatif complet de votre bulletin d'inscription en pièce jointe (PDF).</p>
       <p>Notre équipe vous recontactera prochainement pour finaliser l'organisation de cette formation.</p>
       ${
-        quizUrl
+        quizLinks.length
           ? `<p style="margin-top: 24px;">
-              Prochaine étape : l'apprenant peut dès à présent réaliser son
+              Prochaine étape : ${isPlural ? "chaque apprenant peut dès à présent réaliser son" : "l'apprenant peut dès à présent réaliser son"}
               <strong>auto-évaluation</strong> en amont de la formation.
             </p>
             <p style="color: #09cf65; font-weight: bold;">
-              Cette auto-évaluation est obligatoire pour finaliser le dossier d'inscription. Merci de la compléter dans les meilleurs délais.
+              ${
+                isPlural
+                  ? "Ces auto-évaluations sont obligatoires pour finaliser le dossier d'inscription. Merci de les compléter dans les meilleurs délais."
+                  : "Cette auto-évaluation est obligatoire pour finaliser le dossier d'inscription. Merci de la compléter dans les meilleurs délais."
+              }
             </p>
-            <p>
-              <a href="${quizUrl}" style="display: inline-block; background: #09cf65; color: #ffffff; padding: 12px 20px; border-radius: 999px; text-decoration: none; font-weight: bold;">
-                Faire mon auto-évaluation
-              </a>
-            </p>`
+            ${quizButtons}`
           : ""
       }
       <p style="margin-top: 32px; color: #4d6a78; font-size: 0.85rem;">Oxideve - Organisme de formation professionnelle</p>
@@ -101,7 +113,7 @@ function buildEmailHtml({ bulletin, formation, session, quizUrl }) {
  * Si SMTP_HOST n'est pas configuré, la fonction logge un avertissement et ne fait rien
  * (mode dégradé) plutôt que de faire planter le flux d'inscription.
  */
-async function sendBulletinConfirmationEmail({ bulletin, formation, session, pdfBuffer, quizUrl }) {
+async function sendBulletinConfirmationEmail({ bulletin, formation, session, pdfBuffer, quizLinks = [] }) {
   const transporter = getTransporter();
 
   if (!transporter) {
@@ -121,7 +133,7 @@ async function sendBulletinConfirmationEmail({ bulletin, formation, session, pdf
   const uniqueRecipients = Array.from(new Set([bulletin.sponsorEmail, bulletin.learnerEmail].filter(Boolean)));
 
   const from = process.env.MAIL_FROM || "no-reply@oxideve.fr";
-  const html = buildEmailHtml({ bulletin, formation, session, quizUrl });
+  const html = buildEmailHtml({ bulletin, formation, session, quizLinks });
 
   try {
     await transporter.sendMail({
