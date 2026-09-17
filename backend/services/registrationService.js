@@ -1,6 +1,8 @@
 const { randomUUID } = require("crypto");
 const { getPrismaClient } = require("./prismaClient");
 const { findOrCreateCompanyFromRegistration, listCompanies } = require("./companyService");
+const { getBulletinInscriptionById } = require("./bulletinInscriptionService");
+const { listQuizAttemptsByBulletinId } = require("./quizService");
 
 const inMemoryRegistrations = [];
 
@@ -38,6 +40,7 @@ function normalizeRegistration(registration) {
     status: registration.status || REGISTRATION_STATUS.TO_QUALIFY,
     origin: registration.origin || REGISTRATION_ORIGIN.SITE_FORM,
     bulletinInscriptionId: registration.bulletinInscriptionId || null,
+    notes: registration.notes || "",
     createdAt:
       typeof registration.createdAt === "string"
         ? registration.createdAt
@@ -135,6 +138,23 @@ async function updateRegistrationStatus(id, status) {
   return normalizeRegistration(target);
 }
 
+async function updateRegistrationNotes(id, notes) {
+  const prisma = getPrismaClient();
+
+  if (prisma) {
+    const updated = await prisma.inscription.update({
+      where: { id },
+      data: { notes },
+    });
+    return normalizeRegistration(updated);
+  }
+
+  const target = inMemoryRegistrations.find((item) => item.id === id);
+  if (!target) return null;
+  target.notes = notes;
+  return normalizeRegistration(target);
+}
+
 function normalizeMatchKey(formationSlug, email) {
   return `${(formationSlug || "").trim().toLowerCase()}::${(email || "").trim().toLowerCase()}`;
 }
@@ -163,7 +183,13 @@ async function linkOrCreateRegistrationForBulletin(bulletin, { hasQuiz }) {
     if (matching) {
       const updated = await prisma.inscription.update({
         where: { id: matching.id },
-        data: { status: nextStatus, bulletinInscriptionId: bulletin.id },
+        data: {
+          status: nextStatus,
+          bulletinInscriptionId: bulletin.id,
+          contactName: bulletin.sponsorFullName,
+          company: bulletin.companyName,
+          phone: bulletin.sponsorPhone,
+        },
       });
       return normalizeRegistration(updated);
     }
@@ -192,6 +218,9 @@ async function linkOrCreateRegistrationForBulletin(bulletin, { hasQuiz }) {
   if (matching) {
     matching.status = nextStatus;
     matching.bulletinInscriptionId = bulletin.id;
+    matching.contactName = bulletin.sponsorFullName;
+    matching.company = bulletin.companyName;
+    matching.phone = bulletin.sponsorPhone;
     return normalizeRegistration(matching);
   }
 
@@ -214,24 +243,38 @@ async function linkOrCreateRegistrationForBulletin(bulletin, { hasQuiz }) {
 }
 
 /**
- * Appelée à la complétion d'une auto-évaluation. Fait passer le statut de la pré-inscription
- * liée (via bulletinInscriptionId) de "En attente auto-éval" à "Inscription complétée".
+ * Appelée à la complétion d'une auto-évaluation. Un bulletin peut porter plusieurs apprenants
+ * (1 à 3), chacun devant faire sa propre auto-évaluation : le statut ne passe à "Inscription
+ * complétée" que lorsque TOUS les apprenants du bulletin ont soumis la leur, sinon il reste
+ * (ou repasse) à "En attente auto-éval".
  */
 async function markRegistrationCompleteForBulletin(bulletinInscriptionId) {
+  const bulletin = await getBulletinInscriptionById(bulletinInscriptionId);
+  if (!bulletin) return;
+
+  const attempts = await listQuizAttemptsByBulletinId(bulletinInscriptionId);
+  const submittedEmails = new Set(attempts.map((attempt) => (attempt.learnerEmail || "").trim().toLowerCase()));
+  const learners = Array.isArray(bulletin.learners) ? bulletin.learners : [];
+  const allLearnersCompleted =
+    learners.length > 0 && learners.every((learner) => submittedEmails.has((learner.email || "").trim().toLowerCase()));
+
+  const nextStatus = allLearnersCompleted ? REGISTRATION_STATUS.COMPLETE : REGISTRATION_STATUS.AWAITING_QUIZ;
   const prisma = getPrismaClient();
 
   if (prisma) {
     await prisma.inscription.updateMany({
-      where: { bulletinInscriptionId, status: REGISTRATION_STATUS.AWAITING_QUIZ },
-      data: { status: REGISTRATION_STATUS.COMPLETE },
+      where: { bulletinInscriptionId, status: { in: [REGISTRATION_STATUS.AWAITING_QUIZ, REGISTRATION_STATUS.COMPLETE] } },
+      data: { status: nextStatus },
     });
     return;
   }
 
   const target = inMemoryRegistrations.find(
-    (item) => item.bulletinInscriptionId === bulletinInscriptionId && item.status === REGISTRATION_STATUS.AWAITING_QUIZ
+    (item) =>
+      item.bulletinInscriptionId === bulletinInscriptionId &&
+      (item.status === REGISTRATION_STATUS.AWAITING_QUIZ || item.status === REGISTRATION_STATUS.COMPLETE)
   );
-  if (target) target.status = REGISTRATION_STATUS.COMPLETE;
+  if (target) target.status = nextStatus;
 }
 
 module.exports = {
@@ -241,6 +284,7 @@ module.exports = {
   createRegistration,
   listRegistrations,
   updateRegistrationStatus,
+  updateRegistrationNotes,
   linkOrCreateRegistrationForBulletin,
   markRegistrationCompleteForBulletin,
 };

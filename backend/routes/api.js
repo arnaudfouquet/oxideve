@@ -19,6 +19,7 @@ const {
   createRegistration,
   listRegistrations,
   updateRegistrationStatus,
+  updateRegistrationNotes,
   linkOrCreateRegistrationForBulletin,
   markRegistrationCompleteForBulletin,
   MANUAL_STATUSES,
@@ -421,6 +422,16 @@ function createApiRouter() {
     asyncHandler(async (req, res) => {
       const { status } = registrationStatusSchema.parse(req.body);
       const updated = await updateRegistrationStatus(req.params.id, status);
+      if (!updated) return res.status(404).json({ error: "Inscription introuvable" });
+      return res.json({ data: updated });
+    })
+  );
+
+  router.patch(
+    "/admin/registrations/:id/notes",
+    asyncHandler(async (req, res) => {
+      const { notes } = z.object({ notes: z.string().max(4000).optional().default("") }).parse(req.body);
+      const updated = await updateRegistrationNotes(req.params.id, notes);
       if (!updated) return res.status(404).json({ error: "Inscription introuvable" });
       return res.json({ data: updated });
     })

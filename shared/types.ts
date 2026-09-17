@@ -95,6 +95,7 @@ export type Registration = {
   status: string;
   origin: string;
   bulletinInscriptionId: string | null;
+  notes: string;
   createdAt: string;
   source?: string;
 };
@@ -272,6 +273,7 @@ export type Participant = {
   registrationId: string | null;
   bulletinInscriptionId: string | null;
   message: string | null;
+  notes: string;
   hasQuiz: boolean;
   quizAttempt: ParticipantQuizSummary | null;
 };

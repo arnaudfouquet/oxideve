@@ -113,6 +113,16 @@ function formatRegistrationDate(value: string) {
   return `${day}/${month}/${year} ${hours}:${minutes} UTC`;
 }
 
+function formatShortDateTimeFr(value: string) {
+  const date = new Date(value);
+  const day = String(date.getUTCDate()).padStart(2, "0");
+  const month = String(date.getUTCMonth() + 1).padStart(2, "0");
+  const year = date.getUTCFullYear();
+  const hours = String(date.getUTCHours()).padStart(2, "0");
+  const minutes = String(date.getUTCMinutes()).padStart(2, "0");
+  return `${day}/${month}/${year} - ${hours}h${minutes}`;
+}
+
 function formatSessionRange(startDate?: string, endDate?: string) {
   if (!startDate || !endDate) {
     return "Session à planifier";
@@ -373,6 +383,8 @@ export function AdminWorkspace({
   const [formationSearch, setFormationSearch] = useState("");
 
   const [participantDrawerOpen, setParticipantDrawerOpen] = useState(false);
+  const [participantNotesDraft, setParticipantNotesDraft] = useState("");
+  const [savingParticipantNotes, setSavingParticipantNotes] = useState(false);
 
   const [queovalSyncing, setQueovalSyncing] = useState(false);
   const [queovalStageIds, setQueovalStageIds] = useState("");
@@ -635,6 +647,35 @@ export function AdminWorkspace({
     setSelectedParticipantId(participantId);
     setParticipantDrawerOpen(true);
     setFeedback("");
+    const participant = participants.find((item) => item.id === participantId);
+    setParticipantNotesDraft(participant?.notes || "");
+  }
+
+  async function saveParticipantNotes() {
+    if (!selectedParticipant?.registrationId) return;
+
+    setSavingParticipantNotes(true);
+    const registrationId = selectedParticipant.registrationId;
+
+    try {
+      const response = await fetch(`/api/admin/registrations/${registrationId}/notes`, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ notes: participantNotesDraft }),
+      });
+
+      if (!response.ok) {
+        setError("Impossible d'enregistrer la note.");
+        return;
+      }
+
+      setParticipants((current) =>
+        current.map((item) => (item.registrationId === registrationId ? { ...item, notes: participantNotesDraft } : item)),
+      );
+      setSuccess("Note enregistrée.");
+    } finally {
+      setSavingParticipantNotes(false);
+    }
   }
 
   function closeParticipantDrawer() {
@@ -1728,6 +1769,14 @@ export function AdminWorkspace({
 
             <DataTable
               columns={[
+                {
+                  key: "firstContactAt",
+                  label: "Date",
+                  sortable: true,
+                  width: "160px",
+                  sortValue: (row) => row.firstContactAt,
+                  render: (row) => formatShortDateTimeFr(row.firstContactAt),
+                },
                 { key: "fullName", label: "Nom", sortable: true, sortValue: (row) => row.fullName, render: (row) => row.fullName },
                 { key: "company", label: "Entreprise", sortable: true, sortValue: (row) => row.company, render: (row) => row.company },
                 { key: "phone", label: "Téléphone", render: (row) => row.phone },
@@ -1824,6 +1873,23 @@ export function AdminWorkspace({
                       ? `${selectedParticipant.quizAttempt.scoreOn20} / 20`
                       : "en attente"}
                 </p>
+
+                {selectedParticipant.registrationId ? (
+                  <div className="admin-notes-block">
+                    <span>Notes</span>
+                    <textarea
+                      className="ui-field"
+                      rows={3}
+                      value={participantNotesDraft}
+                      onChange={(event) => setParticipantNotesDraft(event.target.value)}
+                      placeholder="Ex. : relancé le 12/09, en attente de retour du client..."
+                    />
+                    <Button variant="secondary" onClick={saveParticipantNotes} disabled={savingParticipantNotes}>
+                      {savingParticipantNotes ? "Enregistrement..." : "Enregistrer la note"}
+                    </Button>
+                  </div>
+                ) : null}
+
                 <h3>Coordonnées</h3>
                 <div className="form-grid">
                   <DetailField label="Origine" value={selectedParticipant.origin} copyKey="p-origin" copyToClipboard={copyToClipboard} copiedKey={copiedKey} />

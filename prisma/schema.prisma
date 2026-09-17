@@ -97,6 +97,7 @@ model Inscription {
   status                String      @default("Pré-inscription (à qualifier)")
   origin                String      @default("Formulaire pré-inscription site")
   bulletinInscriptionId String?     @unique
+  notes                 String?     @db.Text
   createdAt             DateTime    @default(now())
   companyRef            Company?    @relation(fields: [companyId], references: [id], onDelete: SetNull)
   session               Session?    @relation(fields: [sessionId], references: [id], onDelete: SetNull)
