@@ -1,4 +1,5 @@
 const express = require("express");
+const archiver = require("archiver");
 const { z } = require("zod");
 const { formLimiter } = require("../middleware/security");
 const { isDatabaseConnected } = require("../services/prismaClient");
@@ -503,6 +504,85 @@ function createApiRouter() {
       res.set("Content-Type", "application/pdf");
       res.set("Content-Disposition", `inline; filename="bulletin-${bulletin.id}.pdf"`);
       return res.send(pdfBuffer);
+    })
+  );
+
+  router.get(
+    "/admin/sessions/:id/documents.zip",
+    asyncHandler(async (req, res) => {
+      const [sessions, bulletins, quizAttempts] = await Promise.all([
+        listSessions(),
+        listBulletinInscriptions(),
+        listAllQuizAttempts(),
+      ]);
+      const session = sessions.find((item) => item.id === req.params.id);
+
+      if (!session) {
+        return res.status(404).json({ error: "Session introuvable" });
+      }
+
+      const sessionBulletins = bulletins.filter((bulletin) => bulletin.sessionId === session.id);
+
+      if (sessionBulletins.length === 0) {
+        return res.status(404).json({ error: "Aucun bulletin d'inscription pour cette session." });
+      }
+
+      const formation = await getFormationBySlug(session.formationSlug);
+
+      res.set("Content-Type", "application/zip");
+      res.set("Content-Disposition", `attachment; filename="documents-session-${session.id}.zip"`);
+
+      const archive = archiver("zip", { zlib: { level: 9 } });
+      archive.on("error", (error) => {
+        console.error("[api] Échec de la génération de l'archive ZIP", error);
+        res.destroy(error);
+      });
+      archive.pipe(res);
+
+      const usedNames = new Set();
+      function uniqueName(baseName) {
+        let candidate = baseName;
+        let suffix = 2;
+        while (usedNames.has(candidate)) {
+          candidate = `${baseName.replace(/\.pdf$/, "")}-${suffix}.pdf`;
+          suffix += 1;
+        }
+        usedNames.add(candidate);
+        return candidate;
+      }
+
+      function slugifyName(value) {
+        return String(value || "")
+          .normalize("NFD")
+          .replace(/[̀-ͯ]/g, "")
+          .replace(/[^a-zA-Z0-9]+/g, "-")
+          .replace(/^-+|-+$/g, "")
+          .toLowerCase() || "sans-nom";
+      }
+
+      for (const bulletin of sessionBulletins) {
+        const bulletinPdf = await generateBulletinPdf(bulletin, formation, session);
+        const companySlug = slugifyName(bulletin.companyName);
+        archive.append(bulletinPdf, { name: uniqueName(`bulletin-${companySlug}.pdf`) });
+
+        const learners = Array.isArray(bulletin.learners) ? bulletin.learners : [];
+        for (const learner of learners) {
+          const attempt = quizAttempts.find(
+            (item) =>
+              item.bulletinInscriptionId === bulletin.id &&
+              (item.learnerEmail || "").trim().toLowerCase() === (learner.email || "").trim().toLowerCase(),
+          );
+          if (!attempt) continue;
+
+          const quiz = getQuizBySlug(attempt.quizSlug);
+          const attemptResult = await getQuizAttemptById(attempt.id);
+          const quizPdf = await generateQuizPdf(quiz, attemptResult);
+          const learnerSlug = slugifyName(learner.fullName);
+          archive.append(quizPdf, { name: uniqueName(`autoeval-${companySlug}-${learnerSlug}.pdf`) });
+        }
+      }
+
+      await archive.finalize();
     })
   );
 

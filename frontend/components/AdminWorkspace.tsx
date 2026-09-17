@@ -1360,21 +1360,26 @@ export function AdminWorkspace({
               <div className="admin-form-section">
                 <div className="section-heading section-heading-tight">
                   <h3>Inscrits à cette session</h3>
-                  {editingSessionRegistrations.length ? (
-                    <Button
-                      variant="secondary"
-                      onClick={() =>
-                        copyToClipboard(
-                          "session-all",
-                          editingSessionRegistrations
-                            .map((registration) => `${registration.company}\t${registration.contactName}\t${registration.email}\t${registration.phone}`)
-                            .join("\n"),
-                        )
-                      }
-                    >
-                      {copiedKey === "session-all" ? "Copié !" : "Copier la liste"}
-                    </Button>
-                  ) : null}
+                  <div className="admin-row-actions">
+                    {editingSessionRegistrations.length ? (
+                      <Button
+                        variant="secondary"
+                        onClick={() =>
+                          copyToClipboard(
+                            "session-all",
+                            editingSessionRegistrations
+                              .map((registration) => `${registration.company}\t${registration.contactName}\t${registration.email}\t${registration.phone}`)
+                              .join("\n"),
+                          )
+                        }
+                      >
+                        {copiedKey === "session-all" ? "Copié !" : "Copier la liste"}
+                      </Button>
+                    ) : null}
+                    <a className="ui-button ui-button-secondary" href={`/api/admin/sessions/${editingSessionId}/documents.zip`}>
+                      Télécharger les docs
+                    </a>
+                  </div>
                 </div>
                 <DataTable
                   columns={[
