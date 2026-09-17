@@ -2930,6 +2930,12 @@ main {
   background: rgba(0, 156, 220, 0.16);
 }
 
+.admin-row-actions {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
 .admin-inline-select {
   min-height: 36px;
   padding: 6px 10px;

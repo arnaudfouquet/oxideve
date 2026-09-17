@@ -2,7 +2,7 @@
 
 import { useEffect, useMemo, useState } from "react";
 import { Button } from "@/components/ui";
-import { DataTable, type DataTableColumn } from "@/components/admin/DataTable";
+import { DataTable } from "@/components/admin/DataTable";
 import { Drawer } from "@/components/admin/Drawer";
 import type { AdminUser, Article, BulletinInscriptionWithAttempts, Company, CrmInteraction, CrmTask, Formation, Participant, PendingSyncSession, ProgrammeDay, Registration, Session } from "../../shared/types";
 
@@ -62,12 +62,6 @@ type ArticleDraft = {
   readingTime: string;
   publishedAt: string;
   featuredFormationSlug: string;
-};
-
-type RegistrationDetail = {
-  registration: Registration;
-  formation?: Formation;
-  session?: Session;
 };
 
 function splitLines(value: string) {
@@ -240,7 +234,7 @@ type DetailFieldProps = {
 const NAV_ITEMS: { value: Section; label: string; icon: string }[] = [
   { value: "dashboard", label: "Dashboard", icon: "◧" },
   { value: "sessions", label: "Sessions", icon: "◷" },
-  { value: "participants", label: "Inscrits", icon: "◍" },
+  { value: "participants", label: "Inscriptions", icon: "◍" },
   { value: "formations", label: "Catalogue", icon: "▤" },
   { value: "editorial", label: "Editorial", icon: "✎" },
   { value: "accounts", label: "Comptes", icon: "◉" },
@@ -285,8 +279,6 @@ export function AdminWorkspace({
   const [formations, setFormations] = useState(initialFormations);
   const [sessions, setSessions] = useState(initialSessions);
   const [registrations, setRegistrations] = useState(initialRegistrations);
-  const [registrationSearch, setRegistrationSearch] = useState("");
-  const [registrationStatusFilter, setRegistrationStatusFilter] = useState("Tous");
   const MANUAL_REGISTRATION_STATUSES = ["Pré-inscription (à qualifier)", "Non intéressé", "BI envoyé"];
   const AUTOMATIC_REGISTRATION_STATUSES = ["En attente auto-éval", "Inscription complétée"];
   const [bulletinInscriptions, setBulletinInscriptions] = useState(initialBulletinInscriptions);
@@ -381,18 +373,6 @@ export function AdminWorkspace({
   const [formationSearch, setFormationSearch] = useState("");
 
   const [participantDrawerOpen, setParticipantDrawerOpen] = useState(false);
-
-  const [selectedRegistrationId, setSelectedRegistrationId] = useState("");
-  const [registrationDrawerOpen, setRegistrationDrawerOpen] = useState(false);
-
-  function openRegistrationDrawer(id: string) {
-    setSelectedRegistrationId(id);
-    setRegistrationDrawerOpen(true);
-  }
-
-  function closeRegistrationDrawer() {
-    setRegistrationDrawerOpen(false);
-  }
 
   const [queovalSyncing, setQueovalSyncing] = useState(false);
   const [queovalStageIds, setQueovalStageIds] = useState("");
@@ -613,18 +593,6 @@ export function AdminWorkspace({
     const matchesCategory = sessionCategoryFilter === "Toutes" || formation?.category === sessionCategoryFilter;
     return matchesSearch && matchesState && matchesCategory;
   });
-
-  const filteredRegistrations = useMemo(() => {
-    const search = registrationSearch.trim().toLowerCase();
-    return registrations
-      .filter((registration) => {
-        const matchesSearch =
-          !search || `${registration.contactName} ${registration.company} ${registration.email}`.toLowerCase().includes(search);
-        const matchesStatus = registrationStatusFilter === "Tous" || registration.status === registrationStatusFilter;
-        return matchesSearch && matchesStatus;
-      })
-      .sort((left, right) => compareDateDesc(left.createdAt, right.createdAt));
-  }, [registrations, registrationSearch, registrationStatusFilter]);
 
   async function handleRegistrationStatusChange(registrationId: string, status: string) {
     const previous = registrations;
@@ -1026,72 +994,6 @@ export function AdminWorkspace({
     setSuccess(result.message || "Article enregistré.");
   }
 
-  const selectedRegistration = registrations.find((item) => item.id === selectedRegistrationId) || null;
-  const selectedRegistrationDetail: RegistrationDetail | null = selectedRegistration
-    ? {
-        registration: selectedRegistration,
-        formation: formations.find((item) => item.slug === selectedRegistration.formationSlug),
-        session: sessions.find((item) => item.id === selectedRegistration.sessionId),
-      }
-    : null;
-
-  const registrationColumns: DataTableColumn<Registration>[] = [
-    { key: "contact", label: "Contact", sortable: true, sortValue: (row) => row.contactName, render: (row) => row.contactName },
-    { key: "company", label: "Entreprise", sortable: true, sortValue: (row) => row.company, render: (row) => row.company },
-    {
-      key: "formation",
-      label: "Formation",
-      sortable: true,
-      sortValue: (row) => formations.find((item) => item.slug === row.formationSlug)?.shortTitle || row.formationSlug,
-      render: (row) => formations.find((item) => item.slug === row.formationSlug)?.shortTitle || row.formationSlug,
-    },
-    {
-      key: "createdAt",
-      label: "Soumis le",
-      sortable: true,
-      sortValue: (row) => row.createdAt,
-      render: (row) => formatRegistrationDate(row.createdAt),
-    },
-    {
-      key: "status",
-      label: "Statut",
-      sortable: true,
-      sortValue: (row) => row.status,
-      width: "190px",
-      render: (row) =>
-        AUTOMATIC_REGISTRATION_STATUSES.includes(row.status) ? (
-          <StatusBadge label={row.status} tone="accent" />
-        ) : (
-          <select
-            className="ui-field admin-inline-select"
-            value={row.status}
-            onClick={(event) => event.stopPropagation()}
-            onChange={(event) => handleRegistrationStatusChange(row.id, event.target.value)}
-          >
-            {MANUAL_REGISTRATION_STATUSES.map((status) => (
-              <option key={status} value={status}>{status}</option>
-            ))}
-          </select>
-        ),
-    },
-    {
-      key: "actions",
-      label: "Actions",
-      width: "190px",
-      render: (row) => (
-        <button
-          className="admin-copy-button"
-          onClick={(event) => {
-            event.stopPropagation();
-            copyBulletinLink(row.id, row.formationSlug);
-          }}
-          type="button"
-        >
-          {copiedKey === `registration-bulletin-${row.id}` ? "Copié !" : "Copier le lien"}
-        </button>
-      ),
-    },
-  ];
 
   return (
     <div className="admin-shell-v2">
@@ -1131,7 +1033,7 @@ export function AdminWorkspace({
               <div>
                 <span className="eyebrow">Vue d&apos;ensemble</span>
                 <h2>Dashboard</h2>
-                <p>Catalogue de formations, sessions à venir et disponibilités.</p>
+                <p>Catalogue, sessions et suivi des leads. Pour la liste détaillée, voir l&apos;onglet Inscriptions.</p>
               </div>
               <Button variant="secondary" onClick={refreshAdminData} disabled={refreshing}>
                 {refreshing ? "Actualisation..." : "Rafraîchir"}
@@ -1140,9 +1042,7 @@ export function AdminWorkspace({
             <div className="admin-metric-grid">
               <article className="admin-metric-card"><span>Catalogue</span><strong>{formations.length}</strong><small>formations</small></article>
               <article className="admin-metric-card"><span>Sessions</span><strong>{sessions.filter((session) => isUpcoming(session)).length}</strong><small>à venir</small></article>
-              <article className="admin-metric-card"><span>Entreprises</span><strong>{initialCompanies.length}</strong><small>au total</small></article>
               <article className="admin-metric-card"><span>Articles</span><strong>{articles.length}</strong><small>publiés</small></article>
-              <article className="admin-metric-card"><span>Pré-inscriptions</span><strong>{registrations.length}</strong><small>au total</small></article>
             </div>
           </section>
 
@@ -1150,73 +1050,52 @@ export function AdminWorkspace({
             <div className="section-heading section-heading-tight">
               <div>
                 <span className="eyebrow">Suivi</span>
-                <h2>Pré-inscriptions</h2>
-                <p>Demandes rapides reçues depuis les fiches formation, avant complétion d&apos;un bulletin d&apos;inscription.</p>
+                <h2>Leads et conversion</h2>
+                <p>Répartition des inscriptions par statut, tous canaux confondus.</p>
               </div>
             </div>
-
-            <div className="admin-filter-grid admin-filter-grid-compact">
-              <label><span>Recherche</span><input className="ui-field" value={registrationSearch} onChange={(event) => setRegistrationSearch(event.target.value)} placeholder="Nom, entreprise, email..." /></label>
-              <label>
-                <span>Statut</span>
-                <select className="ui-field" value={registrationStatusFilter} onChange={(event) => setRegistrationStatusFilter(event.target.value)}>
-                  <option>Tous</option>
-                  {[...MANUAL_REGISTRATION_STATUSES, ...AUTOMATIC_REGISTRATION_STATUSES].map((status) => (
-                    <option key={status}>{status}</option>
-                  ))}
-                </select>
-              </label>
+            <div className="admin-metric-grid">
+              <article className="admin-metric-card">
+                <span>Total</span>
+                <strong>{registrations.length}</strong>
+                <small>inscriptions</small>
+              </article>
+              <article className="admin-metric-card">
+                <span>À qualifier</span>
+                <strong>{registrations.filter((r) => r.status === "Pré-inscription (à qualifier)").length}</strong>
+                <small>en attente</small>
+              </article>
+              <article className="admin-metric-card">
+                <span>BI envoyé</span>
+                <strong>{registrations.filter((r) => r.status === "BI envoyé").length}</strong>
+                <small>en attente de retour</small>
+              </article>
+              <article className="admin-metric-card">
+                <span>Auto-éval</span>
+                <strong>{registrations.filter((r) => r.status === "En attente auto-éval").length}</strong>
+                <small>en attente</small>
+              </article>
+              <article className="admin-metric-card">
+                <span>Complétées</span>
+                <strong>{registrations.filter((r) => r.status === "Inscription complétée").length}</strong>
+                <small>inscriptions</small>
+              </article>
+              <article className="admin-metric-card">
+                <span>Taux de conversion</span>
+                <strong>
+                  {registrations.length
+                    ? Math.round(
+                        (registrations.filter((r) => r.status === "Inscription complétée" || r.status === "En attente auto-éval").length /
+                          registrations.length) *
+                          100,
+                      )
+                    : 0}
+                  %
+                </strong>
+                <small>lead → inscription</small>
+              </article>
             </div>
-
-            <DataTable
-              columns={registrationColumns}
-              rows={filteredRegistrations}
-              getRowKey={(row) => row.id}
-              emptyLabel="Aucune pré-inscription ne correspond à ces filtres."
-              pageSize={15}
-              onRowClick={(row) => openRegistrationDrawer(row.id)}
-              isRowActive={(row) => selectedRegistrationId === row.id && registrationDrawerOpen}
-              getRowClassName={(row) => (row.status === "Pré-inscription (à qualifier)" ? "admin-data-table-row-new" : "")}
-            />
           </section>
-
-          <Drawer
-            open={registrationDrawerOpen}
-            onClose={closeRegistrationDrawer}
-            title="Détail de la pré-inscription"
-          >
-            {selectedRegistrationDetail ? (
-              <>
-                <DetailField label="Origine" value={selectedRegistrationDetail.registration.origin} copyKey="reg-origin" copyToClipboard={copyToClipboard} copiedKey={copiedKey} />
-                <DetailField label="Contact" value={selectedRegistrationDetail.registration.contactName} copyKey="reg-contact" copyToClipboard={copyToClipboard} copiedKey={copiedKey} />
-                <DetailField label="Entreprise" value={selectedRegistrationDetail.registration.company} copyKey="reg-company" copyToClipboard={copyToClipboard} copiedKey={copiedKey} />
-                <DetailField label="Email" value={selectedRegistrationDetail.registration.email} copyKey="reg-email" copyToClipboard={copyToClipboard} copiedKey={copiedKey} />
-                <DetailField label="Téléphone" value={selectedRegistrationDetail.registration.phone} copyKey="reg-phone" copyToClipboard={copyToClipboard} copiedKey={copiedKey} />
-                <DetailField label="Formation" value={selectedRegistrationDetail.formation?.title || selectedRegistrationDetail.registration.formationSlug} copyKey="reg-formation" copyToClipboard={copyToClipboard} copiedKey={copiedKey} />
-                <DetailField
-                  label="Session"
-                  value={
-                    selectedRegistrationDetail.session
-                      ? `${formatSessionRange(selectedRegistrationDetail.session.startDate, selectedRegistrationDetail.session.endDate)} · ${selectedRegistrationDetail.session.city}`
-                      : "Non renseignée"
-                  }
-                  copyKey="reg-session"
-                  copyToClipboard={copyToClipboard}
-                  copiedKey={copiedKey}
-                />
-                <DetailField label="Soumis le" value={formatRegistrationDate(selectedRegistrationDetail.registration.createdAt)} copyKey="reg-createdat" copyToClipboard={copyToClipboard} copiedKey={copiedKey} />
-                <DetailField label="Besoin" value={selectedRegistrationDetail.registration.message || "Non renseigné"} copyKey="reg-message" copyToClipboard={copyToClipboard} copiedKey={copiedKey} />
-                <div className="admin-form-actions">
-                  <Button
-                    variant="secondary"
-                    onClick={() => copyBulletinLink(selectedRegistrationDetail.registration.id, selectedRegistrationDetail.registration.formationSlug)}
-                  >
-                    {copiedKey === `registration-bulletin-${selectedRegistrationDetail.registration.id}` ? "Copié !" : "Copier le lien du bulletin"}
-                  </Button>
-                </div>
-              </>
-            ) : null}
-          </Drawer>
         </div>
       ) : null}
 
@@ -1818,9 +1697,9 @@ export function AdminWorkspace({
           <section className="admin-shell">
             <div className="section-heading section-heading-tight">
               <div>
-                <span className="eyebrow">Inscrits</span>
-                <h2>Tous les inscrits</h2>
-                <p>Pré-inscriptions rapides et bulletins d&apos;inscription détaillés, fusionnés en une seule liste par personne.</p>
+                <span className="eyebrow">Suivi</span>
+                <h2>Inscriptions</h2>
+                <p>Toutes les demandes, du premier contact à l&apos;inscription complétée — pré-inscriptions rapides et bulletins d&apos;inscription fusionnés en une seule liste par personne.</p>
               </div>
             </div>
 
@@ -1856,24 +1735,29 @@ export function AdminWorkspace({
                   render: (row) => formations.find((item) => item.slug === row.formationSlug)?.shortTitle || row.formationSlug,
                 },
                 {
-                  key: "session",
-                  label: "Session",
-                  render: (row) => {
-                    const session = sessions.find((item) => item.id === row.sessionId);
-                    return session ? `${formatSessionRange(session.startDate, session.endDate)} · ${session.city}` : "Non renseignée";
-                  },
-                },
-                {
                   key: "status",
                   label: "Statut",
                   sortable: true,
                   sortValue: (row) => row.status,
-                  render: (row) => (
-                    <StatusBadge
-                      label={row.status}
-                      tone={AUTOMATIC_REGISTRATION_STATUSES.includes(row.status) ? "accent" : row.status === "Non intéressé" ? "soft" : "default"}
-                    />
-                  ),
+                  width: "190px",
+                  render: (row) =>
+                    row.registrationId && !AUTOMATIC_REGISTRATION_STATUSES.includes(row.status) ? (
+                      <select
+                        className="ui-field admin-inline-select"
+                        value={row.status}
+                        onClick={(event) => event.stopPropagation()}
+                        onChange={(event) => row.registrationId && handleRegistrationStatusChange(row.registrationId, event.target.value)}
+                      >
+                        {MANUAL_REGISTRATION_STATUSES.map((status) => (
+                          <option key={status} value={status}>{status}</option>
+                        ))}
+                      </select>
+                    ) : (
+                      <StatusBadge
+                        label={row.status}
+                        tone={AUTOMATIC_REGISTRATION_STATUSES.includes(row.status) ? "accent" : row.status === "Non intéressé" ? "soft" : "default"}
+                      />
+                    ),
                 },
                 {
                   key: "quiz",
@@ -1889,26 +1773,40 @@ export function AdminWorkspace({
                 {
                   key: "actions",
                   label: "Actions",
-                  width: "140px",
-                  render: (row) =>
-                    row.bulletinInscriptionId ? (
-                      <a
+                  width: "190px",
+                  render: (row) => (
+                    <div className="admin-row-actions">
+                      <button
                         className="admin-copy-button"
-                        href={`/api/admin/bulletin-inscriptions/${row.bulletinInscriptionId}/pdf`}
-                        target="_blank"
-                        rel="noreferrer"
-                        onClick={(event) => event.stopPropagation()}
+                        onClick={(event) => {
+                          event.stopPropagation();
+                          copyBulletinLink(row.registrationId || row.id, row.formationSlug);
+                        }}
+                        type="button"
                       >
-                        Voir le PDF
-                      </a>
-                    ) : null,
+                        {copiedKey === `registration-bulletin-${row.registrationId || row.id}` ? "Copié !" : "Copier"}
+                      </button>
+                      {row.bulletinInscriptionId ? (
+                        <a
+                          className="admin-copy-button"
+                          href={`/api/admin/bulletin-inscriptions/${row.bulletinInscriptionId}/pdf`}
+                          target="_blank"
+                          rel="noreferrer"
+                          onClick={(event) => event.stopPropagation()}
+                        >
+                          PDF
+                        </a>
+                      ) : null}
+                    </div>
+                  ),
                 },
               ]}
               rows={filteredParticipants}
               getRowKey={(row) => row.id}
-              emptyLabel="Aucun inscrit ne correspond à ces filtres."
+              emptyLabel="Aucune inscription ne correspond à ces filtres."
               onRowClick={(row) => selectParticipant(row.id)}
               isRowActive={(row) => selectedParticipantId === row.id}
+              getRowClassName={(row) => (row.status === "Pré-inscription (à qualifier)" ? "admin-data-table-row-new" : "")}
               pageSize={15}
             />
           </section>
@@ -1962,7 +1860,7 @@ export function AdminWorkspace({
                     <div className="form-grid">
                       <DetailField label="Dates de session" value={selectedParticipantBulletin.sessionDates || "Non renseignées"} copyKey="b-dates" copyToClipboard={copyToClipboard} copiedKey={copiedKey} />
                       <DetailField label="Lieu de session" value={selectedParticipantBulletin.sessionLocation || "Non renseigné"} copyKey="b-location" copyToClipboard={copyToClipboard} copiedKey={copiedKey} />
-                      <DetailField label="Origine" value={selectedParticipantBulletin.source || "Non renseignée"} copyKey="b-source" copyToClipboard={copyToClipboard} copiedKey={copiedKey} />
+                      <DetailField label="Comment il nous a connu" value={selectedParticipantBulletin.source || "Non renseignée"} copyKey="b-source" copyToClipboard={copyToClipboard} copiedKey={copiedKey} />
                       <DetailField label="Raison sociale" value={selectedParticipantBulletin.companyName} copyKey="b-company" copyToClipboard={copyToClipboard} copiedKey={copiedKey} />
                       <DetailField label="SIRET" value={selectedParticipantBulletin.siret || "Non renseigné"} copyKey="b-siret" copyToClipboard={copyToClipboard} copiedKey={copiedKey} />
                       <DetailField label="Commanditaire" value={`${selectedParticipantBulletin.sponsorFullName} (${selectedParticipantBulletin.sponsorRole || "fonction non renseignée"})`} copyKey="b-sponsor" copyToClipboard={copyToClipboard} copiedKey={copiedKey} />
