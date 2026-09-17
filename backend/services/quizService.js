@@ -13,6 +13,10 @@ function getQuizByFormationSlug(formationSlug) {
   return quizzes.find((quiz) => quiz.formationSlug === formationSlug);
 }
 
+function normalizeLearnerEmail(email) {
+  return String(email || "").trim().toLowerCase();
+}
+
 function normalizeQuizAttempt(attempt) {
   const rawAnswers = attempt.answers || {};
 
@@ -83,6 +87,21 @@ async function submitQuizAttempt(payload) {
       throw error;
     }
 
+    const normalizedEmail = normalizeLearnerEmail(payload.learnerEmail);
+    const existingAttempts = await prisma.quizAttempt.findMany({
+      where: { bulletinInscriptionId: payload.bulletinInscriptionId },
+    });
+    const alreadySubmitted = existingAttempts.some(
+      (attempt) => normalizeLearnerEmail(attempt.learnerEmail) === normalizedEmail,
+    );
+
+    if (alreadySubmitted) {
+      const error = new Error("Cette auto-évaluation a déjà été complétée.");
+      error.statusCode = 409;
+      error.expose = true;
+      throw error;
+    }
+
     const created = await prisma.quizAttempt.create({
       data: {
         bulletinInscriptionId: payload.bulletinInscriptionId,
@@ -101,6 +120,20 @@ async function submitQuizAttempt(payload) {
       correctCount,
       totalQuestions,
     };
+  }
+
+  const normalizedEmailFallback = normalizeLearnerEmail(payload.learnerEmail);
+  const alreadySubmittedFallback = inMemoryQuizAttempts.some(
+    (attempt) =>
+      attempt.bulletinInscriptionId === payload.bulletinInscriptionId &&
+      normalizeLearnerEmail(attempt.learnerEmail) === normalizedEmailFallback,
+  );
+
+  if (alreadySubmittedFallback) {
+    const error = new Error("Cette auto-évaluation a déjà été complétée.");
+    error.statusCode = 409;
+    error.expose = true;
+    throw error;
   }
 
   const fallbackAttempt = {

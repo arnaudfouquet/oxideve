@@ -302,6 +302,7 @@ function buildInternalBulletinHtml({ bulletin, formation, session }) {
       return `
         <div style="margin-top: 12px;">
           <p style="margin: 0;"><strong>${title} :</strong> ${learner.fullName || "-"}</p>
+          ${learner.email ? `<p style="margin: 0;">Email : ${learner.email}</p>` : ""}
           ${learner.role ? `<p style="margin: 0;">Fonction : ${learner.role}</p>` : ""}
           ${learner.phone ? `<p style="margin: 0;">Téléphone : ${learner.phone}</p>` : ""}
           ${learner.birthDate ? `<p style="margin: 0;">Date de naissance : ${formatDate(learner.birthDate)}</p>` : ""}
@@ -368,10 +369,78 @@ async function sendInternalBulletinNotification({ bulletin, formation, session }
   }
 }
 
+function buildLearnerQuizInviteHtml({ learner, formation, quizUrl }) {
+  const formationTitle = formation?.title || "votre formation";
+
+  return `
+    <div style="font-family: Arial, sans-serif; color: #004d6d; max-width: 560px; margin: 0 auto;">
+      ${buildEmailLogoHeader()}
+      <h2 style="color: #004d6d;">Votre auto-évaluation avant formation</h2>
+      <p>Bonjour ${learner.fullName || ""},</p>
+      <p>
+        Vous êtes inscrit(e) à la formation <strong>${formationTitle}</strong>. Merci de réaliser votre
+        <strong>auto-évaluation</strong> personnelle en amont de la formation.
+      </p>
+      <p style="color: #09cf65; font-weight: bold;">
+        Cette auto-évaluation est obligatoire pour finaliser le dossier d'inscription. Merci de la compléter dans les meilleurs délais.
+      </p>
+      <p>
+        <a href="${quizUrl}" style="display: inline-block; background: #09cf65; color: #ffffff; padding: 12px 20px; border-radius: 999px; text-decoration: none; font-weight: bold;">
+          Réaliser mon auto-évaluation →
+        </a>
+      </p>
+      <p style="margin-top: 32px; color: #4d6a78; font-size: 0.85rem;">Oxideve - Organisme de formation professionnelle</p>
+    </div>
+  `;
+}
+
+/**
+ * Envoie à un apprenant, à sa propre adresse email, le lien vers SA seule auto-évaluation
+ * (contrairement à sendBulletinConfirmationEmail qui liste tous les liens au commanditaire).
+ * Mode dégradé identique aux autres fonctions d'envoi si SMTP_HOST n'est pas configuré.
+ */
+async function sendLearnerQuizInviteEmail({ learner, formation, quizUrl }) {
+  const transporter = getTransporter();
+
+  if (!transporter) {
+    if (!warnedMissingConfig) {
+      console.warn(
+        "[mailService] SMTP_HOST non configuré : envoi d'email désactivé (mode dégradé). L'invitation à l'auto-évaluation n'a pas été envoyée.",
+      );
+      warnedMissingConfig = true;
+    }
+
+    return { sent: false, reason: "smtp_not_configured" };
+  }
+
+  if (!learner?.email) {
+    return { sent: false, reason: "missing_recipient" };
+  }
+
+  const from = process.env.MAIL_FROM || "no-reply@oxideve.fr";
+  const html = buildLearnerQuizInviteHtml({ learner, formation, quizUrl });
+
+  try {
+    await transporter.sendMail({
+      from,
+      to: learner.email,
+      subject: `Votre auto-évaluation - ${formation?.title || "formation Oxideve"}`,
+      html,
+      attachments: logoAttachment(),
+    });
+
+    return { sent: true };
+  } catch (error) {
+    console.error("[mailService] Échec de l'envoi de l'invitation à l'auto-évaluation à un apprenant", error);
+    return { sent: false, reason: "send_error" };
+  }
+}
+
 module.exports = {
   isSmtpConfigured,
   sendBulletinConfirmationEmail,
   sendQuizResultEmail,
   sendInternalRegistrationNotification,
   sendInternalBulletinNotification,
+  sendLearnerQuizInviteEmail,
 };

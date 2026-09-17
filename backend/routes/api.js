@@ -32,6 +32,7 @@ const {
   sendQuizResultEmail,
   sendInternalRegistrationNotification,
   sendInternalBulletinNotification,
+  sendLearnerQuizInviteEmail,
 } = require("../services/mailService");
 const {
   listAdminUsers,
@@ -159,6 +160,7 @@ const crmInteractionSchema = z.object({
 
 const learnerSchema = z.object({
   fullName: z.string().min(2).max(160),
+  email: z.string().email(),
   role: z.string().max(160).optional(),
   phone: z.string().max(30).optional(),
   birthDate: z.string().max(10).optional(),
@@ -302,7 +304,8 @@ function createApiRouter() {
       const quizLinks = quiz
         ? bulletin.learners.map((learner) => ({
             learnerFullName: learner.fullName,
-            url: `${process.env.SITE_URL || "http://localhost:3000"}/auto-evaluation/${quiz.slug}?bulletinInscriptionId=${bulletin.id}&learnerFullName=${encodeURIComponent(learner.fullName)}&companyName=${encodeURIComponent(bulletin.companyName)}`,
+            learnerEmail: learner.email,
+            url: `${process.env.SITE_URL || "http://localhost:3000"}/auto-evaluation/${quiz.slug}?bulletinInscriptionId=${bulletin.id}&learnerFullName=${encodeURIComponent(learner.fullName)}&learnerEmail=${encodeURIComponent(learner.email)}&companyName=${encodeURIComponent(bulletin.companyName)}`,
           }))
         : [];
 
@@ -318,6 +321,21 @@ function createApiRouter() {
         await sendInternalBulletinNotification({ bulletin, formation, session });
       } catch (error) {
         console.error("[api] Échec de l'envoi de la notification interne de bulletin d'inscription", error);
+      }
+
+      // Envoi défensif par apprenant : un échec individuel ne doit jamais faire échouer
+      // la requête ni empêcher l'envoi aux autres apprenants du même bulletin.
+      if (quiz) {
+        for (const learner of bulletin.learners) {
+          const link = quizLinks.find((item) => item.learnerEmail === learner.email);
+          if (!link) continue;
+
+          try {
+            await sendLearnerQuizInviteEmail({ learner, formation, quizUrl: link.url });
+          } catch (error) {
+            console.error("[api] Échec de l'envoi de l'invitation à l'auto-évaluation à un apprenant", error);
+          }
+        }
       }
 
       try {

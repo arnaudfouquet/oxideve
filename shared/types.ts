@@ -109,6 +109,7 @@ export type AdminUser = {
 
 export type LearnerInput = {
   fullName: string;
+  email: string;
   role?: string;
   phone?: string;
   birthDate?: string;

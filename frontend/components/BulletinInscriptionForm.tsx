@@ -5,7 +5,7 @@ import type { Formation, LearnerInput, Session } from "../../shared/types";
 import { formatDateRange } from "@/lib/dates";
 
 function createEmptyLearner(): LearnerInput {
-  return { fullName: "", role: "", phone: "", birthDate: "", hasDisability: false, disabilityDetails: "" };
+  return { fullName: "", email: "", role: "", phone: "", birthDate: "", hasDisability: false, disabilityDetails: "" };
 }
 
 type Props = {
@@ -288,6 +288,17 @@ export function BulletinInscriptionForm({ formations, sessions, defaultFormation
                 placeholder="Prénom Nom"
                 value={learner.fullName}
                 onChange={(event) => updateLearner(index, { fullName: event.target.value })}
+              />
+            </label>
+            <label>
+              Email
+              <input
+                className="ui-field"
+                type="email"
+                required
+                placeholder="apprenant@entreprise.fr"
+                value={learner.email}
+                onChange={(event) => updateLearner(index, { email: event.target.value })}
               />
             </label>
             <label>

@@ -96,6 +96,7 @@ function generateBulletinPdf(bulletin, formation, session) {
       learners.forEach((learner, index) => {
         drawSectionTitle(doc, multipleLearners ? `Apprenant ${index + 1}` : "Apprenant");
         drawField(doc, "Nom", learner.fullName);
+        drawField(doc, "Email", learner.email);
         drawField(doc, "Fonction", learner.role);
         drawField(doc, "Téléphone", learner.phone);
         drawField(doc, "Date de naissance", learner.birthDate ? formatDate(learner.birthDate) : null);

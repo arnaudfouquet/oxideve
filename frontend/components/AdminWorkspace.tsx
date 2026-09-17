@@ -1765,17 +1765,6 @@ export function AdminWorkspace({
                     ),
                 },
                 {
-                  key: "quiz",
-                  label: "Auto-éval",
-                  sortable: true,
-                  sortValue: (row) => (row.quizAttempt ? row.quizAttempt.scoreOn20 : row.hasQuiz ? -1 : -2),
-                  render: (row) => {
-                    if (!row.hasQuiz) return <span className="admin-list-item-meta">Non applicable</span>;
-                    if (row.quizAttempt) return `${row.quizAttempt.scoreOn20} / 20`;
-                    return <span className="admin-list-item-meta">En attente</span>;
-                  },
-                },
-                {
                   key: "actions",
                   label: "Actions",
                   width: "190px",
@@ -1882,6 +1871,7 @@ export function AdminWorkspace({
                           <p className="admin-list-item-meta">Apprenant {index + 1}</p>
                         ) : null}
                         <DetailField label="Nom" value={learner.fullName} copyKey={`b-learner-name-${index}`} copyToClipboard={copyToClipboard} copiedKey={copiedKey} />
+                        <DetailField label="Email" value={learner.email || "Non renseigné"} copyKey={`b-learner-email-${index}`} copyToClipboard={copyToClipboard} copiedKey={copiedKey} />
                         <DetailField label="Fonction" value={learner.role || "Non renseignée"} copyKey={`b-learner-role-${index}`} copyToClipboard={copyToClipboard} copiedKey={copiedKey} />
                         <DetailField label="Téléphone" value={learner.phone || "Non renseigné"} copyKey={`b-learner-phone-${index}`} copyToClipboard={copyToClipboard} copiedKey={copiedKey} />
                         <DetailField label="Date de naissance" value={formatShortDateFr(learner.birthDate)} copyKey={`b-learner-birth-${index}`} copyToClipboard={copyToClipboard} copiedKey={copiedKey} />

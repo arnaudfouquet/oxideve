@@ -144,7 +144,13 @@ export function QuizForm({
     if (!response.ok) {
       const data = (await response.json().catch(() => null)) as { error?: string } | null;
       setStatus("error");
-      setMessage(data?.error || "Impossible d'envoyer votre auto-évaluation pour le moment.");
+      if (response.status === 409) {
+        setMessage(
+          "Vous avez déjà complété cette auto-évaluation. Si vous pensez qu'il s'agit d'une erreur, contactez Oxideve.",
+        );
+      } else {
+        setMessage(data?.error || "Impossible d'envoyer votre auto-évaluation pour le moment.");
+      }
       return;
     }
 
