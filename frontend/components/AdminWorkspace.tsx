@@ -1019,6 +1019,9 @@ export function AdminWorkspace({
             );
           })}
         </div>
+        <Button variant="secondary" onClick={refreshAdminData} disabled={refreshing}>
+          {refreshing ? "Actualisation..." : "Rafraîchir"}
+        </Button>
       </nav>
 
       <div className="admin-shell-v2-main">
@@ -1038,9 +1041,6 @@ export function AdminWorkspace({
                 <h2>Dashboard</h2>
                 <p>Catalogue, sessions et suivi des leads. Pour la liste détaillée, voir l&apos;onglet Inscriptions.</p>
               </div>
-              <Button variant="secondary" onClick={refreshAdminData} disabled={refreshing}>
-                {refreshing ? "Actualisation..." : "Rafraîchir"}
-              </Button>
             </div>
             <div className="admin-metric-grid">
               <article className="admin-metric-card"><span>Catalogue</span><strong>{formations.length}</strong><small>formations</small></article>
@@ -1730,6 +1730,8 @@ export function AdminWorkspace({
               columns={[
                 { key: "fullName", label: "Nom", sortable: true, sortValue: (row) => row.fullName, render: (row) => row.fullName },
                 { key: "company", label: "Entreprise", sortable: true, sortValue: (row) => row.company, render: (row) => row.company },
+                { key: "phone", label: "Téléphone", render: (row) => row.phone },
+                { key: "email", label: "Email", render: (row) => row.email },
                 {
                   key: "formation",
                   label: "Formation",
@@ -1779,16 +1781,18 @@ export function AdminWorkspace({
                   width: "190px",
                   render: (row) => (
                     <div className="admin-row-actions">
-                      <button
-                        className="admin-copy-button"
-                        onClick={(event) => {
-                          event.stopPropagation();
-                          copyBulletinLink(row.registrationId || row.id, row.formationSlug);
-                        }}
-                        type="button"
-                      >
-                        {copiedKey === `registration-bulletin-${row.registrationId || row.id}` ? "Copié !" : "Copier"}
-                      </button>
+                      {row.status !== "Non intéressé" ? (
+                        <button
+                          className="admin-copy-button"
+                          onClick={(event) => {
+                            event.stopPropagation();
+                            copyBulletinLink(row.registrationId || row.id, row.formationSlug);
+                          }}
+                          type="button"
+                        >
+                          {copiedKey === `registration-bulletin-${row.registrationId || row.id}` ? "Copié !" : "Copier"}
+                        </button>
+                      ) : null}
                       {row.bulletinInscriptionId ? (
                         <a
                           className="admin-copy-button"

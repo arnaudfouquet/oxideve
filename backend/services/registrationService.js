@@ -94,7 +94,11 @@ async function listRegistrations() {
   const prisma = getPrismaClient();
 
   if (prisma) {
-    await listCompanies();
+    try {
+      await listCompanies();
+    } catch (error) {
+      console.error("[registrationService] Échec de la synchronisation des entreprises (non bloquant)", error);
+    }
 
     const registrations = await prisma.inscription.findMany({
       orderBy: { createdAt: "desc" },

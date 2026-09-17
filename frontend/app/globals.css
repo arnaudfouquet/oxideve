@@ -4305,6 +4305,10 @@ main {
   gap: 2px;
 }
 
+.admin-shell-v2-sidebar > .ui-button {
+  margin: auto 12px 8px;
+}
+
 .admin-shell-v2-link {
   display: flex;
   align-items: center;

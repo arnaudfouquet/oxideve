@@ -64,14 +64,16 @@ async function syncCompaniesFromRegistrations(prisma) {
     let company = companyByKey.get(key);
 
     if (!company) {
-      company = await prisma.company.create({
-        data: {
+      company = await prisma.company.upsert({
+        where: { name_email: { name: registration.company, email: registration.email } },
+        create: {
           name: registration.company,
           contactName: registration.contactName,
           email: registration.email,
           phone: registration.phone,
           lastContactAt: registration.createdAt,
         },
+        update: {},
         select: {
           id: true,
           name: true,
