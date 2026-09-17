@@ -14,12 +14,17 @@ const {
 const { createArticle, deleteArticle, getArticleBySlug, listArticles, updateArticle } = require("../services/editorialService");
 const { createCompany, listCompanies, updateCompany } = require("../services/companyService");
 const { createCrmInteraction, createCrmTask, listCrmInteractions, listCrmTasks, updateCrmTask } = require("../services/crmService");
-const { createRegistration, listRegistrations } = require("../services/registrationService");
+const { createRegistration, listRegistrations, updateRegistrationStatus } = require("../services/registrationService");
 const { syncQueovalCalendar, listPendingSyncSessions, resolvePendingSyncSession } = require("../services/queovalService");
 const { createBulletinInscription, listBulletinInscriptions, getBulletinInscriptionById } = require("../services/bulletinInscriptionService");
 const { listParticipants } = require("../services/participantsService");
 const { generateBulletinPdf, generateQuizPdf } = require("../services/pdfService");
-const { sendBulletinConfirmationEmail, sendQuizResultEmail } = require("../services/mailService");
+const {
+  sendBulletinConfirmationEmail,
+  sendQuizResultEmail,
+  sendInternalRegistrationNotification,
+  sendInternalBulletinNotification,
+} = require("../services/mailService");
 const {
   getQuizBySlug,
   getPublicQuizByFormationSlug,
@@ -76,9 +81,10 @@ const sessionSchema = z.object({
   city: z.string().min(2).max(120),
   startDate: z.string().min(10).max(10),
   endDate: z.string().min(10).max(10),
-  seatsLeft: z.coerce.number().int().min(0).max(999),
   mode: z.string().min(2).max(40),
 });
+
+const registrationStatusSchema = z.object({ status: z.string().min(2).max(40) });
 
 const articleSchema = z.object({
   slug: z.string().min(3).max(160).regex(/^[a-z0-9-]+$/),
@@ -123,6 +129,15 @@ const crmInteractionSchema = z.object({
   occurredAt: z.string().max(10).optional().or(z.literal("")),
 });
 
+const learnerSchema = z.object({
+  fullName: z.string().min(2).max(160),
+  role: z.string().max(160).optional(),
+  phone: z.string().max(30).optional(),
+  birthDate: z.string().max(10).optional(),
+  hasDisability: z.coerce.boolean().optional().default(false),
+  disabilityDetails: z.string().max(1000).optional(),
+});
+
 const bulletinInscriptionSchema = z.object({
   formationSlug: z.string().min(2).max(160),
   sessionId: z.string().max(120).optional(),
@@ -138,12 +153,7 @@ const bulletinInscriptionSchema = z.object({
   sponsorRole: z.string().max(160).optional(),
   sponsorEmail: z.string().email(),
   sponsorPhone: z.string().min(8).max(30),
-  learnerFullName: z.string().min(2).max(160),
-  learnerRole: z.string().max(160).optional(),
-  learnerPhone: z.string().max(30).optional(),
-  learnerBirthDate: z.string().max(10).optional(),
-  hasDisability: z.coerce.boolean().optional().default(false),
-  disabilityDetails: z.string().max(1000).optional(),
+  learners: z.array(learnerSchema).min(1).max(3),
 });
 
 const quizAttemptSchema = z.object({
@@ -221,6 +231,18 @@ function createApiRouter() {
     asyncHandler(async (req, res) => {
       const payload = inscriptionSchema.parse(req.body);
       const registration = await createRegistration(payload);
+
+      try {
+        const [formation, sessions] = await Promise.all([
+          getFormationBySlug(registration.formationSlug),
+          listSessions(),
+        ]);
+        const session = sessions.find((item) => item.id === registration.sessionId) || null;
+        await sendInternalRegistrationNotification({ registration, formation, session });
+      } catch (error) {
+        console.error("[api] Échec de l'envoi de la notification interne de pré-inscription", error);
+      }
+
       res.status(201).json({ data: registration, message: "Inscription enregistrée" });
     })
   );
@@ -257,6 +279,12 @@ function createApiRouter() {
         pdfBuffer,
         quizUrl,
       });
+
+      try {
+        await sendInternalBulletinNotification({ bulletin, formation, session });
+      } catch (error) {
+        console.error("[api] Échec de l'envoi de la notification interne de bulletin d'inscription", error);
+      }
 
       res.status(201).json({
         data: { id: bulletin.id, quizSlug: quiz ? quiz.slug : null },
@@ -313,6 +341,24 @@ function createApiRouter() {
         },
         message: "Auto-évaluation enregistrée",
       });
+    })
+  );
+
+  router.get(
+    "/admin/registrations",
+    asyncHandler(async (_req, res) => {
+      const registrations = await listRegistrations();
+      res.json({ data: registrations });
+    })
+  );
+
+  router.patch(
+    "/admin/registrations/:id/status",
+    asyncHandler(async (req, res) => {
+      const { status } = registrationStatusSchema.parse(req.body);
+      const updated = await updateRegistrationStatus(req.params.id, status);
+      if (!updated) return res.status(404).json({ error: "Inscription introuvable" });
+      return res.json({ data: updated });
     })
   );
 

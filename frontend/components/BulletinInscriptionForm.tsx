@@ -1,8 +1,12 @@
 "use client";
 
 import { FormEvent, useMemo, useState } from "react";
-import type { Formation, Session } from "../../shared/types";
+import type { Formation, LearnerInput, Session } from "../../shared/types";
 import { formatDateRange } from "@/lib/dates";
+
+function createEmptyLearner(): LearnerInput {
+  return { fullName: "", role: "", phone: "", birthDate: "", hasDisability: false, disabilityDetails: "" };
+}
 
 type Props = {
   formations: Formation[];
@@ -23,7 +27,7 @@ export function BulletinInscriptionForm({ formations, sessions, defaultFormation
   const [selectedSessionId, setSelectedSessionId] = useState(defaultSessionId);
   const [source, setSource] = useState("");
   const [distributorName, setDistributorName] = useState("");
-  const [hasDisability, setHasDisability] = useState(false);
+  const [learners, setLearners] = useState<LearnerInput[]>([createEmptyLearner()]);
 
   const isFormationLocked = Boolean(defaultFormationSlug);
 
@@ -46,6 +50,18 @@ export function BulletinInscriptionForm({ formations, sessions, defaultFormation
     setSelectedSessionId(nextSessions[0]?.id || "");
   }
 
+  function updateLearner(index: number, patch: Partial<LearnerInput>) {
+    setLearners((current) => current.map((learner, learnerIndex) => (learnerIndex === index ? { ...learner, ...patch } : learner)));
+  }
+
+  function addLearner() {
+    setLearners((current) => (current.length < 3 ? [...current, createEmptyLearner()] : current));
+  }
+
+  function removeLearner(index: number) {
+    setLearners((current) => (current.length > 1 ? current.filter((_, learnerIndex) => learnerIndex !== index) : current));
+  }
+
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
     setStatus("loading");
@@ -54,10 +70,11 @@ export function BulletinInscriptionForm({ formations, sessions, defaultFormation
     const form = event.currentTarget;
     const formData = new FormData(form);
     const payload: Record<string, unknown> = Object.fromEntries(formData.entries());
-    payload.hasDisability = formData.get("hasDisability") === "on";
+    delete payload.hasDisability;
     payload.sessionId = selectedSession?.id || "";
     payload.sessionDates = selectedSession ? formatDateRange(selectedSession.startDate, selectedSession.endDate) : "";
     payload.sessionLocation = selectedSession?.city || "";
+    payload.learners = learners;
 
     const response = await fetch("/api/bulletin-inscription", {
       method: "POST",
@@ -80,7 +97,7 @@ export function BulletinInscriptionForm({ formations, sessions, defaultFormation
     setQuizSlug(data?.data?.quizSlug || null);
     setBulletinId(data?.data?.id || null);
     form.reset();
-    setHasDisability(false);
+    setLearners([createEmptyLearner()]);
     setSource("");
     setDistributorName("");
     setStatus("success");
@@ -257,49 +274,90 @@ export function BulletinInscriptionForm({ formations, sessions, defaultFormation
         </div>
       </section>
 
-      <section className="bulletin-form-block">
-        <h2 className="bulletin-form-block-title">
-          <span>3</span> Apprenant
-        </h2>
-        <div className="form-grid">
-          <label>
-            Prénom et nom
-            <input className="ui-field" name="learnerFullName" type="text" required placeholder="Prénom Nom" />
-          </label>
-          <label>
-            Fonction
-            <input className="ui-field" name="learnerRole" type="text" placeholder="Fonction dans l'entreprise" />
-          </label>
-          <label>
-            Téléphone portable
-            <input className="ui-field" name="learnerPhone" type="tel" placeholder="06 00 00 00 00" />
-          </label>
-          <label>
-            Date de naissance
-            <input className="ui-field" name="learnerBirthDate" type="date" />
-          </label>
-        </div>
-        <label className="bulletin-checkbox">
-          <input
-            name="hasDisability"
-            type="checkbox"
-            checked={hasDisability}
-            onChange={(event) => setHasDisability(event.target.checked)}
-          />
-          Situation de handicap à signaler
-        </label>
-        {hasDisability ? (
-          <label>
-            Précisions sur la situation de handicap
-            <textarea
-              className="ui-field bulletin-form-textarea"
-              name="disabilityDetails"
-              rows={4}
-              placeholder="Merci de préciser les besoins d'adaptation éventuels"
+      {learners.map((learner, index) => (
+        <section className="bulletin-form-block" key={index}>
+          <h2 className="bulletin-form-block-title">
+            <span>3</span> {learners.length > 1 ? `Apprenant ${index + 1}` : "Apprenant"}
+          </h2>
+          <div className="form-grid">
+            <label>
+              Prénom et nom
+              <input
+                className="ui-field"
+                type="text"
+                required
+                placeholder="Prénom Nom"
+                value={learner.fullName}
+                onChange={(event) => updateLearner(index, { fullName: event.target.value })}
+              />
+            </label>
+            <label>
+              Fonction
+              <input
+                className="ui-field"
+                type="text"
+                placeholder="Fonction dans l'entreprise"
+                value={learner.role}
+                onChange={(event) => updateLearner(index, { role: event.target.value })}
+              />
+            </label>
+            <label>
+              Téléphone portable
+              <input
+                className="ui-field"
+                type="tel"
+                placeholder="06 00 00 00 00"
+                value={learner.phone}
+                onChange={(event) => updateLearner(index, { phone: event.target.value })}
+              />
+            </label>
+            <label>
+              Date de naissance
+              <input
+                className="ui-field"
+                type="date"
+                value={learner.birthDate}
+                onChange={(event) => updateLearner(index, { birthDate: event.target.value })}
+              />
+            </label>
+          </div>
+          <label className="bulletin-checkbox">
+            <input
+              type="checkbox"
+              checked={learner.hasDisability}
+              onChange={(event) => updateLearner(index, { hasDisability: event.target.checked })}
             />
+            Situation de handicap à signaler
           </label>
-        ) : null}
-      </section>
+          {learner.hasDisability ? (
+            <label>
+              Précisions sur la situation de handicap
+              <textarea
+                className="ui-field bulletin-form-textarea"
+                rows={4}
+                placeholder="Merci de préciser les besoins d'adaptation éventuels"
+                value={learner.disabilityDetails}
+                onChange={(event) => updateLearner(index, { disabilityDetails: event.target.value })}
+              />
+            </label>
+          ) : null}
+          {learners.length > 1 ? (
+            <button
+              className="ui-button ui-button-secondary"
+              type="button"
+              onClick={() => removeLearner(index)}
+            >
+              Retirer cet apprenant
+            </button>
+          ) : null}
+        </section>
+      ))}
+
+      {learners.length < 3 ? (
+        <button className="ui-button ui-button-secondary" type="button" onClick={addLearner}>
+          + Ajouter un apprenant
+        </button>
+      ) : null}
 
       <button className="ui-button ui-button-primary" type="submit" disabled={status === "loading"}>
         {status === "loading" ? "Envoi..." : "Envoyer le bulletin d'inscription"}

@@ -51,12 +51,18 @@ function buildParticipantFromRegistration(registration, matchingBulletin, quizAt
   };
 }
 
+function primaryLearnerName(bulletin) {
+  const learners = Array.isArray(bulletin.learners) ? bulletin.learners : [];
+  const firstName = learners[0]?.fullName || bulletin.sponsorFullName || "";
+  return learners.length > 1 ? `${firstName} et ${learners.length - 1} autre(s)` : firstName;
+}
+
 function buildParticipantFromBulletin(bulletin, quizAttempts) {
   const latestQuizAttempt = pickLatestQuizAttempt(quizAttempts, bulletin.id);
 
   return {
     id: `bulletin-${bulletin.id}`,
-    fullName: bulletin.learnerFullName,
+    fullName: primaryLearnerName(bulletin),
     email: bulletin.sponsorEmail,
     company: bulletin.companyName,
     phone: bulletin.sponsorPhone,

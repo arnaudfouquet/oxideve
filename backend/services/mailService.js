@@ -80,6 +80,9 @@ function buildEmailHtml({ bulletin, formation, session, quizUrl }) {
               Prochaine étape : l'apprenant peut dès à présent réaliser son
               <strong>auto-évaluation</strong> en amont de la formation.
             </p>
+            <p style="color: #09cf65; font-weight: bold;">
+              Cette auto-évaluation est obligatoire pour finaliser le dossier d'inscription. Merci de la compléter dans les meilleurs délais.
+            </p>
             <p>
               <a href="${quizUrl}" style="display: inline-block; background: #09cf65; color: #ffffff; padding: 12px 20px; border-radius: 999px; text-decoration: none; font-weight: bold;">
                 Faire mon auto-évaluation
@@ -209,8 +212,154 @@ async function sendQuizResultEmail({ quizTitle, attempt, pdfBuffer }) {
   }
 }
 
+const INTERNAL_NOTIFICATION_EMAIL = "oxideve@yopmail.com";
+
+function buildInternalRegistrationHtml({ registration, formation, session }) {
+  const formationTitle = formation?.title || registration.formationSlug;
+  const sessionSummary = session
+    ? `${formatDate(session.startDate)} - ${formatDate(session.endDate)}${session.city ? ` (${session.city})` : ""}`
+    : "-";
+
+  return `
+    <div style="font-family: Arial, sans-serif; color: #004d6d; max-width: 560px; margin: 0 auto;">
+      ${buildEmailLogoHeader()}
+      <h2 style="color: #004d6d;">Nouvelle pré-inscription</h2>
+      <p><strong>Formation :</strong> ${formationTitle}</p>
+      <p><strong>Session :</strong> ${sessionSummary}</p>
+      <h3 style="color: #004d6d; margin-top: 24px;">Contact</h3>
+      <p><strong>Nom :</strong> ${registration.contactName || "-"}</p>
+      <p><strong>Entreprise :</strong> ${registration.company || "-"}</p>
+      <p><strong>Email :</strong> ${registration.email || "-"}</p>
+      <p><strong>Téléphone :</strong> ${registration.phone || "-"}</p>
+      ${registration.message ? `<h3 style="color: #004d6d; margin-top: 24px;">Message</h3><p>${registration.message}</p>` : ""}
+      <p style="margin-top: 32px; color: #4d6a78; font-size: 0.85rem;">Oxideve - Organisme de formation professionnelle</p>
+    </div>
+  `;
+}
+
+/**
+ * Envoie une notification interne (équipe Oxideve) à chaque nouvelle pré-inscription rapide.
+ * Mode dégradé identique aux autres fonctions d'envoi si SMTP_HOST n'est pas configuré.
+ */
+async function sendInternalRegistrationNotification({ registration, formation, session }) {
+  const transporter = getTransporter();
+
+  if (!transporter) {
+    if (!warnedMissingConfig) {
+      console.warn(
+        "[mailService] SMTP_HOST non configuré : envoi d'email désactivé (mode dégradé). La pré-inscription reste enregistrée en base.",
+      );
+      warnedMissingConfig = true;
+    }
+
+    return { sent: false, reason: "smtp_not_configured" };
+  }
+
+  const from = process.env.MAIL_FROM || "no-reply@oxideve.fr";
+  const html = buildInternalRegistrationHtml({ registration, formation, session });
+
+  try {
+    await transporter.sendMail({
+      from,
+      to: INTERNAL_NOTIFICATION_EMAIL,
+      subject: `Nouvelle pré-inscription — ${formation?.title || registration.formationSlug}`,
+      html,
+      attachments: logoAttachment(),
+    });
+
+    return { sent: true };
+  } catch (error) {
+    console.error("[mailService] Échec de l'envoi de la notification interne de pré-inscription", error);
+    return { sent: false, reason: "send_error" };
+  }
+}
+
+function buildInternalBulletinHtml({ bulletin, formation, session }) {
+  const formationTitle = formation?.title || bulletin.formationSlug;
+  const sessionSummary =
+    bulletin.sessionDates ||
+    (session ? `${formatDate(session.startDate)} - ${formatDate(session.endDate)}` : null) ||
+    "-";
+  const sessionLocation = bulletin.sessionLocation || session?.city || "-";
+  const learners = Array.isArray(bulletin.learners) ? bulletin.learners : [];
+  const multipleLearners = learners.length > 1;
+
+  const learnersHtml = learners
+    .map((learner, index) => {
+      const title = multipleLearners ? `Apprenant ${index + 1}` : "Apprenant";
+      return `
+        <div style="margin-top: 12px;">
+          <p style="margin: 0;"><strong>${title} :</strong> ${learner.fullName || "-"}</p>
+          ${learner.role ? `<p style="margin: 0;">Fonction : ${learner.role}</p>` : ""}
+          ${learner.phone ? `<p style="margin: 0;">Téléphone : ${learner.phone}</p>` : ""}
+          ${learner.birthDate ? `<p style="margin: 0;">Date de naissance : ${formatDate(learner.birthDate)}</p>` : ""}
+          <p style="margin: 0;">Situation de handicap : ${learner.hasDisability ? "Oui" : "Non"}</p>
+          ${learner.hasDisability && learner.disabilityDetails ? `<p style="margin: 0;">Précisions : ${learner.disabilityDetails}</p>` : ""}
+        </div>
+      `;
+    })
+    .join("");
+
+  return `
+    <div style="font-family: Arial, sans-serif; color: #004d6d; max-width: 560px; margin: 0 auto;">
+      ${buildEmailLogoHeader()}
+      <h2 style="color: #004d6d;">Nouveau bulletin d'inscription</h2>
+      <p><strong>Formation :</strong> ${formationTitle}</p>
+      <p><strong>Session :</strong> ${sessionSummary}</p>
+      <p><strong>Lieu :</strong> ${sessionLocation}</p>
+      <h3 style="color: #004d6d; margin-top: 24px;">Commanditaire</h3>
+      <p><strong>Société :</strong> ${bulletin.companyName || "-"}</p>
+      <p><strong>Contact :</strong> ${bulletin.sponsorFullName || "-"}${bulletin.sponsorRole ? ` (${bulletin.sponsorRole})` : ""}</p>
+      <p><strong>Email :</strong> ${bulletin.sponsorEmail || "-"}</p>
+      <p><strong>Téléphone :</strong> ${bulletin.sponsorPhone || "-"}</p>
+      <h3 style="color: #004d6d; margin-top: 24px;">${multipleLearners ? "Apprenants" : "Apprenant"}</h3>
+      ${learnersHtml || "<p>-</p>"}
+      <p style="margin-top: 32px; color: #4d6a78; font-size: 0.85rem;">Oxideve - Organisme de formation professionnelle</p>
+    </div>
+  `;
+}
+
+/**
+ * Envoie une notification interne (équipe Oxideve) à chaque nouveau bulletin d'inscription complet.
+ * Mode dégradé identique aux autres fonctions d'envoi si SMTP_HOST n'est pas configuré.
+ */
+async function sendInternalBulletinNotification({ bulletin, formation, session }) {
+  const transporter = getTransporter();
+
+  if (!transporter) {
+    if (!warnedMissingConfig) {
+      console.warn(
+        "[mailService] SMTP_HOST non configuré : envoi d'email désactivé (mode dégradé). Le bulletin reste enregistré en base.",
+      );
+      warnedMissingConfig = true;
+    }
+
+    return { sent: false, reason: "smtp_not_configured" };
+  }
+
+  const from = process.env.MAIL_FROM || "no-reply@oxideve.fr";
+  const html = buildInternalBulletinHtml({ bulletin, formation, session });
+
+  try {
+    await transporter.sendMail({
+      from,
+      to: INTERNAL_NOTIFICATION_EMAIL,
+      subject: `Nouveau bulletin d'inscription — ${formation?.title || bulletin.formationSlug}`,
+      html,
+      attachments: logoAttachment(),
+    });
+
+    return { sent: true };
+  } catch (error) {
+    console.error("[mailService] Échec de l'envoi de la notification interne de bulletin d'inscription", error);
+    return { sent: false, reason: "send_error" };
+  }
+}
+
 module.exports = {
   isSmtpConfigured,
   sendBulletinConfirmationEmail,
   sendQuizResultEmail,
+  sendInternalRegistrationNotification,
+  sendInternalBulletinNotification,
 };

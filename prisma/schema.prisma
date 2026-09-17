@@ -52,7 +52,6 @@ model Session {
   city              String
   startDate         DateTime
   endDate           DateTime
-  seatsLeft         Int
   mode              String
   source            String        @default("manual")
   externalId        String?       @unique
@@ -72,7 +71,6 @@ model PendingSyncSession {
   city          String?
   startDate     DateTime
   endDate       DateTime
-  seatsLeft     Int
   externalState String
   createdAt     DateTime  @default(now())
 }
@@ -87,6 +85,7 @@ model Inscription {
   formationSlug String
   sessionId     String
   message       String?     @db.Text
+  status        String      @default("Nouveau")
   createdAt     DateTime    @default(now())
   companyRef    Company?    @relation(fields: [companyId], references: [id], onDelete: SetNull)
   session       Session     @relation(fields: [sessionId], references: [id], onDelete: Cascade)
@@ -118,12 +117,7 @@ model BulletinInscription {
   sponsorRole         String?
   sponsorEmail        String
   sponsorPhone        String
-  learnerFullName     String
-  learnerRole         String?
-  learnerPhone        String?
-  learnerBirthDate    DateTime?
-  hasDisability       Boolean   @default(false)
-  disabilityDetails   String?   @db.Text
+  learners            Json
   status              String    @default("submitted")
   confirmationEmailSentAt DateTime?
   createdAt           DateTime  @default(now())

@@ -55,7 +55,6 @@ function normalizeSession(session) {
     city: session.city,
     startDate: formatDate(session.startDate),
     endDate: formatDate(session.endDate),
-    seatsLeft: session.seatsLeft,
     mode: session.mode,
   };
 }
@@ -230,7 +229,6 @@ async function createSession(payload) {
       city: payload.city,
       startDate: new Date(payload.startDate),
       endDate: new Date(payload.endDate),
-      seatsLeft: payload.seatsLeft,
       mode: payload.mode,
     },
   });
@@ -265,7 +263,6 @@ async function updateSession(id, payload) {
       city: payload.city,
       startDate: new Date(payload.startDate),
       endDate: new Date(payload.endDate),
-      seatsLeft: payload.seatsLeft,
       mode: payload.mode,
     },
   });

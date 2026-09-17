@@ -168,7 +168,6 @@ async function syncQueovalCalendar(externalIds) {
           city: stage.city,
           startDate: new Date(stage.startDate),
           endDate: new Date(stage.endDate),
-          seatsLeft: 0,
           externalState: stage.state,
         },
         update: {
@@ -190,7 +189,6 @@ async function syncQueovalCalendar(externalIds) {
         city: stage.city || "À distance",
         startDate: new Date(stage.startDate),
         endDate: new Date(stage.endDate),
-        seatsLeft: 0,
         mode: stage.city ? "Présentiel" : "Distanciel",
         source: "queoval",
         externalId: stage.externalId,
@@ -245,7 +243,6 @@ async function resolvePendingSyncSession(id, formationSlug) {
       city: pending.city || "À distance",
       startDate: pending.startDate,
       endDate: pending.endDate,
-      seatsLeft: pending.seatsLeft,
       mode: pending.city ? "Présentiel" : "Distanciel",
       source: "queoval",
       externalId: pending.externalId,
@@ -258,7 +255,6 @@ async function resolvePendingSyncSession(id, formationSlug) {
       city: pending.city || "À distance",
       startDate: pending.startDate,
       endDate: pending.endDate,
-      seatsLeft: pending.seatsLeft,
       lastSyncedAt: new Date(),
     },
   });

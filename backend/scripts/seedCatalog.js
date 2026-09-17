@@ -144,7 +144,6 @@ async function main() {
           city: session.city,
           startDate: new Date(session.startDate),
           endDate: new Date(session.endDate),
-          seatsLeft: session.seatsLeft,
           mode: session.mode,
         },
         update: {
@@ -152,7 +151,6 @@ async function main() {
           city: session.city,
           startDate: new Date(session.startDate),
           endDate: new Date(session.endDate),
-          seatsLeft: session.seatsLeft,
           mode: session.mode,
         },
       });

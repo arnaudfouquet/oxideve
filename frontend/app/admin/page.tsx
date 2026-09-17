@@ -21,8 +21,6 @@ export default async function AdminPage() {
     getBulletinInscriptions(),
     getParticipants(),
   ]);
-  const totalSeatsLeft = sessions.reduce((total, session) => total + session.seatsLeft, 0);
-
   return (
     <section className="admin-page-shell">
       <div className="admin-page-container">
@@ -31,7 +29,7 @@ export default async function AdminPage() {
           <span className="stat-pill">{sessions.length} sessions</span>
           <span className="stat-pill">{companies.length} entreprises</span>
           <span className="stat-pill">{articles.length} articles</span>
-          <span className="stat-pill">{totalSeatsLeft} places restantes</span>
+          <span className="stat-pill">{registrations.length} pré-inscriptions</span>
         </div>
 
         <AdminWorkspace

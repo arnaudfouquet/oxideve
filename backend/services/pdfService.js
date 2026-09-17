@@ -90,17 +90,22 @@ function generateBulletinPdf(bulletin, formation, session) {
       drawField(doc, "Email", bulletin.sponsorEmail);
       drawField(doc, "Téléphone", bulletin.sponsorPhone);
 
-      drawSectionTitle(doc, "Apprenant");
-      drawField(doc, "Nom", bulletin.learnerFullName);
-      drawField(doc, "Fonction", bulletin.learnerRole);
-      drawField(doc, "Téléphone", bulletin.learnerPhone);
-      drawField(doc, "Date de naissance", bulletin.learnerBirthDate ? formatDate(bulletin.learnerBirthDate) : null);
-      drawField(doc, "Situation de handicap", bulletin.hasDisability ? "Oui" : "Non");
+      const learners = Array.isArray(bulletin.learners) ? bulletin.learners : [];
+      const multipleLearners = learners.length > 1;
 
-      if (bulletin.hasDisability && bulletin.disabilityDetails) {
-        doc.moveDown(0.3);
-        doc.font("Helvetica-Bold").text("Précisions : ", { continued: true }).font("Helvetica").text(bulletin.disabilityDetails);
-      }
+      learners.forEach((learner, index) => {
+        drawSectionTitle(doc, multipleLearners ? `Apprenant ${index + 1}` : "Apprenant");
+        drawField(doc, "Nom", learner.fullName);
+        drawField(doc, "Fonction", learner.role);
+        drawField(doc, "Téléphone", learner.phone);
+        drawField(doc, "Date de naissance", learner.birthDate ? formatDate(learner.birthDate) : null);
+        drawField(doc, "Situation de handicap", learner.hasDisability ? "Oui" : "Non");
+
+        if (learner.hasDisability && learner.disabilityDetails) {
+          doc.moveDown(0.3);
+          doc.font("Helvetica-Bold").text("Précisions : ", { continued: true }).font("Helvetica").text(learner.disabilityDetails);
+        }
+      });
 
       doc.moveDown(1.5);
       doc

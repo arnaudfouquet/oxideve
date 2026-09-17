@@ -69,7 +69,6 @@ export type Session = {
   city: string;
   startDate: string;
   endDate: string;
-  seatsLeft: number;
   mode: string;
 };
 
@@ -80,7 +79,6 @@ export type PendingSyncSession = {
   city: string | null;
   startDate: string;
   endDate: string;
-  seatsLeft: number;
   externalState: string;
 };
 
@@ -94,8 +92,18 @@ export type Registration = {
   formationSlug: string;
   sessionId: string;
   message?: string | null;
+  status: string;
   createdAt: string;
   source?: string;
+};
+
+export type LearnerInput = {
+  fullName: string;
+  role?: string;
+  phone?: string;
+  birthDate?: string;
+  hasDisability: boolean;
+  disabilityDetails?: string;
 };
 
 export type BulletinInscriptionInput = {
@@ -113,12 +121,7 @@ export type BulletinInscriptionInput = {
   sponsorRole?: string;
   sponsorEmail: string;
   sponsorPhone: string;
-  learnerFullName: string;
-  learnerRole?: string;
-  learnerPhone?: string;
-  learnerBirthDate?: string;
-  hasDisability: boolean;
-  disabilityDetails?: string;
+  learners: LearnerInput[];
 };
 
 export type BulletinInscription = BulletinInscriptionInput & {

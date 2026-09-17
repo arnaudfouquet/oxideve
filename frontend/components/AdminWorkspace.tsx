@@ -47,9 +47,10 @@ type SessionDraft = {
   city: string;
   startDate: string;
   endDate: string;
-  seatsLeft: string;
   mode: string;
 };
+
+const SESSION_MODE_OPTIONS = ["Présentiel", "Distanciel"];
 
 type ArticleDraft = {
   slug: string;
@@ -131,14 +132,6 @@ function isUpcoming(session?: Session) {
 }
 
 function getSessionState(session: Session) {
-  if (session.seatsLeft === 0) {
-    return "Complet";
-  }
-
-  if (session.seatsLeft <= 2) {
-    return "Dernières places";
-  }
-
   if (isUpcoming(session)) {
     return "À venir";
   }
@@ -203,7 +196,6 @@ function toSessionDraft(session?: Session): SessionDraft {
     city: session?.city || "",
     startDate: session?.startDate || "",
     endDate: session?.endDate || "",
-    seatsLeft: session ? String(session.seatsLeft) : "",
     mode: session?.mode || "",
   };
 }
@@ -263,7 +255,10 @@ export function AdminWorkspace({
   const [articles, setArticles] = useState(initialArticles);
   const [formations, setFormations] = useState(initialFormations);
   const [sessions, setSessions] = useState(initialSessions);
-  const [registrations] = useState(initialRegistrations);
+  const [registrations, setRegistrations] = useState(initialRegistrations);
+  const [registrationSearch, setRegistrationSearch] = useState("");
+  const [registrationStatusFilter, setRegistrationStatusFilter] = useState("Tous");
+  const REGISTRATION_STATUS_OPTIONS = ["Nouveau", "Intéressé", "Non intéressé"];
   const [bulletinInscriptions] = useState(initialBulletinInscriptions);
   const [participants] = useState(initialParticipants);
 
@@ -288,7 +283,6 @@ export function AdminWorkspace({
   const [selectedSessionIds, setSelectedSessionIds] = useState<string[]>([]);
   const [bulkSessionMode, setBulkSessionMode] = useState("");
   const [bulkSessionCity, setBulkSessionCity] = useState("");
-  const [bulkSessionSeats, setBulkSessionSeats] = useState("");
 
   const [queovalSyncing, setQueovalSyncing] = useState(false);
   const [queovalStageIds, setQueovalStageIds] = useState("");
@@ -365,6 +359,22 @@ export function AdminWorkspace({
     ? bulletinInscriptions.find((bulletin) => bulletin.id === selectedParticipant.bulletinInscriptionId)
     : undefined;
 
+  const availableCities = useMemo(
+    () =>
+      Array.from(new Set([...sessions.map((session) => session.city), ...customCities]))
+        .filter(Boolean)
+        .sort((a, b) => a.localeCompare(b, "fr")),
+    [sessions, customCities],
+  );
+
+  function handleAddCustomCity() {
+    const city = newCityInput.trim();
+    if (!city) return;
+    setCustomCities((current) => (current.includes(city) ? current : [...current, city]));
+    setSessionDraft((current) => ({ ...current, city }));
+    setNewCityInput("");
+  }
+
   const filteredSessions = sessions.filter((session) => {
     const formation = formations.find((item) => item.slug === session.formationSlug);
     const state = getSessionState(session);
@@ -374,7 +384,41 @@ export function AdminWorkspace({
     return matchesSearch && matchesState && matchesCategory;
   });
 
-  const totalSeatsLeft = sessions.reduce((total, session) => total + session.seatsLeft, 0);
+  const filteredRegistrations = useMemo(() => {
+    const search = registrationSearch.trim().toLowerCase();
+    return registrations
+      .filter((registration) => {
+        const matchesSearch =
+          !search || `${registration.contactName} ${registration.company} ${registration.email}`.toLowerCase().includes(search);
+        const matchesStatus = registrationStatusFilter === "Tous" || registration.status === registrationStatusFilter;
+        return matchesSearch && matchesStatus;
+      })
+      .sort((left, right) => compareDateDesc(left.createdAt, right.createdAt));
+  }, [registrations, registrationSearch, registrationStatusFilter]);
+
+  async function handleRegistrationStatusChange(registrationId: string, status: string) {
+    const previous = registrations;
+    setRegistrations((current) => current.map((item) => (item.id === registrationId ? { ...item, status } : item)));
+
+    const response = await fetch(`/api/admin/registrations/${registrationId}/status`, {
+      method: "PATCH",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ status }),
+    });
+
+    if (!response.ok) {
+      setRegistrations(previous);
+      setError("Impossible de mettre à jour le statut de cette pré-inscription.");
+      return;
+    }
+
+    setSuccess("Statut mis à jour.");
+  }
+
+  function copyBulletinLink(registrationId: string, formationSlug: string) {
+    const url = `${window.location.origin}/bulletin-inscription?formationSlug=${encodeURIComponent(formationSlug)}`;
+    copyToClipboard(`registration-bulletin-${registrationId}`, url);
+  }
 
   function setSuccess(message: string) {
     setFeedbackTone("success");
@@ -490,7 +534,6 @@ export function AdminWorkspace({
       city: sessionDraft.city,
       startDate: sessionDraft.startDate,
       endDate: sessionDraft.endDate,
-      seatsLeft: Number(sessionDraft.seatsLeft),
       mode: sessionDraft.mode,
     };
 
@@ -533,7 +576,6 @@ export function AdminWorkspace({
               city: bulkSessionCity || session.city,
               startDate: session.startDate,
               endDate: session.endDate,
-              seatsLeft: bulkSessionSeats ? Number(bulkSessionSeats) : session.seatsLeft,
               mode: bulkSessionMode || session.mode,
             }),
           });
@@ -745,8 +787,89 @@ export function AdminWorkspace({
             <div className="admin-metric-grid">
               <article className="admin-metric-card"><span>Catalogue</span><strong>{formations.length}</strong><small>formations</small></article>
               <article className="admin-metric-card"><span>Sessions</span><strong>{sessions.filter((session) => isUpcoming(session)).length}</strong><small>à venir</small></article>
-              <article className="admin-metric-card"><span>Places</span><strong>{totalSeatsLeft}</strong><small>encore disponibles</small></article>
+              <article className="admin-metric-card"><span>Pré-inscriptions</span><strong>{registrations.length}</strong><small>au total</small></article>
             </div>
+          </section>
+
+          <section className="admin-shell">
+            <div className="section-heading section-heading-tight">
+              <div>
+                <span className="eyebrow">Suivi</span>
+                <h2>Pré-inscriptions</h2>
+                <p>Demandes rapides reçues depuis les fiches formation, avant complétion d&apos;un bulletin d&apos;inscription.</p>
+              </div>
+            </div>
+
+            <div className="admin-filter-grid admin-filter-grid-compact">
+              <label><span>Recherche</span><input className="ui-field" value={registrationSearch} onChange={(event) => setRegistrationSearch(event.target.value)} placeholder="Nom, entreprise, email..." /></label>
+              <label>
+                <span>Statut</span>
+                <select className="ui-field" value={registrationStatusFilter} onChange={(event) => setRegistrationStatusFilter(event.target.value)}>
+                  <option>Tous</option>
+                  {REGISTRATION_STATUS_OPTIONS.map((status) => (
+                    <option key={status}>{status}</option>
+                  ))}
+                </select>
+              </label>
+            </div>
+
+            {filteredRegistrations.length === 0 ? (
+              <p className="admin-empty-state">Aucune pré-inscription ne correspond à ces filtres.</p>
+            ) : (
+              <div className="admin-table-shell admin-table-shell-solid">
+                <table className="data-table">
+                  <thead>
+                    <tr>
+                      <th>Contact</th>
+                      <th>Entreprise</th>
+                      <th>Email</th>
+                      <th>Téléphone</th>
+                      <th>Formation</th>
+                      <th>Session</th>
+                      <th>Statut</th>
+                      <th>Actions</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {filteredRegistrations.map((registration) => {
+                      const formation = formations.find((item) => item.slug === registration.formationSlug);
+                      const session = sessions.find((item) => item.id === registration.sessionId);
+
+                      return (
+                        <tr key={registration.id}>
+                          <td>{registration.contactName}</td>
+                          <td>{registration.company}</td>
+                          <td>{registration.email}</td>
+                          <td>{registration.phone}</td>
+                          <td>{formation?.shortTitle || registration.formationSlug}</td>
+                          <td>{session ? `${formatSessionRange(session.startDate, session.endDate)} · ${session.city}` : "Non renseignée"}</td>
+                          <td>
+                            <select
+                              className="ui-field"
+                              value={registration.status}
+                              onChange={(event) => handleRegistrationStatusChange(registration.id, event.target.value)}
+                            >
+                              {REGISTRATION_STATUS_OPTIONS.map((status) => (
+                                <option key={status} value={status}>{status}</option>
+                              ))}
+                            </select>
+                          </td>
+                          <td>
+                            <button
+                              className="admin-copy-button"
+                              onClick={() => copyBulletinLink(registration.id, registration.formationSlug)}
+                              type="button"
+                            >
+                              {copiedKey === `registration-bulletin-${registration.id}` ? "Copié !" : "Copier le lien du bulletin"}
+                            </button>
+                          </td>
+                        </tr>
+                      );
+                    })}
+                  </tbody>
+                </table>
+              </div>
+            )}
           </section>
         </div>
       ) : null}
@@ -758,7 +881,7 @@ export function AdminWorkspace({
               <div className="section-heading section-heading-tight"><div><span className="eyebrow">Planning</span><h2>Sessions</h2></div></div>
               <div className="admin-filter-grid admin-filter-grid-compact">
                 <label><span>Recherche</span><input className="ui-field" value={sessionSearch} onChange={(event) => setSessionSearch(event.target.value)} placeholder="Formation, ville, mode..." /></label>
-                <label><span>État</span><select className="ui-field" value={sessionStateFilter} onChange={(event) => setSessionStateFilter(event.target.value)}><option>Tous</option><option>À venir</option><option>Dernières places</option><option>Complet</option><option>Passée</option></select></label>
+                <label><span>État</span><select className="ui-field" value={sessionStateFilter} onChange={(event) => setSessionStateFilter(event.target.value)}><option>Tous</option><option>À venir</option><option>Passée</option></select></label>
               </div>
               <div className="admin-list admin-list-dense">
                 {filteredSessions.map((session) => {
@@ -779,16 +902,55 @@ export function AdminWorkspace({
               <form className="contact-form" onSubmit={handleSessionSubmit}>
                 <div className="form-grid">
                   <label><span>Formation</span><select className="ui-field" value={sessionDraft.formationSlug} onChange={(event) => setSessionDraft((current) => ({ ...current, formationSlug: event.target.value }))} required><option value="">Choisir</option>{formations.map((formation) => <option key={formation.slug} value={formation.slug}>{formation.title}</option>)}</select></label>
-                  <label><span>Ville</span><input className="ui-field" value={sessionDraft.city} onChange={(event) => setSessionDraft((current) => ({ ...current, city: event.target.value }))} required /></label>
+                  <label>
+                    <span>Ville</span>
+                    <select
+                      className="ui-field"
+                      value={availableCities.includes(sessionDraft.city) ? sessionDraft.city : ""}
+                      onChange={(event) => {
+                        if (event.target.value === "__new__") return;
+                        setSessionDraft((current) => ({ ...current, city: event.target.value }));
+                      }}
+                      required
+                    >
+                      <option value="">Choisir</option>
+                      {availableCities.map((city) => (
+                        <option key={city} value={city}>{city}</option>
+                      ))}
+                      <option value="__new__">+ Ajouter une nouvelle ville</option>
+                    </select>
+                  </label>
                   <label><span>Début</span><input className="ui-field" type="date" value={sessionDraft.startDate} onChange={(event) => setSessionDraft((current) => ({ ...current, startDate: event.target.value }))} required /></label>
                   <label><span>Fin</span><input className="ui-field" type="date" value={sessionDraft.endDate} onChange={(event) => setSessionDraft((current) => ({ ...current, endDate: event.target.value }))} required /></label>
-                  <label><span>Places</span><input className="ui-field" type="number" min="0" value={sessionDraft.seatsLeft} onChange={(event) => setSessionDraft((current) => ({ ...current, seatsLeft: event.target.value }))} required /></label>
-                  <label><span>Mode</span><input className="ui-field" value={sessionDraft.mode} onChange={(event) => setSessionDraft((current) => ({ ...current, mode: event.target.value }))} required /></label>
+                  <label>
+                    <span>Mode</span>
+                    <select className="ui-field" value={sessionDraft.mode} onChange={(event) => setSessionDraft((current) => ({ ...current, mode: event.target.value }))} required>
+                      <option value="">Choisir</option>
+                      {SESSION_MODE_OPTIONS.map((mode) => (
+                        <option key={mode} value={mode}>{mode}</option>
+                      ))}
+                    </select>
+                  </label>
+                </div>
+                <div className="form-grid">
+                  <label>
+                    <span>Nouvelle ville</span>
+                    <div className="admin-bulk-grid">
+                      <input
+                        className="ui-field"
+                        value={newCityInput}
+                        onChange={(event) => setNewCityInput(event.target.value)}
+                        placeholder="Nom de la ville"
+                      />
+                      <Button type="button" variant="secondary" onClick={handleAddCustomCity} disabled={!newCityInput.trim()}>
+                        Ajouter
+                      </Button>
+                    </div>
+                  </label>
                 </div>
                 <div className="admin-session-overview">
                   <div><span>État</span><strong>{editingSessionId ? getSessionState(sessions.find((item) => item.id === editingSessionId) || sessions[0]) : "Nouvelle"}</strong></div>
                   <div><span>Inscrits</span><strong>{registrationsBySession[editingSessionId] || 0}</strong></div>
-                  <div><span>Places restantes</span><strong>{sessionDraft.seatsLeft || "0"}</strong></div>
                 </div>
                 <div className="admin-form-actions">
                   <Button disabled={saving} type="submit">{saving ? "Enregistrement..." : editingSessionId ? "Mettre à jour" : "Créer la session"}</Button>
@@ -880,9 +1042,24 @@ export function AdminWorkspace({
               ))}
             </div>
             <div className="admin-bulk-grid">
-              <label><span>Mode masse</span><input className="ui-field" value={bulkSessionMode} onChange={(event) => setBulkSessionMode(event.target.value)} placeholder="Présentiel, Distanciel..." /></label>
-              <label><span>Ville masse</span><input className="ui-field" value={bulkSessionCity} onChange={(event) => setBulkSessionCity(event.target.value)} placeholder="Rouen, Paris..." /></label>
-              <label><span>Places restantes</span><input className="ui-field" type="number" min="0" value={bulkSessionSeats} onChange={(event) => setBulkSessionSeats(event.target.value)} placeholder="10" /></label>
+              <label>
+                <span>Mode masse</span>
+                <select className="ui-field" value={bulkSessionMode} onChange={(event) => setBulkSessionMode(event.target.value)}>
+                  <option value="">Ne pas modifier</option>
+                  {SESSION_MODE_OPTIONS.map((mode) => (
+                    <option key={mode} value={mode}>{mode}</option>
+                  ))}
+                </select>
+              </label>
+              <label>
+                <span>Ville masse</span>
+                <select className="ui-field" value={bulkSessionCity} onChange={(event) => setBulkSessionCity(event.target.value)}>
+                  <option value="">Ne pas modifier</option>
+                  {availableCities.map((city) => (
+                    <option key={city} value={city}>{city}</option>
+                  ))}
+                </select>
+              </label>
               <Button onClick={handleBulkSessionApply} disabled={saving || !selectedSessionIds.length}>Appliquer à {selectedSessionIds.length || 0} session(s)</Button>
             </div>
           </section>
@@ -1203,9 +1380,23 @@ export function AdminWorkspace({
                       <DetailField label="Raison sociale" value={selectedParticipantBulletin.companyName} copyKey="b-company" copyToClipboard={copyToClipboard} copiedKey={copiedKey} />
                       <DetailField label="SIRET" value={selectedParticipantBulletin.siret || "Non renseigné"} copyKey="b-siret" copyToClipboard={copyToClipboard} copiedKey={copiedKey} />
                       <DetailField label="Commanditaire" value={`${selectedParticipantBulletin.sponsorFullName} (${selectedParticipantBulletin.sponsorRole || "fonction non renseignée"})`} copyKey="b-sponsor" copyToClipboard={copyToClipboard} copiedKey={copiedKey} />
-                      <DetailField label="Apprenant" value={selectedParticipantBulletin.learnerFullName} copyKey="b-learner" copyToClipboard={copyToClipboard} copiedKey={copiedKey} />
-                      <DetailField label="Situation de handicap" value={selectedParticipantBulletin.hasDisability ? "Oui" : "Non"} copyKey="b-disability" copyToClipboard={copyToClipboard} copiedKey={copiedKey} />
                     </div>
+                  </div>
+
+                  <div className="admin-form-section">
+                    <h3>{selectedParticipantBulletin.learners.length > 1 ? "Apprenants" : "Apprenant"}</h3>
+                    {selectedParticipantBulletin.learners.map((learner, index) => (
+                      <div className="form-grid" key={index}>
+                        {selectedParticipantBulletin.learners.length > 1 ? (
+                          <p className="admin-list-item-meta">Apprenant {index + 1}</p>
+                        ) : null}
+                        <DetailField label="Nom" value={learner.fullName} copyKey={`b-learner-name-${index}`} copyToClipboard={copyToClipboard} copiedKey={copiedKey} />
+                        <DetailField label="Fonction" value={learner.role || "Non renseignée"} copyKey={`b-learner-role-${index}`} copyToClipboard={copyToClipboard} copiedKey={copiedKey} />
+                        <DetailField label="Téléphone" value={learner.phone || "Non renseigné"} copyKey={`b-learner-phone-${index}`} copyToClipboard={copyToClipboard} copiedKey={copiedKey} />
+                        <DetailField label="Date de naissance" value={learner.birthDate || "Non renseignée"} copyKey={`b-learner-birth-${index}`} copyToClipboard={copyToClipboard} copiedKey={copiedKey} />
+                        <DetailField label="Situation de handicap" value={learner.hasDisability ? "Oui" : "Non"} copyKey={`b-learner-disability-${index}`} copyToClipboard={copyToClipboard} copiedKey={copiedKey} />
+                      </div>
+                    ))}
                   </div>
 
                   <div className="admin-form-section">

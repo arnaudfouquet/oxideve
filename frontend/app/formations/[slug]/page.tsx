@@ -76,7 +76,8 @@ export default async function FormationDetailPage({ params }: Props) {
     .filter((entry) => entry.formation);
 
   const sessionCities = Array.from(new Set(sessions.map((session) => session.city)));
-  const displayLocation = sessionCities.length === 1 ? sessionCities[0] : sessionCities.length > 1 ? "Plusieurs villes" : formation.location;
+  const displayLocation =
+    sessionCities.length > 0 ? sessionCities.join(", ") : formation.location;
 
   return (
     <>

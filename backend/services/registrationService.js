@@ -15,6 +15,7 @@ function normalizeRegistration(registration) {
     formationSlug: registration.formationSlug,
     sessionId: registration.sessionId,
     message: registration.message,
+    status: registration.status || "Nouveau",
     createdAt:
       typeof registration.createdAt === "string"
         ? registration.createdAt
@@ -56,6 +57,7 @@ async function createRegistration(payload) {
   const fallbackRegistration = {
     id: randomUUID(),
     ...payload,
+    status: "Nouveau",
     createdAt: now,
     source: "memory",
   };
@@ -81,7 +83,25 @@ async function listRegistrations() {
   return [...inMemoryRegistrations].reverse().map(normalizeRegistration);
 }
 
+async function updateRegistrationStatus(id, status) {
+  const prisma = getPrismaClient();
+
+  if (prisma) {
+    const updated = await prisma.inscription.update({
+      where: { id },
+      data: { status },
+    });
+    return normalizeRegistration(updated);
+  }
+
+  const target = inMemoryRegistrations.find((item) => item.id === id);
+  if (!target) return null;
+  target.status = status;
+  return normalizeRegistration(target);
+}
+
 module.exports = {
   createRegistration,
   listRegistrations,
+  updateRegistrationStatus,
 };
