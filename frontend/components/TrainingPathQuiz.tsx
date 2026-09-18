@@ -2,6 +2,7 @@
 
 import { useMemo, useState } from "react";
 import Link from "next/link";
+import { Text } from "@/components/ui";
 import type { Formation } from "../../shared/types";
 
 type Props = {
@@ -99,14 +100,14 @@ export function TrainingPathQuiz({ formations }: Props) {
         <div className="quiz-step-meta">
           <span className="eyebrow">Résultat</span>
           <h2>Parcours conseillé</h2>
-          <p>Voici les familles les plus cohérentes avec ton activité et ton besoin immédiat.</p>
+          <Text tone="muted">Voici les familles les plus cohérentes avec ton activité et ton besoin immédiat.</Text>
         </div>
 
         <div className="quiz-results-grid">
           {results.map((result) => (
             <article className="quiz-result-card" key={result.category}>
               <strong>{result.category}</strong>
-              <p>Oxideve peut te faire démarrer ou consolider cette spécialité avec des formats immédiatement exploitables.</p>
+              <Text tone="muted">Oxideve peut te faire démarrer ou consolider cette spécialité avec des formats immédiatement exploitables.</Text>
               <div className="quiz-result-links">
                 {result.formations.map((formation) => (
                   <Link href={`/formations/${formation.slug}`} key={formation.slug}>{formation.title}</Link>
@@ -129,7 +130,7 @@ export function TrainingPathQuiz({ formations }: Props) {
       <div className="quiz-step-meta">
         <span className="eyebrow">Question {stepIndex + 1} / {questions.length}</span>
         <h2>{currentQuestion.title}</h2>
-        <p>Réponds simplement selon tes chantiers et ton besoin actuel. Le diagnostic reste rapide et orienté métier.</p>
+        <Text tone="muted">Réponds simplement selon tes chantiers et ton besoin actuel. Le diagnostic reste rapide et orienté métier.</Text>
       </div>
 
       <div className="quiz-answer-grid">

@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { Text } from "@/components/ui";
 import { BulletinInscriptionForm } from "@/components/BulletinInscriptionForm";
 import { getFormations, getSessions } from "@/lib/content";
 
@@ -34,10 +35,10 @@ export default async function BulletinInscriptionPage({ searchParams }: Props) {
         <div className="page-title">
           <span className="eyebrow">Bulletin d'inscription</span>
           <h1>Bulletin d'inscription à une formation Oxideve</h1>
-          <p>
+          <Text tone="muted">
             Ce formulaire complet permet d'enregistrer officiellement l'inscription du commanditaire et de l'apprenant.
             Un récapitulatif vous sera envoyé par email dès la validation.
-          </p>
+          </Text>
         </div>
 
         <article className="contact-card bulletin-form-shell">

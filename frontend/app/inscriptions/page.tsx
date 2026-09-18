@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { Text } from "@/components/ui";
 import { ContactForm } from "@/components/ContactForm";
 import { getFormations, getSessions } from "@/lib/content";
 
@@ -30,7 +31,7 @@ export default async function InscriptionsPage({ searchParams }: Props) {
         <div className="page-title">
           <span className="eyebrow">Inscrivez-vous</span>
           <h1>Inscrivez-vous à une formation Oxideve</h1>
-          <p>Choisissez une formation, une session disponible et transmettez votre demande. L'équipe Oxideve vous recontacte ensuite pour confirmer l'organisation.</p>
+          <Text tone="muted">Choisissez une formation, une session disponible et transmettez votre demande. L'équipe Oxideve vous recontacte ensuite pour confirmer l'organisation.</Text>
         </div>
 
         <article className="contact-card contact-card-standalone">

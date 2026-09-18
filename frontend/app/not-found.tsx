@@ -1,4 +1,4 @@
-import { ButtonLink } from "@/components/ui";
+import { ButtonLink, Text } from "@/components/ui";
 
 export default function NotFoundPage() {
   return (
@@ -6,7 +6,7 @@ export default function NotFoundPage() {
       <div className="container contact-card">
         <span className="eyebrow">404</span>
         <h1>Page introuvable</h1>
-        <p>La ressource demandée n'existe pas ou a été déplacée.</p>
+        <Text tone="muted">La ressource demandée n'existe pas ou a été déplacée.</Text>
         <ButtonLink href="/" variant="primary">
           Revenir à l'accueil
         </ButtonLink>

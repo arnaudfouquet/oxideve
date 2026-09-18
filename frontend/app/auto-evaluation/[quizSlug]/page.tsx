@@ -1,5 +1,6 @@
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
+import { Text } from "@/components/ui";
 import { QuizForm } from "@/components/QuizForm";
 import { getQuizBySlug } from "../../../../shared/quiz-data";
 
@@ -40,10 +41,10 @@ export default async function AutoEvaluationPage({ params, searchParams }: Props
         <div className="page-title">
           <span className="eyebrow">Auto-évaluation</span>
           <h1>{quiz.title}</h1>
-          <p>
+          <Text tone="muted">
             Cette auto-évaluation vous permet de situer votre niveau de connaissances avant la formation. Elle n&apos;est pas
             notée pour votre dossier : elle sert uniquement à adapter l&apos;accompagnement pédagogique.
-          </p>
+          </Text>
         </div>
 
         <article className="contact-card bulletin-form-shell">

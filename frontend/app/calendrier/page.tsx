@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { TrainingCalendar } from "@/components/TrainingCalendar";
-import { ButtonLink } from "@/components/ui";
+import { ButtonLink, Text } from "@/components/ui";
 import { getFormations, getSessions } from "@/lib/content";
 
 export const dynamic = "force-dynamic";
@@ -20,7 +20,7 @@ export default async function CalendrierPage() {
         <div className="page-title">
           <span className="eyebrow">Planning</span>
           <h1>Calendrier des prochaines sessions</h1>
-          <p>Visualisez rapidement les prochaines dates, le format de formation et les places encore disponibles.</p>
+          <Text tone="muted">Visualisez rapidement les prochaines dates, le format de formation et les places encore disponibles.</Text>
         </div>
 
         <TrainingCalendar formations={formations} sessions={sessions} />
@@ -28,11 +28,11 @@ export default async function CalendrierPage() {
         <div className="section grid-2">
           <article className="card card-highlight">
             <h2>Besoin d'une autre date ?</h2>
-            <p>Si aucune session ne correspond à votre agenda, contactez Oxideve pour étudier une nouvelle ouverture.</p>
+            <Text tone="muted">Si aucune session ne correspond à votre agenda, contactez Oxideve pour étudier une nouvelle ouverture.</Text>
           </article>
           <article className="card">
             <h2>Prêt à réserver ?</h2>
-            <p>La page d'inscription vous permet d'envoyer votre demande en quelques étapes.</p>
+            <Text tone="muted">La page d'inscription vous permet d'envoyer votre demande en quelques étapes.</Text>
             <div className="cta-row">
               <ButtonLink href="/inscriptions" variant="primary">
                 Aller à l'inscription

@@ -1,6 +1,7 @@
 "use client";
 
 import { FormEvent, useEffect, useState } from "react";
+import { Text } from "@/components/ui";
 
 type PublicQuizOption = {
   label: string;
@@ -164,7 +165,7 @@ export function QuizForm({
   }
 
   if (!quiz) {
-    return <p>Chargement de l&apos;auto-évaluation...</p>;
+    return <Text tone="muted">Chargement de l&apos;auto-évaluation...</Text>;
   }
 
   if (status === "success" && result) {
@@ -193,13 +194,13 @@ export function QuizForm({
           {result.details.map((detail) => (
             <div key={detail.questionId} className={`quiz-result-item ${detail.isCorrect ? "is-correct" : "is-incorrect"}`}>
               <p className="quiz-result-question">{detail.question}</p>
-              <p>
+              <Text size="sm" tone="muted">
                 Votre réponse : <strong>{detail.submittedLabel || "Non répondu"}</strong>
-              </p>
+              </Text>
               {!detail.isCorrect ? (
-                <p>
+                <Text size="sm" tone="muted">
                   Bonne réponse : <strong>{detail.correctLabel}</strong>
-                </p>
+                </Text>
               ) : null}
             </div>
           ))}

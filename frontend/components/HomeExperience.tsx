@@ -2,6 +2,7 @@
 
 import { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
+import { Text } from "@/components/ui";
 import type { Formation, Session } from "../../shared/types";
 
 type Props = {
@@ -289,7 +290,7 @@ export function HomeCalendarSection({ formations, sessions }: Props) {
                   ))}
                 </ul>
               ) : (
-                <p>Aucune session ce jour-là. Changez de mois ou choisissez un autre jour.</p>
+                <Text tone="muted">Aucune session ce jour-là. Changez de mois ou choisissez un autre jour.</Text>
               )}
             </div>
           </div>

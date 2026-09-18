@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { Text } from "@/components/ui";
 import { ContactForm } from "@/components/ContactForm";
 import { contactAddress, contactEmail, contactPhone, getFormations, getSessions } from "@/lib/content";
 
@@ -18,12 +19,12 @@ export default async function ContactPage() {
         <div className="contact-card">
           <span className="eyebrow">Contact</span>
           <h1>Contactez Oxideve</h1>
-          <p>Utilisez cette page pour poser une question, demander des informations ou préparer votre inscription.</p>
-          <div className="detail-list">
-            <p>Téléphone: {contactPhone}</p>
-            <p>Email: {contactEmail}</p>
-            <p>Adresse: {contactAddress}</p>
-          </div>
+          <Text tone="muted">Utilisez cette page pour poser une question, demander des informations ou préparer votre inscription.</Text>
+          <ul className="detail-list">
+            <li>Téléphone: {contactPhone}</li>
+            <li>Email: {contactEmail}</li>
+            <li>Adresse: {contactAddress}</li>
+          </ul>
         </div>
         <div className="contact-card">
           <ContactForm

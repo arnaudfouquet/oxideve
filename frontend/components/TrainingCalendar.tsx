@@ -1,6 +1,6 @@
 import type { Formation, Session } from "../../shared/types";
 import { formatDateRange, formatShortDate } from "@/lib/dates";
-import { ButtonLink } from "@/components/ui";
+import { ButtonLink, Text } from "@/components/ui";
 
 type Props = {
   formations: Formation[];
@@ -26,7 +26,7 @@ export function TrainingCalendar({ formations, sessions, compact = false }: Prop
                 <span className="meta-pill">{session.city}</span>
               </div>
               <h3>{formation?.title || session.formationSlug}</h3>
-              <p>{formatDateRange(session.startDate, session.endDate)}</p>
+              <Text tone="muted" size="sm">{formatDateRange(session.startDate, session.endDate)}</Text>
             </div>
             <div className="schedule-action">
               <ButtonLink href={`/formations/${session.formationSlug}`} variant="secondary">
