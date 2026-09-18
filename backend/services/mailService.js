@@ -231,6 +231,8 @@ function buildInternalRegistrationHtml({ registration, formation, session }) {
   const sessionSummary = session
     ? `${formatDate(session.startDate)} - ${formatDate(session.endDate)}${session.city ? ` (${session.city})` : ""}`
     : "-";
+  const siteUrl = process.env.SITE_URL || "http://localhost:3000";
+  const adminUrl = `${siteUrl}/admin?section=participants&registrationId=${registration.id}`;
 
   return `
     <div style="font-family: Arial, sans-serif; color: #004d6d; max-width: 560px; margin: 0 auto;">
@@ -244,6 +246,11 @@ function buildInternalRegistrationHtml({ registration, formation, session }) {
       <p><strong>Email :</strong> ${registration.email || "-"}</p>
       <p><strong>Téléphone :</strong> ${registration.phone || "-"}</p>
       ${registration.message ? `<h3 style="color: #004d6d; margin-top: 24px;">Message</h3><p>${registration.message}</p>` : ""}
+      <p style="margin-top: 24px;">
+        <a href="${adminUrl}" style="display: inline-block; background: #09cf65; color: #ffffff; padding: 12px 20px; border-radius: 999px; text-decoration: none; font-weight: bold;">
+          Voir la demande dans l'admin →
+        </a>
+      </p>
       <p style="margin-top: 32px; color: #4d6a78; font-size: 0.85rem;">Oxideve - Organisme de formation professionnelle</p>
     </div>
   `;

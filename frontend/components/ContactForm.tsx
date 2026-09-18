@@ -25,6 +25,7 @@ export function ContactForm({
 }: Props) {
   const [status, setStatus] = useState<"idle" | "loading" | "success" | "error">("idle");
   const [message, setMessage] = useState("");
+  const [formRenderedAt] = useState(() => Date.now());
   const [selectedFormationSlug, setSelectedFormationSlug] = useState(defaultFormationSlug);
   const [internalSessionId, setInternalSessionId] = useState(defaultSessionId);
   const isControlled = controlledSessionId !== undefined;
@@ -88,6 +89,15 @@ export function ContactForm({
 
   return (
     <form className="contact-form" onSubmit={handleSubmit}>
+      <input
+        name="website"
+        type="text"
+        tabIndex={-1}
+        autoComplete="off"
+        aria-hidden="true"
+        className="form-honeypot"
+      />
+      <input name="formRenderedAt" type="hidden" value={formRenderedAt} readOnly />
       <div className="form-grid">
         <label>
           Société

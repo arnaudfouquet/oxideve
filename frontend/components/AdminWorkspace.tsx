@@ -462,6 +462,25 @@ export function AdminWorkspace({
   const [pendingFormationChoice, setPendingFormationChoice] = useState<Record<string, string>>({});
 
   useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    const targetSection = params.get("section");
+    const targetRegistrationId = params.get("registrationId");
+
+    if (targetSection === "participants") {
+      setSection("participants");
+    }
+
+    if (targetRegistrationId) {
+      const participant = initialParticipants.find((item) => item.registrationId === targetRegistrationId);
+      if (participant) {
+        setSelectedParticipantId(participant.id);
+        setParticipantDrawerOpen(true);
+      }
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  useEffect(() => {
     if (section !== "sessions") return;
 
     let cancelled = false;
@@ -699,6 +718,33 @@ export function AdminWorkspace({
     }
 
     setSuccess("Statut mis à jour.");
+  }
+
+  async function handleDeleteRegistration(participantId: string, registrationId: string | null, label: string) {
+    if (!registrationId) {
+      setError("Cette ligne n'a pas d'inscription associée à supprimer.");
+      return;
+    }
+
+    if (!window.confirm(`Supprimer définitivement l'inscription de "${label}" ? Cette action est irréversible.`)) {
+      return;
+    }
+
+    const previousRegistrations = registrations;
+    const previousParticipants = participants;
+    setRegistrations((current) => current.filter((item) => item.id !== registrationId));
+    setParticipants((current) => current.filter((item) => item.id !== participantId));
+
+    const response = await fetch(`/api/admin/registrations/${registrationId}`, { method: "DELETE" });
+
+    if (!response.ok && response.status !== 204) {
+      setRegistrations(previousRegistrations);
+      setParticipants(previousParticipants);
+      setError("Impossible de supprimer cette inscription.");
+      return;
+    }
+
+    setSuccess("Inscription supprimée.");
   }
 
   function copyBulletinLink(
@@ -2061,7 +2107,7 @@ export function AdminWorkspace({
                   width: "190px",
                   render: (row) => (
                     <div className="admin-row-actions">
-                      {row.status !== "Non intéressé" ? (
+                      {row.status !== "Non intéressé" && row.status !== "Inscription complétée" ? (
                         <button
                           className="admin-copy-button"
                           onClick={(event) => {
@@ -2089,6 +2135,18 @@ export function AdminWorkspace({
                           PDF
                         </a>
                       ) : null}
+                      {row.registrationId ? (
+                        <button
+                          className="admin-copy-button admin-copy-button-danger"
+                          onClick={(event) => {
+                            event.stopPropagation();
+                            handleDeleteRegistration(row.id, row.registrationId, row.fullName);
+                          }}
+                          type="button"
+                        >
+                          Supprimer
+                        </button>
+                      ) : null}
                     </div>
                   ),
                 },
@@ -2100,6 +2158,7 @@ export function AdminWorkspace({
               isRowActive={(row) => selectedParticipantId === row.id}
               getRowClassName={(row) => (row.status === "Pré-inscription (à qualifier)" ? "admin-data-table-row-new" : "")}
               pageSize={15}
+              className="admin-data-table-compact"
             />
           </section>
 

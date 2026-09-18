@@ -60,6 +60,7 @@ export function QuizForm({
   const [status, setStatus] = useState<"idle" | "loading" | "success" | "error">("idle");
   const [message, setMessage] = useState("");
   const [result, setResult] = useState<QuizAttemptResult | null>(null);
+  const [formRenderedAt] = useState(() => Date.now());
   const isLearnerFullNameLocked = Boolean(defaultLearnerFullName);
   const isLearnerEmailLocked = Boolean(defaultLearnerEmail);
   const isCompanyNameLocked = Boolean(defaultCompanyName);
@@ -109,6 +110,7 @@ export function QuizForm({
     const learnerFullName = String(formData.get("learnerFullName") || "");
     const learnerEmail = String(formData.get("learnerEmail") || "");
     const companyName = String(formData.get("companyName") || "");
+    const website = String(formData.get("website") || "");
 
     const answers: Record<string, string> = {};
     for (const question of quiz.questions) {
@@ -134,6 +136,8 @@ export function QuizForm({
       companyName,
       answers,
       selfRatings,
+      website,
+      formRenderedAt,
     };
 
     const response = await fetch("/api/quiz-attempt", {
@@ -213,6 +217,14 @@ export function QuizForm({
 
   return (
     <form className="contact-form quiz-form" onSubmit={handleSubmit}>
+      <input
+        name="website"
+        type="text"
+        tabIndex={-1}
+        autoComplete="off"
+        aria-hidden="true"
+        className="form-honeypot"
+      />
       <section className="bulletin-form-block">
         <h2 className="bulletin-form-block-title">
           <span>1</span> Qui êtes-vous ?

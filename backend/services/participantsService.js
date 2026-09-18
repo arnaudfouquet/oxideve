@@ -1,4 +1,4 @@
-const { listRegistrations } = require("./registrationService");
+const { listRegistrations, REGISTRATION_STATUS, REGISTRATION_ORIGIN } = require("./registrationService");
 const { listBulletinInscriptions } = require("./bulletinInscriptionService");
 const { listAllQuizAttempts, getPublicQuizByFormationSlug } = require("./quizService");
 
@@ -83,8 +83,8 @@ async function listParticipants() {
       formationSlug: bulletin.formationSlug,
       sessionId: bulletin.sessionId || null,
       firstContactAt: bulletin.createdAt,
-      status: "Inscription complétée",
-      origin: "Contact direct (lien BI envoyé)",
+      status: REGISTRATION_STATUS.COMPLETE,
+      origin: REGISTRATION_ORIGIN.DIRECT_CONTACT,
       registrationId: null,
       bulletinInscriptionId: bulletin.id,
       message: null,

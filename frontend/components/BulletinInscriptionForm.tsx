@@ -40,6 +40,7 @@ export function BulletinInscriptionForm({
   const [source, setSource] = useState("");
   const [distributorName, setDistributorName] = useState("");
   const [learners, setLearners] = useState<LearnerInput[]>([createEmptyLearner()]);
+  const [formRenderedAt] = useState(() => Date.now());
 
   const isFormationLocked = Boolean(defaultFormationSlug);
 
@@ -141,6 +142,15 @@ export function BulletinInscriptionForm({
 
   return (
     <form className="contact-form bulletin-form" onSubmit={handleSubmit}>
+      <input
+        name="website"
+        type="text"
+        tabIndex={-1}
+        autoComplete="off"
+        aria-hidden="true"
+        className="form-honeypot"
+      />
+      <input name="formRenderedAt" type="hidden" value={formRenderedAt} readOnly />
       <section className="bulletin-form-block">
         <h2 className="bulletin-form-block-title">
           <span>1</span> Formation

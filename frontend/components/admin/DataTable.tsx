@@ -21,6 +21,7 @@ export type DataTableProps<T> = {
   onRowClick?: (row: T) => void;
   isRowActive?: (row: T) => boolean;
   getRowClassName?: (row: T) => string;
+  className?: string;
 };
 
 type SortState = {
@@ -37,6 +38,7 @@ export function DataTable<T>({
   onRowClick,
   isRowActive,
   getRowClassName,
+  className,
 }: DataTableProps<T>) {
   const [sort, setSort] = useState<SortState | null>(null);
   const [page, setPage] = useState(0);
@@ -91,7 +93,7 @@ export function DataTable<T>({
   return (
     <div className="admin-data-table-shell">
       <div className="admin-data-table-scroll">
-        <table className="admin-data-table">
+        <table className={`admin-data-table${className ? ` ${className}` : ""}`}>
           <thead>
             <tr>
               {columns.map((column) => {

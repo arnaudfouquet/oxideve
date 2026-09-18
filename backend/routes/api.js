@@ -1,7 +1,7 @@
 const express = require("express");
 const archiver = require("archiver");
 const { z } = require("zod");
-const { formLimiter } = require("../middleware/security");
+const { formLimiter, honeypotGuard } = require("../middleware/security");
 const { isDatabaseConnected } = require("../services/prismaClient");
 const {
   listFormations,
@@ -26,6 +26,7 @@ const {
   addRegistrationNote,
   linkOrCreateRegistrationForBulletin,
   markRegistrationCompleteForBulletin,
+  deleteRegistration,
   MANUAL_STATUSES,
 } = require("../services/registrationService");
 const { syncQueovalCalendar, listPendingSyncSessions, resolvePendingSyncSession } = require("../services/queovalService");
@@ -275,6 +276,7 @@ function createApiRouter() {
   router.post(
     "/inscription",
     formLimiter,
+    honeypotGuard,
     asyncHandler(async (req, res) => {
       const payload = inscriptionSchema.parse(req.body);
       const registration = await createRegistration(payload);
@@ -297,6 +299,7 @@ function createApiRouter() {
   router.post(
     "/bulletin-inscription",
     formLimiter,
+    honeypotGuard,
     asyncHandler(async (req, res) => {
       const payload = bulletinInscriptionSchema.parse(req.body);
       const formationBeforeCreate = await getFormationBySlug(payload.formationSlug);
@@ -399,6 +402,7 @@ function createApiRouter() {
   router.post(
     "/quiz-attempt",
     formLimiter,
+    honeypotGuard,
     asyncHandler(async (req, res) => {
       const payload = quizAttemptSchema.parse(req.body);
       const result = await submitQuizAttempt(payload);
@@ -449,6 +453,15 @@ function createApiRouter() {
       const updated = await updateRegistrationStatus(req.params.id, status);
       if (!updated) return res.status(404).json({ error: "Inscription introuvable" });
       return res.json({ data: updated });
+    })
+  );
+
+  router.delete(
+    "/admin/registrations/:id",
+    asyncHandler(async (req, res) => {
+      const deleted = await deleteRegistration(req.params.id);
+      if (!deleted) return res.status(404).json({ error: "Inscription introuvable" });
+      return res.status(204).send();
     })
   );
 

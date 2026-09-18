@@ -44,8 +44,40 @@ function sanitizeInputs(req, _res, next) {
   next();
 }
 
+const HONEYPOT_FIELD = "website";
+const FORM_TIMESTAMP_FIELD = "formRenderedAt";
+const MIN_FILL_TIME_MS = 2000;
+
+/**
+ * Anti-bot minimal sans dépendance externe ni clé d'API : un champ caché (piège à bots,
+ * jamais rempli par un humain) et un horodatage du rendu du formulaire (un envoi trop
+ * rapide trahit un script). Les deux valeurs sont retirées du payload avant validation
+ * métier pour ne pas polluer les schémas Zod.
+ */
+function honeypotGuard(req, res, next) {
+  if (req.body && typeof req.body === "object") {
+    const honeypotValue = req.body[HONEYPOT_FIELD];
+    const renderedAt = req.body[FORM_TIMESTAMP_FIELD];
+
+    delete req.body[HONEYPOT_FIELD];
+    delete req.body[FORM_TIMESTAMP_FIELD];
+
+    if (typeof honeypotValue === "string" && honeypotValue.trim() !== "") {
+      return res.status(400).json({ error: "Requête invalide." });
+    }
+
+    const renderedAtMs = Number.parseInt(renderedAt, 10);
+    if (!renderedAtMs || Date.now() - renderedAtMs < MIN_FILL_TIME_MS) {
+      return res.status(400).json({ error: "Requête invalide." });
+    }
+  }
+
+  next();
+}
+
 module.exports = {
   apiLimiter,
   formLimiter,
   sanitizeInputs,
+  honeypotGuard,
 };

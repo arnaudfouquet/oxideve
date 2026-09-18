@@ -252,7 +252,11 @@ async function linkOrCreateRegistrationForBulletin(bulletin, { hasQuiz }) {
   if (prisma) {
     const matchKey = normalizeMatchKey(bulletin.formationSlug, bulletin.sponsorEmail);
     const candidates = await prisma.inscription.findMany({
-      where: { formationSlug: bulletin.formationSlug, bulletinInscriptionId: null },
+      where: {
+        formationSlug: bulletin.formationSlug,
+        bulletinInscriptionId: null,
+        status: { not: REGISTRATION_STATUS.NOT_INTERESTED },
+      },
     });
     const matching = candidates.find(
       (candidate) => normalizeMatchKey(candidate.formationSlug, candidate.email) === matchKey
@@ -290,7 +294,10 @@ async function linkOrCreateRegistrationForBulletin(bulletin, { hasQuiz }) {
 
   const matchKey = normalizeMatchKey(bulletin.formationSlug, bulletin.sponsorEmail);
   const matching = inMemoryRegistrations.find(
-    (item) => !item.bulletinInscriptionId && normalizeMatchKey(item.formationSlug, item.email) === matchKey
+    (item) =>
+      !item.bulletinInscriptionId &&
+      item.status !== REGISTRATION_STATUS.NOT_INTERESTED &&
+      normalizeMatchKey(item.formationSlug, item.email) === matchKey
   );
 
   if (matching) {
@@ -333,8 +340,13 @@ async function markRegistrationCompleteForBulletin(bulletinInscriptionId) {
   const attempts = await listQuizAttemptsByBulletinId(bulletinInscriptionId);
   const submittedEmails = new Set(attempts.map((attempt) => (attempt.learnerEmail || "").trim().toLowerCase()));
   const learners = Array.isArray(bulletin.learners) ? bulletin.learners : [];
+  // Un bulletin créé avant l'ajout du champ `learners` n'a aucun apprenant déclaré : on ne
+  // peut alors pas vérifier "tous les apprenants ont répondu", donc on se fie à la présence
+  // d'au moins une tentative pour ne pas bloquer indéfiniment ce dossier sur "En attente".
   const allLearnersCompleted =
-    learners.length > 0 && learners.every((learner) => submittedEmails.has((learner.email || "").trim().toLowerCase()));
+    learners.length > 0
+      ? learners.every((learner) => submittedEmails.has((learner.email || "").trim().toLowerCase()))
+      : attempts.length > 0;
 
   const nextStatus = allLearnersCompleted ? REGISTRATION_STATUS.COMPLETE : REGISTRATION_STATUS.AWAITING_QUIZ;
   const prisma = getPrismaClient();
@@ -355,6 +367,25 @@ async function markRegistrationCompleteForBulletin(bulletinInscriptionId) {
   if (target) target.status = nextStatus;
 }
 
+async function deleteRegistration(id) {
+  const prisma = getPrismaClient();
+
+  if (prisma) {
+    try {
+      await prisma.inscription.delete({ where: { id } });
+      return true;
+    } catch (error) {
+      if (error.code === "P2025") return false;
+      throw error;
+    }
+  }
+
+  const index = inMemoryRegistrations.findIndex((item) => item.id === id);
+  if (index === -1) return false;
+  inMemoryRegistrations.splice(index, 1);
+  return true;
+}
+
 module.exports = {
   REGISTRATION_STATUS,
   REGISTRATION_ORIGIN,
@@ -367,4 +398,5 @@ module.exports = {
   addRegistrationNote,
   linkOrCreateRegistrationForBulletin,
   markRegistrationCompleteForBulletin,
+  deleteRegistration,
 };

@@ -1678,6 +1678,16 @@ main {
   gap: var(--space-3);
 }
 
+.form-honeypot {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  opacity: 0;
+  pointer-events: none;
+  left: -9999px;
+}
+
 .contact-form label {
   display: grid;
   gap: 8px;
@@ -3035,6 +3045,15 @@ main {
   background: rgba(0, 156, 220, 0.16);
 }
 
+.admin-copy-button-danger {
+  background: rgba(214, 69, 69, 0.08);
+  color: #b13030;
+}
+
+.admin-copy-button-danger:hover {
+  background: rgba(214, 69, 69, 0.16);
+}
+
 .admin-row-actions {
   display: flex;
   gap: 6px;
@@ -3150,6 +3169,19 @@ main {
 
 .admin-data-table td {
   white-space: normal;
+}
+
+.admin-data-table-compact th,
+.admin-data-table-compact td {
+  padding: 8px 12px;
+  font-size: 0.85rem;
+}
+
+.admin-data-table-compact td {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 220px;
 }
 
 .admin-data-table thead th {
