@@ -3780,26 +3780,6 @@ main {
   }
 }
 
-.ui-button {
-  justify-content: center;
-  min-height: 48px;
-  padding: 4px 25px;
-  border: 0;
-  font-size: 25px;
-  border-radius: 10px;
-  font-weight: 700;
-  text-decoration: none;
-  cursor: pointer;
-  transition: transform 0.18s ease, box-shadow 0.18s ease, background-color 0.18s ease, color 0.18s ease;
-}
-
-.ui-button-primary,
-.ui-button-blue {
-  background: var(--color-blue);
-  color: var(--color-white);
-  box-shadow: none;
-}
-
 .ui-button-green {
   background: var(--color-green);
   color: var(--color-white);
