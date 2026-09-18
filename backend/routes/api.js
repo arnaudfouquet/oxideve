@@ -523,10 +523,11 @@ function createApiRouter() {
   router.get(
     "/admin/sessions/:id/documents.zip",
     asyncHandler(async (req, res) => {
-      const [sessions, bulletins, quizAttempts] = await Promise.all([
+      const [sessions, bulletins, quizAttempts, registrations] = await Promise.all([
         listSessions(),
         listBulletinInscriptions(),
         listAllQuizAttempts(),
+        listRegistrations(),
       ]);
       const session = sessions.find((item) => item.id === req.params.id);
 
@@ -534,7 +535,26 @@ function createApiRouter() {
         return res.status(404).json({ error: "Session introuvable" });
       }
 
-      const sessionBulletins = bulletins.filter((bulletin) => bulletin.sessionId === session.id);
+      // Un bulletin porte son propre sessionId (saisi dans le formulaire du bulletin), qui
+      // peut différer de celui de la pré-inscription d'origine liée. On rassemble donc les
+      // bulletins qui pointent directement vers cette session ET ceux rattachés (via
+      // bulletinInscriptionId) à une pré-inscription de cette session, pour ne rater aucun
+      // document déjà visible dans le tableau "Inscrits à cette session".
+      const bulletinsById = new Map(bulletins.map((bulletin) => [bulletin.id, bulletin]));
+      const relevantBulletinIds = new Set();
+
+      for (const bulletin of bulletins) {
+        if (bulletin.sessionId === session.id) relevantBulletinIds.add(bulletin.id);
+      }
+      for (const registration of registrations) {
+        if (registration.sessionId === session.id && registration.bulletinInscriptionId) {
+          relevantBulletinIds.add(registration.bulletinInscriptionId);
+        }
+      }
+
+      const sessionBulletins = Array.from(relevantBulletinIds)
+        .map((id) => bulletinsById.get(id))
+        .filter(Boolean);
 
       if (sessionBulletins.length === 0) {
         return res.status(404).json({ error: "Aucun bulletin d'inscription pour cette session." });

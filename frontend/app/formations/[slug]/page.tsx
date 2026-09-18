@@ -199,20 +199,7 @@ export default async function FormationDetailPage({ params }: Props) {
               <span>Tarif standard</span>
               <strong>{formation.price}</strong>
             </div>
-            {formation.priceMember ? (
-              <div className="formation-pricing-card formation-pricing-card-accent">
-                <span>{formation.priceMemberLabel || "Tarif adhérent"}</span>
-                <strong>{formation.priceMember}</strong>
-              </div>
-            ) : null}
           </div>
-
-          {formation.memberProgram ? (
-            <div className="detail-side-card formation-member-program">
-              <h2>{formation.memberProgram.name}</h2>
-              <p>{formation.memberProgram.description}</p>
-            </div>
-          ) : null}
         </Container>
       </Section>
 
