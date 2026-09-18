@@ -2711,15 +2711,16 @@ main {
 
 .admin-form-section {
   display: grid;
-  gap: 16px;
-  padding: 20px;
-  border-radius: 20px;
-  border: 1px solid var(--border-subtle);
-  background: rgba(0, 77, 109, 0.04);
+  gap: 14px;
+  padding: 18px 20px;
+  border-radius: 16px;
+  background: transparent;
 }
 
 .admin-form-section + .admin-form-section {
   margin-top: 4px;
+  border-top: 1px solid var(--border-subtle);
+  padding-top: 20px;
 }
 
 .admin-form-section h3 {
@@ -2939,17 +2940,16 @@ main {
 .admin-notes-block {
   display: grid;
   gap: 8px;
-  margin: 14px 0;
-  padding: 14px;
-  border: 1px solid var(--border-subtle);
-  border-radius: var(--radius-lg);
-  background: rgba(0, 156, 220, 0.04);
+  padding-top: 10px;
+  border-top: 1px solid var(--border-subtle);
 }
 
 .admin-notes-block > span {
-  font-size: 0.85rem;
+  font-size: 0.78rem;
   font-weight: 700;
-  color: var(--color-navy);
+  color: var(--color-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
 }
 
 .admin-notes-block textarea {
@@ -2958,18 +2958,20 @@ main {
 
 .admin-notes-history {
   display: grid;
-  gap: 8px;
-  max-height: 220px;
+  gap: 6px;
+  max-height: 200px;
   overflow-y: auto;
 }
 
 .admin-notes-history-item {
   display: grid;
   gap: 2px;
-  padding: 8px 10px;
-  border-radius: var(--radius-md, 10px);
-  background: var(--color-white);
-  border: 1px solid var(--border-subtle);
+  padding: 6px 0;
+}
+
+.admin-notes-history-item + .admin-notes-history-item {
+  border-top: 1px solid var(--border-subtle);
+  padding-top: 8px;
 }
 
 .admin-notes-history-item p {
