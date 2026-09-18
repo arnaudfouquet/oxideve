@@ -62,6 +62,7 @@ type ArticleDraft = {
   readingTime: string;
   publishedAt: string;
   featuredFormationSlug: string;
+  coverImageUrl: string;
 };
 
 function splitLines(value: string) {
@@ -226,6 +227,7 @@ function toArticleDraft(article?: Article): ArticleDraft {
     readingTime: article?.readingTime || "",
     publishedAt: article?.publishedAt || "",
     featuredFormationSlug: article?.featuredFormationSlug || "",
+    coverImageUrl: article?.coverImageUrl || "",
   };
 }
 
@@ -348,6 +350,7 @@ export function AdminWorkspace({
   }
 
   const [editingFormationSlug, setEditingFormationSlug] = useState(initialFormations[0]?.slug || "");
+  const [formationDrawerOpen, setFormationDrawerOpen] = useState(false);
   const [editingSessionId, setEditingSessionId] = useState(initialSessions[0]?.id || "");
   const [customCities, setCustomCities] = useState<string[]>([]);
   const [newCityInput, setNewCityInput] = useState("");
@@ -363,6 +366,7 @@ export function AdminWorkspace({
   const [articleDraft, setArticleDraft] = useState(toArticleDraft(initialArticles[0]));
   const [articleBodyParagraphs, setArticleBodyParagraphs] = useState<string[]>(toArticleBodyParagraphs(initialArticles[0]));
   const [articleSearch, setArticleSearch] = useState("");
+  const [articleImageUploading, setArticleImageUploading] = useState(false);
 
   const [sessionSearch, setSessionSearch] = useState("");
   const [sessionStateFilter, setSessionStateFilter] = useState("Tous");
@@ -726,6 +730,22 @@ export function AdminWorkspace({
     setFeedback("");
   }
 
+  function openFormationDrawer(slug: string) {
+    selectFormation(slug);
+    setFormationDrawerOpen(true);
+  }
+
+  function openNewFormationDrawer() {
+    setEditingFormationSlug("");
+    setFormationDraft(toFormationDraft());
+    setFeedback("");
+    setFormationDrawerOpen(true);
+  }
+
+  function closeFormationDrawer() {
+    setFormationDrawerOpen(false);
+  }
+
   function addProgrammeDay() {
     setFormationDraft((current) => ({
       ...current,
@@ -1015,7 +1035,35 @@ export function AdminWorkspace({
     setFormations((current) => [...current.filter((item) => item.slug !== result.data?.slug && item.slug !== editingFormationSlug), result.data as Formation]);
     selectFormation((result.data as Formation).slug);
     setSaving(false);
+    setFormationDrawerOpen(false);
     setSuccess(result.message || "Formation enregistrée.");
+  }
+
+  async function handleArticleImageChange(event: React.ChangeEvent<HTMLInputElement>) {
+    const file = event.target.files?.[0];
+    event.target.value = "";
+    if (!file) return;
+
+    setArticleImageUploading(true);
+    setFeedback("");
+
+    const formData = new FormData();
+    formData.append("image", file);
+
+    const response = await fetch("/api/admin/uploads/article-image", {
+      method: "POST",
+      body: formData,
+    });
+    const result = (await response.json().catch(() => null)) as { data?: { url: string }; error?: string } | null;
+
+    setArticleImageUploading(false);
+
+    if (!response.ok || !result?.data?.url) {
+      setError(result?.error || "L'image n'a pas pu être envoyée.");
+      return;
+    }
+
+    setArticleDraft((current) => ({ ...current, coverImageUrl: result.data!.url }));
   }
 
   async function handleArticleSubmit(event: React.FormEvent<HTMLFormElement>) {
@@ -1032,6 +1080,7 @@ export function AdminWorkspace({
       readingTime: articleDraft.readingTime.trim(),
       publishedAt: articleDraft.publishedAt.trim(),
       featuredFormationSlug: articleDraft.featuredFormationSlug.trim(),
+      coverImageUrl: articleDraft.coverImageUrl.trim(),
     };
 
     const isEditing = Boolean(editingArticleSlug);
@@ -1439,26 +1488,64 @@ export function AdminWorkspace({
       ) : null}
 
       {section === "formations" ? (
-        <div className="admin-dual-pane">
-          <section className="admin-shell">
-            <div className="section-heading section-heading-tight"><div><span className="eyebrow">Catalogue</span><h2>Formations</h2></div><Button onClick={() => { setEditingFormationSlug(""); setFormationDraft(toFormationDraft()); }}>Nouvelle formation</Button></div>
-            <div className="admin-filter-grid admin-filter-grid-compact">
-              <label><span>Recherche</span><input className="ui-field" value={formationSearch} onChange={(event) => setFormationSearch(event.target.value)} placeholder="Nom, catégorie..." /></label>
-            </div>
-            <div className="admin-list admin-list-dense">
-              {formations
-                .filter((formation) => !formationSearch.trim() || `${formation.title} ${formation.category}`.toLowerCase().includes(formationSearch.trim().toLowerCase()))
-                .sort((a, b) => a.title.localeCompare(b.title, "fr")).map((formation) => (
-                <button className={`admin-list-item${editingFormationSlug === formation.slug ? " active" : ""}`} key={formation.slug} onClick={() => selectFormation(formation.slug)} type="button">
-                  <strong>{formation.title}</strong>
-                  <span>{formation.category}</span>
-                  <span>{registrationsByFormation[formation.slug] || 0} inscriptions</span>
-                </button>
-              ))}
-            </div>
-          </section>
-          <section className="admin-shell">
-            <div className="section-heading section-heading-tight"><div><span className="eyebrow">Edition</span><h2>{editingFormationSlug ? "Modifier la formation" : "Créer une formation"}</h2></div></div>
+        <section className="admin-shell">
+          <div className="section-heading section-heading-tight"><div><span className="eyebrow">Catalogue</span><h2>Formations</h2></div><Button onClick={openNewFormationDrawer}>Nouvelle formation</Button></div>
+          <div className="admin-filter-grid admin-filter-grid-compact">
+            <label><span>Recherche</span><input className="ui-field" value={formationSearch} onChange={(event) => setFormationSearch(event.target.value)} placeholder="Nom, catégorie..." /></label>
+          </div>
+          <DataTable
+            columns={[
+              {
+                key: "title",
+                label: "Formation",
+                sortable: true,
+                sortValue: (row) => row.title,
+                render: (row) => (
+                  <div className="admin-formation-title-cell">
+                    <strong>{row.title}</strong>
+                    <span>{row.shortTitle}</span>
+                  </div>
+                ),
+              },
+              {
+                key: "category",
+                label: "Catégorie",
+                sortable: true,
+                sortValue: (row) => row.category,
+                render: (row) => <StatusBadge label={row.category} tone="soft" />,
+              },
+              { key: "duration", label: "Durée", sortable: true, sortValue: (row) => row.duration, render: (row) => row.duration },
+              {
+                key: "registrations",
+                label: "Inscriptions",
+                sortable: true,
+                sortValue: (row) => registrationsByFormation[row.slug] || 0,
+                render: (row) => registrationsByFormation[row.slug] || 0,
+              },
+              {
+                key: "actions",
+                label: "Actions",
+                width: "120px",
+                render: (row) => (
+                  <button className="admin-copy-button" onClick={(event) => { event.stopPropagation(); openFormationDrawer(row.slug); }} type="button">
+                    Modifier
+                  </button>
+                ),
+              },
+            ]}
+            rows={formations.filter((formation) => !formationSearch.trim() || `${formation.title} ${formation.category}`.toLowerCase().includes(formationSearch.trim().toLowerCase()))}
+            getRowKey={(row) => row.slug}
+            emptyLabel="Aucune formation ne correspond à cette recherche."
+            onRowClick={(row) => openFormationDrawer(row.slug)}
+            isRowActive={(row) => editingFormationSlug === row.slug && formationDrawerOpen}
+            pageSize={15}
+          />
+
+          <Drawer
+            open={formationDrawerOpen}
+            onClose={closeFormationDrawer}
+            title={editingFormationSlug ? "Modifier la formation" : "Créer une formation"}
+          >
             <nav className="admin-form-toc">
               <a href="#formation-section-identite">Identité</a>
               <a href="#formation-section-contenu">Contenu</a>
@@ -1515,8 +1602,16 @@ export function AdminWorkspace({
                 <label><span>Tarif</span><input className="ui-field" value={formationDraft.price} onChange={(event) => setFormationDraft((current) => ({ ...current, price: event.target.value }))} required /></label>
               </div></div>
               <div className="admin-form-section" id="formation-section-contenu"><h3>Contenu</h3>
-                <label><span>Résumé</span><textarea className="ui-field" rows={3} value={formationDraft.summary} onChange={(event) => setFormationDraft((current) => ({ ...current, summary: event.target.value }))} required /></label>
-                <label><span>Description</span><textarea className="ui-field" rows={5} value={formationDraft.description} onChange={(event) => setFormationDraft((current) => ({ ...current, description: event.target.value }))} required /></label>
+                <label>
+                  <span>Résumé</span>
+                  <textarea className="ui-field admin-textarea-long" rows={4} value={formationDraft.summary} onChange={(event) => setFormationDraft((current) => ({ ...current, summary: event.target.value }))} required />
+                  <p className="admin-field-hint">{formationDraft.summary.length} caractères</p>
+                </label>
+                <label>
+                  <span>Description</span>
+                  <textarea className="ui-field admin-textarea-long" rows={7} value={formationDraft.description} onChange={(event) => setFormationDraft((current) => ({ ...current, description: event.target.value }))} required />
+                  <p className="admin-field-hint">{formationDraft.description.length} caractères</p>
+                </label>
                 <div className="form-grid">
                   <label><span>Points forts</span><textarea className="ui-field" rows={6} value={formationDraft.benefits} onChange={(event) => setFormationDraft((current) => ({ ...current, benefits: event.target.value }))} required /></label>
                   <label><span>Objectifs</span><textarea className="ui-field" rows={6} value={formationDraft.objectives} onChange={(event) => setFormationDraft((current) => ({ ...current, objectives: event.target.value }))} required /></label>
@@ -1587,14 +1682,22 @@ export function AdminWorkspace({
                 <label><span>Détails durée</span><textarea className="ui-field" rows={4} value={formationDraft.durationDetails} onChange={(event) => setFormationDraft((current) => ({ ...current, durationDetails: event.target.value }))} required /></label>
                 <label><span>Détails tarif</span><textarea className="ui-field" rows={4} value={formationDraft.priceDetails} onChange={(event) => setFormationDraft((current) => ({ ...current, priceDetails: event.target.value }))} required /></label>
                 <label><span>Taux de réussite</span><input className="ui-field" value={formationDraft.successRate} onChange={(event) => setFormationDraft((current) => ({ ...current, successRate: event.target.value }))} required /></label>
-                <label><span>Accessibilité</span><textarea className="ui-field" rows={4} value={formationDraft.handicapPolicy} onChange={(event) => setFormationDraft((current) => ({ ...current, handicapPolicy: event.target.value }))} required /></label>
+                <label>
+                  <span>Accessibilité</span>
+                  <textarea className="ui-field admin-textarea-long" rows={4} value={formationDraft.handicapPolicy} onChange={(event) => setFormationDraft((current) => ({ ...current, handicapPolicy: event.target.value }))} required />
+                  <p className="admin-field-hint">{formationDraft.handicapPolicy.length} caractères</p>
+                </label>
               </div>
-                <label><span>Finalité / certification</span><textarea className="ui-field" rows={3} value={formationDraft.certification} onChange={(event) => setFormationDraft((current) => ({ ...current, certification: event.target.value }))} required /></label>
+                <label>
+                  <span>Finalité / certification</span>
+                  <textarea className="ui-field admin-textarea-long" rows={4} value={formationDraft.certification} onChange={(event) => setFormationDraft((current) => ({ ...current, certification: event.target.value }))} required />
+                  <p className="admin-field-hint">{formationDraft.certification.length} caractères</p>
+                </label>
               </div>
               <Button disabled={saving} type="submit">{saving ? "Enregistrement..." : editingFormationSlug ? "Mettre à jour" : "Créer la formation"}</Button>
             </form>
-          </section>
-        </div>
+          </Drawer>
+        </section>
       ) : null}
 
       {section === "editorial" ? (
@@ -1660,6 +1763,31 @@ export function AdminWorkspace({
                 <label><span>Publication</span><input className="ui-field" type="date" value={articleDraft.publishedAt} onChange={(event) => setArticleDraft((current) => ({ ...current, publishedAt: event.target.value }))} required /></label>
                 <label><span>Formation liée</span><select className="ui-field" value={articleDraft.featuredFormationSlug} onChange={(event) => setArticleDraft((current) => ({ ...current, featuredFormationSlug: event.target.value }))}><option value="">Aucune</option>{formations.map((formation) => <option key={formation.slug} value={formation.slug}>{formation.title}</option>)}</select></label>
               </div>
+              <label>
+                <span>Image de couverture</span>
+                <div className="admin-article-image-field">
+                  {articleDraft.coverImageUrl ? (
+                    <div className="admin-article-image-preview">
+                      <img src={articleDraft.coverImageUrl} alt="Aperçu de l'image de couverture" />
+                      <Button
+                        variant="ghost"
+                        type="button"
+                        onClick={() => setArticleDraft((current) => ({ ...current, coverImageUrl: "" }))}
+                      >
+                        Retirer l&apos;image
+                      </Button>
+                    </div>
+                  ) : null}
+                  <input
+                    className="ui-field"
+                    type="file"
+                    accept="image/jpeg,image/png,image/webp"
+                    onChange={handleArticleImageChange}
+                    disabled={articleImageUploading}
+                  />
+                  {articleImageUploading ? <span className="admin-field-hint">Envoi en cours...</span> : null}
+                </div>
+              </label>
               <label><span>Extrait</span><textarea className="ui-field" rows={4} value={articleDraft.excerpt} onChange={(event) => setArticleDraft((current) => ({ ...current, excerpt: event.target.value }))} required /></label>
               <div className="admin-programme-editor">
                 <div className="admin-programme-editor-header">

@@ -19,6 +19,7 @@ function normalizeArticle(article) {
     readingTime: article.readingTime,
     publishedAt: typeof article.publishedAt === "string" ? article.publishedAt.slice(0, 10) : new Date(article.publishedAt).toISOString().slice(0, 10),
     featuredFormationSlug: article.featuredFormationSlug || undefined,
+    coverImageUrl: article.coverImageUrl || undefined,
   };
 }
 
@@ -77,6 +78,7 @@ async function createArticle(payload) {
       readingTime: payload.readingTime,
       publishedAt: new Date(payload.publishedAt),
       featuredFormationSlug: payload.featuredFormationSlug || null,
+      coverImageUrl: payload.coverImageUrl || null,
     },
   });
 
@@ -108,6 +110,7 @@ async function updateArticle(slug, payload) {
       readingTime: payload.readingTime,
       publishedAt: new Date(payload.publishedAt),
       featuredFormationSlug: payload.featuredFormationSlug || null,
+      coverImageUrl: payload.coverImageUrl || null,
     },
   });
 

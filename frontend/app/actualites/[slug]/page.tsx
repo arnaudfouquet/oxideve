@@ -34,6 +34,11 @@ export default async function ArticlePage({ params }: Props) {
     <Section>
       <Container>
         <article className="article-detail-shell">
+          {article.coverImageUrl ? (
+            <div className="article-detail-hero">
+              <img src={article.coverImageUrl} alt="" />
+            </div>
+          ) : null}
           <Title as="h1" eyebrow={article.category} title={article.title} description={article.excerpt} />
           <div className="article-meta-row">
             <span>{article.readingTime}</span>

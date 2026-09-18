@@ -19,15 +19,24 @@ export default async function ActualitesPage() {
         <Title as="h1" title="Actus sur la formation" />
         <div className="article-grid">
           {articles.map((article) => (
-            <article className="article-card" key={article.slug}>
-              <span>{article.category}</span>
-              <h2>{article.title}</h2>
-              <Text tone="muted">{article.excerpt}</Text>
-              <div className="article-card-foot">
-                <small>{article.readingTime}</small>
-                <Link href={`/actualites/${article.slug}`}>Lire l'article</Link>
+            <Link className="article-card" href={`/actualites/${article.slug}`} key={article.slug}>
+              <div className={`article-card-media${article.coverImageUrl ? "" : " article-card-media-fallback"}`}>
+                {article.coverImageUrl ? (
+                  <img src={article.coverImageUrl} alt="" loading="lazy" />
+                ) : (
+                  <span className="article-card-media-mark">Oxideve</span>
+                )}
               </div>
-            </article>
+              <div className="article-card-body">
+                <span className="article-card-category">{article.category}</span>
+                <h2>{article.title}</h2>
+                <Text tone="muted">{article.excerpt}</Text>
+                <div className="article-card-foot">
+                  <small>{article.readingTime}</small>
+                  <span className="article-card-cta">Lire l&apos;article</span>
+                </div>
+              </div>
+            </Link>
           ))}
         </div>
       </Container>

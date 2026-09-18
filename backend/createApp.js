@@ -1,3 +1,4 @@
+const path = require("path");
 const express = require("express");
 const helmet = require("helmet");
 const { apiLimiter, sanitizeInputs } = require("./middleware/security");
@@ -25,6 +26,7 @@ function createBackendApp({ handle }) {
   app.use("/api", apiLimiter);
   app.use("/api/admin", adminAuth);
   app.use("/admin", adminAuth);
+  app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 
   app.get("/health", async (_req, res) => {
     res.status(200).json({

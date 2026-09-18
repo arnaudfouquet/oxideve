@@ -169,6 +169,7 @@ model Article {
   readingTime          String
   publishedAt          DateTime
   featuredFormationSlug String?
+  coverImageUrl        String?
   createdAt            DateTime  @default(now())
   updatedAt            DateTime  @updatedAt
 }

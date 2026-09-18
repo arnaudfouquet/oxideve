@@ -8,3 +8,6 @@ prisma/dev.db
 mot de passe client
 infos api queoval
 Ressources/
+backend/uploads/*
+!backend/uploads/articles
+!backend/uploads/articles/.gitkeep

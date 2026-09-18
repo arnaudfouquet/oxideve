@@ -14,6 +14,7 @@ const {
   updateSession,
 } = require("../services/catalogService");
 const { createArticle, deleteArticle, getArticleBySlug, listArticles, updateArticle } = require("../services/editorialService");
+const { handleArticleImageUpload } = require("../middleware/articleImageUpload");
 const { createCompany, listCompanies, updateCompany } = require("../services/companyService");
 const { createCrmInteraction, createCrmTask, listCrmInteractions, listCrmTasks, updateCrmTask } = require("../services/crmService");
 const {
@@ -128,6 +129,7 @@ const articleSchema = z.object({
   readingTime: z.string().min(2).max(40),
   publishedAt: z.string().min(10).max(10),
   featuredFormationSlug: z.string().max(120).optional().default(""),
+  coverImageUrl: z.string().max(500).optional(),
 });
 
 const companySchema = z.object({
@@ -757,6 +759,18 @@ function createApiRouter() {
     asyncHandler(async (req, res) => {
       const session = await deleteSession(req.params.id);
       res.json({ data: session, message: "Session supprimée" });
+    })
+  );
+
+  router.post(
+    "/admin/uploads/article-image",
+    handleArticleImageUpload,
+    asyncHandler(async (req, res) => {
+      if (!req.file) {
+        return res.status(400).json({ error: "Aucun fichier reçu." });
+      }
+
+      return res.status(201).json({ data: { url: `/uploads/articles/${req.file.filename}` } });
     })
   );
 

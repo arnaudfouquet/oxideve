@@ -258,6 +258,7 @@ export type Article = {
   readingTime: string;
   publishedAt: string;
   featuredFormationSlug?: string;
+  coverImageUrl?: string;
 };
 
 export type ParticipantQuizSummary = {
