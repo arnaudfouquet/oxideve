@@ -190,7 +190,7 @@ export default async function FormationDetailPage({ params }: Props) {
         </Container>
       </Section>
 
-      <Section surface="muted">
+      <Section>
         <Container>
           <Title eyebrow="Programme" title="Le déroulé de la formation" description="Projetez-vous avec le détail jour par jour du programme." />
           <div className="formation-programme-days">
@@ -213,14 +213,14 @@ export default async function FormationDetailPage({ params }: Props) {
         </Container>
       </Section>
 
-      <Section id="inscription" surface="muted">
+      <Section id="inscription">
         <Container>
           <FormationSessionBooking formation={formation} sessions={sessions} />
         </Container>
       </Section>
 
       {formation.faq?.length ? (
-        <Section surface="muted">
+        <Section>
           <Container>
             <Title eyebrow="FAQ" title="Questions fréquentes" className="formation-faq-title" />
             <div className="formation-faq-list">

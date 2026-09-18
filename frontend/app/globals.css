@@ -1658,10 +1658,14 @@ main {
 }
 
 .contact-card-note {
-  margin: 0 0 var(--space-3);
+  margin: 0 0 var(--space-2);
   color: var(--color-muted);
   font-size: 0.92rem;
   line-height: 1.5;
+}
+
+.contact-card-form .ui-title-block {
+  margin-bottom: var(--space-2);
 }
 
 .contact-card-form .ui-title {
