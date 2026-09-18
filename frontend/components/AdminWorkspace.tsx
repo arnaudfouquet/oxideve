@@ -1549,21 +1549,22 @@ export function AdminWorkspace({
                 {
                   key: "actions",
                   label: "Actions",
-                  width: "190px",
+                  width: "80px",
                   render: (row) => (
                     <div className="admin-row-actions">
-                      <button className="admin-copy-button" onClick={(event) => { event.stopPropagation(); openSessionDrawer(row.id); }} type="button">
-                        Modifier
+                      <button className="admin-icon-button" onClick={(event) => { event.stopPropagation(); openSessionDrawer(row.id); }} title="Modifier la session" type="button">
+                        ✎
                       </button>
                       <button
-                        className="admin-copy-button admin-copy-button-danger"
+                        className="admin-icon-button admin-icon-button-danger"
                         onClick={(event) => {
                           event.stopPropagation();
                           handleDeleteSession(row.id, registrationsBySession[row.id] || 0);
                         }}
+                        title="Supprimer la session"
                         type="button"
                       >
-                        Supprimer
+                        ✕
                       </button>
                     </div>
                   ),
@@ -1575,6 +1576,7 @@ export function AdminWorkspace({
               onRowClick={(row) => openSessionDrawer(row.id)}
               isRowActive={(row) => editingSessionId === row.id && sessionDrawerOpen}
               pageSize={15}
+              className="admin-data-table-compact"
             />
           </section>
 
@@ -1788,10 +1790,10 @@ export function AdminWorkspace({
               {
                 key: "actions",
                 label: "Actions",
-                width: "120px",
+                width: "50px",
                 render: (row) => (
-                  <button className="admin-copy-button" onClick={(event) => { event.stopPropagation(); openFormationDrawer(row.slug); }} type="button">
-                    Modifier
+                  <button className="admin-icon-button" onClick={(event) => { event.stopPropagation(); openFormationDrawer(row.slug); }} title="Modifier la formation" type="button">
+                    ✎
                   </button>
                 ),
               },
@@ -1806,6 +1808,7 @@ export function AdminWorkspace({
             onRowClick={(row) => openFormationDrawer(row.slug)}
             isRowActive={(row) => editingFormationSlug === row.slug && formationDrawerOpen}
             pageSize={15}
+            className="admin-data-table-compact"
           />
 
           <Drawer

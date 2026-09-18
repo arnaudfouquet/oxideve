@@ -23,6 +23,29 @@ function normalizeArticle(article) {
   };
 }
 
+/**
+ * Recopie les articles de démo dans la vraie table dès que la base est vide, pour que
+ * l'admin ne serve jamais ces articles en lecture seule depuis le JSON de secours : sans
+ * ça, listArticles() retombait silencieusement sur le fallback mémoire et les boutons
+ * Modifier/Supprimer de l'admin échouaient avec P2025 (la ligne n'existait pas en base).
+ */
+async function seedArticlesIfEmpty(prisma) {
+  await prisma.article.createMany({
+    data: blogArticles.map((article) => ({
+      slug: article.slug,
+      title: article.title,
+      category: article.category,
+      excerpt: article.excerpt,
+      body: article.body,
+      readingTime: article.readingTime,
+      publishedAt: new Date(article.publishedAt),
+      featuredFormationSlug: article.featuredFormationSlug || null,
+      coverImageUrl: article.coverImageUrl || null,
+    })),
+    skipDuplicates: true,
+  });
+}
+
 async function listArticles() {
   const prisma = getPrismaClient();
 
@@ -30,12 +53,15 @@ async function listArticles() {
     return listFallbackArticles();
   }
 
-  const articles = await prisma.article.findMany({
+  let articles = await prisma.article.findMany({
     orderBy: [{ publishedAt: "desc" }, { title: "asc" }],
   });
 
   if (articles.length === 0) {
-    return listFallbackArticles();
+    await seedArticlesIfEmpty(prisma);
+    articles = await prisma.article.findMany({
+      orderBy: [{ publishedAt: "desc" }, { title: "asc" }],
+    });
   }
 
   return articles.map(normalizeArticle);
