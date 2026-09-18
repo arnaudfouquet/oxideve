@@ -18,7 +18,7 @@ type Props = {
   initialParticipants: Participant[];
 };
 
-type Section = "dashboard" | "sessions" | "participants" | "formations" | "editorial" | "accounts";
+type Section = "dashboard" | "sessions" | "participants" | "clients" | "formations" | "editorial" | "accounts";
 
 type FormationDraft = {
   slug: string;
@@ -259,12 +259,13 @@ const NAV_ITEMS: { value: Section; label: string; icon: string }[] = [
   { value: "dashboard", label: "Dashboard", icon: "◧" },
   { value: "sessions", label: "Sessions", icon: "◷" },
   { value: "participants", label: "Inscriptions", icon: "◍" },
+  { value: "clients", label: "Clients", icon: "◈" },
   { value: "formations", label: "Catalogue", icon: "▤" },
   { value: "editorial", label: "Editorial", icon: "✎" },
   { value: "accounts", label: "Comptes", icon: "◉" },
 ];
 
-function StatusBadge({ label, tone = "default" }: { label: string; tone?: "default" | "accent" | "soft" }) {
+function StatusBadge({ label, tone = "default" }: { label: string; tone?: "default" | "accent" | "soft" | "negative" }) {
   return <span className={`admin-status-badge admin-status-badge-${tone}`}>{label}</span>;
 }
 
@@ -307,6 +308,7 @@ export function AdminWorkspace({
   const AUTOMATIC_REGISTRATION_STATUSES = ["En attente auto-éval", "Inscription complétée"];
   const [bulletinInscriptions, setBulletinInscriptions] = useState(initialBulletinInscriptions);
   const [participants, setParticipants] = useState(initialParticipants);
+  const [companies, setCompanies] = useState(initialCompanies);
   const [refreshing, setRefreshing] = useState(false);
 
   async function refreshAdminData() {
@@ -314,16 +316,18 @@ export function AdminWorkspace({
     setFeedback("");
 
     try {
-      const [registrationsResponse, bulletinsResponse, participantsResponse] = await Promise.all([
+      const [registrationsResponse, bulletinsResponse, participantsResponse, companiesResponse] = await Promise.all([
         fetch("/api/admin/registrations"),
         fetch("/api/admin/bulletin-inscriptions"),
         fetch("/api/admin/participants"),
+        fetch("/api/admin/companies"),
       ]);
 
-      const [registrationsResult, bulletinsResult, participantsResult] = await Promise.all([
+      const [registrationsResult, bulletinsResult, participantsResult, companiesResult] = await Promise.all([
         registrationsResponse.json().catch(() => null),
         bulletinsResponse.json().catch(() => null),
         participantsResponse.json().catch(() => null),
+        companiesResponse.json().catch(() => null),
       ]);
 
       const failures: string[] = [];
@@ -344,6 +348,12 @@ export function AdminWorkspace({
         setParticipants(participantsResult.data);
       } else {
         failures.push("inscrits");
+      }
+
+      if (companiesResponse.ok && companiesResult?.data) {
+        setCompanies(companiesResult.data);
+      } else {
+        failures.push("clients");
       }
 
       if (failures.length) {
@@ -373,6 +383,10 @@ export function AdminWorkspace({
   const [participantFormationFilter, setParticipantFormationFilter] = useState("Toutes");
   const [participantStatusFilter, setParticipantStatusFilter] = useState("Tous");
 
+  const [clientSearch, setClientSearch] = useState("");
+  const [selectedClientKey, setSelectedClientKey] = useState("");
+  const [clientDrawerOpen, setClientDrawerOpen] = useState(false);
+
   const [formationDraft, setFormationDraft] = useState(toFormationDraft(initialFormations[0]));
   const [sessionDraft, setSessionDraft] = useState(toSessionDraft(initialSessions[0]));
   const [articleDraft, setArticleDraft] = useState(toArticleDraft(initialArticles[0]));
@@ -397,6 +411,7 @@ export function AdminWorkspace({
   const [isAddingArticleCategory, setIsAddingArticleCategory] = useState(false);
 
   const [formationSearch, setFormationSearch] = useState("");
+  const [formationCategoryFilter, setFormationCategoryFilter] = useState("Toutes");
 
   const [participantDrawerOpen, setParticipantDrawerOpen] = useState(false);
   const [participantNotes, setParticipantNotes] = useState<RegistrationNote[]>([]);
@@ -574,7 +589,11 @@ export function AdminWorkspace({
     }
   }
 
-  async function handleDeleteAdminUser(id: string) {
+  async function handleDeleteAdminUser(id: string, label: string) {
+    if (!window.confirm(`Supprimer définitivement le compte "${label}" ? Cette action est irréversible.`)) {
+      return;
+    }
+
     const previous = adminUsers;
     setAdminUsers((current) => current.filter((user) => user.id !== id));
 
@@ -620,6 +639,61 @@ export function AdminWorkspace({
       return accumulator;
     }, {});
   }, [registrations]);
+
+  function clientKeyForParticipant(participant: Participant) {
+    return participant.companyId || `name::${participant.company.trim().toLowerCase()}`;
+  }
+
+  type ClientGroup = {
+    key: string;
+    name: string;
+    company?: Company;
+    participants: Participant[];
+  };
+
+  const clientGroups = useMemo<ClientGroup[]>(() => {
+    const companiesById = new Map(companies.map((company) => [company.id, company]));
+    const groups = new Map<string, ClientGroup>();
+
+    for (const participant of participants) {
+      if (!participant.company.trim()) continue;
+      const key = clientKeyForParticipant(participant);
+      const existing = groups.get(key);
+
+      if (existing) {
+        existing.participants.push(participant);
+      } else {
+        groups.set(key, {
+          key,
+          name: participant.company,
+          company: participant.companyId ? companiesById.get(participant.companyId) : undefined,
+          participants: [participant],
+        });
+      }
+    }
+
+    return Array.from(groups.values()).sort((left, right) =>
+      compareDateDesc(
+        left.participants[0]?.firstContactAt || "",
+        right.participants[0]?.firstContactAt || "",
+      ),
+    );
+  }, [companies, participants]);
+
+  const filteredClientGroups = useMemo(() => {
+    const search = clientSearch.trim().toLowerCase();
+    if (!search) return clientGroups;
+
+    return clientGroups.filter((group) => {
+      const haystack = [group.name, group.company?.contactName, group.company?.email, ...group.participants.map((item) => item.email)]
+        .filter(Boolean)
+        .join(" ")
+        .toLowerCase();
+      return haystack.includes(search);
+    });
+  }, [clientGroups, clientSearch]);
+
+  const selectedClientGroup = clientGroups.find((group) => group.key === selectedClientKey);
 
   const filteredParticipants = useMemo(() => {
     const search = participantSearch.trim().toLowerCase();
@@ -1231,7 +1305,10 @@ export function AdminWorkspace({
         <div className="admin-shell-v2-brand">Oxideve</div>
         <div className="admin-shell-v2-nav">
           {NAV_ITEMS.map((item) => {
-            const newRegistrationsCount = item.value === "dashboard" ? registrations.filter((registration) => registration.status === "Pré-inscription (à qualifier)").length : 0;
+            const newRegistrationsCount =
+              item.value === "participants"
+                ? registrations.filter((registration) => registration.status === "Pré-inscription (à qualifier)").length
+                : 0;
             return (
               <button
                 className={`admin-shell-v2-link${section === item.value ? " active" : ""}`}
@@ -1246,6 +1323,7 @@ export function AdminWorkspace({
             );
           })}
         </div>
+        {feedback ? <p className={`form-status admin-shell-v2-sidebar-feedback ${feedbackTone}`}>{feedback}</p> : null}
         <Button variant="secondary" onClick={refreshAdminData} disabled={refreshing}>
           {refreshing ? "Actualisation..." : "Rafraîchir"}
         </Button>
@@ -1257,7 +1335,6 @@ export function AdminWorkspace({
             Attention : la base de données n&apos;est pas connectée. Les données créées maintenant ne seront pas conservées après le prochain redémarrage du serveur.
           </p>
         ) : null}
-        {feedback ? <p className={`form-status admin-shell-v2-feedback ${feedbackTone}`}>{feedback}</p> : null}
 
       {section === "dashboard" ? (
         <div className="admin-stack-grid">
@@ -1613,6 +1690,15 @@ export function AdminWorkspace({
           <div className="section-heading section-heading-tight"><div><span className="eyebrow">Catalogue</span><h2>Formations</h2></div><Button onClick={openNewFormationDrawer}>Nouvelle formation</Button></div>
           <div className="admin-filter-grid admin-filter-grid-compact">
             <label><span>Recherche</span><input className="ui-field" value={formationSearch} onChange={(event) => setFormationSearch(event.target.value)} placeholder="Nom, catégorie..." /></label>
+            <label>
+              <span>Catégorie</span>
+              <select className="ui-field" value={formationCategoryFilter} onChange={(event) => setFormationCategoryFilter(event.target.value)}>
+                <option>Toutes</option>
+                {availableCategories.map((category) => (
+                  <option key={category}>{category}</option>
+                ))}
+              </select>
+            </label>
           </div>
           <DataTable
             columns={[
@@ -1654,7 +1740,11 @@ export function AdminWorkspace({
                 ),
               },
             ]}
-            rows={formations.filter((formation) => !formationSearch.trim() || `${formation.title} ${formation.category}`.toLowerCase().includes(formationSearch.trim().toLowerCase()))}
+            rows={formations.filter(
+              (formation) =>
+                (!formationSearch.trim() || `${formation.title} ${formation.category}`.toLowerCase().includes(formationSearch.trim().toLowerCase())) &&
+                (formationCategoryFilter === "Toutes" || formation.category === formationCategoryFilter),
+            )}
             getRowKey={(row) => row.slug}
             emptyLabel="Aucune formation ne correspond à cette recherche."
             onRowClick={(row) => openFormationDrawer(row.slug)}
@@ -1995,7 +2085,7 @@ export function AdminWorkspace({
                   label: "Actions",
                   width: "120px",
                   render: (user) => (
-                    <button className="ui-button ui-button-ghost" type="button" onClick={() => handleDeleteAdminUser(user.id)}>
+                    <button className="ui-button ui-button-ghost" type="button" onClick={() => handleDeleteAdminUser(user.id, user.name || user.email)}>
                       Supprimer
                     </button>
                   ),
@@ -2097,7 +2187,7 @@ export function AdminWorkspace({
                     ) : (
                       <StatusBadge
                         label={row.status}
-                        tone={AUTOMATIC_REGISTRATION_STATUSES.includes(row.status) ? "accent" : row.status === "Non intéressé" ? "soft" : "default"}
+                        tone={AUTOMATIC_REGISTRATION_STATUSES.includes(row.status) ? "accent" : row.status === "Non intéressé" ? "negative" : "default"}
                       />
                     ),
                 },
@@ -2347,6 +2437,112 @@ export function AdminWorkspace({
             </form>
           </Drawer>
         </div>
+      ) : null}
+
+      {section === "clients" ? (
+        <section className="admin-shell">
+          <div className="section-heading section-heading-tight">
+            <div><span className="eyebrow">CRM</span><h2>Clients</h2></div>
+          </div>
+
+          <div className="admin-filter-grid admin-filter-grid-compact">
+            <label><span>Recherche</span><input className="ui-field" value={clientSearch} onChange={(event) => setClientSearch(event.target.value)} placeholder="Société, contact, email..." /></label>
+          </div>
+
+          <DataTable
+            columns={[
+              { key: "name", label: "Société", sortable: true, sortValue: (row) => row.name, render: (row) => row.name },
+              {
+                key: "contact",
+                label: "Contact",
+                render: (row) => row.company?.contactName || row.participants[0]?.fullName || "—",
+              },
+              {
+                key: "email",
+                label: "Email",
+                render: (row) => row.company?.email || row.participants[0]?.email || "—",
+              },
+              {
+                key: "sessionsCount",
+                label: "Sessions suivies",
+                sortable: true,
+                sortValue: (row) => row.participants.filter((item) => item.status === "Inscription complétée").length,
+                render: (row) => row.participants.filter((item) => item.status === "Inscription complétée").length,
+              },
+              {
+                key: "lastContactAt",
+                label: "Dernier contact",
+                sortable: true,
+                sortValue: (row) => row.participants[0]?.firstContactAt || "",
+                render: (row) => (row.participants[0] ? formatShortDateTimeFr(row.participants[0].firstContactAt) : "—"),
+              },
+            ]}
+            rows={filteredClientGroups}
+            getRowKey={(row) => row.key}
+            emptyLabel="Aucun client ne correspond à cette recherche."
+            onRowClick={(row) => {
+              setSelectedClientKey(row.key);
+              setClientDrawerOpen(true);
+            }}
+            isRowActive={(row) => selectedClientKey === row.key}
+            pageSize={15}
+            className="admin-data-table-compact"
+          />
+
+          <Drawer
+            open={clientDrawerOpen && Boolean(selectedClientGroup)}
+            onClose={() => setClientDrawerOpen(false)}
+            title={selectedClientGroup?.name || "Détail du client"}
+          >
+            {selectedClientGroup ? (
+              <div className="admin-form-section">
+                <p className="admin-list-item-meta">
+                  {selectedClientGroup.company?.contactName || selectedClientGroup.participants[0]?.fullName}
+                  {" · "}
+                  {selectedClientGroup.company?.email || selectedClientGroup.participants[0]?.email}
+                  {selectedClientGroup.company?.phone ? ` · ${selectedClientGroup.company.phone}` : ""}
+                </p>
+
+                <div className="admin-notes-block">
+                  <span>Historique des sessions</span>
+                  <div className="admin-notes-history">
+                    {[...selectedClientGroup.participants]
+                      .sort((left, right) => compareDateDesc(left.firstContactAt, right.firstContactAt))
+                      .map((participant) => {
+                        const formation = formations.find((item) => item.slug === participant.formationSlug);
+                        const relatedSession = sessions.find((item) => item.id === participant.sessionId);
+                        return (
+                          <div className="admin-notes-history-item" key={participant.id}>
+                            <p className="admin-list-item-meta">
+                              {formatShortDateTimeFr(participant.firstContactAt)}
+                              {" · "}
+                              {formation?.shortTitle || participant.formationSlug}
+                            </p>
+                            <p>
+                              {relatedSession ? `${formatSessionRange(relatedSession.startDate, relatedSession.endDate)} · ${relatedSession.city}` : "Session non précisée"}
+                            </p>
+                            <StatusBadge
+                              label={participant.status}
+                              tone={
+                                AUTOMATIC_REGISTRATION_STATUSES.includes(participant.status)
+                                  ? "accent"
+                                  : participant.status === "Non intéressé"
+                                    ? "negative"
+                                    : "default"
+                              }
+                            />
+                            {participant.quizAttempt ? (
+                              <p className="admin-list-item-meta">Auto-évaluation : {participant.quizAttempt.scoreOn20} / 20</p>
+                            ) : null}
+                          </div>
+                        );
+                      })}
+                  </div>
+                </div>
+              </div>
+            ) : null}
+          </Drawer>
+        </section>
       ) : null}
       </div>
     </div>

@@ -272,6 +272,7 @@ export type Participant = {
   fullName: string;
   email: string;
   company: string;
+  companyId: string | null;
   phone: string;
   formationSlug: string;
   sessionId: string | null;

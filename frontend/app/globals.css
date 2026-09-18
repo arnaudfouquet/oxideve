@@ -3143,6 +3143,11 @@ main {
   background: rgba(0, 156, 220, 0.12);
 }
 
+.admin-status-badge-negative {
+  color: #b13030;
+  background: rgba(214, 69, 69, 0.12);
+}
+
 .admin-data-table-shell {
   margin-top: 18px;
   display: grid;
@@ -4464,7 +4469,7 @@ main {
 /* Admin dashboard v2 — Linear/Notion/Vercel-style sober shell. Scoped under .admin-shell-v2 so it never touches public-site rules. */
 .admin-shell-v2 {
   display: grid;
-  grid-template-columns: 232px minmax(0, 1fr);
+  grid-template-columns: 196px minmax(0, 1fr);
   min-height: 100vh;
   background: #f7f8fa;
 }
@@ -4544,6 +4549,12 @@ main {
 
 .admin-shell-v2-feedback {
   margin: 0;
+}
+
+.admin-shell-v2-sidebar-feedback {
+  margin: 0 0 10px;
+  font-size: 0.78rem;
+  padding: 6px 10px;
 }
 
 .rge-page-section {
