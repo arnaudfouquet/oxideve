@@ -13,12 +13,25 @@ type Props = {
   sessions: Session[];
   defaultFormationSlug?: string;
   defaultSessionId?: string;
+  defaultCompanyName?: string;
+  defaultSponsorFullName?: string;
+  defaultSponsorEmail?: string;
+  defaultSponsorPhone?: string;
 };
 
 const sourceOptions = ["Bouche à oreille", "Moteur de recherche", "Votre distributeur", "Nouvel Horizon", "Réseaux sociaux"];
 const distributorOptions = ["Solipac", "Tereva", "Nouvel Horizon"];
 
-export function BulletinInscriptionForm({ formations, sessions, defaultFormationSlug = "", defaultSessionId = "" }: Props) {
+export function BulletinInscriptionForm({
+  formations,
+  sessions,
+  defaultFormationSlug = "",
+  defaultSessionId = "",
+  defaultCompanyName = "",
+  defaultSponsorFullName = "",
+  defaultSponsorEmail = "",
+  defaultSponsorPhone = "",
+}: Props) {
   const [status, setStatus] = useState<"idle" | "loading" | "success" | "error">("idle");
   const [message, setMessage] = useState("");
   const [quizLinks, setQuizLinks] = useState<{ learnerFullName: string; url: string }[]>([]);
@@ -240,7 +253,7 @@ export function BulletinInscriptionForm({ formations, sessions, defaultFormation
         <div className="form-grid">
           <label>
             Raison sociale
-            <input className="ui-field" name="companyName" type="text" required placeholder="Nom de l'entreprise" />
+            <input className="ui-field" name="companyName" type="text" required placeholder="Nom de l'entreprise" defaultValue={defaultCompanyName} />
           </label>
           <label>
             SIRET
@@ -256,7 +269,7 @@ export function BulletinInscriptionForm({ formations, sessions, defaultFormation
           </label>
           <label>
             Prénom et nom du commanditaire
-            <input className="ui-field" name="sponsorFullName" type="text" required placeholder="Prénom Nom" />
+            <input className="ui-field" name="sponsorFullName" type="text" required placeholder="Prénom Nom" defaultValue={defaultSponsorFullName} />
           </label>
           <label>
             Fonction
@@ -264,11 +277,11 @@ export function BulletinInscriptionForm({ formations, sessions, defaultFormation
           </label>
           <label>
             Email
-            <input className="ui-field" name="sponsorEmail" type="email" required placeholder="contact@entreprise.fr" />
+            <input className="ui-field" name="sponsorEmail" type="email" required placeholder="contact@entreprise.fr" defaultValue={defaultSponsorEmail} />
           </label>
           <label>
             Téléphone portable
-            <input className="ui-field" name="sponsorPhone" type="tel" required placeholder="06 00 00 00 00" />
+            <input className="ui-field" name="sponsorPhone" type="tel" required placeholder="06 00 00 00 00" defaultValue={defaultSponsorPhone} />
           </label>
         </div>
       </section>

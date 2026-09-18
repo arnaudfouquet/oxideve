@@ -24,6 +24,7 @@ const MANUAL_STATUSES = [REGISTRATION_STATUS.TO_QUALIFY, REGISTRATION_STATUS.NOT
 const REGISTRATION_ORIGIN = {
   SITE_FORM: "Formulaire pré-inscription site",
   DIRECT_CONTACT: "Contact direct (lien BI envoyé)",
+  MANUAL: "Ajouté manuellement (téléphone, etc.)",
 };
 
 function normalizeRegistration(registration) {
@@ -83,6 +84,44 @@ async function createRegistration(payload) {
     ...payload,
     status: REGISTRATION_STATUS.TO_QUALIFY,
     origin: REGISTRATION_ORIGIN.SITE_FORM,
+    bulletinInscriptionId: null,
+    createdAt: now,
+    source: "memory",
+  };
+
+  inMemoryRegistrations.push(fallbackRegistration);
+  return normalizeRegistration(fallbackRegistration);
+}
+
+async function createManualRegistration(payload) {
+  const prisma = getPrismaClient();
+  const now = new Date().toISOString();
+
+  if (prisma) {
+    const company = await findOrCreateCompanyFromRegistration(payload);
+    const created = await prisma.inscription.create({
+      data: {
+        companyId: company.id,
+        company: payload.company,
+        contactName: payload.contactName,
+        email: payload.email,
+        phone: payload.phone,
+        formationSlug: payload.formationSlug,
+        sessionId: payload.sessionId || null,
+        message: payload.message || null,
+        origin: REGISTRATION_ORIGIN.MANUAL,
+      },
+    });
+
+    return normalizeRegistration(created);
+  }
+
+  const fallbackRegistration = {
+    id: randomUUID(),
+    ...payload,
+    sessionId: payload.sessionId || null,
+    status: REGISTRATION_STATUS.TO_QUALIFY,
+    origin: REGISTRATION_ORIGIN.MANUAL,
     bulletinInscriptionId: null,
     createdAt: now,
     source: "memory",
@@ -321,6 +360,7 @@ module.exports = {
   REGISTRATION_ORIGIN,
   MANUAL_STATUSES,
   createRegistration,
+  createManualRegistration,
   listRegistrations,
   updateRegistrationStatus,
   listRegistrationNotes,

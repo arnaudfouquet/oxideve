@@ -11,7 +11,14 @@ export const metadata: Metadata = {
 };
 
 type Props = {
-  searchParams?: Promise<{ formationSlug?: string; sessionId?: string }>;
+  searchParams?: Promise<{
+    formationSlug?: string;
+    sessionId?: string;
+    companyName?: string;
+    sponsorFullName?: string;
+    sponsorEmail?: string;
+    sponsorPhone?: string;
+  }>;
 };
 
 export default async function BulletinInscriptionPage({ searchParams }: Props) {
@@ -47,6 +54,10 @@ export default async function BulletinInscriptionPage({ searchParams }: Props) {
             sessions={sessions}
             defaultFormationSlug={defaultFormationSlug}
             defaultSessionId={defaultSession?.id || ""}
+            defaultCompanyName={params?.companyName || ""}
+            defaultSponsorFullName={params?.sponsorFullName || ""}
+            defaultSponsorEmail={params?.sponsorEmail || ""}
+            defaultSponsorPhone={params?.sponsorPhone || ""}
           />
         </article>
       </div>

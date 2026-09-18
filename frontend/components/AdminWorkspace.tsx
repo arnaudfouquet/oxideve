@@ -391,6 +391,59 @@ export function AdminWorkspace({
   const [newParticipantNote, setNewParticipantNote] = useState("");
   const [savingParticipantNotes, setSavingParticipantNotes] = useState(false);
 
+  const [manualRegistrationDrawerOpen, setManualRegistrationDrawerOpen] = useState(false);
+  const [manualRegistrationDraft, setManualRegistrationDraft] = useState({
+    company: "",
+    contactName: "",
+    email: "",
+    phone: "",
+    formationSlug: "",
+    sessionId: "",
+    message: "",
+  });
+
+  function openManualRegistrationDrawer() {
+    setManualRegistrationDraft({ company: "", contactName: "", email: "", phone: "", formationSlug: "", sessionId: "", message: "" });
+    setManualRegistrationDrawerOpen(true);
+  }
+
+  function closeManualRegistrationDrawer() {
+    setManualRegistrationDrawerOpen(false);
+  }
+
+  async function handleManualRegistrationSubmit(event: React.FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    setSaving(true);
+    setFeedback("");
+
+    const response = await fetch("/api/admin/registrations", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        company: manualRegistrationDraft.company.trim(),
+        contactName: manualRegistrationDraft.contactName.trim(),
+        email: manualRegistrationDraft.email.trim(),
+        phone: manualRegistrationDraft.phone.trim(),
+        formationSlug: manualRegistrationDraft.formationSlug,
+        sessionId: manualRegistrationDraft.sessionId || undefined,
+        message: manualRegistrationDraft.message.trim(),
+      }),
+    });
+
+    const result = (await response.json().catch(() => null)) as { data?: Registration; error?: string } | null;
+    setSaving(false);
+
+    if (!response.ok || !result?.data) {
+      setError(result?.error || "Impossible d'ajouter cette inscription.");
+      return;
+    }
+
+    setRegistrations((current) => [result.data as Registration, ...current]);
+    setSuccess("Inscription ajoutée.");
+    closeManualRegistrationDrawer();
+    refreshAdminData();
+  }
+
   const [queovalSyncing, setQueovalSyncing] = useState(false);
   const [queovalStageIds, setQueovalStageIds] = useState("");
   const [pendingSessions, setPendingSessions] = useState<PendingSyncSession[]>([]);
@@ -636,8 +689,18 @@ export function AdminWorkspace({
     setSuccess("Statut mis à jour.");
   }
 
-  function copyBulletinLink(registrationId: string, formationSlug: string) {
-    const url = `${window.location.origin}/bulletin-inscription?formationSlug=${encodeURIComponent(formationSlug)}`;
+  function copyBulletinLink(
+    registrationId: string,
+    formationSlug: string,
+    prefill?: { company?: string; fullName?: string; email?: string; phone?: string },
+  ) {
+    const params = new URLSearchParams({ formationSlug });
+    if (prefill?.company) params.set("companyName", prefill.company);
+    if (prefill?.fullName) params.set("sponsorFullName", prefill.fullName);
+    if (prefill?.email) params.set("sponsorEmail", prefill.email);
+    if (prefill?.phone) params.set("sponsorPhone", prefill.phone);
+
+    const url = `${window.location.origin}/bulletin-inscription?${params.toString()}`;
     copyToClipboard(`registration-bulletin-${registrationId}`, url);
   }
 
@@ -1894,6 +1957,7 @@ export function AdminWorkspace({
                 <h2>Inscriptions</h2>
                 <p>Toutes les demandes, du premier contact à l&apos;inscription complétée — pré-inscriptions rapides et bulletins d&apos;inscription fusionnés en une seule liste par personne.</p>
               </div>
+              <Button onClick={openManualRegistrationDrawer}>Ajouter une inscription</Button>
             </div>
 
             <div className="admin-filter-grid admin-filter-grid-compact">
@@ -1990,7 +2054,12 @@ export function AdminWorkspace({
                           className="admin-copy-button"
                           onClick={(event) => {
                             event.stopPropagation();
-                            copyBulletinLink(row.registrationId || row.id, row.formationSlug);
+                            copyBulletinLink(row.registrationId || row.id, row.formationSlug, {
+                              company: row.company,
+                              fullName: row.fullName,
+                              email: row.email,
+                              phone: row.phone,
+                            });
                           }}
                           type="button"
                         >
@@ -2155,6 +2224,56 @@ export function AdminWorkspace({
               )}
               </>
             ) : null}
+          </Drawer>
+
+          <Drawer
+            open={manualRegistrationDrawerOpen}
+            onClose={closeManualRegistrationDrawer}
+            title="Ajouter une inscription"
+          >
+            <form className="contact-form" onSubmit={handleManualRegistrationSubmit}>
+              <p className="admin-field-hint">
+                Utile pour saisir une demande reçue par téléphone ou email, hors formulaire du site.
+              </p>
+              <div className="form-grid">
+                <label><span>Entreprise</span><input className="ui-field" value={manualRegistrationDraft.company} onChange={(event) => setManualRegistrationDraft((current) => ({ ...current, company: event.target.value }))} required /></label>
+                <label><span>Contact</span><input className="ui-field" value={manualRegistrationDraft.contactName} onChange={(event) => setManualRegistrationDraft((current) => ({ ...current, contactName: event.target.value }))} required /></label>
+                <label><span>Email</span><input className="ui-field" type="email" value={manualRegistrationDraft.email} onChange={(event) => setManualRegistrationDraft((current) => ({ ...current, email: event.target.value }))} required /></label>
+                <label><span>Téléphone</span><input className="ui-field" type="tel" value={manualRegistrationDraft.phone} onChange={(event) => setManualRegistrationDraft((current) => ({ ...current, phone: event.target.value }))} required /></label>
+                <label>
+                  <span>Formation</span>
+                  <select
+                    className="ui-field"
+                    value={manualRegistrationDraft.formationSlug}
+                    onChange={(event) => setManualRegistrationDraft((current) => ({ ...current, formationSlug: event.target.value, sessionId: "" }))}
+                    required
+                  >
+                    <option value="">Choisir</option>
+                    {formations.map((formation) => <option key={formation.slug} value={formation.slug}>{formation.title}</option>)}
+                  </select>
+                </label>
+                <label>
+                  <span>Session (optionnel)</span>
+                  <select
+                    className="ui-field"
+                    value={manualRegistrationDraft.sessionId}
+                    onChange={(event) => setManualRegistrationDraft((current) => ({ ...current, sessionId: event.target.value }))}
+                    disabled={!manualRegistrationDraft.formationSlug}
+                  >
+                    <option value="">Pas de session précise</option>
+                    {sessions
+                      .filter((session) => session.formationSlug === manualRegistrationDraft.formationSlug)
+                      .map((session) => (
+                        <option key={session.id} value={session.id}>
+                          {formatSessionRange(session.startDate, session.endDate)} · {session.city}
+                        </option>
+                      ))}
+                  </select>
+                </label>
+              </div>
+              <label><span>Besoin / notes</span><textarea className="ui-field" rows={3} value={manualRegistrationDraft.message} onChange={(event) => setManualRegistrationDraft((current) => ({ ...current, message: event.target.value }))} /></label>
+              <Button disabled={saving} type="submit">{saving ? "Enregistrement..." : "Ajouter l'inscription"}</Button>
+            </form>
           </Drawer>
         </div>
       ) : null}

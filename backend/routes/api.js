@@ -19,6 +19,7 @@ const { createCompany, listCompanies, updateCompany } = require("../services/com
 const { createCrmInteraction, createCrmTask, listCrmInteractions, listCrmTasks, updateCrmTask } = require("../services/crmService");
 const {
   createRegistration,
+  createManualRegistration,
   listRegistrations,
   updateRegistrationStatus,
   listRegistrationNotes,
@@ -63,6 +64,16 @@ const inscriptionSchema = z.object({
   phone: z.string().min(8).max(30),
   formationSlug: z.string().min(2),
   sessionId: z.string().min(2),
+  message: z.string().max(1000).optional().default(""),
+});
+
+const manualRegistrationSchema = z.object({
+  company: z.string().min(2).max(120),
+  contactName: z.string().min(2).max(120),
+  email: z.string().email(),
+  phone: z.string().min(8).max(30),
+  formationSlug: z.string().min(2),
+  sessionId: z.string().min(2).optional(),
   message: z.string().max(1000).optional().default(""),
 });
 
@@ -419,6 +430,15 @@ function createApiRouter() {
     asyncHandler(async (_req, res) => {
       const registrations = await listRegistrations();
       res.json({ data: registrations });
+    })
+  );
+
+  router.post(
+    "/admin/registrations",
+    asyncHandler(async (req, res) => {
+      const payload = manualRegistrationSchema.parse(req.body);
+      const registration = await createManualRegistration(payload);
+      res.status(201).json({ data: registration, message: "Inscription ajoutée." });
     })
   );
 
