@@ -81,7 +81,7 @@ export default async function FormationDetailPage({ params }: Props) {
 
   return (
     <>
-      <Section>
+      <Section className="formation-hero-section">
         <Container>
         <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
           <div className="formation-hero-full">
@@ -91,19 +91,19 @@ export default async function FormationDetailPage({ params }: Props) {
               <ButtonLink href="#inscription" variant="primary">Je m'inscris</ButtonLink>
               <ButtonLink href="/contact" variant="secondary">Parler a l'equipe</ButtonLink>
             </div>
-          </div>
 
-          <div className="info-bar">
-            <div><span>Duree</span><strong>{formation.duration}</strong></div>
-            <div><span>Lieu</span><strong>{displayLocation}</strong></div>
-            <div><span>Tarif</span><strong>{formation.price}</strong></div>
-            <div><span>Public</span><strong>{formation.audience}</strong></div>
+            <div className="info-bar">
+              <div><span>Durée</span><strong>{formation.duration}</strong></div>
+              <div><span>Lieu</span><strong>{displayLocation}</strong></div>
+              <div><span>Tarif</span><strong>{formation.price}</strong></div>
+              <div><span>Public</span><strong>{formation.audience}</strong></div>
+            </div>
           </div>
 
           {formation.rgeBadge ? (
             <div className="formation-rge-strip">
               <div>
-                <h2>{formation.certification}</h2>
+                <p className="formation-subhead">{formation.certification}</p>
                 <Text size="lg">{formation.description}</Text>
               </div>
               {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -118,7 +118,7 @@ export default async function FormationDetailPage({ params }: Props) {
               <Text>{formation.description}</Text>
 
               <div className="formation-objectives-list">
-                <h2>Ce que la formation vous apporte</h2>
+                <p className="formation-subhead">Ce que la formation vous apporte</p>
                 <ol>
                   {formation.objectives.map((objective) => (
                     <li key={objective}>{objective}</li>
@@ -128,7 +128,7 @@ export default async function FormationDetailPage({ params }: Props) {
 
               <div className="detail-block-grid">
                 <div>
-                  <h2>Points forts</h2>
+                  <p className="formation-subhead">Points forts</p>
                   <ul className="detail-list">
                     {formation.benefits.map((benefit) => (
                       <li key={benefit}>{benefit}</li>
@@ -136,7 +136,7 @@ export default async function FormationDetailPage({ params }: Props) {
                   </ul>
                 </div>
                 <div>
-                  <h2>Prérequis</h2>
+                  <p className="formation-subhead">Prérequis</p>
                   <ul className="detail-list">
                     {formation.prerequisites.map((item) => (
                       <li key={item}>{item}</li>
@@ -145,24 +145,41 @@ export default async function FormationDetailPage({ params }: Props) {
                 </div>
               </div>
 
-              <details className="formation-detail-accordion">
-                <summary>Modalités pédagogiques</summary>
+              <div className="detail-block-grid-single">
+                <p className="formation-subhead">Modalités pédagogiques</p>
                 <ul className="detail-list">
                   {formation.modalities.map((item) => (
                     <li key={item}>{item}</li>
                   ))}
                 </ul>
-              </details>
+              </div>
             </article>
 
             <aside className="detail-sidebar-stack">
               <div className="detail-side-card detail-side-card-accent">
-                <h2>Informations pratiques</h2>
-                <p><strong>Duree detaillee :</strong> {formation.durationDetails}</p>
-                <p><strong>Tarif :</strong> {formation.priceDetails}</p>
-                <p><strong>Reussite :</strong> {formation.successRate}</p>
-                <p><strong>Accessibilité :</strong> {formation.handicapPolicy}</p>
-                <p><strong>Finalité :</strong> {formation.certification}</p>
+                <p className="formation-subhead">Informations pratiques</p>
+                <dl className="formation-fact-list">
+                  <div>
+                    <dt>Durée détaillée</dt>
+                    <dd>{formation.durationDetails}</dd>
+                  </div>
+                  <div>
+                    <dt>Tarif</dt>
+                    <dd>{formation.priceDetails}</dd>
+                  </div>
+                  <div>
+                    <dt>Réussite</dt>
+                    <dd>{formation.successRate}</dd>
+                  </div>
+                  <div>
+                    <dt>Accessibilité</dt>
+                    <dd>{formation.handicapPolicy}</dd>
+                  </div>
+                  <div>
+                    <dt>Finalité</dt>
+                    <dd>{formation.certification}</dd>
+                  </div>
+                </dl>
               </div>
             </aside>
           </div>
@@ -175,10 +192,10 @@ export default async function FormationDetailPage({ params }: Props) {
           <div className="formation-programme-days">
             {formation.programme.map((day, dayIndex) => (
               <article className="formation-programme-day" key={day.title}>
-                <h3>Jour {dayIndex + 1} : {day.title}</h3>
+                <p className="formation-programme-day-title">Jour {dayIndex + 1} : {day.title}</p>
                 {day.sequences.map((sequence) => (
                   <div className="formation-programme-sequence" key={sequence.title}>
-                    <h4>{sequence.title}</h4>
+                    <p className="formation-programme-sequence-title">{sequence.title}</p>
                     <ul className="detail-list">
                       {sequence.points.map((point) => (
                         <li key={point}>{point}</li>
@@ -188,17 +205,6 @@ export default async function FormationDetailPage({ params }: Props) {
                 ))}
               </article>
             ))}
-          </div>
-        </Container>
-      </Section>
-
-      <Section>
-        <Container>
-          <div className="formation-pricing-grid">
-            <div className="formation-pricing-card">
-              <span>Tarif standard</span>
-              <strong>{formation.price}</strong>
-            </div>
           </div>
         </Container>
       </Section>
