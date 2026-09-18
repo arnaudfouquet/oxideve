@@ -2211,6 +2211,7 @@ export function AdminWorkspace({
                   key: "formation",
                   label: "Formation",
                   sortable: true,
+                  width: "150px",
                   sortValue: (row) => formations.find((item) => item.slug === row.formationSlug)?.shortTitle || row.formationSlug,
                   render: (row) => formations.find((item) => item.slug === row.formationSlug)?.shortTitle || row.formationSlug,
                 },
@@ -2259,12 +2260,12 @@ export function AdminWorkspace({
                 {
                   key: "actions",
                   label: "Actions",
-                  width: "190px",
+                  width: "110px",
                   render: (row) => (
                     <div className="admin-row-actions">
                       {row.status !== "Non intéressé" && row.status !== "Inscription complétée" ? (
                         <button
-                          className="admin-copy-button"
+                          className="admin-icon-button"
                           onClick={(event) => {
                             event.stopPropagation();
                             copyBulletinLink(row.registrationId || row.id, row.formationSlug, {
@@ -2274,32 +2275,35 @@ export function AdminWorkspace({
                               phone: row.phone,
                             });
                           }}
+                          title={copiedKey === `registration-bulletin-${row.registrationId || row.id}` ? "Copié !" : "Copier le lien du bulletin"}
                           type="button"
                         >
-                          {copiedKey === `registration-bulletin-${row.registrationId || row.id}` ? "Copié !" : "Copier"}
+                          {copiedKey === `registration-bulletin-${row.registrationId || row.id}` ? "✓" : "⧉"}
                         </button>
                       ) : null}
                       {row.bulletinInscriptionId ? (
                         <a
-                          className="admin-copy-button"
+                          className="admin-icon-button"
                           href={`/api/admin/bulletin-inscriptions/${row.bulletinInscriptionId}/pdf`}
                           target="_blank"
                           rel="noreferrer"
                           onClick={(event) => event.stopPropagation()}
+                          title="Voir le PDF"
                         >
-                          PDF
+                          ⬇
                         </a>
                       ) : null}
                       {row.registrationId ? (
                         <button
-                          className="admin-copy-button admin-copy-button-danger"
+                          className="admin-icon-button admin-icon-button-danger"
                           onClick={(event) => {
                             event.stopPropagation();
                             handleDeleteRegistration(row.id, row.registrationId, row.fullName);
                           }}
+                          title="Supprimer l'inscription"
                           type="button"
                         >
-                          Supprimer
+                          ✕
                         </button>
                       ) : null}
                     </div>

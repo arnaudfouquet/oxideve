@@ -3081,6 +3081,35 @@ main {
   flex-wrap: wrap;
 }
 
+.admin-icon-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  border: 1px solid var(--border-subtle);
+  border-radius: 8px;
+  background: rgba(0, 156, 220, 0.08);
+  color: var(--color-navy);
+  font-size: 0.95rem;
+  line-height: 1;
+  cursor: pointer;
+  text-decoration: none;
+}
+
+.admin-icon-button:hover {
+  background: rgba(0, 156, 220, 0.16);
+}
+
+.admin-icon-button-danger {
+  background: rgba(214, 69, 69, 0.08);
+  color: #b13030;
+}
+
+.admin-icon-button-danger:hover {
+  background: rgba(214, 69, 69, 0.16);
+}
+
 .admin-notes-block {
   display: grid;
   gap: 8px;
