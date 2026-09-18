@@ -1073,6 +1073,29 @@ export function AdminWorkspace({
     setSuccess(result.message || "Session enregistrée.");
   }
 
+  async function handleDeleteSession(sessionId: string, registrationsCount: number) {
+    const warning =
+      registrationsCount > 0
+        ? `${registrationsCount} inscription(s) référencent cette session et perdront leur date/ville associée. `
+        : "";
+
+    if (!window.confirm(`${warning}Supprimer définitivement cette session ?`)) {
+      return;
+    }
+
+    const previous = sessions;
+    setSessions((current) => current.filter((item) => item.id !== sessionId));
+
+    const response = await fetch(`/api/admin/sessions/${sessionId}`, { method: "DELETE" });
+    if (!response.ok) {
+      setSessions(previous);
+      setError("Impossible de supprimer cette session.");
+      return;
+    }
+
+    setSuccess("Session supprimée.");
+  }
+
   async function handleBulkSessionApply() {
     if (!selectedSessionIds.length) return;
     setSaving(true);
@@ -1298,6 +1321,27 @@ export function AdminWorkspace({
     setSuccess(result.message || "Article enregistré.");
   }
 
+  async function handleDeleteArticle(slug: string, title: string) {
+    if (!window.confirm(`Supprimer définitivement l'article "${title}" ?`)) {
+      return;
+    }
+
+    const previous = articles;
+    setArticles((current) => current.filter((item) => item.slug !== slug));
+    if (editingArticleSlug === slug) {
+      const fallback = previous.find((item) => item.slug !== slug);
+      if (fallback) selectArticle(fallback.slug);
+    }
+
+    const response = await fetch(`/api/admin/articles/${slug}`, { method: "DELETE" });
+    if (!response.ok) {
+      setArticles(previous);
+      setError("Impossible de supprimer cet article.");
+      return;
+    }
+
+    setSuccess("Article supprimé.");
+  }
 
   return (
     <div className="admin-shell-v2">
@@ -1505,11 +1549,23 @@ export function AdminWorkspace({
                 {
                   key: "actions",
                   label: "Actions",
-                  width: "120px",
+                  width: "190px",
                   render: (row) => (
-                    <button className="admin-copy-button" onClick={(event) => { event.stopPropagation(); openSessionDrawer(row.id); }} type="button">
-                      Modifier
-                    </button>
+                    <div className="admin-row-actions">
+                      <button className="admin-copy-button" onClick={(event) => { event.stopPropagation(); openSessionDrawer(row.id); }} type="button">
+                        Modifier
+                      </button>
+                      <button
+                        className="admin-copy-button admin-copy-button-danger"
+                        onClick={(event) => {
+                          event.stopPropagation();
+                          handleDeleteSession(row.id, registrationsBySession[row.id] || 0);
+                        }}
+                        type="button"
+                      >
+                        Supprimer
+                      </button>
+                    </div>
                   ),
                 },
               ]}
@@ -1920,11 +1976,20 @@ export function AdminWorkspace({
               {articles
                 .filter((article) => !articleSearch.trim() || `${article.title} ${article.category}`.toLowerCase().includes(articleSearch.trim().toLowerCase()))
                 .sort((a, b) => compareDateDesc(a.publishedAt, b.publishedAt)).map((article) => (
-                <button className={`admin-list-item${editingArticleSlug === article.slug ? " active" : ""}`} key={article.slug} onClick={() => selectArticle(article.slug)} type="button">
-                  <strong>{article.title}</strong>
-                  <span>{article.category}</span>
-                  <span>{formatDateLabel(article.publishedAt)}</span>
-                </button>
+                <div className={`admin-list-item admin-list-item-with-action${editingArticleSlug === article.slug ? " active" : ""}`} key={article.slug}>
+                  <button className="admin-list-item-main" onClick={() => selectArticle(article.slug)} type="button">
+                    <strong>{article.title}</strong>
+                    <span>{article.category}</span>
+                    <span>{formatDateLabel(article.publishedAt)}</span>
+                  </button>
+                  <button
+                    className="admin-copy-button admin-copy-button-danger"
+                    onClick={() => handleDeleteArticle(article.slug, article.title)}
+                    type="button"
+                  >
+                    Supprimer
+                  </button>
+                </div>
               ))}
             </div>
           </section>

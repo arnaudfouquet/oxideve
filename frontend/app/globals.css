@@ -2702,6 +2702,27 @@ main {
   box-shadow: var(--shadow-soft);
 }
 
+.admin-list-item-with-action {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  cursor: default;
+}
+
+.admin-list-item-main {
+  display: grid;
+  gap: 4px;
+  text-align: left;
+  flex: 1;
+  min-width: 0;
+  border: 0;
+  background: transparent;
+  padding: 0;
+  cursor: pointer;
+  font: inherit;
+}
+
 .admin-table-shell {
   padding: 0;
   box-shadow: none;
