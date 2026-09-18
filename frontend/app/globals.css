@@ -1467,6 +1467,11 @@ main {
   line-height: 1.5;
 }
 
+.formation-fact-price {
+  color: var(--color-navy);
+  font-family: var(--font-display), sans-serif;
+}
+
 .formation-rge-strip {
   display: grid;
   grid-template-columns: minmax(0, 1fr) auto;

@@ -165,7 +165,11 @@ export default async function FormationDetailPage({ params }: Props) {
                   </div>
                   <div>
                     <dt>Tarif</dt>
-                    <dd>{formation.priceDetails}</dd>
+                    <dd>
+                      <strong className="formation-fact-price">{formation.price}</strong>
+                      {" "}
+                      {formation.priceDetails}
+                    </dd>
                   </div>
                   <div>
                     <dt>Réussite</dt>
