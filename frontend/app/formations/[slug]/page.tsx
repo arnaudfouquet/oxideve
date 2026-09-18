@@ -145,14 +145,6 @@ export default async function FormationDetailPage({ params }: Props) {
                 </div>
               </div>
 
-              <div className="detail-block-grid-single">
-                <p className="formation-subhead">Modalités pédagogiques</p>
-                <ul className="detail-list">
-                  {formation.modalities.map((item) => (
-                    <li key={item}>{item}</li>
-                  ))}
-                </ul>
-              </div>
             </article>
 
             <aside className="detail-sidebar-stack">
@@ -184,6 +176,14 @@ export default async function FormationDetailPage({ params }: Props) {
                     <dd>{formation.certification}</dd>
                   </div>
                 </dl>
+                <div className="formation-fact-list-block">
+                  <p className="formation-subhead">Modalités pédagogiques</p>
+                  <ul className="detail-list">
+                    {formation.modalities.map((item) => (
+                      <li key={item}>{item}</li>
+                    ))}
+                  </ul>
+                </div>
               </div>
             </aside>
           </div>
@@ -219,25 +219,10 @@ export default async function FormationDetailPage({ params }: Props) {
         </Container>
       </Section>
 
-      {relatedFormations.length ? (
-        <Section>
-          <Container>
-            <Title eyebrow="Pour aller plus loin" title="Nos formations complémentaires" />
-            <div className="formation-related-grid">
-              {relatedFormations.map(({ link, formation: related }) => (
-                <ButtonLink className="formation-related-card" href={`/formations/${link.slug}`} key={link.slug} variant="secondary">
-                  {link.label || related?.shortTitle}
-                </ButtonLink>
-              ))}
-            </div>
-          </Container>
-        </Section>
-      ) : null}
-
       {formation.faq?.length ? (
         <Section surface="muted">
           <Container>
-            <Title eyebrow="FAQ" title="Questions fréquentes" />
+            <Title eyebrow="FAQ" title="Questions fréquentes" className="formation-faq-title" />
             <div className="formation-faq-list">
               {formation.faq.map((entry) => (
                 <details className="formation-detail-accordion formation-faq-item" key={entry.question}>
@@ -245,6 +230,19 @@ export default async function FormationDetailPage({ params }: Props) {
                   <Text>{entry.answer}</Text>
                 </details>
               ))}
+            </div>
+          </Container>
+        </Section>
+      ) : null}
+
+      {relatedFormations.length ? (
+        <Section>
+          <Container>
+            <Title eyebrow="Pour aller plus loin" title="Nos formations complémentaires" />
+            <div className="training-showcase-grid">
+              {relatedFormations.map(({ formation: related }) =>
+                related ? <FormationCard formation={related} key={related.slug} /> : null,
+              )}
             </div>
           </Container>
         </Section>
