@@ -519,7 +519,10 @@ export function AdminWorkspace({
   }, [registrations]);
 
   const editingSessionRegistrations = useMemo(
-    () => registrations.filter((registration) => registration.sessionId === editingSessionId),
+    () =>
+      registrations.filter(
+        (registration) => registration.sessionId === editingSessionId && registration.status === "Inscription complétée",
+      ),
     [registrations, editingSessionId],
   );
 
@@ -1362,7 +1365,7 @@ export function AdminWorkspace({
               </label>
               <div className="admin-session-overview">
                 <div><span>État</span><strong>{editingSessionId ? getSessionState(sessions.find((item) => item.id === editingSessionId) || sessions[0]) : "Nouvelle"}</strong></div>
-                <div><span>Inscrits</span><strong>{registrationsBySession[editingSessionId] || 0}</strong></div>
+                <div><span>Leads (tous statuts)</span><strong>{registrationsBySession[editingSessionId] || 0}</strong></div>
               </div>
               <div className="admin-form-actions">
                 <Button disabled={saving} type="submit">{saving ? "Enregistrement..." : editingSessionId ? "Mettre à jour" : "Créer la session"}</Button>
@@ -1372,7 +1375,7 @@ export function AdminWorkspace({
             {editingSessionId ? (
               <div className="admin-form-section">
                 <div className="section-heading section-heading-tight">
-                  <h3>Inscrits à cette session</h3>
+                  <h3>Inscriptions complétées pour cette session</h3>
                   <div className="admin-row-actions">
                     {editingSessionRegistrations.length ? (
                       <Button
@@ -1805,6 +1808,23 @@ export function AdminWorkspace({
                   sortable: true,
                   sortValue: (row) => formations.find((item) => item.slug === row.formationSlug)?.shortTitle || row.formationSlug,
                   render: (row) => formations.find((item) => item.slug === row.formationSlug)?.shortTitle || row.formationSlug,
+                },
+                {
+                  key: "sessionDates",
+                  label: "Date de formation",
+                  sortable: true,
+                  sortValue: (row) => sessions.find((item) => item.id === row.sessionId)?.startDate || "",
+                  render: (row) => {
+                    const session = sessions.find((item) => item.id === row.sessionId);
+                    return session ? formatSessionRange(session.startDate, session.endDate) : "—";
+                  },
+                },
+                {
+                  key: "sessionCity",
+                  label: "Ville",
+                  sortable: true,
+                  sortValue: (row) => sessions.find((item) => item.id === row.sessionId)?.city || "",
+                  render: (row) => sessions.find((item) => item.id === row.sessionId)?.city || "—",
                 },
                 {
                   key: "status",
