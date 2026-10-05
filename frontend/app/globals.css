@@ -5025,13 +5025,26 @@ main {
   padding: 56px 0 64px;
 }
 
-/* Diagonale vert très pâle qui couvre la moitié droite de la section */
+/* Zone vert très pâle couvrant la droite, bord diagonal descendant */
 .home-hero::before {
   content: "";
   position: absolute;
-  inset: 0 -10% 0 40%;
+  inset: 0;
   background: #edfcf4;
-  clip-path: polygon(18% 0, 100% 0, 100% 100%, 0 100%);
+  clip-path: polygon(40% 0, 100% 0, 100% 100%, 46% 100%);
+  pointer-events: none;
+}
+
+/* Petit coin vert pâle en bas à gauche */
+.home-hero::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 22%;
+  height: 40%;
+  background: #edfcf4;
+  clip-path: polygon(0 40%, 100% 100%, 0 100%);
   pointer-events: none;
 }
 
@@ -5114,21 +5127,19 @@ main {
 }
 
 .home-hero-blob-big {
-  width: 70%;
-  height: 86%;
-  right: 6%;
-  top: 8%;
-  opacity: 0.85;
+  width: 76%;
+  height: 90%;
+  right: 2%;
+  top: 6%;
   border-radius: 46% 54% 52% 48% / 56% 44% 56% 44%;
 }
 
 .home-hero-blob-small {
-  width: 26%;
-  height: 30%;
-  left: 8%;
-  top: 4%;
-  opacity: 0.85;
-  border-radius: 50% 50% 48% 52% / 54% 50% 50% 46%;
+  width: 16%;
+  height: 22%;
+  left: 14%;
+  top: 2%;
+  border-radius: 50%;
 }
 
 .home-hero-visual img {
