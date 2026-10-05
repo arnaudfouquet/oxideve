@@ -5077,6 +5077,27 @@ main {
   background: var(--color-green);
 }
 
+/* Bouton avec icône flèche ronde blanche à droite (reprend la maquette) */
+.home-cta-arrow {
+  border-radius: 999px;
+  padding-right: 10px;
+  gap: 14px;
+}
+
+.home-cta-arrow::after {
+  content: "›";
+  display: inline-grid;
+  place-items: center;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  background: #ffffff;
+  color: var(--arrow-color, var(--color-green));
+  font-size: 1.2rem;
+  font-weight: 800;
+  line-height: 1;
+}
+
 .home-hero-visual {
   position: relative;
   display: flex;
@@ -5133,7 +5154,7 @@ main {
 .home-category-card {
   display: flex;
   flex-direction: column;
-  border-radius: var(--radius-lg);
+  border-radius: 22px;
   background: #ffffff;
   overflow: hidden;
   box-shadow: 0 10px 28px rgba(0, 77, 109, 0.08);
@@ -5151,6 +5172,7 @@ main {
   width: 100%;
   height: 150px;
   object-fit: cover;
+  border-radius: 22px 22px 0 0;
 }
 
 .home-category-body {
@@ -5213,11 +5235,11 @@ main {
 /* --- Sessions (bloc gris, 3 rangées qui défilent) --- */
 .home-sessions {
   background: #ffffff;
-  padding: 10px 0 64px;
+  padding: 64px 0 72px;
 }
 
 .home-sessions-panel {
-  max-width: 1200px;
+  width: min(1200px, calc(100% - 32px));
   margin: 0 auto;
   padding: 48px 0 56px;
   border-radius: var(--radius-xl);
@@ -5261,7 +5283,7 @@ main {
   gap: 20px;
   width: max-content;
   padding: 6px 24px;
-  animation: home-sessions-scroll 48s linear infinite;
+  animation: home-sessions-scroll 95s linear infinite;
 }
 
 .home-sessions-track.is-reverse {
@@ -5757,8 +5779,13 @@ main {
 }
 
 .home-faq-cta-button {
+  align-self: flex-start;
   justify-content: center;
+  min-height: 42px;
+  padding: 0 8px 0 18px;
   background: var(--color-blue);
+  font-size: 0.92rem;
+  --arrow-color: var(--color-blue);
 }
 
 .home-faq-list {

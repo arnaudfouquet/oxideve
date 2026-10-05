@@ -97,7 +97,7 @@ export default async function HomePage() {
               Développez les compétences utiles à votre activité grâce à des formations concrètes, accessibles et adaptées à vos
               objectifs.
             </p>
-            <ButtonLink href="/formations" variant="primary" className="home-hero-cta">
+            <ButtonLink href="/formations" variant="primary" className="home-hero-cta home-cta-arrow">
               Découvrir nos formations
             </ButtonLink>
           </div>
@@ -168,7 +168,7 @@ export default async function HomePage() {
             Nos formateurs expérimentés vous transmettent des connaissances et des méthodes directement applicables dans votre
             quotidien professionnel.
           </p>
-          <ButtonLink href="/qui-sommes-nous" variant="primary" className="home-field-cta">
+          <ButtonLink href="/qui-sommes-nous" variant="primary" className="home-field-cta home-cta-arrow">
             En savoir plus sur Oxideve
           </ButtonLink>
         </Container>
@@ -232,7 +232,7 @@ export default async function HomePage() {
             <img alt="4,7/5 sur les avis stagiaires" src="/assets/home/bulle-note.png" />
           </div>
           <TestimonialCarousel />
-          <ButtonLink href="/contact" variant="primary" className="home-reviews-cta">
+          <ButtonLink href="/contact" variant="primary" className="home-reviews-cta home-cta-arrow">
             Je partage mon avis
           </ButtonLink>
         </Container>
@@ -247,7 +247,7 @@ export default async function HomePage() {
               OPCO, employeur, CPF, France Travail ou financement personnel : découvrez les solutions adaptées à votre situation et
               à la formation choisie.
             </p>
-            <ButtonLink href="/contact" variant="primary">En savoir plus</ButtonLink>
+            <ButtonLink href="/contact" variant="primary" className="home-cta-arrow">En savoir plus</ButtonLink>
           </div>
         </Container>
       </section>
@@ -265,10 +265,10 @@ export default async function HomePage() {
               <div className="home-faq-cta-card">
                 <h3>Un projet de formation ?</h3>
                 <p>Notre équipe vous accompagne pour trouver la formation adaptée à votre besoin et répondre à vos questions</p>
-                <ButtonLink href="/contact" variant="primary" className="home-faq-cta-button">
+                <ButtonLink href="/contact" variant="primary" className="home-faq-cta-button home-cta-arrow">
                   Échanger avec notre équipe
                 </ButtonLink>
-                <ButtonLink href="/formations" variant="primary" className="home-faq-cta-button">
+                <ButtonLink href="/formations" variant="primary" className="home-faq-cta-button home-cta-arrow">
                   Découvrir nos formations
                 </ButtonLink>
               </div>
