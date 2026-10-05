@@ -1,32 +1,27 @@
-import { ButtonLink, Container, Section } from "@/components/ui";
-import { HomeCalendarSection, HomeIdentitySection } from "@/components/HomeExperience";
+import { ButtonLink, Container } from "@/components/ui";
+import { HomeSessionsCarousel } from "@/components/HomeSessionsCarousel";
 import { TestimonialCarousel } from "@/components/TestimonialCarousel";
 import { getFormations, getSessions } from "@/lib/content";
 
 export const dynamic = "force-dynamic";
 
 const heroImage = encodeURI("/assets/accueil/formation oxideve hero.jpg");
-const whiteLogoUrl = "https://oxideve.com/wp-content/uploads/2024/11/LOGO_OXIDEVE_BLANC_WEB_SVG.svg";
-const infoIconUrl = "/assets/info-icon.svg";
-const trustIconUrl = encodeURI("/assets/accueil/icone google avis oxideve.svg");
-const dayTypeImage = encodeURI("/assets/accueil/journée type formation oxideve.svg");
 
 function categoryAnchor(category: string) {
   return `/formations#category-${category
     .normalize("NFD")
-    .replace(/[\u0300-\u036f]/g, "")
+    .replace(/[̀-ͯ]/g, "")
     .toLowerCase()
     .replace(/[^a-z0-9]+/g, "-")
     .replace(/^-+|-+$/g, "")}`;
 }
 
 const homeCategories = [
-  { title: ["Formation", "sécurité au travail"], href: categoryAnchor("Sécurité au travail") },
-  { title: ["Formation", "bureautique"], href: categoryAnchor("Bureautique") },
-  { title: ["Formation", "management"], href: categoryAnchor("Management") },
-  { title: ["Formation", "photovoltaïque"], href: categoryAnchor("Photovoltaïque") },
-  { title: ["Formation", "pompe à chaleur"], href: categoryAnchor("Pompes à chaleur") },
-  { title: "Logo", href: "/formations", accent: true, logo: true },
+  { label: "Sécurité au travail", match: "Sécurité au travail" },
+  { label: "Bureautique", match: "Bureautique" },
+  { label: "Management", match: "Management" },
+  { label: "Photovoltaïque", match: "Photovoltaïque" },
+  { label: "Pompe à chaleur", match: "Pompes à chaleur" },
 ];
 
 const advantages = [
@@ -35,178 +30,254 @@ const advantages = [
   { title: "Plateaux techniques", icon: encodeURI("/assets/accueil/plateaux techniques oxideve.svg") },
   { title: "Suivi de l'évolution du marché", icon: encodeURI("/assets/accueil/formation evolution marche oxideve.svg") },
   { title: "Formateurs expérimentés", icon: encodeURI("/assets/accueil/formateurs experimentés oxideve.svg") },
-  { title: "Organisme Qualiopi", icon: encodeURI("/assets/accueil/qualipio oxideve formation.svg") },
+  { title: "Organisme Qualiopi", icon: encodeURI("/assets/accueil/qualipio oxideve formation.svg"), link: { href: "/qui-sommes-nous", label: "Notre certificat" } },
   { title: "Elargir votre réseau", icon: encodeURI("/assets/accueil/reseau oxideve formation.svg") },
   { title: "Equipement de pointe et innovant", icon: encodeURI("/assets/accueil/equipement formation.svg") },
   { title: "Accompagnement post formation", icon: encodeURI("/assets/accueil/accompagenement formation qualipv.svg") },
 ];
 
 const keyStats = [
-  { value: "843", label: "personnes formées", detail: "1er trimestre 2025" },
-  { value: "166", label: "journées de formation", detail: "1er trimestre 2025" },
-  { value: "3,78/4", label: "taux de satisfaction client", detail: "1er trimestre 2025" },
-  { value: "14", label: "années d'expérience", detail: "au service du terrain" },
+  { value: "843", label: "Personnes formées", detail: "1er trimestre 2024" },
+  { value: "166", label: "Journée de formation", detail: "1er trimestre 2024" },
+  { value: "3,78/4", label: "Taux de satisfaction client", detail: "1er trimestre 2024" },
+  { value: "14", label: "Années d'expérience", detail: "" },
+];
+
+const faqItems = [
+  {
+    question: "À qui s'adressent les formations Oxideve ?",
+    answer:
+      "À tous les professionnels souhaitant développer leurs compétences : salariés, dirigeants, indépendants ou demandeurs d'emploi, quel que soit leur secteur d'activité.",
+  },
+  {
+    question: "Où se déroulent les formations ?",
+    answer:
+      "Selon la formation choisie, nos sessions peuvent être organisées partout en France, dans les agences de nos partenaires, directement dans votre entreprise ou à distance.",
+  },
+  {
+    question: "Proposez-vous des formations à distance ?",
+    answer:
+      "Oui, certaines formations sont disponibles en visio. Les modalités disponibles sont précisées sur chaque fiche de formation.",
+  },
+  {
+    question: "Est-il possible de faire financer sa formation ?",
+    answer:
+      "Oui, nos formations sont éligibles à différents dispositifs : OPCO, employeur, CPF, France Travail ou financement personnel. Notre équipe vous accompagne dans vos démarches.",
+  },
+  {
+    question: "Les formations sont-elles accessibles aux personnes en situation de handicap ?",
+    answer:
+      "Oui, nous mettons tout en œuvre pour adapter nos formations. Contactez notre référent handicap pour étudier ensemble les aménagements possibles.",
+  },
 ];
 
 export default async function HomePage() {
   const formations = await getFormations();
   const sessions = await getSessions();
 
+  const categoriesWithCount = homeCategories.map((category) => ({
+    ...category,
+    count: formations.filter((formation) => formation.category === category.match).length,
+    href: categoryAnchor(category.match),
+  }));
+
   return (
     <>
-      <section className="landing-hero" style={{ backgroundImage: `linear-gradient(rgba(0, 77, 109, 0.72), rgba(0, 77, 109, 0.72)), url(${heroImage})` }}>
-        <Container className="landing-hero-inner">
-          <h1>
-            Votre centre de formation
-            <br />
-            professionnelle
-            <br />
-            <span className="title-accent">avec Oxideve</span>
-          </h1>
-          <ButtonLink href="/formations" variant="primary">Nos formations</ButtonLink>
+      {/* HERO */}
+      <section className="home-hero">
+        <Container className="home-hero-inner">
+          <div className="home-hero-copy">
+            <h1>
+              Votre centre de
+              <br />
+              <strong>formation</strong>
+              <br />
+              <em>professionnelle</em>
+            </h1>
+            <p>
+              Développez les compétences utiles à votre activité grâce à des formations concrètes, accessibles et adaptées à vos
+              objectifs.
+            </p>
+            <ButtonLink href="/formations" variant="primary" className="home-hero-cta">
+              Découvrir nos formations
+            </ButtonLink>
+          </div>
+          <div className="home-hero-visual">
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img alt="Équipe de professionnels en formation Oxideve" src={heroImage} />
+          </div>
         </Container>
       </section>
 
-      <Section className="landing-section landing-categories">
+      {/* CATEGORIES */}
+      <section className="home-categories">
         <Container>
-          <div className="landing-heading center">
-            <h2>Nos grandes familles <span className="title-accent">de formation</span></h2>
+          <h2 className="home-section-title">Trouvez la formation adaptée à vos besoins</h2>
+          <div className="home-category-grid">
+            {categoriesWithCount.map((category) => (
+              <a className="home-category-card" href={category.href} key={category.label}>
+                <span className="home-category-image" aria-hidden="true" />
+                <span className="home-category-body">
+                  <strong>{category.label}</strong>
+                  <span className="home-category-foot">
+                    <span className="home-category-count">{category.count} formation{category.count > 1 ? "s" : ""}</span>
+                    <span className="home-category-arrow" aria-hidden="true">›</span>
+                  </span>
+                </span>
+              </a>
+            ))}
+            <a className="home-category-card is-accent" href="/formations">
+              <span className="home-category-accent-title">Toutes nos formations</span>
+              <span className="home-category-arrow is-light" aria-hidden="true">›</span>
+            </a>
           </div>
-          <div className="landing-category-grid">
-            {homeCategories.map((item) => (
-              <article className={`landing-category-card${item.accent ? " is-accent" : ""}`} key={item.href}>
-                {item.logo ? (
-                  <>
-                    <img alt="Oxideve" className="landing-category-logo" src={whiteLogoUrl} />
-                    <ButtonLink className="ui-button-card" href={item.href} variant="secondary">Découvrir</ButtonLink>
-                  </>
-                ) : (
-                  <>
-                    <h3>
-                      {item.title[0]}
-                      <br />
-                      {item.title[1]}
-                    </h3>
-                    <ButtonLink className="ui-button-card" href={item.href} variant="secondary">Découvrir</ButtonLink>
-                  </>
-                )}
+        </Container>
+      </section>
+
+      {/* SESSIONS CAROUSEL */}
+      <HomeSessionsCarousel formations={formations} sessions={sessions} />
+
+      {/* FORMEZ-VOUS OÙ QUE VOUS SOYEZ */}
+      <section className="home-anywhere">
+        <Container>
+          <h2 className="home-section-title">Formez-vous où que vous soyez</h2>
+          <p className="home-anywhere-text">
+            Selon la formation choisie, nos sessions peuvent être organisées partout en France, dans les agences de nos partenaires
+            Solipac et Téréva, directement dans votre entreprise ou à distance.
+            <br />
+            Les lieux et les modalités disponibles sont précisés sur chaque fiche de formation afin de vous permettre de choisir la
+            solution la plus adaptée à vos besoins.
+          </p>
+          <div className="home-anywhere-visual" aria-hidden="true" />
+        </Container>
+      </section>
+
+      {/* BANDE TERRAIN */}
+      <section className="home-field">
+        <Container>
+          <h2>Des formations pensées pour la réalité du terrain</h2>
+          <p>
+            Chez Oxideve, nous privilégions une approche concrète, fondée sur la pratique, les échanges et les situations
+            rencontrées dans votre activité. Selon la formation choisie, vous progressez grâce à des exercices, des mises en
+            situation ou des manipulations sur nos plateaux techniques.
+            <br />
+            Nos formateurs expérimentés vous transmettent des connaissances et des méthodes directement applicables dans votre
+            quotidien professionnel.
+          </p>
+          <ButtonLink href="/qui-sommes-nous" variant="primary" className="home-field-cta">
+            En savoir plus sur Oxideve
+          </ButtonLink>
+        </Container>
+      </section>
+
+      {/* CHIFFRES */}
+      <section className="home-stats">
+        <Container>
+          <h2 className="home-section-title">Oxideve en quelques chiffres</h2>
+          <div className="home-stats-grid">
+            {keyStats.map((stat, index) => (
+              <div className={`home-stat-row${index % 2 === 1 ? " is-reversed" : ""}`} key={stat.label}>
+                <div className="home-stat-card">
+                  <strong>{stat.value}</strong>
+                  <span>
+                    {stat.label}
+                    {stat.detail ? (
+                      <>
+                        <br />
+                        {stat.detail}
+                      </>
+                    ) : null}
+                  </span>
+                </div>
+                <div className="home-stat-image" aria-hidden="true" />
+              </div>
+            ))}
+          </div>
+        </Container>
+      </section>
+
+      {/* POURQUOI CHOISIR */}
+      <section className="home-why">
+        <Container>
+          <h2 className="home-section-title">Pourquoi choisir Oxideve pour vous former ?</h2>
+          <div className="home-why-grid">
+            {advantages.map((item) => (
+              <article className="home-why-card" key={item.title}>
+                <span className="home-why-icon">
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img alt="" src={item.icon} />
+                </span>
+                <strong>{item.title}</strong>
+                {item.link ? (
+                  <ButtonLink href={item.link.href} variant="primary" className="home-why-link">
+                    {item.link.label}
+                  </ButtonLink>
+                ) : null}
               </article>
             ))}
           </div>
         </Container>
-      </Section>
+      </section>
 
-      <Section className="landing-section landing-testimonials-section">
-        <TestimonialCarousel />
-      </Section>
-
-      <Section className="landing-section">
+      {/* AVIS */}
+      <section className="home-reviews">
         <Container>
-          <HomeIdentitySection />
+          <TestimonialCarousel />
+          <ButtonLink href="/contact" variant="primary" className="home-reviews-cta">
+            Je partage mon avis
+          </ButtonLink>
+        </Container>
+      </section>
 
-          <div className="landing-heading center stats-heading">
-            <h2>Nos chiffres clés 2025</h2>
-          </div>
-          <div className="landing-stats home-key-stats">
-            {keyStats.map((item) => (
-              <article key={item.label}>
-                <strong>{item.value}</strong>
-                <span>{item.label}<br />{item.detail}</span>
-              </article>
-            ))}
-          </div>
-
-          <div className="landing-center-cta">
-            <ButtonLink className="ui-button-card" href="/inscriptions" variant="secondary">Vous aussi, formez-vous avec Oxideve</ButtonLink>
+      {/* FINANCEMENT */}
+      <section className="home-funding">
+        <Container>
+          <div className="home-funding-card">
+            <h2>Financez votre formation !</h2>
+            <p>
+              OPCO, employeur, CPF, France Travail ou financement personnel : découvrez les solutions adaptées à votre situation et
+              à la formation choisie.
+            </p>
+            <ButtonLink href="/contact" variant="primary">En savoir plus</ButtonLink>
           </div>
         </Container>
-      </Section>
+      </section>
 
-      <Section className="landing-section landing-benefits-shell">
+      {/* FAQ */}
+      <section className="home-faq">
         <Container>
-          <div className="benefits-board">
-            <h2>POURQUOI VOUS FORMER AVEC OXIDEVE ?</h2>
-            <div className="benefits-grid-home">
-              {advantages.map((item) => (
-                <article className="benefit-pill" key={item.title}>
-                  <span className="benefit-pill-icon"><img alt="" src={item.icon} /></span>
-                  <strong>{item.title}</strong>
-                </article>
+          <div className="home-faq-layout">
+            <div className="home-faq-aside">
+              <h2>
+                Questions
+                <br />
+                fréquentes
+              </h2>
+              <div className="home-faq-cta-card">
+                <h3>Un projet de formation ?</h3>
+                <p>Notre équipe vous accompagne pour trouver la formation adaptée à votre besoin et répondre à vos questions</p>
+                <ButtonLink href="/contact" variant="primary" className="home-faq-cta-button">
+                  Échanger avec notre équipe
+                </ButtonLink>
+                <ButtonLink href="/formations" variant="primary" className="home-faq-cta-button">
+                  Découvrir nos formations
+                </ButtonLink>
+              </div>
+            </div>
+            <div className="home-faq-list">
+              {faqItems.map((item) => (
+                <details className="home-faq-item" key={item.question}>
+                  <summary>
+                    <span>{item.question}</span>
+                    <span className="home-faq-chevron" aria-hidden="true">⌄</span>
+                  </summary>
+                  <p>{item.answer}</p>
+                </details>
               ))}
             </div>
           </div>
-
-          <div className="trust-strip">
-            <div className="trust-strip-copy">
-              <h3>Ils nous font confiance</h3>
-              <p>Des professionnels du terrain choisissent Oxideve pour des formations concrètes, rapides et directement applicables.</p>
-              <ul className="trust-strip-points">
-                <li>Formateurs experts et disponibles</li>
-                <li>Sessions courtes, résultats concrets</li>
-                <li>Suivi personnalisé après formation</li>
-              </ul>
-            </div>
-            <div className="trust-strip-card">
-              <img alt="Avis Google Oxideve" src={trustIconUrl} />
-              <strong>4,7/5</strong>
-              <span>sur les avis stagiaires</span>
-            </div>
-          </div>
         </Container>
-      </Section>
-
-      <Section className="landing-section">
-        <Container>
-          <div className="day-type-card">
-            <div className="day-type-copy">
-              <h2>Votre journée type <span className="title-accent">chez Oxideve</span></h2>
-              <p>Chaque programme est structuré pour combiner théorie essentielle et pratique sur nos plateaux techniques.</p>
-              <p>Nos formations professionnelles sont conçues pour enrichir vos compétences et vous préparer aux défis actuels de votre métier, quel qu'il soit. Sécurité, bureautique, management, habilitations ou énergies renouvelables, nos parcours répondent à vos besoins.</p>
-              <p>Explorez le déroulé de chaque formation et trouvez celle qui correspond le mieux à vos ambitions. Faites le premier pas vers une qualification reconnue et un apprentissage de qualité.</p>
-              <ul>
-                <li>Sécurité au travail</li>
-                <li>Bureautique</li>
-                <li>Management</li>
-                <li>Photovoltaïque &amp; pompe à chaleur</li>
-                <li>Habilitations électriques</li>
-              </ul>
-            </div>
-            <div className="day-type-visual">
-              <img alt="Journée type de formation Oxideve" src={dayTypeImage} />
-              <ButtonLink className="ui-button-card" href="/inscriptions" variant="secondary">Je me projette</ButtonLink>
-            </div>
-          </div>
-
-          <div className="quiz-band">
-            <div className="quiz-band-copy">
-              <h2>Quizz rapide pour orienter votre parcours de formation</h2>
-              <p>Avant de vous lancer dans l&apos;une de nos formations professionnelles, pourquoi ne pas découvrir votre niveau actuel avec notre <strong>quizz d&apos;auto-évaluation</strong> ?</p>
-            </div>
-            <div className="quiz-band-side">
-              <ButtonLink className="ui-button-green" href="/diagnostic-parcours" variant="primary">J&apos;évalue mes compétences</ButtonLink>
-              <div className="quiz-band-note">
-                <p>Cet outil vous permet d&apos;identifier vos points forts et les domaines où une formation peut vous aider à progresser.</p>
-                <span className="home-info-badge"><img alt="" src={infoIconUrl} /></span>
-              </div>
-            </div>
-          </div>
-
-          <div className="funding-card funding-card-last">
-            <div>
-              <h2>Aide financière formation</h2>
-              <p>Notre centre de formation professionnelle certifié Qualiopi vous permet d&apos;accéder à des organismes de financement formation comme le CPF, les OPCO et d&apos;autres dispositifs.</p>
-              <p>Notre objectif est de rendre nos formations accessibles à tous et de soutenir votre montée en compétences face aux attentes du marché.</p>
-            </div>
-            <ButtonLink className="ui-button-card" href="/actualites" variant="secondary">Découvrir</ButtonLink>
-          </div>
-        </Container>
-      </Section>
-
-      <Section className="landing-section landing-sessions-block">
-        <Container>
-          <HomeCalendarSection formations={formations} sessions={sessions} />
-        </Container>
-      </Section>
+      </section>
     </>
   );
 }

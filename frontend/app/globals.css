@@ -5,6 +5,8 @@
   --color-amber: #f2a900;
   --color-white: #ffffff;
   --color-light: #eeeeee;
+  --color-green-pale: #daf8e8;
+  --color-blue-pale: #d8f0f8;
   --color-paper: #ffffff;
   --color-ink: #004d6d;
   --color-muted: #4d6a78;
@@ -32,7 +34,7 @@ html {
 
 body {
   margin: 0;
-  font-family: var(--font-body), sans-serif;
+  font-family: var(--font-sans), sans-serif;
   color: var(--color-ink);
   background: #ffffff;
 }
@@ -95,7 +97,7 @@ main {
 .ui-card h3,
 .site-footer h3,
 .brand-mark strong {
-  font-family: var(--font-display), sans-serif;
+  font-family: var(--font-sans), sans-serif;
 }
 
 .ui-title {
@@ -453,7 +455,7 @@ main {
   margin: 0;
   max-width: 760px;
   color: var(--color-white);
-  font-family: var(--font-display), sans-serif;
+  font-family: var(--font-sans), sans-serif;
   font-size: clamp(2.8rem, 6vw, 4.8rem);
   font-weight: 800;
   line-height: 0.95;
@@ -479,7 +481,7 @@ main {
 .about-intro-grid h2,
 .training-section-banner h2 {
   margin: 0;
-  font-family: var(--font-display), sans-serif;
+  font-family: var(--font-sans), sans-serif;
   font-size: clamp(2rem, 4vw, 3rem);
   line-height: 1.05;
   color: var(--color-blue);
@@ -529,7 +531,7 @@ main {
 .featured-session-main h3,
 .rge-highlight-card h3 {
   margin: 0;
-  font-family: var(--font-display), sans-serif;
+  font-family: var(--font-sans), sans-serif;
 }
 
 .landing-category-card.is-accent {
@@ -625,7 +627,7 @@ main {
 .funding-card h2 {
   margin: 0 0 12px;
   color: var(--color-blue);
-  font-family: var(--font-display), sans-serif;
+  font-family: var(--font-sans), sans-serif;
   font-size: clamp(1.8rem, 4vw, 2.8rem);
 }
 
@@ -673,7 +675,7 @@ main {
   border: 3px solid var(--color-navy);
   border-radius: 999px;
   color: var(--color-green);
-  font-family: var(--font-display), sans-serif;
+  font-family: var(--font-sans), sans-serif;
   font-size: 2.2rem;
   font-weight: 800;
 }
@@ -788,7 +790,7 @@ main {
 }
 
 .landing-session-item-head strong {
-  font-family: var(--font-display), sans-serif;
+  font-family: var(--font-sans), sans-serif;
   color: var(--color-navy);
 }
 
@@ -817,7 +819,7 @@ main {
 
 .featured-session-facts strong {
   color: var(--color-navy);
-  font-family: var(--font-display), sans-serif;
+  font-family: var(--font-sans), sans-serif;
   font-size: 1.8rem;
 }
 
@@ -900,7 +902,7 @@ main {
 .quiz-band-copy h2 {
   margin: 0 0 12px;
   color: var(--color-blue);
-  font-family: var(--font-display), sans-serif;
+  font-family: var(--font-sans), sans-serif;
   font-size: clamp(1.8rem, 3vw, 2.5rem);
 }
 
@@ -1154,7 +1156,7 @@ main {
 .metric-card strong,
 .path-card span {
   display: block;
-  font-family: var(--font-display), sans-serif;
+  font-family: var(--font-sans), sans-serif;
   font-size: clamp(1.8rem, 3vw, 2.6rem);
 }
 
@@ -1306,7 +1308,7 @@ main {
 .catalog-hero-copy h2 {
   margin: 0;
   color: var(--color-blue);
-  font-family: var(--font-display), sans-serif;
+  font-family: var(--font-sans), sans-serif;
   font-size: clamp(2rem, 3vw, 2.8rem);
 }
 
@@ -1337,7 +1339,7 @@ main {
 
 .catalog-next-session-item strong,
 .catalog-empty-state h2 {
-  font-family: var(--font-display), sans-serif;
+  font-family: var(--font-sans), sans-serif;
   color: var(--color-navy);
 }
 
@@ -1396,7 +1398,7 @@ main {
 }
 
 .info-bar strong {
-  font-family: var(--font-display), sans-serif;
+  font-family: var(--font-sans), sans-serif;
   font-size: 1.1rem;
   color: var(--color-navy);
 }
@@ -1421,7 +1423,7 @@ main {
 
 .formation-subhead {
   margin: 0 0 var(--space-2);
-  font-family: var(--font-display), sans-serif;
+  font-family: var(--font-sans), sans-serif;
   font-size: 1.1rem;
   font-weight: 700;
   color: var(--color-navy);
@@ -1469,7 +1471,7 @@ main {
 
 .formation-fact-price {
   color: var(--color-navy);
-  font-family: var(--font-display), sans-serif;
+  font-family: var(--font-sans), sans-serif;
 }
 
 .formation-fact-list-block {
@@ -1555,7 +1557,7 @@ main {
 
 .formation-programme-day-title {
   margin: 0 0 var(--space-2);
-  font-family: var(--font-display), sans-serif;
+  font-family: var(--font-sans), sans-serif;
   font-size: 1.2rem;
   font-weight: 700;
   color: var(--color-navy);
@@ -1786,7 +1788,7 @@ main {
 }
 
 .article-card-media-mark {
-  font-family: var(--font-display), sans-serif;
+  font-family: var(--font-sans), sans-serif;
   font-size: 1.4rem;
   letter-spacing: 0.04em;
   color: rgba(255, 255, 255, 0.85);
@@ -1975,7 +1977,7 @@ main {
 
 .cms-brand-card h2 {
   margin: 0;
-  font-family: var(--font-display), sans-serif;
+  font-family: var(--font-sans), sans-serif;
 }
 
 .cms-brand-card p {
@@ -2159,7 +2161,7 @@ main {
 .site-footer h3,
 .contact-card h2,
 .admin-shell h2 {
-  font-family: var(--font-display), sans-serif;
+  font-family: var(--font-sans), sans-serif;
   margin-top: 0;
 }
 
@@ -2324,7 +2326,7 @@ main {
   align-items: center;
   gap: 10px;
   margin: 0 0 var(--space-2);
-  font-family: var(--font-display), sans-serif;
+  font-family: var(--font-sans), sans-serif;
   font-size: 1.05rem;
   color: var(--color-navy);
 }
@@ -2381,7 +2383,7 @@ main {
 
 .bulletin-success-title {
   margin: 0;
-  font-family: var(--font-display), sans-serif;
+  font-family: var(--font-sans), sans-serif;
   font-size: 1.4rem;
   color: var(--color-navy);
 }
@@ -2532,7 +2534,7 @@ main {
 
 .quiz-score-value {
   position: relative;
-  font-family: var(--font-display), sans-serif;
+  font-family: var(--font-sans), sans-serif;
   font-size: 1.6rem;
   line-height: 1;
   color: var(--color-navy);
@@ -2760,7 +2762,7 @@ main {
 }
 
 .admin-metric-card strong {
-  font-family: var(--font-display), sans-serif;
+  font-family: var(--font-sans), sans-serif;
   color: var(--color-navy);
   font-size: 2.2rem;
   line-height: 1;
@@ -2783,7 +2785,7 @@ main {
 }
 
 .admin-session-overview strong {
-  font-family: var(--font-display), sans-serif;
+  font-family: var(--font-sans), sans-serif;
   color: var(--color-navy);
 }
 
@@ -2819,7 +2821,7 @@ main {
 .formation-card h2,
 .formation-overview h2,
 .admin-form-section h3 {
-  font-family: var(--font-display), sans-serif;
+  font-family: var(--font-sans), sans-serif;
 }
 
 .formation-facts {
@@ -2970,7 +2972,7 @@ main {
 
 .quiz-step-meta h2,
 .quiz-result-card strong {
-  font-family: var(--font-display), sans-serif;
+  font-family: var(--font-sans), sans-serif;
 }
 
 .quiz-step-meta h2 {
@@ -3681,7 +3683,7 @@ main {
 .catalog-category-heading h2 {
   margin: 0;
   color: var(--color-blue);
-  font-family: var(--font-display), sans-serif;
+  font-family: var(--font-sans), sans-serif;
   font-size: clamp(2rem, 3vw, 2.7rem);
 }
 
@@ -3968,7 +3970,7 @@ main {
 .home-identity-head h2 {
   margin: 0;
   color: var(--color-blue);
-  font-family: var(--font-display), sans-serif;
+  font-family: var(--font-sans), sans-serif;
   font-size: clamp(2.4rem, 4.6vw, 4rem);
   line-height: 0.98;
 }
@@ -4061,7 +4063,7 @@ main {
 .home-identity-copy h3 {
   margin: 0;
   color: var(--color-navy);
-  font-family: var(--font-display), sans-serif;
+  font-family: var(--font-sans), sans-serif;
   font-size: clamp(2rem, 3vw, 2.8rem);
 }
 
@@ -4112,7 +4114,7 @@ main {
 
 .home-calendar-heading h2 {
   margin: 0;
-  font-family: var(--font-display), sans-serif;
+  font-family: var(--font-sans), sans-serif;
   font-size: clamp(2.2rem, 4vw, 3.6rem);
   line-height: 0.98;
 }
@@ -4155,7 +4157,7 @@ main {
 .home-calendar-card .landing-calendar-toolbar strong {
   margin: 0;
   color: var(--color-navy);
-  font-family: var(--font-display), sans-serif;
+  font-family: var(--font-sans), sans-serif;
   font-size: 2rem;
 }
 
@@ -4225,7 +4227,7 @@ main {
 
 .home-calendar-session-box h3 {
   margin: 0 0 10px;
-  font-family: var(--font-display), sans-serif;
+  font-family: var(--font-sans), sans-serif;
   font-size: 2rem;
 }
 
@@ -4259,7 +4261,7 @@ main {
 
 .home-calendar-session-list-heading h3 {
   margin: 0;
-  font-family: var(--font-display), sans-serif;
+  font-family: var(--font-sans), sans-serif;
   font-size: 1.3rem;
 }
 
@@ -4357,7 +4359,7 @@ main {
 .trust-strip-copy h3,
 .trust-strip-card strong {
   margin: 0;
-  font-family: var(--font-display), sans-serif;
+  font-family: var(--font-sans), sans-serif;
 }
 
 .trust-strip-copy h3 {
@@ -4529,7 +4531,7 @@ main {
 .admin-shell-v2-brand {
   padding: 8px 12px 20px;
   color: var(--color-navy);
-  font-family: var(--font-display), sans-serif;
+  font-family: var(--font-sans), sans-serif;
   font-size: 1.1rem;
   font-weight: 800;
   letter-spacing: -0.01em;
@@ -4625,7 +4627,7 @@ main {
 .rge-become-grid h2,
 .rge-faq-shell h2 {
   margin: 0;
-  font-family: var(--font-display), sans-serif;
+  font-family: var(--font-sans), sans-serif;
 }
 
 .rge-hero-copy h1 {
@@ -4726,7 +4728,7 @@ main {
 .rge-objective-copy h3 {
   margin: 0;
   color: var(--color-navy);
-  font-family: var(--font-display), sans-serif;
+  font-family: var(--font-sans), sans-serif;
   font-size: 2rem;
 }
 
@@ -4759,7 +4761,7 @@ main {
   display: block;
   margin-bottom: 10px;
   color: var(--color-navy);
-  font-family: var(--font-display), sans-serif;
+  font-family: var(--font-sans), sans-serif;
   font-size: 1.5rem;
 }
 
@@ -4824,7 +4826,7 @@ main {
 
 .admin-login-card h1 {
   margin: 0;
-  font-family: var(--font-display), sans-serif;
+  font-family: var(--font-sans), sans-serif;
   font-size: 1.5rem;
   color: var(--color-navy);
 }
@@ -4916,7 +4918,7 @@ main {
 
 .review-carousel-heading h2 {
   margin: 0;
-  font-family: var(--font-display), sans-serif;
+  font-family: var(--font-sans), sans-serif;
   font-size: clamp(1.6rem, 3vw, 2.2rem);
   color: var(--color-navy);
 }
@@ -5002,6 +5004,669 @@ main {
 @media (max-width: 720px) {
   .review-track {
     animation-duration: 28s;
+  }
+}
+
+/* ===================== HOME PAGE (refonte maquette) ===================== */
+
+.home-section-title {
+  margin: 0 0 32px;
+  font-family: var(--font-sans), sans-serif;
+  font-size: clamp(1.7rem, 3.2vw, 2.4rem);
+  font-weight: 800;
+  color: var(--color-navy);
+}
+
+/* --- Hero --- */
+.home-hero {
+  position: relative;
+  overflow: hidden;
+  background: #edfcf4;
+  padding: 56px 0 64px;
+}
+
+/* Forme 1 : grande diagonale verte qui descend du coin haut-droit */
+.home-hero::before {
+  content: "";
+  position: absolute;
+  top: -20%;
+  right: -8%;
+  width: 55%;
+  height: 150%;
+  background: var(--color-green);
+  opacity: 0.16;
+  transform: skewX(-18deg);
+  transform-origin: top right;
+  pointer-events: none;
+}
+
+/* Forme 2 : blob vert plein derrière l'illustration */
+.home-hero::after {
+  content: "";
+  position: absolute;
+  top: 12%;
+  right: 6%;
+  width: 34%;
+  height: 76%;
+  background: var(--color-green);
+  opacity: 0.32;
+  border-radius: 48% 52% 55% 45% / 55% 45% 55% 45%;
+  pointer-events: none;
+}
+
+.home-hero .home-hero-inner {
+  position: relative;
+  z-index: 1;
+}
+
+.home-hero-inner {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  align-items: center;
+  gap: 48px;
+}
+
+.home-hero-copy h1 {
+  margin: 0 0 24px;
+  font-family: var(--font-sans), sans-serif;
+  font-weight: 500;
+  font-size: clamp(2.4rem, 4.4vw, 3.4rem);
+  line-height: 1.08;
+  color: var(--color-navy);
+}
+
+.home-hero-copy h1 strong {
+  font-weight: 800;
+}
+
+.home-hero-copy h1 em {
+  font-style: italic;
+  font-weight: 800;
+}
+
+.home-hero-copy p {
+  margin: 0 0 32px;
+  max-width: 440px;
+  color: var(--color-muted);
+  font-size: 1.02rem;
+  line-height: 1.6;
+}
+
+.home-hero-cta {
+  background: var(--color-green);
+}
+
+.home-hero-visual {
+  position: relative;
+}
+
+.home-hero-visual img {
+  width: 100%;
+  height: auto;
+  border-radius: var(--radius-lg);
+  object-fit: cover;
+}
+
+/* --- Catégories --- */
+.home-categories {
+  background: var(--color-light);
+  padding: 64px 0;
+}
+
+.home-category-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 28px;
+}
+
+.home-category-card {
+  display: flex;
+  flex-direction: column;
+  border-radius: var(--radius-lg);
+  background: #ffffff;
+  overflow: hidden;
+  box-shadow: 0 10px 28px rgba(0, 77, 109, 0.08);
+  text-decoration: none;
+  transition: transform 180ms ease, box-shadow 180ms ease;
+}
+
+.home-category-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 16px 36px rgba(0, 77, 109, 0.14);
+}
+
+.home-category-image {
+  display: block;
+  height: 150px;
+  background: linear-gradient(135deg, var(--color-blue-pale), var(--color-green-pale));
+}
+
+.home-category-body {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding: 20px 22px 22px;
+}
+
+.home-category-body strong {
+  font-family: var(--font-sans), sans-serif;
+  font-size: 1.3rem;
+  font-weight: 800;
+  color: var(--color-navy);
+}
+
+.home-category-foot {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.home-category-count {
+  color: var(--color-muted);
+  font-size: 0.95rem;
+}
+
+.home-category-arrow {
+  display: inline-grid;
+  place-items: center;
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  background: var(--color-green);
+  color: #ffffff;
+  font-size: 1.3rem;
+  line-height: 1;
+}
+
+.home-category-arrow.is-light {
+  background: #ffffff;
+  color: var(--color-blue);
+}
+
+.home-category-card.is-accent {
+  justify-content: center;
+  align-items: flex-start;
+  gap: 24px;
+  padding: 32px;
+  background: linear-gradient(135deg, var(--color-green), var(--color-blue));
+}
+
+.home-category-accent-title {
+  font-family: var(--font-sans), sans-serif;
+  font-size: 1.6rem;
+  font-weight: 800;
+  color: #ffffff;
+}
+
+/* --- Sessions carrousel infini --- */
+.home-sessions {
+  background: var(--color-light);
+  padding: 10px 0 64px;
+}
+
+.home-sessions-heading {
+  text-align: center;
+  max-width: 720px;
+  margin: 0 auto 36px;
+  padding: 0 24px;
+}
+
+.home-sessions-heading h2 {
+  margin: 0 0 12px;
+  font-family: var(--font-sans), sans-serif;
+  font-size: clamp(1.7rem, 3.2vw, 2.4rem);
+  font-weight: 800;
+  color: var(--color-navy);
+}
+
+.home-sessions-heading p {
+  margin: 0;
+  color: var(--color-muted);
+  font-size: 1.02rem;
+}
+
+.home-sessions-viewport {
+  overflow: hidden;
+  mask-image: linear-gradient(90deg, transparent, #000 60px, #000 calc(100% - 60px), transparent);
+  -webkit-mask-image: linear-gradient(90deg, transparent, #000 60px, #000 calc(100% - 60px), transparent);
+}
+
+.home-sessions-track {
+  display: flex;
+  gap: 24px;
+  width: max-content;
+  padding: 8px 24px;
+  animation: home-sessions-scroll 60s linear infinite;
+}
+
+.home-sessions-viewport:hover .home-sessions-track {
+  animation-play-state: paused;
+}
+
+@keyframes home-sessions-scroll {
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
+}
+
+.home-session-card {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  flex: 0 0 auto;
+  width: 300px;
+  padding: 22px 24px;
+  border-radius: var(--radius-lg);
+  background: #ffffff;
+  box-shadow: 0 8px 22px rgba(0, 77, 109, 0.08);
+  text-decoration: none;
+  transition: transform 180ms ease, box-shadow 180ms ease;
+}
+
+.home-session-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 14px 30px rgba(0, 77, 109, 0.14);
+}
+
+.home-session-category {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-style: italic;
+  font-weight: 700;
+  font-size: 0.9rem;
+  color: var(--color-green);
+}
+
+.home-session-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: var(--color-green);
+}
+
+.home-session-title {
+  font-family: var(--font-sans), sans-serif;
+  font-size: 1.1rem;
+  font-weight: 800;
+  color: var(--color-navy);
+  line-height: 1.25;
+}
+
+.home-session-dates {
+  font-weight: 700;
+  color: var(--color-navy);
+  font-size: 0.92rem;
+}
+
+.home-session-meta {
+  font-style: italic;
+  color: var(--color-blue);
+  font-size: 0.9rem;
+}
+
+/* --- Formez-vous où que vous soyez --- */
+.home-anywhere {
+  background: #ffffff;
+  padding: 64px 0;
+}
+
+.home-anywhere-text {
+  max-width: 1040px;
+  margin: 0 0 32px;
+  color: var(--color-muted);
+  font-size: 1.02rem;
+  line-height: 1.7;
+}
+
+.home-anywhere-visual {
+  height: 420px;
+  border-radius: var(--radius-lg);
+  background: var(--color-light);
+}
+
+/* --- Bande terrain (bleu foncé) --- */
+.home-field {
+  background: var(--color-navy);
+  padding: 64px 0;
+}
+
+.home-field h2 {
+  margin: 0 0 24px;
+  font-family: var(--font-sans), sans-serif;
+  font-size: clamp(1.7rem, 3.2vw, 2.4rem);
+  font-weight: 800;
+  color: #ffffff;
+}
+
+.home-field p {
+  max-width: 900px;
+  margin: 0 0 32px;
+  color: rgba(255, 255, 255, 0.92);
+  font-size: 1.02rem;
+  line-height: 1.7;
+}
+
+.home-field-cta {
+  background: var(--color-green);
+}
+
+/* --- Chiffres --- */
+.home-stats {
+  background: #ffffff;
+  padding: 64px 0;
+}
+
+.home-stats-grid {
+  display: grid;
+  gap: 20px;
+}
+
+.home-stat-row {
+  display: grid;
+  grid-template-columns: minmax(0, 260px) minmax(0, 1fr);
+  gap: 20px;
+  align-items: stretch;
+}
+
+.home-stat-row.is-reversed {
+  grid-template-columns: minmax(0, 1fr) minmax(0, 260px);
+}
+
+.home-stat-row.is-reversed .home-stat-card {
+  order: 2;
+}
+
+.home-stat-row.is-reversed .home-stat-image {
+  order: 1;
+}
+
+.home-stat-card {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 6px;
+  padding: 28px 32px;
+  border-radius: var(--radius-lg);
+  background: linear-gradient(135deg, var(--color-green), var(--color-blue));
+  color: #ffffff;
+  text-align: center;
+}
+
+.home-stat-card strong {
+  font-family: var(--font-sans), sans-serif;
+  font-size: 2.6rem;
+  font-weight: 800;
+  line-height: 1;
+}
+
+.home-stat-card span {
+  font-weight: 700;
+  font-size: 0.98rem;
+  line-height: 1.3;
+}
+
+.home-stat-image {
+  min-height: 140px;
+  border-radius: var(--radius-lg);
+  background: linear-gradient(135deg, var(--color-blue-pale), var(--color-green-pale));
+}
+
+/* --- Pourquoi choisir --- */
+.home-why {
+  background: var(--color-light);
+  padding: 64px 0;
+}
+
+.home-why .home-section-title {
+  text-align: center;
+}
+
+.home-why-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 28px;
+}
+
+.home-why-card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  min-height: 150px;
+  padding: 28px 30px;
+  border-radius: var(--radius-lg);
+  background: #ffffff;
+  box-shadow: 0 10px 26px rgba(0, 77, 109, 0.08);
+}
+
+.home-why-icon {
+  position: absolute;
+  top: 22px;
+  right: 24px;
+  width: 42px;
+  height: 42px;
+}
+
+.home-why-icon img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.home-why-card strong {
+  max-width: 70%;
+  font-family: var(--font-sans), sans-serif;
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: var(--color-navy);
+  line-height: 1.25;
+}
+
+.home-why-link {
+  align-self: flex-start;
+  margin-top: auto;
+  min-height: 40px;
+  padding: 0 18px;
+  background: var(--color-blue);
+  font-size: 0.9rem;
+}
+
+/* --- Avis --- */
+.home-reviews {
+  background: #ffffff;
+  padding: 64px 0;
+  overflow: hidden;
+}
+
+.home-reviews .review-carousel-heading {
+  max-width: none;
+  margin: 0 0 28px;
+  padding: 0;
+}
+
+.home-reviews-cta {
+  display: flex;
+  width: 100%;
+  margin-top: 32px;
+  background: var(--color-green);
+}
+
+/* --- Financement --- */
+.home-funding {
+  background: #ffffff;
+  padding: 0 0 64px;
+}
+
+.home-funding-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 18px;
+  padding: 56px 32px;
+  border-radius: var(--radius-lg);
+  background: var(--color-green-pale);
+  text-align: center;
+}
+
+.home-funding-card h2 {
+  margin: 0;
+  font-family: var(--font-sans), sans-serif;
+  font-size: clamp(1.7rem, 3.2vw, 2.4rem);
+  font-weight: 800;
+  color: var(--color-green);
+}
+
+.home-funding-card p {
+  max-width: 720px;
+  margin: 0;
+  color: var(--color-navy);
+  font-size: 1.05rem;
+  line-height: 1.6;
+}
+
+.home-funding-card .ui-button {
+  background: var(--color-green);
+}
+
+/* --- FAQ --- */
+.home-faq {
+  background: #ffffff;
+  padding: 24px 0 72px;
+}
+
+.home-faq-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.2fr);
+  gap: 56px;
+  align-items: start;
+}
+
+.home-faq-aside h2 {
+  margin: 0 0 28px;
+  font-family: var(--font-sans), sans-serif;
+  font-size: clamp(1.8rem, 3.4vw, 2.6rem);
+  font-weight: 800;
+  color: var(--color-navy);
+}
+
+.home-faq-cta-card {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  padding: 28px;
+  border-radius: var(--radius-lg);
+  background: #ffffff;
+  box-shadow: 0 10px 28px rgba(0, 77, 109, 0.1);
+}
+
+.home-faq-cta-card h3 {
+  margin: 0;
+  font-family: var(--font-sans), sans-serif;
+  font-size: 1.4rem;
+  font-weight: 800;
+  color: var(--color-blue);
+}
+
+.home-faq-cta-card p {
+  margin: 0 0 8px;
+  color: var(--color-muted);
+  line-height: 1.5;
+}
+
+.home-faq-cta-button {
+  justify-content: center;
+  background: var(--color-blue);
+}
+
+.home-faq-list {
+  display: flex;
+  flex-direction: column;
+}
+
+.home-faq-item {
+  border-bottom: 1px solid var(--border-subtle);
+  padding: 20px 0;
+}
+
+.home-faq-item summary {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  cursor: pointer;
+  list-style: none;
+  font-family: var(--font-sans), sans-serif;
+  font-weight: 700;
+  font-size: 1.05rem;
+  color: var(--color-navy);
+}
+
+.home-faq-item summary::-webkit-details-marker {
+  display: none;
+}
+
+.home-faq-chevron {
+  display: inline-grid;
+  place-items: center;
+  flex: 0 0 auto;
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  background: var(--color-navy);
+  color: #ffffff;
+  font-size: 1.1rem;
+  line-height: 1;
+  transition: transform 180ms ease;
+}
+
+.home-faq-item[open] .home-faq-chevron {
+  transform: rotate(180deg);
+}
+
+.home-faq-item p {
+  margin: 14px 0 0;
+  color: var(--color-muted);
+  line-height: 1.6;
+}
+
+@media (max-width: 960px) {
+  .home-hero-inner {
+    grid-template-columns: 1fr;
+    gap: 32px;
+  }
+
+  .home-category-grid,
+  .home-why-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .home-faq-layout {
+    grid-template-columns: 1fr;
+    gap: 36px;
+  }
+}
+
+@media (max-width: 640px) {
+  .home-category-grid,
+  .home-why-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .home-stat-row,
+  .home-stat-row.is-reversed {
+    grid-template-columns: 1fr;
+  }
+
+  .home-stat-row.is-reversed .home-stat-card {
+    order: 0;
+  }
+
+  .home-stat-row.is-reversed .home-stat-image {
+    order: 0;
+  }
+
+  .home-anywhere-visual {
+    height: 240px;
   }
 }
 

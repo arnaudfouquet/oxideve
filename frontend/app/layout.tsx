@@ -1,21 +1,15 @@
 import type { Metadata } from "next";
-import { Poppins } from "next/font/google";
+import { Nunito } from "next/font/google";
 import { LayoutShell } from "@/components/LayoutShell";
 import { SiteFooter } from "@/components/SiteFooter";
 import { SiteHeader } from "@/components/SiteHeader";
 import { siteDescription, siteName } from "@/lib/content";
 import "./globals.css";
 
-const displayFont = Poppins({
+const nunito = Nunito({
   subsets: ["latin"],
-  weight: ["500", "600", "700", "800"],
-  variable: "--font-display",
-});
-
-const bodyFont = Poppins({
-  subsets: ["latin"],
-  weight: ["400", "500", "600", "700"],
-  variable: "--font-body",
+  weight: ["400", "500", "600", "700", "800", "900"],
+  variable: "--font-sans",
 });
 
 export const metadata: Metadata = {
@@ -29,7 +23,7 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   return (
-    <html lang="fr" className={`${displayFont.variable} ${bodyFont.variable}`}>
+    <html lang="fr" className={nunito.variable}>
       <body>
         <LayoutShell header={<SiteHeader />} footer={<SiteFooter />}>
           {children}
