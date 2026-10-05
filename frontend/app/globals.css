@@ -5095,6 +5095,13 @@ main {
   border-radius: 999px;
   padding-right: 10px;
   gap: 14px;
+  background: var(--color-green);
+  box-shadow: none;
+}
+
+.home-cta-arrow:hover {
+  transform: none;
+  box-shadow: 0 6px 18px rgba(9, 207, 101, 0.3);
 }
 
 .home-cta-arrow::after {
@@ -5127,18 +5134,18 @@ main {
 }
 
 .home-hero-blob-big {
-  width: 76%;
-  height: 90%;
-  right: 2%;
-  top: 6%;
+  width: 60%;
+  height: 72%;
+  right: 10%;
+  top: 14%;
   border-radius: 46% 54% 52% 48% / 56% 44% 56% 44%;
 }
 
 .home-hero-blob-small {
-  width: 16%;
-  height: 22%;
-  left: 14%;
-  top: 2%;
+  width: 13%;
+  height: 18%;
+  left: 20%;
+  top: 6%;
   border-radius: 50%;
 }
 
@@ -5188,8 +5195,10 @@ main {
 
 .home-category-body {
   display: flex;
+  flex: 1;
   flex-direction: column;
-  gap: 16px;
+  justify-content: space-between;
+  gap: 18px;
   padding: 20px 22px 22px;
 }
 
