@@ -1,11 +1,10 @@
 import { ButtonLink, Container } from "@/components/ui";
 import { HomeSessionsCarousel } from "@/components/HomeSessionsCarousel";
+import { FranceMap } from "@/components/FranceMap";
 import { TestimonialCarousel } from "@/components/TestimonialCarousel";
 import { getFormations, getSessions } from "@/lib/content";
 
 export const dynamic = "force-dynamic";
-
-const heroImage = encodeURI("/assets/accueil/formation oxideve hero.jpg");
 
 function categoryAnchor(category: string) {
   return `/formations#category-${category
@@ -17,30 +16,30 @@ function categoryAnchor(category: string) {
 }
 
 const homeCategories = [
-  { label: "Sécurité au travail", match: "Sécurité au travail" },
-  { label: "Bureautique", match: "Bureautique" },
-  { label: "Management", match: "Management" },
-  { label: "Photovoltaïque", match: "Photovoltaïque" },
-  { label: "Pompe à chaleur", match: "Pompes à chaleur" },
+  { label: "Sécurité au travail", match: "Sécurité au travail", image: "/assets/home/cat-securite.jpg" },
+  { label: "Bureautique", match: "Bureautique", image: "/assets/home/cat-bureautique.jpg" },
+  { label: "Management", match: "Management", image: "/assets/home/cat-management.jpg" },
+  { label: "Photovoltaïque", match: "Photovoltaïque", image: "/assets/home/cat-photovoltaique.jpg" },
+  { label: "Pompe à chaleur", match: "Pompes à chaleur", image: "/assets/home/cat-pompe-chaleur.jpg" },
 ];
 
 const advantages = [
-  { title: "Diversité de formation", icon: encodeURI("/assets/accueil/diversite formation oxideve.svg") },
-  { title: "Formations courtes et intenses", icon: encodeURI("/assets/accueil/formation courte intense oxideve.svg") },
-  { title: "Plateaux techniques", icon: encodeURI("/assets/accueil/plateaux techniques oxideve.svg") },
-  { title: "Suivi de l'évolution du marché", icon: encodeURI("/assets/accueil/formation evolution marche oxideve.svg") },
-  { title: "Formateurs expérimentés", icon: encodeURI("/assets/accueil/formateurs experimentés oxideve.svg") },
-  { title: "Organisme Qualiopi", icon: encodeURI("/assets/accueil/qualipio oxideve formation.svg"), link: { href: "/qui-sommes-nous", label: "Notre certificat" } },
-  { title: "Elargir votre réseau", icon: encodeURI("/assets/accueil/reseau oxideve formation.svg") },
-  { title: "Equipement de pointe et innovant", icon: encodeURI("/assets/accueil/equipement formation.svg") },
-  { title: "Accompagnement post formation", icon: encodeURI("/assets/accueil/accompagenement formation qualipv.svg") },
+  { title: "Diversité de formation", icon: "/assets/home/av-diversite.svg" },
+  { title: "Formations courtes et intenses", icon: "/assets/home/av-formation.svg" },
+  { title: "Plateaux techniques", icon: "/assets/home/av-plateaux.svg" },
+  { title: "Suivi de l'évolution du marché", icon: "/assets/home/av-suivi.svg" },
+  { title: "Formateurs expérimentés", icon: "/assets/home/av-formateurs.svg" },
+  { title: "Organisme Qualiopi", icon: "/assets/home/av-organisme.svg", link: { href: "/qui-sommes-nous", label: "Notre certificat" } },
+  { title: "Elargir votre réseau", icon: "/assets/home/av-elargir.svg" },
+  { title: "Equipement de pointe et innovant", icon: "/assets/home/av-equipement.svg" },
+  { title: "Accompagnement post formation", icon: "/assets/home/av-accompagnement.svg" },
 ];
 
 const keyStats = [
-  { value: "843", label: "Personnes formées", detail: "1er trimestre 2024" },
-  { value: "166", label: "Journée de formation", detail: "1er trimestre 2024" },
-  { value: "3,78/4", label: "Taux de satisfaction client", detail: "1er trimestre 2024" },
-  { value: "14", label: "Années d'expérience", detail: "" },
+  { value: "843", label: "Personnes formées", detail: "1er trimestre 2024", image: "/assets/home/stat-personnes.jpg" },
+  { value: "166", label: "Journée de formation", detail: "1er trimestre 2024", image: "/assets/home/stat-journees.jpg" },
+  { value: "3,78/4", label: "Taux de satisfaction client", detail: "1er trimestre 2024", image: "/assets/home/stat-satisfaction.jpg" },
+  { value: "14", label: "Années d'expérience", detail: "", image: "/assets/home/stat-experience.jpg" },
 ];
 
 const faqItems = [
@@ -103,8 +102,10 @@ export default async function HomePage() {
             </ButtonLink>
           </div>
           <div className="home-hero-visual">
+            <span className="home-hero-blob home-hero-blob-small" aria-hidden="true" />
+            <span className="home-hero-blob home-hero-blob-big" aria-hidden="true" />
             {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img alt="Équipe de professionnels en formation Oxideve" src={heroImage} />
+            <img alt="Équipe de professionnels en formation Oxideve" src="/assets/home/illustration-home.png" />
           </div>
         </Container>
       </section>
@@ -116,7 +117,8 @@ export default async function HomePage() {
           <div className="home-category-grid">
             {categoriesWithCount.map((category) => (
               <a className="home-category-card" href={category.href} key={category.label}>
-                <span className="home-category-image" aria-hidden="true" />
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img className="home-category-image" alt={category.label} src={category.image} />
                 <span className="home-category-body">
                   <strong>{category.label}</strong>
                   <span className="home-category-foot">
@@ -134,7 +136,7 @@ export default async function HomePage() {
         </Container>
       </section>
 
-      {/* SESSIONS CAROUSEL */}
+      {/* SESSIONS */}
       <HomeSessionsCarousel formations={formations} sessions={sessions} />
 
       {/* FORMEZ-VOUS OÙ QUE VOUS SOYEZ */}
@@ -148,7 +150,9 @@ export default async function HomePage() {
             Les lieux et les modalités disponibles sont précisés sur chaque fiche de formation afin de vous permettre de choisir la
             solution la plus adaptée à vos besoins.
           </p>
-          <div className="home-anywhere-visual" aria-hidden="true" />
+          <div className="home-anywhere-map">
+            <FranceMap />
+          </div>
         </Container>
       </section>
 
@@ -189,7 +193,8 @@ export default async function HomePage() {
                     ) : null}
                   </span>
                 </div>
-                <div className="home-stat-image" aria-hidden="true" />
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img className="home-stat-image" alt="" src={stat.image} />
               </div>
             ))}
           </div>
@@ -222,6 +227,10 @@ export default async function HomePage() {
       {/* AVIS */}
       <section className="home-reviews">
         <Container>
+          <div className="home-reviews-badge">
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img alt="4,7/5 sur les avis stagiaires" src="/assets/home/bulle-note.png" />
+          </div>
           <TestimonialCarousel />
           <ButtonLink href="/contact" variant="primary" className="home-reviews-cta">
             Je partage mon avis
