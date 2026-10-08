@@ -74,6 +74,7 @@ export function FranceMap() {
       </div>
 
       <div className="france-map-panel">
+        <p className="france-map-panel-title">Nos zones d&apos;intervention</p>
         <ul className="france-map-list">
           {ACTIVE_LIST.map((dept) => (
             <li key={dept.code}>

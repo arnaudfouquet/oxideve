@@ -102,8 +102,6 @@ export default async function HomePage() {
             </ButtonLink>
           </div>
           <div className="home-hero-visual">
-            <span className="home-hero-blob home-hero-blob-small" aria-hidden="true" />
-            <span className="home-hero-blob home-hero-blob-big" aria-hidden="true" />
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img alt="Équipe de professionnels en formation Oxideve" src="/assets/home/illustration-home.png" />
           </div>

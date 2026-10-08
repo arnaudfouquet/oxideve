@@ -5025,26 +5025,27 @@ main {
   padding: 56px 0 64px;
 }
 
-/* Zone vert très pâle couvrant la droite, bord diagonal descendant */
+/* Zone vert très pâle couvrant la droite ; bord gauche oblique qui
+   descend vers la droite (plus de blanc en bas à gauche). */
 .home-hero::before {
   content: "";
   position: absolute;
   inset: 0;
   background: #edfcf4;
-  clip-path: polygon(40% 0, 100% 0, 100% 100%, 46% 100%);
+  clip-path: polygon(38% 0, 100% 0, 100% 100%, 50% 100%);
   pointer-events: none;
 }
 
-/* Petit coin vert pâle en bas à gauche */
+/* Petit coin vert pâle en bas à gauche (triangle, hypoténuse montant vers la droite) */
 .home-hero::after {
   content: "";
   position: absolute;
   left: 0;
   bottom: 0;
-  width: 22%;
-  height: 40%;
+  width: 20%;
+  height: 38%;
   background: #edfcf4;
-  clip-path: polygon(0 40%, 100% 100%, 0 100%);
+  clip-path: polygon(0 100%, 0 30%, 100% 100%);
   pointer-events: none;
 }
 
@@ -5126,29 +5127,6 @@ main {
   min-height: 360px;
 }
 
-/* Blobs verts derrière l'illustration */
-.home-hero-blob {
-  position: absolute;
-  background: var(--color-green);
-  pointer-events: none;
-}
-
-.home-hero-blob-big {
-  width: 60%;
-  height: 72%;
-  right: 10%;
-  top: 14%;
-  border-radius: 46% 54% 52% 48% / 56% 44% 56% 44%;
-}
-
-.home-hero-blob-small {
-  width: 13%;
-  height: 18%;
-  left: 20%;
-  top: 6%;
-  border-radius: 50%;
-}
-
 .home-hero-visual img {
   position: relative;
   z-index: 1;
@@ -5174,7 +5152,7 @@ main {
   flex-direction: column;
   border-radius: 22px;
   background: #ffffff;
-  overflow: hidden;
+  padding: 10px;
   box-shadow: 0 10px 28px rgba(0, 77, 109, 0.08);
   text-decoration: none;
   transition: transform 180ms ease, box-shadow 180ms ease;
@@ -5190,7 +5168,7 @@ main {
   width: 100%;
   height: 150px;
   object-fit: cover;
-  border-radius: 22px 22px 0 0;
+  border-radius: 14px;
 }
 
 .home-category-body {
@@ -5199,7 +5177,7 @@ main {
   flex-direction: column;
   justify-content: space-between;
   gap: 18px;
-  padding: 20px 22px 22px;
+  padding: 14px 12px 10px;
 }
 
 .home-category-body strong {
@@ -5303,7 +5281,7 @@ main {
   gap: 20px;
   width: max-content;
   padding: 6px 24px;
-  animation: home-sessions-scroll 95s linear infinite;
+  animation: home-sessions-scroll 130s linear infinite;
 }
 
 .home-sessions-track.is-reverse {
@@ -5494,8 +5472,18 @@ main {
 
 .france-map-panel {
   display: flex;
-  align-items: center;
-  padding: 28px 32px;
+  flex-direction: column;
+  justify-content: center;
+  gap: 18px;
+  padding: 32px;
+}
+
+.france-map-panel-title {
+  margin: 0;
+  font-family: var(--font-sans), sans-serif;
+  font-size: 1.2rem;
+  font-weight: 800;
+  color: var(--color-navy);
 }
 
 .france-map-list {
@@ -5504,7 +5492,7 @@ main {
   padding: 0;
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 8px 20px;
+  gap: 10px 20px;
   width: 100%;
 }
 
@@ -5896,11 +5884,13 @@ main {
   }
 
   .home-session-card {
-    width: 300px;
+    width: min(320px, 85vw);
   }
 
   .home-reviews-badge {
     width: 110px;
+    top: 12px;
+    right: 12px;
   }
 }
 
