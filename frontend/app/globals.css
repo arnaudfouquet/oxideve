@@ -5025,27 +5025,27 @@ main {
   padding: 56px 0 64px;
 }
 
-/* Zone vert très pâle couvrant la droite ; bord gauche oblique qui
-   descend vers la droite (plus de blanc en bas à gauche). */
+/* Zone vert très pâle : bord oblique descendant du haut-droit vers le
+   bas-gauche (le blanc forme un coin en haut à gauche). */
 .home-hero::before {
   content: "";
   position: absolute;
   inset: 0;
   background: #edfcf4;
-  clip-path: polygon(38% 0, 100% 0, 100% 100%, 50% 100%);
+  clip-path: polygon(48% 0, 100% 0, 100% 100%, 20% 100%);
   pointer-events: none;
 }
 
-/* Petit coin vert pâle en bas à gauche (triangle, hypoténuse montant vers la droite) */
+/* Coin vert pâle en bas à gauche, hypoténuse descendant vers la gauche */
 .home-hero::after {
   content: "";
   position: absolute;
   left: 0;
   bottom: 0;
-  width: 20%;
-  height: 38%;
+  width: 14%;
+  height: 46%;
   background: #edfcf4;
-  clip-path: polygon(0 100%, 0 30%, 100% 100%);
+  clip-path: polygon(0 55%, 100% 100%, 0 100%);
   pointer-events: none;
 }
 
@@ -5152,7 +5152,7 @@ main {
   flex-direction: column;
   border-radius: 22px;
   background: #ffffff;
-  padding: 10px;
+  overflow: hidden;
   box-shadow: 0 10px 28px rgba(0, 77, 109, 0.08);
   text-decoration: none;
   transition: transform 180ms ease, box-shadow 180ms ease;
@@ -5163,12 +5163,13 @@ main {
   box-shadow: 0 16px 36px rgba(0, 77, 109, 0.14);
 }
 
+/* Arrondi marqué en bas à gauche : l'image "coule" dans la carte. */
 .home-category-image {
   display: block;
   width: 100%;
-  height: 150px;
+  height: 160px;
   object-fit: cover;
-  border-radius: 14px;
+  border-radius: 22px 22px 0 64px;
 }
 
 .home-category-body {
@@ -5177,7 +5178,7 @@ main {
   flex-direction: column;
   justify-content: space-between;
   gap: 18px;
-  padding: 14px 12px 10px;
+  padding: 18px 22px 22px;
 }
 
 .home-category-body strong {
@@ -5403,7 +5404,7 @@ main {
 .france-map {
   position: relative;
   width: 100%;
-  padding: 24px;
+  padding: 16px;
   background: var(--color-light);
   display: flex;
   align-items: center;
@@ -5413,7 +5414,6 @@ main {
 .france-map-svg {
   width: 100%;
   height: auto;
-  max-width: 520px;
   display: block;
 }
 
@@ -5632,18 +5632,19 @@ main {
   flex-direction: column;
   gap: 16px;
   min-height: 150px;
-  padding: 28px 30px;
+  padding: 32px 30px;
   border-radius: var(--radius-lg);
   background: #ffffff;
   box-shadow: 0 10px 26px rgba(0, 77, 109, 0.08);
 }
 
+/* L'icône déborde légèrement du coin haut-droit de la carte. */
 .home-why-icon {
   position: absolute;
-  top: 22px;
-  right: 24px;
-  width: 42px;
-  height: 42px;
+  top: -14px;
+  right: -10px;
+  width: 76px;
+  height: 76px;
 }
 
 .home-why-icon img {
@@ -5653,7 +5654,7 @@ main {
 }
 
 .home-why-card strong {
-  max-width: 70%;
+  max-width: 64%;
   font-family: var(--font-sans), sans-serif;
   font-size: 1.2rem;
   font-weight: 700;
@@ -5827,14 +5828,18 @@ main {
   display: inline-grid;
   place-items: center;
   flex: 0 0 auto;
-  width: 34px;
-  height: 34px;
+  width: 36px;
+  height: 36px;
   border-radius: 50%;
   background: var(--color-navy);
   color: #ffffff;
-  font-size: 1.1rem;
-  line-height: 1;
   transition: transform 180ms ease;
+}
+
+.home-faq-chevron svg {
+  width: 18px;
+  height: 18px;
+  display: block;
 }
 
 .home-faq-item[open] .home-faq-chevron {

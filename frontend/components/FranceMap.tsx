@@ -40,7 +40,7 @@ export function FranceMap() {
     <div className="france-map-layout">
       <div className="france-map" ref={mapRef}>
         <svg
-          viewBox="244 341 444 360"
+          viewBox="261.8 354.4 408.1 333"
           xmlns="http://www.w3.org/2000/svg"
           className="france-map-svg"
           role="img"
