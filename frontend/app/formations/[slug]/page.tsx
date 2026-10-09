@@ -1,8 +1,9 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
-import { FormationCard } from "@/components/FormationCard";
+import { FormationCatalogCard } from "@/components/FormationCatalog";
 import { FormationSessionBooking } from "@/components/FormationSessionBooking";
-import { Badge, ButtonLink, Container, Section, Text, Title } from "@/components/ui";
+import { ButtonLink, Container } from "@/components/ui";
+import { getCategoryTheme } from "@/lib/formation-theme";
 import { getFormationBySlug, getFormations, getSessionsForFormation, getSiteUrl } from "@/lib/content";
 
 export const dynamic = "force-dynamic";
@@ -16,17 +17,13 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const formation = await getFormationBySlug(slug);
 
   if (!formation) {
-    return {
-      title: "Formation introuvable",
-    };
+    return { title: "Formation introuvable" };
   }
 
   return {
     title: `${formation.title} | Oxideve`,
     description: formation.summary,
-    alternates: {
-      canonical: `/formations/${formation.slug}`,
-    },
+    alternates: { canonical: `/formations/${formation.slug}` },
   };
 }
 
@@ -41,20 +38,25 @@ export default async function FormationDetailPage({ params }: Props) {
   const sessions = await getSessionsForFormation(slug);
   const allFormations = await getFormations();
   const relatedSlugSet = new Set((formation.relatedSlugs || []).map((link) => link.slug));
+  const relatedFormations = (formation.relatedSlugs || [])
+    .map((link) => allFormations.find((item) => item.slug === link.slug))
+    .filter((item): item is NonNullable<typeof item> => Boolean(item));
   const similarFormations = allFormations
     .filter((item) => item.slug !== slug && item.category === formation.category && !relatedSlugSet.has(item.slug))
     .slice(0, 3);
+  const suggestions = (relatedFormations.length ? relatedFormations : similarFormations).slice(0, 3);
+
+  const theme = getCategoryTheme(formation.category);
+  const sessionCities = Array.from(new Set(sessions.map((session) => session.city)));
+  const displayLocation = sessionCities.length ? sessionCities.join(", ") : formation.location;
+
   const siteUrl = getSiteUrl();
   const jsonLd = {
     "@context": "https://schema.org",
     "@type": "Course",
     name: formation.title,
     description: formation.description,
-    provider: {
-      "@type": "Organization",
-      name: "Oxideve",
-      url: siteUrl,
-    },
+    provider: { "@type": "Organization", name: "Oxideve", url: siteUrl },
     hasCourseInstance: sessions.map((session) => ({
       "@type": "Event",
       name: `${formation.title} - session ${session.city}`,
@@ -64,201 +66,274 @@ export default async function FormationDetailPage({ params }: Props) {
         session.mode === "Hybride"
           ? "https://schema.org/MixedEventAttendanceMode"
           : "https://schema.org/OfflineEventAttendanceMode",
-      location: {
-        "@type": "Place",
-        name: session.city,
-      },
+      location: { "@type": "Place", name: session.city },
     })),
   };
 
-  const relatedFormations = (formation.relatedSlugs || [])
-    .map((link) => ({ link, formation: allFormations.find((item) => item.slug === link.slug) }))
-    .filter((entry) => entry.formation);
-
-  const sessionCities = Array.from(new Set(sessions.map((session) => session.city)));
-  const displayLocation =
-    sessionCities.length > 0 ? sessionCities.join(", ") : formation.location;
+  const facts = [
+    { icon: "/assets/formations/icone-heure.svg", label: "Durée", value: formation.duration },
+    { icon: "/assets/formations/icone-lieu.svg", label: "Lieu", value: displayLocation },
+    { icon: "/assets/formations/icone-euro.svg", label: "Tarif", value: formation.price, cpf: formation.cpfEligible },
+    { icon: "/assets/formations/icone-public.svg", label: "Public", value: formation.audience },
+  ];
 
   return (
     <>
-      <Section className="formation-hero-section">
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
+
+      {/* BANNIÈRE DE CATÉGORIE */}
+      <div className="fd-banner">
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img alt={formation.category} src={theme.banner} />
+      </div>
+
+      {/* EN-TÊTE : titre + cartes info */}
+      <section className="fd-head">
         <Container>
-        <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
-          <div className="formation-hero-full">
-            <Badge tone="accent">{formation.category}</Badge>
-            <Title as="h1" title={formation.title} description={formation.summary} />
-            <div className="formation-hero-actions">
-              <ButtonLink href="#inscription" variant="primary">Je m'inscris</ButtonLink>
-              <ButtonLink href="/contact" variant="secondary">Parler a l'equipe</ButtonLink>
+          <div className="fd-head-layout">
+            <div className="fd-head-copy">
+              <span className="fd-category">{formation.category}</span>
+              <h1>
+                {formation.title}
+                {formation.levelLabel ? <em> {formation.levelLabel}</em> : null}
+              </h1>
+              <p className="fd-summary">{formation.summary}</p>
+              <div className="fd-head-actions">
+                <ButtonLink href="#inscription" variant="primary" className="home-cta-arrow">
+                  Je m&apos;inscris
+                </ButtonLink>
+                <ButtonLink href="/contact" variant="primary" className="home-cta-arrow">
+                  Parler à l&apos;équipe
+                </ButtonLink>
+              </div>
             </div>
 
-            <div className="info-bar">
-              <div><span>Durée</span><strong>{formation.duration}</strong></div>
-              <div><span>Lieu</span><strong>{displayLocation}</strong></div>
-              <div><span>Tarif</span><strong>{formation.price}</strong></div>
-              <div><span>Public</span><strong>{formation.audience}</strong></div>
+            <div className="fd-facts">
+              {facts.map((fact) => (
+                <div className="fd-fact" key={fact.label}>
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img alt="" src={fact.icon} />
+                  <span className="fd-fact-label">{fact.label}</span>
+                  <strong className="fd-fact-value">{fact.value}</strong>
+                  {fact.cpf ? <span className="formation-tile-cpf">Finançable CPF</span> : null}
+                </div>
+              ))}
             </div>
           </div>
 
-          {formation.rgeBadge ? (
-            <div className="formation-rge-strip">
-              <div>
-                <p className="formation-subhead">{formation.certification}</p>
-                <Text size="lg">{formation.description}</Text>
-              </div>
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img alt={formation.rgeBadge.label} className="formation-rge-badge" src={formation.rgeBadge.imageUrl} />
+          <div className="fd-local">
+            <div>
+              <p className="fd-local-title">Vous souhaitez suivre cette formation près de chez vous ?</p>
+              <p className="fd-local-text">Cette formation peut être organisée partout en France, selon les demandes et les possibilités.</p>
             </div>
-          ) : null}
+            <ButtonLink href="/contact" variant="primary" className="fd-local-cta home-cta-arrow">
+              Faire une demande
+            </ButtonLink>
+          </div>
+        </Container>
+      </section>
 
-          <div className="detail-layout-modern">
-            <article className="detail-main-card">
-              <Title eyebrow="Description" title="A qui s'adresse cette formation" />
-              <Text size="lg">{formation.audience}</Text>
-              <Text>{formation.description}</Text>
-
-              <div className="formation-objectives-list">
-                <p className="formation-subhead">Ce que la formation vous apporte</p>
-                <ol>
-                  {formation.objectives.map((objective) => (
-                    <li key={objective}>{objective}</li>
-                  ))}
-                </ol>
+      {/* FINALITÉ (bande navy) */}
+      {formation.certification ? (
+        <section className="fd-purpose">
+          <Container>
+            <div className="fd-purpose-layout">
+              <div>
+                <h2>{formation.certification}</h2>
+                <p>{formation.description}</p>
               </div>
+              {formation.rgeBadge ? (
+                <div className="fd-purpose-badges">
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img alt={formation.rgeBadge.label} src={formation.rgeBadge.imageUrl} />
+                </div>
+              ) : null}
+            </div>
+          </Container>
+        </section>
+      ) : null}
 
-              <div className="detail-block-grid">
-                <div>
-                  <p className="formation-subhead">Points forts</p>
-                  <ul className="detail-list">
-                    {formation.benefits.map((benefit) => (
-                      <li key={benefit}>{benefit}</li>
+      {/* DESCRIPTION + INFOS PRATIQUES */}
+      <section className="fd-body">
+        <Container>
+          <div className="fd-body-layout">
+            <article className="fd-card">
+              <span className="fd-pill fd-pill-blue">Description</span>
+              <h2 className="fd-card-title">
+                A qui s&apos;adresse <em>cette</em> <strong>formation</strong>
+              </h2>
+
+              <p className="fd-audience">{formation.audience}</p>
+              <p className="fd-description">{formation.description}</p>
+
+              <p className="fd-subhead">Ce que la formation vous apporte</p>
+              <ol className="fd-objectives">
+                {formation.objectives.map((objective, index) => (
+                  <li key={objective}>
+                    <span className="fd-objective-index">{index + 1}</span>
+                    <span>{objective}</span>
+                  </li>
+                ))}
+              </ol>
+
+              <div className="fd-split">
+                <div className="fd-split-card">
+                  <h3>Points forts</h3>
+                  <ul>
+                    {formation.benefits.map((item) => (
+                      <li key={item}>{item}</li>
                     ))}
                   </ul>
                 </div>
-                <div>
-                  <p className="formation-subhead">Prérequis</p>
-                  <ul className="detail-list">
+                <div className="fd-split-card">
+                  <h3>Prérequis</h3>
+                  <ul>
                     {formation.prerequisites.map((item) => (
                       <li key={item}>{item}</li>
                     ))}
                   </ul>
                 </div>
               </div>
-
             </article>
 
-            <aside className="detail-sidebar-stack">
-              <div className="detail-side-card detail-side-card-accent">
-                <p className="formation-subhead">Informations pratiques</p>
-                <dl className="formation-fact-list">
-                  <div>
-                    <dt>Durée détaillée</dt>
-                    <dd>{formation.durationDetails}</dd>
-                  </div>
-                  <div>
-                    <dt>Tarif</dt>
-                    <dd>
-                      <strong className="formation-fact-price">{formation.price}</strong>
-                      {" "}
-                      {formation.priceDetails}
-                    </dd>
-                  </div>
-                  <div>
-                    <dt>Réussite</dt>
-                    <dd>{formation.successRate}</dd>
-                  </div>
-                  <div>
-                    <dt>Accessibilité</dt>
-                    <dd>{formation.handicapPolicy}</dd>
-                  </div>
-                  <div>
-                    <dt>Finalité</dt>
-                    <dd>{formation.certification}</dd>
-                  </div>
-                </dl>
-                <div className="formation-fact-list-block">
-                  <p className="formation-subhead">Modalités pédagogiques</p>
-                  <ul className="detail-list">
-                    {formation.modalities.map((item) => (
-                      <li key={item}>{item}</li>
-                    ))}
-                  </ul>
+            <aside className="fd-aside">
+              <div className="fd-card fd-practical">
+                <h2>Informations pratiques</h2>
+                <div className="fd-practical-item">
+                  <h3>Durée détaillée</h3>
+                  <p>{formation.durationDetails}</p>
                 </div>
+                <div className="fd-practical-item">
+                  <h3>Tarif</h3>
+                  <p>
+                    <strong>{formation.price}</strong> {formation.priceDetails}
+                  </p>
+                </div>
+                <div className="fd-practical-item">
+                  <h3>Réussite</h3>
+                  <p>{formation.successRate}</p>
+                </div>
+                <div className="fd-practical-item">
+                  <h3>Accessibilité</h3>
+                  <p>{formation.handicapPolicy}</p>
+                </div>
+                {formation.certification ? (
+                  <div className="fd-practical-item">
+                    <h3>Finalité</h3>
+                    <p>{formation.certification}</p>
+                  </div>
+                ) : null}
+              </div>
+
+              <div className="fd-modalities">
+                <h3>Modalités pédagogiques</h3>
+                <ul>
+                  {formation.modalities.map((item) => (
+                    <li key={item}>{item}</li>
+                  ))}
+                </ul>
               </div>
             </aside>
           </div>
         </Container>
-      </Section>
+      </section>
 
-      <Section>
+      {/* PROGRAMME */}
+      <section className="fd-programme">
         <Container>
-          <Title eyebrow="Programme" title="Le déroulé de la formation" description="Projetez-vous avec le détail jour par jour du programme." />
-          <div className="formation-programme-days">
-            {formation.programme.map((day, dayIndex) => (
-              <article className="formation-programme-day" key={day.title}>
-                <p className="formation-programme-day-title">Jour {dayIndex + 1} : {day.title}</p>
-                {day.sequences.map((sequence) => (
-                  <div className="formation-programme-sequence" key={sequence.title}>
-                    <p className="formation-programme-sequence-title">{sequence.title}</p>
-                    <ul className="detail-list">
-                      {sequence.points.map((point) => (
-                        <li key={point}>{point}</li>
-                      ))}
-                    </ul>
-                  </div>
-                ))}
-              </article>
-            ))}
+          <div className="fd-programme-head">
+            <span className="fd-pill fd-pill-green">Programme</span>
+            <h2>Le déroulé de la formation</h2>
+            <p>Projetez-vous avec le détail jour par jour du programme.</p>
+          </div>
+
+          <div className="fd-programme-layout">
+            <div className="fd-programme-days">
+              {formation.programme.map((day, dayIndex) => (
+                <article className="fd-day" key={day.title}>
+                  <p className="fd-day-title">
+                    <strong>Jour {dayIndex + 1} :</strong> <em>{day.title}</em>
+                  </p>
+                  {day.sequences.map((sequence) => (
+                    <div className="fd-sequence" key={sequence.title}>
+                      <h3>{sequence.title}</h3>
+                      <ul>
+                        {sequence.points.map((point) => (
+                          <li key={point}>{point}</li>
+                        ))}
+                      </ul>
+                    </div>
+                  ))}
+                </article>
+              ))}
+            </div>
+            <div className="fd-programme-visual">
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img alt="" src={theme.banner} />
+            </div>
           </div>
         </Container>
-      </Section>
+      </section>
 
-      <Section id="inscription">
+      {/* INSCRIPTION */}
+      <section className="fd-signup" id="inscription">
         <Container>
-          <FormationSessionBooking formation={formation} sessions={sessions} />
+          <div className="fd-card fd-signup-card">
+            <span className="fd-pill fd-pill-blue">Inscription</span>
+            <h2>Préparer votre inscription à {formation.shortTitle}</h2>
+            <FormationSessionBooking formation={formation} sessions={sessions} />
+          </div>
         </Container>
-      </Section>
+      </section>
 
+      {/* FAQ */}
       {formation.faq?.length ? (
-        <Section>
+        <section className="fd-faq">
           <Container>
-            <Title eyebrow="FAQ" title="Questions fréquentes" className="formation-faq-title" />
-            <div className="formation-faq-list">
-              {formation.faq.map((entry) => (
-                <details className="formation-detail-accordion formation-faq-item" key={entry.question}>
-                  <summary>{entry.question}</summary>
-                  <Text>{entry.answer}</Text>
-                </details>
+            <div className="home-faq-layout">
+              <div className="home-faq-aside">
+                <span className="fd-pill fd-pill-navy">FAQ</span>
+                <h2>
+                  Questions
+                  <br />
+                  fréquentes
+                </h2>
+              </div>
+              <div className="home-faq-list">
+                {formation.faq.map((entry) => (
+                  <details className="home-faq-item" key={entry.question}>
+                    <summary>
+                      <span>{entry.question}</span>
+                      <span className="home-faq-chevron" aria-hidden="true">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                          <polyline points="6 9 12 15 18 9" />
+                        </svg>
+                      </span>
+                    </summary>
+                    <p>{entry.answer}</p>
+                  </details>
+                ))}
+              </div>
+            </div>
+          </Container>
+        </section>
+      ) : null}
+
+      {/* FORMATIONS COMPLÉMENTAIRES */}
+      {suggestions.length ? (
+        <section className="fd-related">
+          <Container>
+            <span className="fd-pill fd-pill-green">Pour aller plus loin</span>
+            <h2>
+              Nos formations <em>complémentaires</em>
+            </h2>
+            <div className="catalog-grid">
+              {suggestions.map((item) => (
+                <FormationCatalogCard formation={item} key={item.slug} />
               ))}
             </div>
           </Container>
-        </Section>
-      ) : null}
-
-      {relatedFormations.length ? (
-        <Section>
-          <Container>
-            <Title eyebrow="Pour aller plus loin" title="Nos formations complémentaires" />
-            <div className="training-showcase-grid">
-              {relatedFormations.map(({ formation: related }) =>
-                related ? <FormationCard formation={related} key={related.slug} /> : null,
-              )}
-            </div>
-          </Container>
-        </Section>
-      ) : null}
-
-      {similarFormations.length ? (
-        <Section>
-          <Container>
-            <Title eyebrow="Formations similaires" title={`Autres formations ${formation.category.toLowerCase()}`} />
-            <div className="training-showcase-grid">
-              {similarFormations.map((item) => (
-                <FormationCard formation={item} key={item.slug} />
-              ))}
-            </div>
-          </Container>
-        </Section>
+        </section>
       ) : null}
     </>
   );

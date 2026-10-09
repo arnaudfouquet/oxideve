@@ -6137,6 +6137,592 @@ main {
   }
 }
 
+/* ===================== PAGE DÉTAIL FORMATION ===================== */
+
+.fd-banner {
+  width: 100%;
+  height: 330px;
+  overflow: hidden;
+}
+
+.fd-banner img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+/* Pastilles de section */
+.fd-pill {
+  display: inline-block;
+  padding: 8px 22px;
+  border-radius: 999px;
+  color: #ffffff;
+  font-style: italic;
+  font-weight: 700;
+  font-size: 0.9rem;
+}
+
+.fd-pill-blue { background: var(--color-blue); }
+.fd-pill-green { background: var(--color-green); }
+.fd-pill-navy { background: var(--color-navy); }
+
+/* En-tête */
+.fd-head {
+  padding: 48px 0 56px;
+  background: #ffffff;
+}
+
+.fd-head-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1.15fr) minmax(0, 0.85fr);
+  gap: 48px;
+  align-items: start;
+}
+
+.fd-category {
+  display: inline-block;
+  padding: 10px 26px;
+  border-radius: 999px;
+  background: var(--color-green);
+  color: #ffffff;
+  font-weight: 800;
+  font-size: 1.05rem;
+}
+
+.fd-head-copy h1 {
+  margin: 22px 0 18px;
+  font-family: var(--font-sans), sans-serif;
+  font-weight: 500;
+  font-size: clamp(1.9rem, 3.4vw, 2.7rem);
+  line-height: 1.15;
+  color: var(--color-navy);
+}
+
+.fd-head-copy h1 em {
+  font-style: italic;
+  font-weight: 700;
+}
+
+.fd-summary {
+  margin: 0 0 28px;
+  max-width: 520px;
+  color: var(--color-muted);
+  line-height: 1.6;
+}
+
+.fd-head-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+}
+
+/* Cartes info (durée / lieu / tarif / public) */
+.fd-facts {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+}
+
+.fd-fact {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  padding: 24px 18px;
+  border-radius: 16px;
+  background: #ffffff;
+  box-shadow: 0 10px 28px rgba(0, 77, 109, 0.1);
+  text-align: center;
+}
+
+.fd-fact img {
+  width: 34px;
+  height: 34px;
+  object-fit: contain;
+  opacity: 0.5;
+}
+
+.fd-fact-label {
+  color: var(--color-green);
+  font-weight: 700;
+  font-size: 0.92rem;
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+}
+
+.fd-fact-value {
+  font-family: var(--font-sans), sans-serif;
+  font-size: 1.3rem;
+  font-weight: 800;
+  color: var(--color-navy);
+  line-height: 1.2;
+}
+
+/* Bandeau "près de chez vous" */
+.fd-local {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  margin-top: 48px;
+  padding: 26px 32px;
+  border-radius: 14px;
+  background: var(--color-light);
+}
+
+.fd-local-title {
+  margin: 0 0 6px;
+  font-weight: 700;
+  font-size: 1.05rem;
+  color: var(--color-navy);
+  text-transform: uppercase;
+}
+
+.fd-local-text {
+  margin: 0;
+  color: var(--color-muted);
+}
+
+.fd-local-cta {
+  flex: 0 0 auto;
+  background: var(--color-navy);
+  --arrow-color: var(--color-navy);
+}
+
+/* Bande finalité */
+.fd-purpose {
+  padding: 56px 0;
+  background: var(--color-navy);
+}
+
+.fd-purpose-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 40px;
+  align-items: center;
+}
+
+.fd-purpose h2 {
+  margin: 0 0 18px;
+  font-family: var(--font-sans), sans-serif;
+  font-size: clamp(1.4rem, 2.4vw, 1.9rem);
+  font-weight: 800;
+  color: #ffffff;
+  line-height: 1.3;
+}
+
+.fd-purpose p {
+  margin: 0;
+  color: rgba(255, 255, 255, 0.9);
+  line-height: 1.6;
+}
+
+.fd-purpose-badges {
+  padding: 20px;
+  border-radius: 16px;
+  background: #ffffff;
+}
+
+.fd-purpose-badges img {
+  display: block;
+  width: 190px;
+  height: auto;
+}
+
+/* Corps : description + infos pratiques */
+.fd-body {
+  padding: 56px 0;
+  background: #ffffff;
+}
+
+.fd-body-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1.5fr) minmax(0, 1fr);
+  gap: 32px;
+  align-items: start;
+}
+
+.fd-card {
+  padding: 32px 34px;
+  border-radius: 18px;
+  background: #ffffff;
+  box-shadow: 0 10px 30px rgba(0, 77, 109, 0.1);
+}
+
+.fd-card-title {
+  margin: 22px 0 24px;
+  font-family: var(--font-sans), sans-serif;
+  font-weight: 400;
+  font-size: clamp(1.6rem, 3vw, 2.2rem);
+  color: var(--color-navy);
+  line-height: 1.2;
+}
+
+.fd-card-title em {
+  font-style: italic;
+  color: var(--color-blue);
+}
+
+.fd-card-title strong {
+  font-weight: 800;
+  color: var(--color-blue);
+}
+
+.fd-audience {
+  margin: 0 0 16px;
+  font-style: italic;
+  color: var(--color-navy);
+}
+
+.fd-description {
+  margin: 0 0 28px;
+  color: var(--color-muted);
+  line-height: 1.6;
+}
+
+.fd-subhead {
+  margin: 0 0 16px;
+  font-weight: 800;
+  font-size: 1.05rem;
+  color: var(--color-blue);
+}
+
+/* Objectifs numérotés */
+.fd-objectives {
+  list-style: none;
+  margin: 0 0 32px;
+  padding: 0;
+  display: grid;
+  gap: 12px;
+  counter-reset: objective;
+}
+
+.fd-objectives li {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 12px 18px;
+  border-radius: 10px;
+  background: var(--color-blue-pale);
+  color: var(--color-navy);
+}
+
+.fd-objective-index {
+  display: inline-grid;
+  place-items: center;
+  flex: 0 0 auto;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  background: var(--color-blue);
+  color: #ffffff;
+  font-weight: 800;
+  font-size: 0.9rem;
+}
+
+.fd-split {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+}
+
+.fd-split-card {
+  padding: 24px 26px;
+  border-radius: 14px;
+  background: var(--color-light);
+}
+
+.fd-split-card h3 {
+  margin: 0 0 14px;
+  font-family: var(--font-sans), sans-serif;
+  font-size: 1.25rem;
+  font-weight: 800;
+  color: var(--color-navy);
+}
+
+.fd-split-card ul,
+.fd-modalities ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 10px;
+}
+
+.fd-split-card li,
+.fd-modalities li {
+  position: relative;
+  padding-left: 14px;
+  color: var(--color-muted);
+  line-height: 1.5;
+}
+
+.fd-split-card li::before,
+.fd-modalities li::before {
+  content: "-";
+  position: absolute;
+  left: 0;
+}
+
+/* Sidebar infos pratiques */
+.fd-aside {
+  display: grid;
+  gap: 20px;
+  position: sticky;
+  top: 84px;
+}
+
+.fd-practical h2 {
+  margin: 0 0 22px;
+  font-family: var(--font-sans), sans-serif;
+  font-size: 1.5rem;
+  font-weight: 800;
+  color: var(--color-green);
+}
+
+.fd-practical-item {
+  padding-bottom: 18px;
+  margin-bottom: 18px;
+  border-bottom: 1px solid var(--color-green-pale);
+}
+
+.fd-practical-item:last-child {
+  padding-bottom: 0;
+  margin-bottom: 0;
+  border-bottom: 0;
+}
+
+.fd-practical-item h3 {
+  margin: 0 0 8px;
+  font-size: 0.98rem;
+  font-weight: 800;
+  color: var(--color-green);
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+}
+
+.fd-practical-item p {
+  margin: 0;
+  color: var(--color-muted);
+  line-height: 1.55;
+}
+
+.fd-practical-item strong {
+  color: var(--color-navy);
+}
+
+.fd-modalities {
+  padding: 28px 30px;
+  border-radius: 18px;
+  background: linear-gradient(135deg, var(--color-green), var(--color-blue));
+  color: #ffffff;
+}
+
+.fd-modalities h3 {
+  margin: 0 0 16px;
+  font-family: var(--font-sans), sans-serif;
+  font-size: 1.1rem;
+  font-weight: 800;
+  text-transform: uppercase;
+}
+
+.fd-modalities li {
+  color: rgba(255, 255, 255, 0.95);
+}
+
+/* Programme */
+.fd-programme {
+  padding: 56px 0;
+  background: var(--color-light);
+}
+
+.fd-programme-head {
+  text-align: center;
+  margin-bottom: 36px;
+}
+
+.fd-programme-head h2 {
+  margin: 18px 0 10px;
+  font-family: var(--font-sans), sans-serif;
+  font-size: clamp(1.6rem, 3vw, 2.2rem);
+  font-weight: 800;
+  color: var(--color-navy);
+}
+
+.fd-programme-head p {
+  margin: 0;
+  color: var(--color-navy);
+  font-weight: 700;
+}
+
+.fd-programme-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1.5fr) minmax(0, 1fr);
+  gap: 28px;
+  align-items: start;
+}
+
+.fd-programme-days {
+  display: grid;
+  gap: 22px;
+}
+
+.fd-day {
+  padding: 26px 30px;
+  border-radius: 14px;
+  background: var(--color-green-pale);
+}
+
+.fd-day-title {
+  margin: 0 0 18px;
+  font-family: var(--font-sans), sans-serif;
+  font-size: 1.3rem;
+  color: var(--color-navy);
+}
+
+.fd-day-title strong {
+  font-weight: 800;
+}
+
+.fd-day-title em {
+  font-style: italic;
+}
+
+.fd-sequence + .fd-sequence {
+  margin-top: 20px;
+}
+
+.fd-sequence h3 {
+  margin: 0 0 10px;
+  font-size: 1rem;
+  font-weight: 800;
+  color: var(--color-green);
+  text-transform: uppercase;
+  letter-spacing: 0.01em;
+}
+
+.fd-sequence ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 4px;
+}
+
+.fd-sequence li {
+  position: relative;
+  padding-left: 14px;
+  color: var(--color-navy);
+  line-height: 1.5;
+}
+
+.fd-sequence li::before {
+  content: "-";
+  position: absolute;
+  left: 0;
+}
+
+.fd-programme-visual {
+  position: sticky;
+  top: 84px;
+  border-radius: 14px;
+  overflow: hidden;
+}
+
+.fd-programme-visual img {
+  display: block;
+  width: 100%;
+  height: 420px;
+  object-fit: cover;
+}
+
+/* Inscription */
+.fd-signup {
+  padding: 56px 0;
+  background: #ffffff;
+}
+
+.fd-signup-card {
+  padding: 40px 44px 44px;
+  text-align: center;
+}
+
+.fd-signup-card h2 {
+  margin: 20px 0 28px;
+  font-family: var(--font-sans), sans-serif;
+  font-size: clamp(1.6rem, 3vw, 2.2rem);
+  font-weight: 800;
+  color: var(--color-navy);
+}
+
+.fd-signup-card .session-booking-stack {
+  text-align: left;
+}
+
+/* FAQ + formations complémentaires */
+.fd-faq {
+  padding: 24px 0 56px;
+  background: #ffffff;
+}
+
+.fd-faq .home-faq-aside h2 {
+  margin-top: 24px;
+}
+
+.fd-related {
+  padding: 24px 0 72px;
+  background: #ffffff;
+}
+
+.fd-related h2 {
+  margin: 18px 0 32px;
+  font-family: var(--font-sans), sans-serif;
+  font-weight: 400;
+  font-size: clamp(1.7rem, 3.2vw, 2.4rem);
+  color: var(--color-navy);
+}
+
+.fd-related h2 em {
+  font-style: italic;
+  font-weight: 800;
+}
+
+@media (max-width: 1024px) {
+  .fd-head-layout,
+  .fd-body-layout,
+  .fd-programme-layout,
+  .fd-purpose-layout {
+    grid-template-columns: 1fr;
+  }
+
+  .fd-aside,
+  .fd-programme-visual {
+    position: static;
+  }
+}
+
+@media (max-width: 640px) {
+  .fd-banner {
+    height: 200px;
+  }
+
+  .fd-facts,
+  .fd-split {
+    grid-template-columns: 1fr;
+  }
+
+  .fd-local {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .fd-card,
+  .fd-signup-card {
+    padding: 24px 20px;
+  }
+}
+
 /* Admin drawer — right-sliding panel used by the admin workspace (Sessions, Inscrits). */
 .admin-drawer-root {
   position: fixed;

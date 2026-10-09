@@ -41,6 +41,8 @@ type FormationDraft = {
   priceDetails: string;
   successRate: string;
   handicapPolicy: string;
+  levelLabel: string;
+  cpfEligible: boolean;
 };
 
 type SessionDraft = {
@@ -192,6 +194,8 @@ function toFormationDraft(formation?: Formation): FormationDraft {
       priceDetails: "",
       successRate: "",
       handicapPolicy: "",
+      levelLabel: "",
+      cpfEligible: false,
     };
   }
 
@@ -216,6 +220,8 @@ function toFormationDraft(formation?: Formation): FormationDraft {
     priceDetails: formation.priceDetails,
     successRate: formation.successRate,
     handicapPolicy: formation.handicapPolicy,
+    levelLabel: formation.levelLabel || "",
+    cpfEligible: Boolean(formation.cpfEligible),
   };
 }
 
@@ -1234,6 +1240,8 @@ export function AdminWorkspace({
       priceDetails: formationDraft.priceDetails.trim(),
       successRate: formationDraft.successRate.trim(),
       handicapPolicy: formationDraft.handicapPolicy.trim(),
+      levelLabel: formationDraft.levelLabel.trim(),
+      cpfEligible: formationDraft.cpfEligible,
     };
 
     const isEditing = Boolean(editingFormationSlug);
@@ -1870,6 +1878,15 @@ export function AdminWorkspace({
                 </label>
                 <label><span>Public</span><input className="ui-field" value={formationDraft.audience} onChange={(event) => setFormationDraft((current) => ({ ...current, audience: event.target.value }))} required /></label>
                 <label><span>Tarif</span><input className="ui-field" value={formationDraft.price} onChange={(event) => setFormationDraft((current) => ({ ...current, price: event.target.value }))} required /></label>
+                <label>
+                  <span>Niveau (optionnel)</span>
+                  <input className="ui-field" value={formationDraft.levelLabel} onChange={(event) => setFormationDraft((current) => ({ ...current, levelLabel: event.target.value }))} placeholder="Niveau 1" />
+                  <small className="admin-field-hint">Affiché en italique après le titre, sur la carte et la page formation.</small>
+                </label>
+                <label className="admin-checkbox-item">
+                  <input type="checkbox" checked={formationDraft.cpfEligible} onChange={(event) => setFormationDraft((current) => ({ ...current, cpfEligible: event.target.checked }))} />
+                  <span>Finançable CPF</span>
+                </label>
               </div></div>
               <div className="admin-form-section" id="formation-section-contenu"><h3>Contenu</h3>
                 <label>
