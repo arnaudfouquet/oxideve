@@ -6892,6 +6892,357 @@ main {
   }
 }
 
+/* ===================== QUI SOMMES-NOUS ===================== */
+
+.qsn-hero {
+  position: relative;
+  background: var(--color-light);
+  overflow: hidden;
+}
+
+.qsn-hero-inner {
+  position: relative;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1.05fr);
+  gap: 40px;
+  align-items: center;
+  width: min(1200px, calc(100% - 32px));
+  margin: 0 auto;
+  min-height: 620px;
+  padding: 56px 0 0;
+}
+
+.qsn-hero-copy {
+  position: relative;
+  z-index: 1;
+  padding-bottom: 56px;
+}
+
+.qsn-hero-copy h1 {
+  margin: 0 0 26px;
+  font-family: var(--font-sans), sans-serif;
+  font-weight: 500;
+  font-size: clamp(1.9rem, 3.6vw, 2.9rem);
+  line-height: 1.12;
+  color: var(--color-navy);
+}
+
+.qsn-hero-copy h1 strong {
+  font-weight: 800;
+}
+
+.qsn-hero-copy h1 em {
+  font-style: italic;
+  font-weight: 800;
+}
+
+.qsn-hero-copy p {
+  margin: 0 0 18px;
+  max-width: 480px;
+  color: var(--color-navy);
+  line-height: 1.6;
+}
+
+.qsn-hero-copy .ui-button {
+  margin-top: 14px;
+}
+
+.qsn-hero-visual {
+  position: relative;
+  align-self: end;
+  display: flex;
+  align-items: flex-end;
+  gap: 20px;
+}
+
+.qsn-hero-visual img {
+  display: block;
+  width: 100%;
+  max-width: 460px;
+  height: auto;
+}
+
+.qsn-hero-caption {
+  margin: 0 0 90px;
+  display: grid;
+  gap: 2px;
+  color: var(--color-navy);
+  font-size: 0.95rem;
+  white-space: nowrap;
+}
+
+.qsn-hero-caption strong {
+  font-weight: 800;
+}
+
+.qsn-hero-caption em {
+  font-style: italic;
+}
+
+/* Notre organisme */
+.qsn-organisme {
+  padding: 64px 0;
+  background: #ffffff;
+}
+
+.qsn-organisme-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1.25fr) minmax(0, 0.75fr);
+  gap: 40px;
+  align-items: center;
+}
+
+.qsn-organisme-card {
+  padding: 40px 44px;
+  border-radius: 22px;
+  background: var(--color-green-pale);
+}
+
+.qsn-organisme-card h2 {
+  margin: 0 0 20px;
+  font-family: var(--font-sans), sans-serif;
+  font-size: clamp(1.5rem, 2.6vw, 2rem);
+  font-weight: 800;
+  color: var(--color-green);
+}
+
+.qsn-organisme-card p {
+  margin: 0 0 16px;
+  color: var(--color-navy);
+  line-height: 1.6;
+}
+
+.qsn-organisme-goal {
+  font-style: italic;
+  font-weight: 700;
+}
+
+.qsn-organisme-schema {
+  display: block;
+  width: 100%;
+  max-width: 380px;
+  height: auto;
+  margin: 0 auto;
+}
+
+/* Notre présence */
+.qsn-presence {
+  padding: 24px 0 64px;
+  background: #ffffff;
+}
+
+.qsn-section-title {
+  margin: 0 0 32px;
+  font-family: var(--font-sans), sans-serif;
+  font-size: clamp(1.5rem, 2.8vw, 2.1rem);
+  font-weight: 800;
+  color: var(--color-navy);
+}
+
+.qsn-section-title span {
+  font-weight: 400;
+}
+
+/* Offre de formation */
+.qsn-offer {
+  padding: 64px 0;
+  background: var(--color-light);
+}
+
+.qsn-category-text {
+  color: var(--color-muted);
+  font-size: 0.92rem;
+  line-height: 1.45;
+}
+
+.qsn-offer .home-category-foot {
+  align-items: flex-end;
+  gap: 14px;
+}
+
+.qsn-offer .home-category-accent-title {
+  font-size: 1.15rem;
+  font-weight: 500;
+  line-height: 1.45;
+}
+
+.qsn-offer .home-category-accent-title strong {
+  font-weight: 800;
+}
+
+/* Notre approche */
+.qsn-approach {
+  padding: 64px 0;
+  background: var(--color-navy);
+}
+
+.qsn-approach h2 {
+  margin: 0 0 48px;
+  font-family: var(--font-sans), sans-serif;
+  font-size: clamp(1.6rem, 3vw, 2.2rem);
+  font-weight: 800;
+  color: #ffffff;
+  text-align: center;
+}
+
+.qsn-approach-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 40px;
+}
+
+.qsn-approach-item {
+  text-align: center;
+  color: #ffffff;
+}
+
+.qsn-approach-item img {
+  width: 72px;
+  height: 72px;
+  object-fit: contain;
+  margin-bottom: 22px;
+}
+
+.qsn-approach-item h3 {
+  margin: 0 0 18px;
+  font-family: var(--font-sans), sans-serif;
+  font-size: 1.3rem;
+  font-weight: 800;
+}
+
+.qsn-approach-item p {
+  margin: 0;
+  font-weight: 700;
+  line-height: 1.5;
+}
+
+/* Engagements + projet */
+.qsn-closing {
+  padding: 64px 0 80px;
+  background: #ffffff;
+}
+
+.qsn-closing-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: 48px;
+  align-items: start;
+}
+
+.qsn-commitments {
+  padding: 36px 40px 40px;
+  border-radius: 22px;
+  background: var(--color-blue-pale);
+}
+
+.qsn-commitments h2 {
+  margin: 0 0 22px;
+  font-family: var(--font-sans), sans-serif;
+  font-size: clamp(1.5rem, 2.6vw, 2rem);
+  font-weight: 800;
+  color: var(--color-blue);
+}
+
+.qsn-commitments h3 {
+  margin: 0 0 8px;
+  font-family: var(--font-sans), sans-serif;
+  font-size: 1.25rem;
+  font-weight: 800;
+  color: var(--color-navy);
+}
+
+.qsn-commitments p {
+  margin: 0 0 18px;
+  color: var(--color-navy);
+  line-height: 1.55;
+}
+
+.qsn-commitment-cta {
+  margin-bottom: 30px;
+  background: var(--color-blue);
+  --arrow-color: var(--color-blue);
+}
+
+.qsn-project h2 {
+  margin: 0 0 26px;
+  font-family: var(--font-sans), sans-serif;
+  font-size: clamp(1.6rem, 3vw, 2.2rem);
+  font-weight: 800;
+  color: var(--color-navy);
+  line-height: 1.2;
+}
+
+.qsn-project-card {
+  padding: 32px 34px 36px;
+  border-radius: 22px;
+  background: #ffffff;
+  box-shadow: 0 12px 32px rgba(0, 77, 109, 0.12);
+}
+
+.qsn-project-card h3 {
+  margin: 0 0 14px;
+  font-family: var(--font-sans), sans-serif;
+  font-size: 1.4rem;
+  font-weight: 800;
+  color: var(--color-green);
+}
+
+.qsn-project-card p {
+  margin: 0 0 22px;
+  color: var(--color-navy);
+  line-height: 1.55;
+}
+
+.qsn-project-cta {
+  display: flex;
+  width: fit-content;
+  margin-bottom: 14px;
+  background: var(--color-green);
+}
+
+@media (max-width: 1024px) {
+  .qsn-hero-inner,
+  .qsn-organisme-layout,
+  .qsn-closing-layout {
+    grid-template-columns: 1fr;
+  }
+
+  .qsn-hero-inner {
+    min-height: 0;
+    padding-bottom: 40px;
+  }
+
+  .qsn-hero-visual {
+    align-self: center;
+  }
+
+  .qsn-hero-caption {
+    margin-bottom: 40px;
+  }
+
+  .qsn-approach-grid {
+    grid-template-columns: 1fr;
+    gap: 36px;
+  }
+}
+
+@media (max-width: 640px) {
+  .qsn-hero-visual {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .qsn-hero-caption {
+    margin-bottom: 0;
+    white-space: normal;
+  }
+
+  .qsn-organisme-card,
+  .qsn-commitments {
+    padding: 26px 22px;
+  }
+}
+
 /* Admin drawer — right-sliding panel used by the admin workspace (Sessions, Inscrits). */
 .admin-drawer-root {
   position: fixed;

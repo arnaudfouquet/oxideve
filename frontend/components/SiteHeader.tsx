@@ -7,7 +7,7 @@ import { Container } from "@/components/ui";
 const navItems = [
   { href: "/qui-sommes-nous", label: "Qui sommes-nous" },
   { href: "/formations", label: "Formations" },
-  { href: "/diagnostic-parcours", label: "Trouver votre formation" },
+  { href: "/financement", label: "Financement" },
   { href: "/actualites", label: "Actualités" },
 ];
 
