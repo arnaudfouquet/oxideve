@@ -1,8 +1,9 @@
 import type { Metadata } from "next";
+import Link from "next/link";
 import { notFound } from "next/navigation";
-import { FormationCard } from "@/components/FormationCard";
-import { Container, Section, Text, Title } from "@/components/ui";
-import { getArticleBySlug, getFormationBySlug } from "@/lib/content";
+import { ButtonLink, Container } from "@/components/ui";
+import { NewsCard, formatArticleDate, getArticleCover } from "@/components/NewsCard";
+import { getArticleBySlug, getArticles, getFormationBySlug } from "@/lib/content";
 
 type Props = {
   params: Promise<{ slug: string }>;
@@ -30,34 +31,65 @@ export default async function ArticlePage({ params }: Props) {
 
   const featuredFormation = article.featuredFormationSlug ? await getFormationBySlug(article.featuredFormationSlug) : undefined;
 
+  const others = (await getArticles())
+    .filter((item) => item.slug !== article.slug)
+    .sort((a, b) => b.publishedAt.localeCompare(a.publishedAt))
+    .slice(0, 3);
+
   return (
-    <Section>
+    <div className="news-article">
+      <div className="news-article-hero">
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img src={getArticleCover(article)} alt="" />
+        <span className="news-article-hero-veil" aria-hidden="true" />
+      </div>
+
       <Container>
-        <article className="article-detail-shell">
-          {article.coverImageUrl ? (
-            <div className="article-detail-hero">
-              <img src={article.coverImageUrl} alt="" />
-            </div>
-          ) : null}
-          <Title as="h1" eyebrow={article.category} title={article.title} description={article.excerpt} />
-          <div className="article-meta-row">
+        <Link className="news-back" href="/actualites">
+          Retour aux actualites
+        </Link>
+
+        <header className="news-article-head">
+          <span className="news-card-chip news-article-chip">{article.category}</span>
+          <h1 className="news-article-title">{article.title}</h1>
+          <p className="news-article-lead">{article.excerpt}</p>
+          <div className="news-card-meta news-article-meta">
+            <span>{formatArticleDate(article.publishedAt)}</span>
+            <span className="news-card-dot" aria-hidden="true" />
             <span>{article.readingTime}</span>
-            <span>{new Intl.DateTimeFormat("fr-FR", { day: "2-digit", month: "long", year: "numeric" }).format(new Date(article.publishedAt))}</span>
           </div>
-          <div className="article-body">
-            {article.body.map((paragraph) => (
-              <Text key={paragraph} size="lg">{paragraph}</Text>
-            ))}
-          </div>
-        </article>
+        </header>
+
+        <div className="news-article-body">
+          {article.body.map((paragraph) => (
+            <p key={paragraph}>{paragraph}</p>
+          ))}
+        </div>
 
         {featuredFormation ? (
-          <div className="article-related-block">
-            <Title eyebrow="Formation associee" title="Continuer avec le parcours concerne" />
-            <FormationCard formation={featuredFormation} tone="highlight" />
-          </div>
+          <aside className="news-formation-box">
+            <span className="news-pill news-formation-pill">Formation associee</span>
+            <h2 className="news-formation-title">{featuredFormation.title}</h2>
+            <p className="news-formation-copy">{featuredFormation.summary}</p>
+            <ButtonLink className="home-cta-arrow news-formation-cta" href={`/formations/${featuredFormation.slug}`}>
+              Decouvrir la formation
+            </ButtonLink>
+          </aside>
+        ) : null}
+
+        {others.length > 0 ? (
+          <section className="news-section news-more">
+            <h2 className="news-section-title">
+              Nos dernieres <em>actualites</em>
+            </h2>
+            <div className="news-grid">
+              {others.map((item) => (
+                <NewsCard article={item} key={item.slug} />
+              ))}
+            </div>
+          </section>
         ) : null}
       </Container>
-    </Section>
+    </div>
   );
 }
