@@ -16,6 +16,9 @@ export default async function FormationsPage() {
   const categories = Array.from(new Set(formations.map((formation) => formation.category))).sort((left, right) =>
     left.localeCompare(right, "fr"),
   );
+  const durations = Array.from(new Set(formations.map((formation) => formation.duration))).sort((left, right) =>
+    left.localeCompare(right, "fr", { numeric: true }),
+  );
 
   return (
     <section className="catalog-page">
@@ -29,7 +32,7 @@ export default async function FormationsPage() {
           <img className="catalog-intro-illustration" alt="" src="/assets/home/illustration-home.png" />
         </div>
 
-        <FormationCatalog categories={categories} formations={formations} />
+        <FormationCatalog categories={categories} durations={durations} formations={formations} />
       </Container>
     </section>
   );
