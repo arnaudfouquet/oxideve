@@ -67,7 +67,7 @@ export default function QuiSommesNousPage() {
   return (
     <>
       {/* HERO */}
-      <section className="qsn-hero">
+      <section className="qsn-hero" style={{ backgroundImage: "url(/assets/qsn/severine.webp)" }}>
         <div className="qsn-hero-inner">
           <div className="qsn-hero-copy">
             <h1>
@@ -94,36 +94,30 @@ export default function QuiSommesNousPage() {
             </ButtonLink>
           </div>
 
-          <div className="qsn-hero-visual">
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img alt="Séverine Germanneau, responsable Oxideve" src="/assets/qsn/severine.webp" />
-            <p className="qsn-hero-caption">
-              <strong>Severine GERMANNEAU</strong>
-              <em>Responsable OXIDEVE</em>
-            </p>
-          </div>
+          <p className="qsn-hero-caption">
+            <strong>Severine GERMANNEAU</strong>
+            <em>Responsable OXIDEVE</em>
+          </p>
         </div>
       </section>
 
       {/* NOTRE ORGANISME */}
       <section className="qsn-organisme">
-        <Container>
-          <div className="qsn-organisme-layout">
-            <div className="qsn-organisme-card">
-              <h2>Notre organisme</h2>
-              <p>
-                Oxideve propose des formations professionnelles dans des domaines variés, avec une expertise reconnue dans les
-                métiers techniques, de l&apos;énergie et du génie climatique.
-              </p>
-              <p className="qsn-organisme-goal">
-                Notre objectif : transmettre des connaissances et des méthodes directement applicables dans le quotidien
-                professionnel.
-              </p>
-            </div>
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img className="qsn-organisme-schema" alt="" src="/assets/qsn/schema.webp" />
+        <div className="qsn-organisme-layout">
+          <div className="qsn-organisme-card">
+            <h2>Notre organisme</h2>
+            <p>
+              Oxideve propose des formations professionnelles dans des domaines variés, avec une expertise reconnue dans les
+              métiers techniques, de l&apos;énergie et du génie climatique.
+            </p>
+            <p className="qsn-organisme-goal">
+              Notre objectif : transmettre des connaissances et des méthodes directement applicables dans le quotidien
+              professionnel.
+            </p>
           </div>
-        </Container>
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img className="qsn-organisme-schema" alt="" src="/assets/qsn/schema.webp" />
+        </div>
       </section>
 
       {/* NOTRE PRÉSENCE */}
@@ -142,7 +136,7 @@ export default function QuiSommesNousPage() {
       <section className="qsn-offer">
         <Container>
           <h2 className="qsn-section-title">Une offre de formation diversifiée</h2>
-          <div className="home-category-grid">
+          <div className="home-category-grid qsn-category-grid">
             {categories.map((category) => (
               <a className="home-category-card" href="/formations" key={category.label}>
                 {/* eslint-disable-next-line @next/next/no-img-element */}

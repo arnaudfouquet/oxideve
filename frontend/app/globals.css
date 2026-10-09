@@ -6896,26 +6896,38 @@ main {
 
 .qsn-hero {
   position: relative;
-  background: var(--color-light);
+  background-color: var(--color-light);
+  background-position: right center;
+  background-repeat: no-repeat;
+  background-size: auto 100%;
   overflow: hidden;
+}
+
+/* Voile blanc sur la gauche pour garder le texte lisible par-dessus la photo. */
+.qsn-hero::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg, rgba(238, 238, 238, 0.97) 0%, rgba(238, 238, 238, 0.92) 38%, rgba(238, 238, 238, 0) 62%);
+  pointer-events: none;
 }
 
 .qsn-hero-inner {
   position: relative;
+  z-index: 1;
   display: grid;
-  grid-template-columns: minmax(0, 1fr) minmax(0, 1.05fr);
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
   gap: 40px;
   align-items: center;
   width: min(1200px, calc(100% - 32px));
   margin: 0 auto;
   min-height: 620px;
-  padding: 56px 0 0;
+  padding: 56px 0;
 }
 
 .qsn-hero-copy {
   position: relative;
   z-index: 1;
-  padding-bottom: 56px;
 }
 
 .qsn-hero-copy h1 {
@@ -6947,23 +6959,10 @@ main {
   margin-top: 14px;
 }
 
-.qsn-hero-visual {
-  position: relative;
-  align-self: end;
-  display: flex;
-  align-items: flex-end;
-  gap: 20px;
-}
-
-.qsn-hero-visual img {
-  display: block;
-  width: 100%;
-  max-width: 460px;
-  height: auto;
-}
-
 .qsn-hero-caption {
-  margin: 0 0 90px;
+  margin: 0;
+  justify-self: end;
+  align-self: center;
   display: grid;
   gap: 2px;
   color: var(--color-navy);
@@ -6985,16 +6984,19 @@ main {
   background: #ffffff;
 }
 
+/* La carte verte part du bord gauche de l'écran, l'illustration reste alignée
+   sur la gouttière droite du conteneur. */
 .qsn-organisme-layout {
   display: grid;
-  grid-template-columns: minmax(0, 1.25fr) minmax(0, 0.75fr);
-  gap: 40px;
+  grid-template-columns: minmax(0, 1.1fr) minmax(0, 0.9fr);
+  gap: 48px;
   align-items: center;
+  padding-right: max(16px, calc(50vw - 600px));
 }
 
 .qsn-organisme-card {
-  padding: 40px 44px;
-  border-radius: 22px;
+  padding: 48px 56px;
+  border-radius: 0 22px 22px 0;
   background: var(--color-green-pale);
 }
 
@@ -7060,6 +7062,44 @@ main {
   gap: 14px;
 }
 
+/* La flèche ne doit pas se comprimer face à une description longue. */
+.qsn-offer .home-category-arrow {
+  flex: 0 0 38px;
+}
+
+/* 3 + 3 + 2 : les 6 premières cartes sur deux lignes de trois, puis la
+   dernière ligne partagée 50/50 entre Climatisation et le bloc CTA. */
+.qsn-category-grid {
+  grid-template-columns: repeat(6, 1fr);
+}
+
+.qsn-category-grid > * {
+  grid-column: span 2;
+}
+
+.qsn-category-grid > :nth-last-child(2),
+.qsn-category-grid > :last-child {
+  grid-column: span 3;
+}
+
+@media (max-width: 960px) {
+  .qsn-category-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .qsn-category-grid > *,
+  .qsn-category-grid > :nth-last-child(2),
+  .qsn-category-grid > :last-child {
+    grid-column: span 1;
+  }
+}
+
+@media (max-width: 640px) {
+  .qsn-category-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
 .qsn-offer .home-category-accent-title {
   font-size: 1.15rem;
   font-weight: 500;
@@ -7097,10 +7137,11 @@ main {
 }
 
 .qsn-approach-item img {
+  display: block;
   width: 72px;
   height: 72px;
   object-fit: contain;
-  margin-bottom: 22px;
+  margin: 0 auto 22px;
 }
 
 .qsn-approach-item h3 {
@@ -7159,6 +7200,7 @@ main {
 
 .qsn-commitment-cta {
   margin-bottom: 30px;
+  border-radius: 10px;
   background: var(--color-blue);
   --arrow-color: var(--color-blue);
 }
@@ -7197,6 +7239,7 @@ main {
   display: flex;
   width: fit-content;
   margin-bottom: 14px;
+  border-radius: 10px;
   background: var(--color-green);
 }
 
