@@ -340,7 +340,7 @@ main {
   align-items: center;
   min-height: 32px;
   color: var(--color-white);
-  font-size: 1.4rem;
+  font-size: 0.95rem;
 }
 
 .main-nav-link::after {
@@ -3902,12 +3902,37 @@ main {
   width: auto;
 }
 
+/* Pill transparent bordé de blanc, libellé en minuscules + flèche ronde. */
 .header-contact-link {
-  min-height: 34px;
-  padding: 0 20px;
-  border-radius: 12px;
+  gap: 10px;
+  min-height: 36px;
+  padding: 0 6px 0 18px;
+  border: 1.5px solid rgba(255, 255, 255, 0.9);
+  border-radius: 999px;
+  background: transparent;
+  color: #ffffff;
+  font-size: 0.88rem;
+  font-weight: 800;
+  text-transform: lowercase;
+  transition: background-color 160ms ease, color 160ms ease;
+}
+
+.header-contact-link::after {
+  content: "›";
+  display: inline-grid;
+  place-items: center;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: #ffffff;
   color: var(--color-blue);
-  font-size: 1.2rem;
+  font-size: 1rem;
+  font-weight: 800;
+  line-height: 1;
+}
+
+.header-contact-link:hover {
+  background: rgba(255, 255, 255, 0.14);
 }
 
 .landing-hero {
@@ -6912,21 +6937,23 @@ main {
 
 /* ===================== QUI SOMMES-NOUS ===================== */
 
+/* La photo est cadrée pour amener Séverine vers le centre-droit, ce qui
+   dégage la zone sous la légende. */
 .qsn-hero {
   position: relative;
   background-color: var(--color-light);
-  background-position: right center;
+  background-position: 62% center;
   background-repeat: no-repeat;
-  background-size: auto 100%;
+  background-size: cover;
   overflow: hidden;
 }
 
-/* Voile blanc sur la gauche pour garder le texte lisible par-dessus la photo. */
+/* Voile clair à gauche pour garder le texte lisible par-dessus la photo. */
 .qsn-hero::before {
   content: "";
   position: absolute;
   inset: 0;
-  background: linear-gradient(90deg, rgba(238, 238, 238, 0.97) 0%, rgba(238, 238, 238, 0.92) 38%, rgba(238, 238, 238, 0) 62%);
+  background: linear-gradient(90deg, rgba(238, 238, 238, 0.97) 0%, rgba(238, 238, 238, 0.9) 34%, rgba(238, 238, 238, 0) 58%);
   pointer-events: none;
 }
 
