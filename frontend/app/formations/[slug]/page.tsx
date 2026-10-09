@@ -122,10 +122,17 @@ export default async function FormationDetailPage({ params }: Props) {
           </div>
 
           <div className="fd-local">
-            <div>
+            <div className="fd-local-copy">
               <p className="fd-local-title">Vous souhaitez suivre cette formation près de chez vous ?</p>
               <p className="fd-local-text">Cette formation peut être organisée partout en France, selon les demandes et les possibilités.</p>
             </div>
+            <svg className="fd-local-pin" viewBox="0 0 48 60" aria-hidden="true">
+              <path
+                d="M24 0C10.7 0 0 10.7 0 24c0 17 24 36 24 36s24-19 24-36C48 10.7 37.3 0 24 0Z"
+                fill="var(--color-navy)"
+              />
+              <circle cx="24" cy="23" r="9" fill="#ffffff" />
+            </svg>
             <ButtonLink href="/contact" variant="primary" className="fd-local-cta home-cta-arrow">
               Faire une demande
             </ButtonLink>
@@ -157,7 +164,8 @@ export default async function FormationDetailPage({ params }: Props) {
       <section className="fd-body">
         <Container>
           <div className="fd-body-layout">
-            <article className="fd-card">
+            <article className="fd-card fd-card-description">
+              <span className="fd-help-badge" aria-hidden="true">?</span>
               <span className="fd-pill fd-pill-blue">Description</span>
               <h2 className="fd-card-title">
                 A qui s&apos;adresse <em>cette</em> <strong>formation</strong>
@@ -247,30 +255,24 @@ export default async function FormationDetailPage({ params }: Props) {
             <p>Projetez-vous avec le détail jour par jour du programme.</p>
           </div>
 
-          <div className="fd-programme-layout">
-            <div className="fd-programme-days">
-              {formation.programme.map((day, dayIndex) => (
-                <article className="fd-day" key={day.title}>
-                  <p className="fd-day-title">
-                    <strong>Jour {dayIndex + 1} :</strong> <em>{day.title}</em>
-                  </p>
-                  {day.sequences.map((sequence) => (
-                    <div className="fd-sequence" key={sequence.title}>
-                      <h3>{sequence.title}</h3>
-                      <ul>
-                        {sequence.points.map((point) => (
-                          <li key={point}>{point}</li>
-                        ))}
-                      </ul>
-                    </div>
-                  ))}
-                </article>
-              ))}
-            </div>
-            <div className="fd-programme-visual">
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img alt="" src={theme.banner} />
-            </div>
+          <div className="fd-programme-days">
+            {formation.programme.map((day, dayIndex) => (
+              <article className="fd-day" key={day.title}>
+                <p className="fd-day-title">
+                  <strong>Jour {dayIndex + 1} :</strong> <em>{day.title}</em>
+                </p>
+                {day.sequences.map((sequence) => (
+                  <div className="fd-sequence" key={sequence.title}>
+                    <h3>{sequence.title}</h3>
+                    <ul>
+                      {sequence.points.map((point) => (
+                        <li key={point}>{point}</li>
+                      ))}
+                    </ul>
+                  </div>
+                ))}
+              </article>
+            ))}
           </div>
         </Container>
       </section>

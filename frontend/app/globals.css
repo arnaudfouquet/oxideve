@@ -6428,8 +6428,10 @@ main {
   line-height: 1.2;
 }
 
-/* Bandeau "près de chez vous" */
+/* Bandeau "près de chez vous" : texte à gauche, pictogramme de localisation
+   qui dépasse en haut au centre, CTA à droite. */
 .fd-local {
+  position: relative;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -6438,6 +6440,20 @@ main {
   padding: 26px 32px;
   border-radius: 14px;
   background: var(--color-light);
+}
+
+.fd-local-copy {
+  flex: 1;
+  min-width: 0;
+}
+
+.fd-local-pin {
+  position: absolute;
+  top: -14px;
+  left: 62%;
+  width: 46px;
+  height: 58px;
+  pointer-events: none;
 }
 
 .fd-local-title {
@@ -6517,6 +6533,28 @@ main {
   border-radius: 18px;
   background: #ffffff;
   box-shadow: 0 10px 30px rgba(0, 77, 109, 0.1);
+}
+
+.fd-card-description {
+  position: relative;
+}
+
+/* Pastille "?" qui déborde du coin haut-droit de la carte Description. */
+.fd-help-badge {
+  position: absolute;
+  top: -22px;
+  right: -22px;
+  display: grid;
+  place-items: center;
+  width: 76px;
+  height: 76px;
+  border-radius: 50%;
+  background: var(--color-blue);
+  color: #ffffff;
+  font-family: var(--font-sans), sans-serif;
+  font-size: 2.2rem;
+  font-weight: 800;
+  line-height: 1;
 }
 
 .fd-card-title {
@@ -6725,13 +6763,6 @@ main {
   font-weight: 700;
 }
 
-.fd-programme-layout {
-  display: grid;
-  grid-template-columns: minmax(0, 1.5fr) minmax(0, 1fr);
-  gap: 28px;
-  align-items: start;
-}
-
 .fd-programme-days {
   display: grid;
   gap: 22px;
@@ -6792,20 +6823,6 @@ main {
   left: 0;
 }
 
-.fd-programme-visual {
-  position: sticky;
-  top: 84px;
-  border-radius: 14px;
-  overflow: hidden;
-}
-
-.fd-programme-visual img {
-  display: block;
-  width: 100%;
-  height: 420px;
-  object-fit: cover;
-}
-
 /* Inscription */
 .fd-signup {
   padding: 56px 0;
@@ -6860,13 +6877,11 @@ main {
 @media (max-width: 1024px) {
   .fd-head-layout,
   .fd-body-layout,
-  .fd-programme-layout,
   .fd-purpose-layout {
     grid-template-columns: 1fr;
   }
 
-  .fd-aside,
-  .fd-programme-visual {
+  .fd-aside {
     position: static;
   }
 }
@@ -6968,6 +6983,7 @@ main {
   color: var(--color-navy);
   font-size: 0.95rem;
   white-space: nowrap;
+  text-align: right;
 }
 
 .qsn-hero-caption strong {
@@ -6984,18 +7000,21 @@ main {
   background: #ffffff;
 }
 
-/* La carte verte part du bord gauche de l'écran, l'illustration reste alignée
-   sur la gouttière droite du conteneur. */
+/* La carte verte part du bord gauche de l'écran ; sa largeur s'arrête à la
+   colonne gauche du conteneur, l'illustration occupe la colonne droite. */
 .qsn-organisme-layout {
   display: grid;
-  grid-template-columns: minmax(0, 1.1fr) minmax(0, 0.9fr);
+  grid-template-columns:
+    minmax(0, calc(max(16px, (100vw - 1200px) / 2) + 580px))
+    minmax(0, 1fr);
   gap: 48px;
   align-items: center;
-  padding-right: max(16px, calc(50vw - 600px));
+  padding-right: max(16px, calc((100vw - 1200px) / 2));
 }
 
 .qsn-organisme-card {
   padding: 48px 56px;
+  padding-left: max(16px, calc((100vw - 1200px) / 2 + 16px));
   border-radius: 0 22px 22px 0;
   background: var(--color-green-pale);
 }
@@ -7942,4 +7961,18 @@ main {
   .fin-support-note {
     flex-direction: column;
   }
+}
+
+/* ===================== ARRONDI COMMUN DES CTA ===================== */
+/* Arrondi léger partagé par les CTA des pages Financement, détail
+   formation et Qui sommes-nous (remplace le pill de .home-cta-arrow). */
+.fin-cta-white,
+.fin-cta-green,
+.fin-cta-blue,
+.fin-support-cta,
+.fd-head-actions .ui-button,
+.fd-local-cta,
+.fd-signup-card .ui-button,
+.session-booking-stack .ui-button {
+  border-radius: 10px;
 }
