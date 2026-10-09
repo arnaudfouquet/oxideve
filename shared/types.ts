@@ -51,6 +51,10 @@ export type Formation = {
   priceDetails: string;
   successRate: string;
   handicapPolicy: string;
+  /** Mention de niveau affichée en italique après le titre (ex. "Niveau 1"). */
+  levelLabel?: string | null;
+  /** Affiche le badge "Finançable CPF" sur les cartes et la page détail. */
+  cpfEligible?: boolean;
   queovalIdentFOR?: string | null;
   videoUrl?: string | null;
   rgeBadge?: RgeBadge | null;

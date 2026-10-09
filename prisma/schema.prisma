@@ -50,6 +50,8 @@ model Formation {
   stats           Json?
   gallery         Json?
   relatedSlugs    Json?
+  levelLabel      String?
+  cpfEligible     Boolean       @default(false)
   createdAt       DateTime      @default(now())
   updatedAt       DateTime      @updatedAt
   sessions        Session[]

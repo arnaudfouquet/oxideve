@@ -109,6 +109,8 @@ const formationSchema = z.object({
   priceDetails: z.string().min(10).max(1000),
   successRate: z.string().min(2).max(120),
   handicapPolicy: z.string().min(10).max(1200),
+  levelLabel: z.string().max(60).optional().default(""),
+  cpfEligible: z.coerce.boolean().optional().default(false),
 });
 
 const sessionSchema = z.object({
