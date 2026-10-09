@@ -293,8 +293,7 @@ main {
 }
 
 .site-header-shell {
-  display: grid;
-  grid-template-columns: minmax(120px, 1fr) auto minmax(120px, 1fr);
+  display: flex;
   align-items: center;
   gap: var(--space-3);
   min-height: 64px;
@@ -322,9 +321,9 @@ main {
 .nav-panel {
   display: flex;
   align-items: center;
-  justify-content: center;
+  justify-content: flex-start;
   gap: var(--space-3);
-  margin: 0 auto;
+  margin: 0 0 0 var(--space-3);
 }
 
 .main-nav {
@@ -1890,7 +1889,7 @@ main {
 
   .site-header-shell {
     position: relative;
-    grid-template-columns: auto auto;
+    flex-wrap: wrap;
   }
 
   .site-header-actions {
@@ -3889,14 +3888,18 @@ main {
 
 .site-header-brand {
   justify-content: flex-start;
+  flex: 0 0 auto;
 }
 
+/* Le bouton Contact est poussé à l'extrémité droite de la barre. */
 .site-header-actions {
   justify-content: flex-end;
+  flex: 0 0 auto;
+  margin-left: auto;
 }
 
 .main-nav {
-  width: 100%;
+  width: auto;
 }
 
 .header-contact-link {
