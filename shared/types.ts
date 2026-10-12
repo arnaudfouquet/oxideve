@@ -53,6 +53,8 @@ export type Formation = {
   handicapPolicy: string;
   /** Mention de niveau affichée en italique après le titre (ex. "Niveau 1"). */
   levelLabel?: string | null;
+  /** Sous-famille au sein de la catégorie (ex. "Électricité" pour la sécurité). */
+  subCategory?: string | null;
   /** Affiche le badge "Finançable CPF" sur les cartes et la page détail. */
   cpfEligible?: boolean;
   queovalIdentFOR?: string | null;

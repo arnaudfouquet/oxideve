@@ -51,6 +51,7 @@ model Formation {
   gallery         Json?
   relatedSlugs    Json?
   levelLabel      String?
+  subCategory     String?
   cpfEligible     Boolean       @default(false)
   createdAt       DateTime      @default(now())
   updatedAt       DateTime      @updatedAt

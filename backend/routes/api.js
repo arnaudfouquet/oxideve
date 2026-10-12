@@ -111,6 +111,7 @@ const formationSchema = z.object({
   successRate: z.string().min(2).max(120),
   handicapPolicy: z.string().min(10).max(1200),
   levelLabel: z.string().max(60).optional().default(""),
+  subCategory: z.string().max(80).optional().default(""),
   cpfEligible: z.coerce.boolean().optional().default(false),
 });
 

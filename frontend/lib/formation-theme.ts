@@ -51,6 +51,21 @@ const FALLBACK: CategoryTheme = {
   blurb: "Découvrez nos formations professionnelles conçues pour la réalité du terrain.",
 };
 
-export function getCategoryTheme(category: string): CategoryTheme {
-  return THEMES[category] || FALLBACK;
+/**
+ * Visuel propre à une sous-famille, quand elle en a un : il prend le pas sur
+ * la bannière de la catégorie parente.
+ */
+// Visuels provisoires (Unsplash) en attendant les photos Oxideve définitives.
+const SUBCATEGORY_BANNERS: Record<string, string> = {
+  Électricité: "https://images.unsplash.com/photo-1621905251189-08b45d6a269e?auto=format&fit=crop&w=1200&q=80",
+  "Travail en hauteur": "https://images.unsplash.com/photo-1504328345606-18bbc8c9d7d1?auto=format&fit=crop&w=1200&q=80",
+  "Sauveteur secouriste du travail": "https://images.unsplash.com/photo-1587556930775-8f3ac1e2a9a0?auto=format&fit=crop&w=1200&q=80",
+  Incendie: "https://images.unsplash.com/photo-1599171571332-7b1a7a0b1b4f?auto=format&fit=crop&w=1200&q=80",
+};
+
+export function getCategoryTheme(category: string, subCategory?: string | null): CategoryTheme {
+  const base = THEMES[category] || FALLBACK;
+  const subBanner = subCategory ? SUBCATEGORY_BANNERS[subCategory] : undefined;
+
+  return subBanner ? { ...base, banner: subBanner } : base;
 }

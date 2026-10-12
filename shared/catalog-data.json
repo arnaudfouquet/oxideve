@@ -3444,7 +3444,8 @@
           "label": "SST Initial",
           "slug": "sst-initial"
         }
-      ]
+      ],
+      "subCategory": "Électricité"
     },
     {
       "id": "habilitation-electrique-br-p-3-jours",
@@ -3572,7 +3573,8 @@
           "label": "SST Initial",
           "slug": "sst-initial"
         }
-      ]
+      ],
+      "subCategory": "Électricité"
     },
     {
       "id": "habilitation-electrique-recyclage-1-5-jour",
@@ -3674,7 +3676,8 @@
           "label": "SST recyclage",
           "slug": "sst-recyclage"
         }
-      ]
+      ],
+      "subCategory": "Électricité"
     },
     {
       "id": "prevention-chutes-hauteur-harnais-pont-fixe",
@@ -3785,7 +3788,8 @@
           "label": "Habilitation électrique BR P 3 jours",
           "slug": "habilitation-electrique-br-p-3-jours"
         }
-      ]
+      ],
+      "subCategory": "Travail en hauteur"
     },
     {
       "id": "sst-initial",
@@ -3908,7 +3912,8 @@
           "label": "Découverte de l'électricité",
           "slug": "decouverte-de-l-electricite"
         }
-      ]
+      ],
+      "subCategory": "Sauveteur secouriste du travail"
     },
     {
       "id": "sst-recyclage",
@@ -4010,7 +4015,8 @@
           "label": "Habilitation Electrique Recyclage",
           "slug": "habilitation-electrique-recyclage-1-5-jour"
         }
-      ]
+      ],
+      "subCategory": "Sauveteur secouriste du travail"
     },
     {
       "id": "decouvrir-intelligence-artificielle",

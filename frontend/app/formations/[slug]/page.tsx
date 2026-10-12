@@ -46,7 +46,7 @@ export default async function FormationDetailPage({ params }: Props) {
     .slice(0, 3);
   const suggestions = (relatedFormations.length ? relatedFormations : similarFormations).slice(0, 3);
 
-  const theme = getCategoryTheme(formation.category);
+  const theme = getCategoryTheme(formation.category, formation.subCategory);
   const sessionCities = Array.from(new Set(sessions.map((session) => session.city)));
   const displayLocation = sessionCities.length ? sessionCities.join(", ") : formation.location;
 

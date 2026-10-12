@@ -42,6 +42,7 @@ type FormationDraft = {
   successRate: string;
   handicapPolicy: string;
   levelLabel: string;
+  subCategory: string;
   cpfEligible: boolean;
 };
 
@@ -195,6 +196,7 @@ function toFormationDraft(formation?: Formation): FormationDraft {
       successRate: "",
       handicapPolicy: "",
       levelLabel: "",
+      subCategory: "",
       cpfEligible: false,
     };
   }
@@ -221,6 +223,7 @@ function toFormationDraft(formation?: Formation): FormationDraft {
     successRate: formation.successRate,
     handicapPolicy: formation.handicapPolicy,
     levelLabel: formation.levelLabel || "",
+    subCategory: formation.subCategory || "",
     cpfEligible: Boolean(formation.cpfEligible),
   };
 }
@@ -743,6 +746,15 @@ export function AdminWorkspace({
     [formations, customCategories],
   );
 
+  /** Sous-catégories déjà saisies, proposées en autocomplétion. */
+  const availableSubCategories = useMemo(
+    () =>
+      Array.from(new Set(formations.map((formation) => formation.subCategory || "")))
+        .filter(Boolean)
+        .sort((a, b) => a.localeCompare(b, "fr")),
+    [formations],
+  );
+
   function handleAddCustomCategory() {
     const category = newCategoryInput.trim();
     if (!category) return;
@@ -1241,6 +1253,7 @@ export function AdminWorkspace({
       successRate: formationDraft.successRate.trim(),
       handicapPolicy: formationDraft.handicapPolicy.trim(),
       levelLabel: formationDraft.levelLabel.trim(),
+      subCategory: formationDraft.subCategory.trim(),
       cpfEligible: formationDraft.cpfEligible,
     };
 
@@ -1892,6 +1905,22 @@ export function AdminWorkspace({
                   <span>Niveau (optionnel)</span>
                   <input className="ui-field" value={formationDraft.levelLabel} onChange={(event) => setFormationDraft((current) => ({ ...current, levelLabel: event.target.value }))} placeholder="Niveau 1" />
                   <small className="admin-field-hint">Affiché en italique après le titre, sur la carte et la page formation.</small>
+                </label>
+                <label>
+                  <span>Sous-catégorie (optionnel)</span>
+                  <input
+                    className="ui-field"
+                    list="formation-subcategories"
+                    value={formationDraft.subCategory}
+                    onChange={(event) => setFormationDraft((current) => ({ ...current, subCategory: event.target.value }))}
+                    placeholder="Électricité"
+                  />
+                  <datalist id="formation-subcategories">
+                    {availableSubCategories.map((item) => (
+                      <option key={item} value={item} />
+                    ))}
+                  </datalist>
+                  <small className="admin-field-hint">Permet de filtrer plus finement dans le catalogue (ex. Électricité, Travail en hauteur).</small>
                 </label>
                 <label className="admin-checkbox-item">
                   <input type="checkbox" checked={formationDraft.cpfEligible} onChange={(event) => setFormationDraft((current) => ({ ...current, cpfEligible: event.target.checked }))} />

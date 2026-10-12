@@ -43,6 +43,7 @@ function FilterGroup({
 
 export function FormationCatalog({ formations, categories, durations, citiesByFormation }: Props) {
   const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
+  const [selectedSubCategories, setSelectedSubCategories] = useState<string[]>([]);
   const [selectedDurations, setSelectedDurations] = useState<string[]>([]);
   const [selectedCities, setSelectedCities] = useState<string[]>([]);
   const [cpfOnly, setCpfOnly] = useState(false);
@@ -74,10 +75,12 @@ export function FormationCatalog({ formations, categories, durations, citiesByFo
    * cela permet de savoir quelles options d'une facette donnent encore des
    * résultats, et donc de masquer celles qui n'en donnent aucun.
    */
-  function matches(formation: Formation, skip?: "category" | "duration" | "city" | "cpf") {
+  function matches(formation: Formation, skip?: "category" | "subCategory" | "duration" | "city" | "cpf") {
     const needle = search.trim().toLowerCase();
 
     if (skip !== "category" && selectedCategories.length && !selectedCategories.includes(formation.category)) return false;
+    if (skip !== "subCategory" && selectedSubCategories.length && !selectedSubCategories.includes(formation.subCategory || ""))
+      return false;
     if (skip !== "duration" && selectedDurations.length && !selectedDurations.includes(formation.duration)) return false;
     if (skip !== "cpf" && cpfOnly && !formation.cpfEligible) return false;
 
@@ -100,7 +103,7 @@ export function FormationCatalog({ formations, categories, durations, citiesByFo
   const results = useMemo(
     () => formations.filter((formation) => matches(formation)),
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [activeMaxPrice, cpfOnly, formations, search, selectedCategories, selectedCities, selectedDurations],
+    [activeMaxPrice, cpfOnly, formations, search, selectedCategories, selectedCities, selectedDurations, selectedSubCategories],
   );
 
   // Options encore pertinentes compte tenu des autres filtres actifs.
@@ -108,13 +111,24 @@ export function FormationCatalog({ formations, categories, durations, citiesByFo
     const pool = formations.filter((formation) => matches(formation, "category"));
     return categories.filter((category) => pool.some((formation) => formation.category === category));
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [activeMaxPrice, categories, cpfOnly, formations, search, selectedCities, selectedDurations]);
+  }, [activeMaxPrice, categories, cpfOnly, formations, search, selectedCities, selectedDurations, selectedSubCategories]);
+
+  // Sous-familles pertinentes (ex. Électricité au sein de Sécurité au travail).
+  const availableSubCategories = useMemo(() => {
+    const pool = formations.filter((formation) => matches(formation, "subCategory"));
+    const values = new Set<string>();
+    pool.forEach((formation) => {
+      if (formation.subCategory) values.add(formation.subCategory);
+    });
+    return Array.from(values).sort((left, right) => left.localeCompare(right, "fr"));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [activeMaxPrice, cpfOnly, formations, search, selectedCategories, selectedCities, selectedDurations, selectedSubCategories]);
 
   const availableDurations = useMemo(() => {
     const pool = formations.filter((formation) => matches(formation, "duration"));
     return durations.filter((duration) => pool.some((formation) => formation.duration === duration));
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [activeMaxPrice, cpfOnly, durations, formations, search, selectedCategories, selectedCities]);
+  }, [activeMaxPrice, cpfOnly, durations, formations, search, selectedCategories, selectedCities, selectedSubCategories]);
 
   const availableCities = useMemo(() => {
     const pool = formations.filter((formation) => matches(formation, "city"));
@@ -127,11 +141,12 @@ export function FormationCatalog({ formations, categories, durations, citiesByFo
   const cpfAvailable = useMemo(
     () => formations.filter((formation) => matches(formation, "cpf")).some((formation) => formation.cpfEligible),
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [activeMaxPrice, formations, search, selectedCategories, selectedCities, selectedDurations],
+    [activeMaxPrice, formations, search, selectedCategories, selectedCities, selectedDurations, selectedSubCategories],
   );
 
   const hasActiveFilters =
     selectedCategories.length > 0 ||
+    selectedSubCategories.length > 0 ||
     selectedDurations.length > 0 ||
     selectedCities.length > 0 ||
     cpfOnly ||
@@ -140,6 +155,7 @@ export function FormationCatalog({ formations, categories, durations, citiesByFo
 
   function resetFilters() {
     setSelectedCategories([]);
+    setSelectedSubCategories([]);
     setSelectedDurations([]);
     setSelectedCities([]);
     setCpfOnly(false);
@@ -185,6 +201,21 @@ export function FormationCatalog({ formations, categories, durations, citiesByFo
                   type="checkbox"
                 />
                 <span>{category}</span>
+              </label>
+            ))}
+          </FilterGroup>
+        ) : null}
+
+        {availableSubCategories.length ? (
+          <FilterGroup title="Spécialité">
+            {availableSubCategories.map((subCategory) => (
+              <label className="cat-check" key={subCategory}>
+                <input
+                  checked={selectedSubCategories.includes(subCategory)}
+                  onChange={() => toggle(selectedSubCategories, setSelectedSubCategories, subCategory)}
+                  type="checkbox"
+                />
+                <span>{subCategory}</span>
               </label>
             ))}
           </FilterGroup>
@@ -274,7 +305,7 @@ export function FormationCatalog({ formations, categories, durations, citiesByFo
 
 /** Carte horizontale de la liste de résultats. */
 function FormationResultCard({ formation, cities }: { formation: Formation; cities: string[] }) {
-  const theme = getCategoryTheme(formation.category);
+  const theme = getCategoryTheme(formation.category, formation.subCategory);
   const location = cities.length ? cities.join(", ") : formation.location;
 
   return (
