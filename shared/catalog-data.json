@@ -3913,7 +3913,8 @@
           "slug": "decouverte-de-l-electricite"
         }
       ],
-      "subCategory": "Sauveteur secouriste du travail"
+      "subCategory": "Sauveteur secouriste du travail",
+      "cpfEligible": true
     },
     {
       "id": "sst-recyclage",
