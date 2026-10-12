@@ -264,6 +264,11 @@ type DetailFieldProps = {
   copyToClipboard: (key: string, text: string) => void;
 };
 
+/** Sous-familles prévues par catégorie, proposées à la saisie. */
+const SUB_CATEGORY_SUGGESTIONS: Record<string, string[]> = {
+  "Sécurité au travail": ["Électricité", "Travail en hauteur", "Sauveteur secouriste du travail", "Incendie"],
+};
+
 const NAV_ITEMS: { value: Section; label: string; icon: string }[] = [
   { value: "dashboard", label: "Dashboard", icon: "◧" },
   { value: "sessions", label: "Sessions", icon: "◷" },
@@ -746,14 +751,15 @@ export function AdminWorkspace({
     [formations, customCategories],
   );
 
-  /** Sous-catégories déjà saisies, proposées en autocomplétion. */
-  const availableSubCategories = useMemo(
-    () =>
-      Array.from(new Set(formations.map((formation) => formation.subCategory || "")))
-        .filter(Boolean)
-        .sort((a, b) => a.localeCompare(b, "fr")),
-    [formations],
-  );
+  /**
+   * Sous-catégories proposées : les valeurs de référence prévues pour la
+   * catégorie sélectionnée, complétées par celles déjà saisies ailleurs.
+   */
+  const availableSubCategories = useMemo(() => {
+    const reference = SUB_CATEGORY_SUGGESTIONS[formationDraft.category] || [];
+    const used = formations.map((formation) => formation.subCategory || "").filter(Boolean);
+    return Array.from(new Set([...reference, ...used])).sort((a, b) => a.localeCompare(b, "fr"));
+  }, [formationDraft.category, formations]);
 
   function handleAddCustomCategory() {
     const category = newCategoryInput.trim();
@@ -1908,18 +1914,16 @@ export function AdminWorkspace({
                 </label>
                 <label>
                   <span>Sous-catégorie (optionnel)</span>
-                  <input
+                  <select
                     className="ui-field"
-                    list="formation-subcategories"
-                    value={formationDraft.subCategory}
+                    value={availableSubCategories.includes(formationDraft.subCategory) ? formationDraft.subCategory : ""}
                     onChange={(event) => setFormationDraft((current) => ({ ...current, subCategory: event.target.value }))}
-                    placeholder="Électricité"
-                  />
-                  <datalist id="formation-subcategories">
+                  >
+                    <option value="">Aucune</option>
                     {availableSubCategories.map((item) => (
-                      <option key={item} value={item} />
+                      <option key={item} value={item}>{item}</option>
                     ))}
-                  </datalist>
+                  </select>
                   <small className="admin-field-hint">Permet de filtrer plus finement dans le catalogue (ex. Électricité, Travail en hauteur).</small>
                 </label>
                 <label className="admin-checkbox-item">
