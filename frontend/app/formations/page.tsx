@@ -35,10 +35,15 @@ export default async function FormationsPage() {
         <div className="catalog-intro">
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img className="catalog-intro-illustration" alt="" src="/assets/home/illustration-home.png" />
-          <h1>
-            Nos formations <em>professionnelles</em>
-          </h1>
-          <p>Trouvez la formation adaptée à votre activité, à vos objectifs et à vos besoins parmi l&apos;ensemble de nos domaines.</p>
+          <div className="catalog-intro-copy">
+            <h1>
+              Nos formations <em>professionnelles</em>
+            </h1>
+            <p>
+              Trouvez la formation adaptée à votre activité, à vos objectifs et à vos besoins parmi l&apos;ensemble de nos
+              domaines.
+            </p>
+          </div>
         </div>
 
         <FormationCatalog

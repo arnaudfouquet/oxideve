@@ -328,14 +328,14 @@ function FormationResultCard({ formation, cities }: { formation: Formation; citi
           <li>
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img alt="" src="/assets/formations/icone-lieu.svg" />
-            <span className="cat-result-meta-label">Ville</span>
-            <strong className="cat-result-meta-value">{location}</strong>
+            <span className="cat-result-meta-label">Ville :</span>
+            <span className="cat-result-meta-value">{location}</span>
           </li>
           <li>
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img alt="" src="/assets/formations/icone-public.svg" />
-            <span className="cat-result-meta-label">Pour qui&nbsp;?</span>
-            <strong className="cat-result-meta-value">{formation.audience}</strong>
+            <span className="cat-result-meta-label">Pour qui&nbsp;:</span>
+            <span className="cat-result-meta-value">{formation.audience}</span>
           </li>
         </ul>
 
