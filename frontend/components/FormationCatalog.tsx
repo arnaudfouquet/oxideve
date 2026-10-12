@@ -17,6 +17,14 @@ type Props = {
   sessionsByFormation: Record<string, SessionSummary[]>;
 };
 
+/** Minuscules sans accent, pour que "securite" trouve "Sécurité". */
+function normalize(value: string) {
+  return value
+    .normalize("NFD")
+    .replace(/[̀-ͯ]/g, "")
+    .toLowerCase();
+}
+
 /** "2027-03-23" -> "2027-03", utilisé comme clé de filtre par mois. */
 function monthKey(date: string) {
   return date.slice(0, 7);
@@ -106,7 +114,7 @@ export function FormationCatalog({ formations, categories, durations, citiesByFo
    * résultats, et donc de masquer celles qui n'en donnent aucun.
    */
   function matches(formation: Formation, skip?: "category" | "subCategory" | "duration" | "city" | "cpf" | "month") {
-    const needle = search.trim().toLowerCase();
+    const needle = normalize(search.trim());
 
     if (skip !== "category" && selectedCategories.length && !selectedCategories.includes(formation.category)) return false;
     if (skip !== "subCategory" && selectedSubCategories.length && !selectedSubCategories.includes(formation.subCategory || ""))
@@ -128,8 +136,24 @@ export function FormationCatalog({ formations, categories, durations, citiesByFo
     if (price !== null && activeMaxPrice && price > activeMaxPrice) return false;
 
     if (needle) {
-      const haystack = `${formation.title} ${formation.summary} ${formation.category} ${formation.location} ${formation.audience}`.toLowerCase();
-      if (!haystack.includes(needle)) return false;
+      // On cherche aussi dans les villes réellement programmées : le champ
+      // `location` ne porte que le lieu par défaut de la formation.
+      const cities = (citiesByFormation[formation.slug] || []).join(" ");
+      const haystack = [
+        formation.title,
+        formation.summary,
+        formation.category,
+        formation.subCategory,
+        formation.levelLabel,
+        formation.location,
+        cities,
+        formation.audience,
+      ]
+        .filter(Boolean)
+        .join(" ")
+        .toLowerCase();
+
+      if (!normalize(haystack).includes(needle)) return false;
     }
 
     return true;
