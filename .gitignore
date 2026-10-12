@@ -12,3 +12,6 @@ backend/uploads/*
 !backend/uploads/articles
 !backend/uploads/articles/.gitkeep
 frontend/tsconfig.tsbuildinfo
+
+# Base MySQL de développement local
+.local-mysql/

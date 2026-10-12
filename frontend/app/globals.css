@@ -5970,12 +5970,17 @@ main {
   background: #ffffff;
 }
 
+/* Le catalogue déborde du conteneur standard pour exploiter toute la largeur. */
+.catalog-page > .ui-container {
+  width: min(1700px, calc(100% - 64px));
+}
+
 /* Illustration à gauche, titre et chapô à droite. L'illustration occupe la
    largeur de la sidebar pour que le titre s'aligne sur la colonne de
    résultats. */
 .catalog-intro {
   display: grid;
-  grid-template-columns: 280px minmax(0, 1fr);
+  grid-template-columns: 360px minmax(0, 1fr);
   align-items: center;
   gap: 32px;
   margin-bottom: 44px;
@@ -6027,7 +6032,7 @@ main {
 /* Layout : sidebar de filtres + liste de résultats. */
 .cat-layout {
   display: grid;
-  grid-template-columns: 280px minmax(0, 1fr);
+  grid-template-columns: 360px minmax(0, 1fr);
   gap: 32px;
   align-items: start;
 }
@@ -6115,10 +6120,18 @@ main {
   transform: rotate(180deg);
 }
 
+/* Deux colonnes de cases à cocher : la sidebar est assez large pour ça. */
 .cat-filter-group-body {
   display: grid;
-  gap: 10px;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px 16px;
   padding-bottom: 18px;
+}
+
+/* La recherche et le curseur de prix occupent toute la largeur. */
+.cat-filter-group-body:has(.cat-search),
+.cat-filter-group-body:has(.cat-range) {
+  grid-template-columns: 1fr;
 }
 
 .cat-check {
@@ -6166,6 +6179,7 @@ main {
 
 .cat-results-list {
   display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(560px, 1fr));
   gap: 20px;
 }
 
@@ -6371,7 +6385,7 @@ main {
   color: var(--color-green);
 }
 
-@media (max-width: 1024px) {
+@media (max-width: 1280px) {
   .cat-layout {
     grid-template-columns: 1fr;
   }
@@ -6380,12 +6394,27 @@ main {
     position: static;
   }
 
+  .catalog-intro {
+    grid-template-columns: 1fr;
+    justify-items: start;
+  }
+
+  .cat-results-list {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 1024px) {
   .catalog-grid {
     grid-template-columns: repeat(2, 1fr);
   }
 }
 
 @media (max-width: 640px) {
+  .cat-filter-group-body {
+    grid-template-columns: 1fr;
+  }
+
   .catalog-grid {
     grid-template-columns: 1fr;
   }

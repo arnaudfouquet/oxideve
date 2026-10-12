@@ -59,7 +59,7 @@ export function HomeSessionsCarousel({ formations, sessions }: Props) {
     return (
       <Link
         className="home-session-card"
-        href={`/inscriptions?formationSlug=${session.formationSlug}&sessionId=${session.id}`}
+        href={`/formations/${session.formationSlug}?sessionId=${session.id}`}
         key={key}
       >
         {session.icon ? (

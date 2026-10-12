@@ -241,7 +241,7 @@ export default async function HomePage() {
               OPCO, employeur, CPF, France Travail ou financement personnel : découvrez les solutions adaptées à votre situation et
               à la formation choisie.
             </p>
-            <ButtonLink href="/contact" variant="primary" className="home-cta-arrow">En savoir plus</ButtonLink>
+            <ButtonLink href="/financement" variant="primary" className="home-cta-arrow">En savoir plus</ButtonLink>
           </div>
         </Container>
       </section>
