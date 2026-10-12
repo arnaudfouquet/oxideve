@@ -5976,7 +5976,7 @@ main {
    résultats. */
 .catalog-intro {
   display: grid;
-  grid-template-columns: 280px minmax(0, 1fr);
+  grid-template-columns: 330px minmax(0, 1fr);
   align-items: center;
   gap: 32px;
   margin-bottom: 12px;
@@ -5991,6 +5991,7 @@ main {
   font-family: var(--font-sans), sans-serif;
   font-weight: 500;
   font-size: clamp(2rem, 4vw, 3rem);
+  line-height: 1.05;
   color: var(--color-navy);
 }
 
@@ -6009,7 +6010,7 @@ main {
 .catalog-intro-illustration {
   display: block;
   width: 100%;
-  max-width: 260px;
+  max-width: 330px;
   height: auto;
   margin: 0 auto;
 }
@@ -6029,7 +6030,7 @@ main {
 /* Layout : sidebar de filtres + liste de résultats. */
 .cat-layout {
   display: grid;
-  grid-template-columns: 280px minmax(0, 1fr);
+  grid-template-columns: 330px minmax(0, 1fr);
   gap: 32px;
   align-items: start;
 }
