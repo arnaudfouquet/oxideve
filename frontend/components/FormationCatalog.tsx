@@ -17,6 +17,17 @@ type Props = {
   sessionsByFormation: Record<string, SessionSummary[]>;
 };
 
+/** "2027-03-23" -> "2027-03", utilisé comme clé de filtre par mois. */
+function monthKey(date: string) {
+  return date.slice(0, 7);
+}
+
+/** "2027-03" -> "mars 2027". */
+function monthLabel(key: string) {
+  const label = new Intl.DateTimeFormat("fr-FR", { month: "long", year: "numeric" }).format(new Date(`${key}-01T00:00:00`));
+  return label.charAt(0).toUpperCase() + label.slice(1);
+}
+
 /** "2027-03-23" + "2027-03-24" -> "23 au 24 mars 2027". */
 function formatSessionDates(session: SessionSummary) {
   const start = new Date(`${session.startDate}T00:00:00`);
@@ -64,6 +75,7 @@ export function FormationCatalog({ formations, categories, durations, citiesByFo
   const [selectedSubCategories, setSelectedSubCategories] = useState<string[]>([]);
   const [selectedDurations, setSelectedDurations] = useState<string[]>([]);
   const [selectedCities, setSelectedCities] = useState<string[]>([]);
+  const [selectedMonths, setSelectedMonths] = useState<string[]>([]);
   const [cpfOnly, setCpfOnly] = useState(false);
   const [maxPrice, setMaxPrice] = useState(0);
   const [search, setSearch] = useState("");
@@ -93,7 +105,7 @@ export function FormationCatalog({ formations, categories, durations, citiesByFo
    * cela permet de savoir quelles options d'une facette donnent encore des
    * résultats, et donc de masquer celles qui n'en donnent aucun.
    */
-  function matches(formation: Formation, skip?: "category" | "subCategory" | "duration" | "city" | "cpf") {
+  function matches(formation: Formation, skip?: "category" | "subCategory" | "duration" | "city" | "cpf" | "month") {
     const needle = search.trim().toLowerCase();
 
     if (skip !== "category" && selectedCategories.length && !selectedCategories.includes(formation.category)) return false;
@@ -105,6 +117,11 @@ export function FormationCatalog({ formations, categories, durations, citiesByFo
     if (skip !== "city" && selectedCities.length) {
       const cities = citiesByFormation[formation.slug] || [];
       if (!cities.some((city) => selectedCities.includes(city))) return false;
+    }
+
+    if (skip !== "month" && selectedMonths.length) {
+      const months = (sessionsByFormation[formation.slug] || []).map((session) => monthKey(session.startDate));
+      if (!months.some((month) => selectedMonths.includes(month))) return false;
     }
 
     const price = parsePrice(formation.price);
@@ -121,7 +138,7 @@ export function FormationCatalog({ formations, categories, durations, citiesByFo
   const results = useMemo(
     () => formations.filter((formation) => matches(formation)),
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [activeMaxPrice, cpfOnly, formations, search, selectedCategories, selectedCities, selectedDurations, selectedSubCategories],
+    [activeMaxPrice, cpfOnly, formations, search, selectedCategories, selectedCities, selectedDurations, selectedMonths, selectedSubCategories],
   );
 
   // Options encore pertinentes compte tenu des autres filtres actifs.
@@ -129,7 +146,7 @@ export function FormationCatalog({ formations, categories, durations, citiesByFo
     const pool = formations.filter((formation) => matches(formation, "category"));
     return categories.filter((category) => pool.some((formation) => formation.category === category));
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [activeMaxPrice, categories, cpfOnly, formations, search, selectedCities, selectedDurations, selectedSubCategories]);
+  }, [activeMaxPrice, categories, cpfOnly, formations, search, selectedCities, selectedDurations, selectedMonths, selectedSubCategories]);
 
   // Sous-familles pertinentes (ex. Électricité au sein de Sécurité au travail).
   const availableSubCategories = useMemo(() => {
@@ -140,13 +157,13 @@ export function FormationCatalog({ formations, categories, durations, citiesByFo
     });
     return Array.from(values).sort((left, right) => left.localeCompare(right, "fr"));
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [activeMaxPrice, cpfOnly, formations, search, selectedCategories, selectedCities, selectedDurations, selectedSubCategories]);
+  }, [activeMaxPrice, cpfOnly, formations, search, selectedCategories, selectedCities, selectedDurations, selectedMonths, selectedSubCategories]);
 
   const availableDurations = useMemo(() => {
     const pool = formations.filter((formation) => matches(formation, "duration"));
     return durations.filter((duration) => pool.some((formation) => formation.duration === duration));
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [activeMaxPrice, cpfOnly, durations, formations, search, selectedCategories, selectedCities, selectedSubCategories]);
+  }, [activeMaxPrice, cpfOnly, durations, formations, search, selectedCategories, selectedCities, selectedMonths, selectedSubCategories]);
 
   const availableCities = useMemo(() => {
     const pool = formations.filter((formation) => matches(formation, "city"));
@@ -156,10 +173,21 @@ export function FormationCatalog({ formations, categories, durations, citiesByFo
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [activeMaxPrice, citiesByFormation, cpfOnly, formations, search, selectedCategories, selectedDurations]);
 
+  // Mois ayant au moins une session à venir, triés chronologiquement.
+  const availableMonths = useMemo(() => {
+    const pool = formations.filter((formation) => matches(formation, "month"));
+    const months = new Set<string>();
+    pool.forEach((formation) =>
+      (sessionsByFormation[formation.slug] || []).forEach((session) => months.add(monthKey(session.startDate))),
+    );
+    return Array.from(months).sort();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [activeMaxPrice, cpfOnly, formations, search, selectedCategories, selectedCities, selectedDurations, selectedSubCategories, sessionsByFormation]);
+
   const cpfAvailable = useMemo(
     () => formations.filter((formation) => matches(formation, "cpf")).some((formation) => formation.cpfEligible),
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [activeMaxPrice, formations, search, selectedCategories, selectedCities, selectedDurations, selectedSubCategories],
+    [activeMaxPrice, formations, search, selectedCategories, selectedCities, selectedDurations, selectedMonths, selectedSubCategories],
   );
 
   const hasActiveFilters =
@@ -167,6 +195,7 @@ export function FormationCatalog({ formations, categories, durations, citiesByFo
     selectedSubCategories.length > 0 ||
     selectedDurations.length > 0 ||
     selectedCities.length > 0 ||
+    selectedMonths.length > 0 ||
     cpfOnly ||
     Boolean(search.trim()) ||
     maxPrice > 0;
@@ -176,6 +205,7 @@ export function FormationCatalog({ formations, categories, durations, citiesByFo
     setSelectedSubCategories([]);
     setSelectedDurations([]);
     setSelectedCities([]);
+    setSelectedMonths([]);
     setCpfOnly(false);
     setMaxPrice(0);
     setSearch("");
@@ -234,6 +264,21 @@ export function FormationCatalog({ formations, categories, durations, citiesByFo
                   type="checkbox"
                 />
                 <span>{subCategory}</span>
+              </label>
+            ))}
+          </FilterGroup>
+        ) : null}
+
+        {availableMonths.length ? (
+          <FilterGroup title="Prochaines dates">
+            {availableMonths.map((month) => (
+              <label className="cat-check" key={month}>
+                <input
+                  checked={selectedMonths.includes(month)}
+                  onChange={() => toggle(selectedMonths, setSelectedMonths, month)}
+                  type="checkbox"
+                />
+                <span>{monthLabel(month)}</span>
               </label>
             ))}
           </FilterGroup>
