@@ -6,13 +6,9 @@ import { getFormations, getSessions } from "@/lib/content";
 
 export const dynamic = "force-dynamic";
 
+/** Ouvre le catalogue avec le filtre de domaine déjà appliqué. */
 function categoryAnchor(category: string) {
-  return `/formations#category-${category
-    .normalize("NFD")
-    .replace(/[̀-ͯ]/g, "")
-    .toLowerCase()
-    .replace(/[^a-z0-9]+/g, "-")
-    .replace(/^-+|-+$/g, "")}`;
+  return `/formations?categorie=${encodeURIComponent(category)}`;
 }
 
 const homeCategories = [

@@ -70,11 +70,13 @@ export default async function FormationDetailPage({ params }: Props) {
     })),
   };
 
+  // Lieu et public sont mis en avant : ce sont les deux critères les plus
+  // regardés avant de s'inscrire.
   const facts = [
+    { icon: "/assets/formations/icone-lieu.svg", label: "Ville", value: displayLocation, highlight: true },
+    { icon: "/assets/formations/icone-public.svg", label: "Pour qui ?", value: formation.audience, highlight: true },
     { icon: "/assets/formations/icone-heure.svg", label: "Durée", value: formation.duration },
-    { icon: "/assets/formations/icone-lieu.svg", label: "Lieu", value: displayLocation },
     { icon: "/assets/formations/icone-euro.svg", label: "Tarif", value: formation.price, cpf: formation.cpfEligible },
-    { icon: "/assets/formations/icone-public.svg", label: "Public", value: formation.audience },
   ];
 
   return (
@@ -110,7 +112,7 @@ export default async function FormationDetailPage({ params }: Props) {
 
             <div className="fd-facts">
               {facts.map((fact) => (
-                <div className="fd-fact" key={fact.label}>
+                <div className={`fd-fact${fact.highlight ? " is-highlight" : ""}`} key={fact.label}>
                   {/* eslint-disable-next-line @next/next/no-img-element */}
                   <img alt="" src={fact.icon} />
                   <span className="fd-fact-label">{fact.label}</span>

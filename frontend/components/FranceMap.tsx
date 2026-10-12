@@ -19,6 +19,31 @@ const ACTIVE_LIST = ACTIVE_CODES.map((code) => DEPARTMENTS.find((dept) => dept.c
 
 const ACCROCHES = ["On est là", "On intervient ici", "Zone couverte", "Présents sur ce secteur", "Ici aussi, c'est nous"];
 
+/** Centroïdes approximatifs, pour poser le numéro au centre de chaque département. */
+const LABEL_POSITIONS: Record<string, { x: number; y: number }> = {
+  "01": { x: 574.1, y: 389.4 },
+  "07": { x: 514.7, y: 497.5 },
+  "09": { x: 364.1, y: 631.9 },
+  "11": { x: 404, y: 620.6 },
+  "12": { x: 425.9, y: 531.3 },
+  "26": { x: 560.1, y: 507.3 },
+  "30": { x: 498.6, y: 552.2 },
+  "31": { x: 346.2, y: 606.2 },
+  "32": { x: 304.9, y: 572.8 },
+  "34": { x: 460, y: 585.3 },
+  "38": { x: 576, y: 456.1 },
+  "42": { x: 505.6, y: 414.6 },
+  "43": { x: 484.1, y: 466.2 },
+  "46": { x: 361.7, y: 509.5 },
+  "48": { x: 468.4, y: 517.1 },
+  "66": { x: 394.8, y: 668.5 },
+  "69": { x: 529.4, y: 407.9 },
+  "73": { x: 621.1, y: 436.4 },
+  "74": { x: 629.6, y: 400.1 },
+  "81": { x: 397.9, y: 571.4 },
+  "82": { x: 350.4, y: 542.9 },
+};
+
 export function FranceMap() {
   const mapRef = useRef<HTMLDivElement>(null);
   const [tooltip, setTooltip] = useState<{ nom: string; accroche: string; x: number; y: number } | null>(null);
@@ -57,6 +82,17 @@ export function FranceMap() {
                   onMouseEnter={active ? (event) => handleEnter(event, dept, index) : undefined}
                   onMouseLeave={active ? () => setTooltip(null) : undefined}
                 />
+              );
+            })}
+          </g>
+          <g>
+            {ACTIVE_CODES.map((code) => {
+              const position = LABEL_POSITIONS[code];
+              if (!position) return null;
+              return (
+                <text className="france-dept-label" key={code} x={position.x} y={position.y}>
+                  {code}
+                </text>
               );
             })}
           </g>

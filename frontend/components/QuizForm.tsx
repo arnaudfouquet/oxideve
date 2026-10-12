@@ -174,6 +174,7 @@ export function QuizForm({
 
   if (status === "success" && result) {
     const scoreRatio = Math.max(0, Math.min(1, result.scoreOn20 / 20));
+    const scoreOnTen = Math.round((result.scoreOn20 / 2) * 10) / 10;
 
     return (
       <div className="quiz-result">
@@ -208,6 +209,23 @@ export function QuizForm({
               ) : null}
             </div>
           ))}
+        </div>
+
+        <div className="quiz-advice">
+          <p className="quiz-advice-score">
+            Vous avez obtenu le score de <strong>{scoreOnTen} / 10</strong>.
+          </p>
+          <p className="quiz-advice-intro">Si vous avez obtenu un score :</p>
+          <ul className="quiz-advice-list">
+            <li className={scoreOnTen < 5 ? "is-active" : ""}>
+              <strong>Inférieur à 5/10</strong> : Niveau de connaissance trop juste, nous vous conseillons de demander l&apos;envoi
+              du référentiel à <a href="mailto:contact@oxideve.com">contact@oxideve.com</a> afin que vous puissiez débuter les
+              révisions
+            </li>
+            <li className={scoreOnTen >= 5 ? "is-active" : ""}>
+              <strong>Supérieur à 5/10</strong> : Niveau de prérequis correct, nous vous souhaitons une bonne formation
+            </li>
+          </ul>
         </div>
       </div>
     );

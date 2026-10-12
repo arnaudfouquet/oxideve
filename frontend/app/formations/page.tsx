@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { Container } from "@/components/ui";
 import { FormationCatalog } from "@/components/FormationCatalog";
-import { getFormations } from "@/lib/content";
+import { getFormations, getSessions } from "@/lib/content";
 
 export const dynamic = "force-dynamic";
 
@@ -20,6 +20,15 @@ export default async function FormationsPage() {
     left.localeCompare(right, "fr", { numeric: true }),
   );
 
+  // Villes réellement programmées, par formation : alimente le filtre Ville.
+  const sessions = await getSessions();
+  const citiesByFormation = sessions.reduce<Record<string, string[]>>((accumulator, session) => {
+    const cities = accumulator[session.formationSlug] || [];
+    if (!cities.includes(session.city)) cities.push(session.city);
+    accumulator[session.formationSlug] = cities;
+    return accumulator;
+  }, {});
+
   return (
     <section className="catalog-page">
       <Container>
@@ -32,7 +41,12 @@ export default async function FormationsPage() {
           <p>Trouvez la formation adaptée à votre activité, à vos objectifs et à vos besoins parmi l&apos;ensemble de nos domaines.</p>
         </div>
 
-        <FormationCatalog categories={categories} durations={durations} formations={formations} />
+        <FormationCatalog
+          categories={categories}
+          citiesByFormation={citiesByFormation}
+          durations={durations}
+          formations={formations}
+        />
       </Container>
     </section>
   );

@@ -10,36 +10,43 @@ export const metadata: Metadata = {
 const categories = [
   {
     label: "Sécurité au travail",
+    category: "Sécurité au travail",
     description: "Prévenez les risques et adoptez les bons gestes au travail.",
     image: "/assets/home/cat-securite.jpg",
   },
   {
     label: "Bureautique",
+    category: "Bureautique",
     description: "Développez votre maîtrise des outils numériques professionnels.",
     image: "/assets/home/cat-bureautique.jpg",
   },
   {
     label: "Management",
+    category: "Management",
     description: "Renforcez vos compétences pour accompagner et faire progresser votre équipe.",
     image: "/assets/home/cat-management.jpg",
   },
   {
     label: "Photovoltaïque",
+    category: "Photovoltaïque",
     description: "Développez vos compétences dans l'installation et la maîtrise des équipements photovoltaïques.",
     image: "/assets/home/cat-photovoltaique.jpg",
   },
   {
     label: "Pompe à chaleur",
+    category: "Pompes à chaleur",
     description: "Apprenez à installer, mettre en service et entretenir les pompes à chaleur.",
     image: "/assets/home/cat-pompe-chaleur.jpg",
   },
   {
     label: "Bornes de recharge (IRVE)",
+    category: "Bornes de recharge",
     description: "Apprenez à installer et mettre en service des bornes de recharge.",
     image: "/assets/formations/banner-irve.webp",
   },
   {
     label: "Climatisation et fluides frigorigènes",
+    category: "Traitement d'air",
     description: "Intervenez en conformité sur les équipements de traitement d'air.",
     image: "/assets/formations/banner-clim.webp",
   },
@@ -138,7 +145,11 @@ export default function QuiSommesNousPage() {
           <h2 className="qsn-section-title">Une offre de formation diversifiée</h2>
           <div className="home-category-grid qsn-category-grid">
             {categories.map((category) => (
-              <a className="home-category-card" href="/formations" key={category.label}>
+              <a
+                className="home-category-card"
+                href={`/formations?categorie=${encodeURIComponent(category.category)}`}
+                key={category.label}
+              >
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img className="home-category-image" alt={category.label} src={category.image} />
                 <span className="home-category-body">
