@@ -5987,7 +5987,7 @@ main {
 }
 
 .catalog-intro h1 {
-  margin: 0 0 10px;
+  margin: 0;
   font-family: var(--font-sans), sans-serif;
   font-weight: 500;
   font-size: clamp(2rem, 4vw, 3rem);
