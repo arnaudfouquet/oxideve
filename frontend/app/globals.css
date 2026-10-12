@@ -5977,9 +5977,9 @@ main {
 .catalog-intro {
   display: grid;
   grid-template-columns: 280px minmax(0, 1fr);
-  align-items: center;
+  align-items: end;
   gap: 32px;
-  margin-bottom: 20px;
+  margin-bottom: 12px;
 }
 
 .catalog-intro-copy {
@@ -6009,8 +6009,9 @@ main {
 .catalog-intro-illustration {
   display: block;
   width: 100%;
-  max-width: 230px;
+  max-width: 180px;
   height: auto;
+  margin: 0 auto;
 }
 
 @media (max-width: 1024px) {
