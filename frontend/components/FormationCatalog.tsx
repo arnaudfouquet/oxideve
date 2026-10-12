@@ -5,13 +5,31 @@ import Link from "next/link";
 import type { Formation } from "../../shared/types";
 import { getCategoryTheme } from "@/lib/formation-theme";
 
+type SessionSummary = { startDate: string; endDate: string; city: string };
+
 type Props = {
   formations: Formation[];
   categories: string[];
   durations: string[];
   /** Villes des sessions programmées, par slug de formation. */
   citiesByFormation: Record<string, string[]>;
+  /** Prochaines sessions à venir, triées par date, par slug de formation. */
+  sessionsByFormation: Record<string, SessionSummary[]>;
 };
+
+/** "2027-03-23" + "2027-03-24" -> "23 au 24 mars 2027". */
+function formatSessionDates(session: SessionSummary) {
+  const start = new Date(`${session.startDate}T00:00:00`);
+  const end = new Date(`${session.endDate}T00:00:00`);
+  const full = new Intl.DateTimeFormat("fr-FR", { day: "numeric", month: "long", year: "numeric" });
+
+  if (session.startDate === session.endDate) {
+    return full.format(start);
+  }
+
+  const sameMonth = start.getMonth() === end.getMonth() && start.getFullYear() === end.getFullYear();
+  return sameMonth ? `${start.getDate()} au ${full.format(end)}` : `${full.format(start)} au ${full.format(end)}`;
+}
 
 /** "1 190 EUR" -> 1190 ; renvoie null si aucun nombre exploitable. */
 function parsePrice(price: string): number | null {
@@ -41,7 +59,7 @@ function FilterGroup({
   );
 }
 
-export function FormationCatalog({ formations, categories, durations, citiesByFormation }: Props) {
+export function FormationCatalog({ formations, categories, durations, citiesByFormation, sessionsByFormation }: Props) {
   const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
   const [selectedSubCategories, setSelectedSubCategories] = useState<string[]>([]);
   const [selectedDurations, setSelectedDurations] = useState<string[]>([]);
@@ -292,6 +310,7 @@ export function FormationCatalog({ formations, categories, durations, citiesByFo
                 cities={citiesByFormation[formation.slug] || []}
                 formation={formation}
                 key={formation.slug}
+                sessions={sessionsByFormation[formation.slug] || []}
               />
             ))}
           </div>
@@ -304,9 +323,18 @@ export function FormationCatalog({ formations, categories, durations, citiesByFo
 }
 
 /** Carte horizontale de la liste de résultats. */
-function FormationResultCard({ formation, cities }: { formation: Formation; cities: string[] }) {
+function FormationResultCard({
+  formation,
+  cities,
+  sessions,
+}: {
+  formation: Formation;
+  cities: string[];
+  sessions: SessionSummary[];
+}) {
   const theme = getCategoryTheme(formation.category, formation.subCategory);
   const location = cities.length ? cities.join(", ") : formation.location;
+  const nextSessions = sessions.slice(0, 2);
 
   return (
     <article className="cat-result">
@@ -325,6 +353,16 @@ function FormationResultCard({ formation, cities }: { formation: Formation; citi
         <p className="cat-result-summary">{formation.summary}</p>
 
         <ul className="cat-result-meta">
+          {nextSessions.length ? (
+            <li>
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img alt="" src="/assets/formations/icone-heure.svg" />
+              <span className="cat-result-meta-label">Prochaines dates :</span>
+              <span className="cat-result-meta-value">
+                {nextSessions.map((session) => formatSessionDates(session)).join(" · ")}
+              </span>
+            </li>
+          ) : null}
           <li>
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img alt="" src="/assets/formations/icone-lieu.svg" />

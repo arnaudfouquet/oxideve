@@ -29,6 +29,18 @@ export default async function FormationsPage() {
     return accumulator;
   }, {});
 
+  // Prochaines dates à venir, par formation, pour les afficher sur les tuiles.
+  const today = new Date().toISOString().slice(0, 10);
+  const sessionsByFormation = sessions
+    .filter((session) => session.endDate >= today)
+    .sort((left, right) => left.startDate.localeCompare(right.startDate))
+    .reduce<Record<string, { startDate: string; endDate: string; city: string }[]>>((accumulator, session) => {
+      const list = accumulator[session.formationSlug] || [];
+      list.push({ startDate: session.startDate, endDate: session.endDate, city: session.city });
+      accumulator[session.formationSlug] = list;
+      return accumulator;
+    }, {});
+
   return (
     <section className="catalog-page">
       <Container>
@@ -39,16 +51,13 @@ export default async function FormationsPage() {
             <h1>
               Nos formations <em>professionnelles</em>
             </h1>
-            <p>
-              Trouvez la formation adaptée à votre activité, à vos objectifs et à vos besoins parmi l&apos;ensemble de nos
-              domaines.
-            </p>
           </div>
         </div>
 
         <FormationCatalog
           categories={categories}
           citiesByFormation={citiesByFormation}
+          sessionsByFormation={sessionsByFormation}
           durations={durations}
           formations={formations}
         />

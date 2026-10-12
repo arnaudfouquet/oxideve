@@ -5966,24 +5966,20 @@ main {
 /* ===================== CATALOGUE FORMATIONS ===================== */
 
 .catalog-page {
-  padding: 56px 0 80px;
+  padding: 28px 0 80px;
   background: #ffffff;
 }
 
-/* Le catalogue déborde du conteneur standard pour exploiter toute la largeur. */
-.catalog-page > .ui-container {
-  width: min(1700px, calc(100% - 64px));
-}
 
 /* Illustration à gauche, titre et chapô à droite. L'illustration occupe la
    largeur de la sidebar pour que le titre s'aligne sur la colonne de
    résultats. */
 .catalog-intro {
   display: grid;
-  grid-template-columns: 360px minmax(0, 1fr);
+  grid-template-columns: 280px minmax(0, 1fr);
   align-items: center;
   gap: 32px;
-  margin-bottom: 44px;
+  margin-bottom: 20px;
 }
 
 .catalog-intro-copy {
@@ -5991,7 +5987,7 @@ main {
 }
 
 .catalog-intro h1 {
-  margin: 0 0 14px;
+  margin: 0;
   font-family: var(--font-sans), sans-serif;
   font-weight: 500;
   font-size: clamp(2rem, 4vw, 3rem);
@@ -6032,14 +6028,14 @@ main {
 /* Layout : sidebar de filtres + liste de résultats. */
 .cat-layout {
   display: grid;
-  grid-template-columns: 360px minmax(0, 1fr);
+  grid-template-columns: 280px minmax(0, 1fr);
   gap: 32px;
   align-items: start;
 }
 
 .cat-sidebar {
   position: sticky;
-  top: 84px;
+  top: 80px;
   padding: 22px 24px 8px;
   border-radius: 16px;
   background: #ffffff;
@@ -6120,18 +6116,10 @@ main {
   transform: rotate(180deg);
 }
 
-/* Deux colonnes de cases à cocher : la sidebar est assez large pour ça. */
 .cat-filter-group-body {
   display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 10px 16px;
+  gap: 10px;
   padding-bottom: 18px;
-}
-
-/* La recherche et le curseur de prix occupent toute la largeur. */
-.cat-filter-group-body:has(.cat-search),
-.cat-filter-group-body:has(.cat-range) {
-  grid-template-columns: 1fr;
 }
 
 .cat-check {
@@ -6172,14 +6160,13 @@ main {
 
 /* Résultats */
 .cat-results-count {
-  margin: 0 0 18px;
+  margin: 0 0 12px;
   color: var(--color-muted);
   font-size: 0.95rem;
 }
 
 .cat-results-list {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(560px, 1fr));
   gap: 20px;
 }
 
@@ -6385,7 +6372,7 @@ main {
   color: var(--color-green);
 }
 
-@media (max-width: 1280px) {
+@media (max-width: 1024px) {
   .cat-layout {
     grid-template-columns: 1fr;
   }
