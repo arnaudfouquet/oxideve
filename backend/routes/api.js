@@ -33,6 +33,7 @@ const { syncQueovalCalendar, listPendingSyncSessions, resolvePendingSyncSession 
 const { createBulletinInscription, listBulletinInscriptions, getBulletinInscriptionById } = require("../services/bulletinInscriptionService");
 const { listParticipants } = require("../services/participantsService");
 const { generateBulletinPdf, generateQuizPdf } = require("../services/pdfService");
+const { generateProgrammePdf } = require("../services/programmePdfService");
 const {
   sendBulletinConfirmationEmail,
   sendQuizResultEmail,
@@ -553,6 +554,23 @@ function createApiRouter() {
 
       res.set("Content-Type", "application/pdf");
       res.set("Content-Disposition", `inline; filename="bulletin-${bulletin.id}.pdf"`);
+      return res.send(pdfBuffer);
+    })
+  );
+
+  router.get(
+    "/admin/formations/:slug/programme.pdf",
+    asyncHandler(async (req, res) => {
+      const formation = await getFormationBySlug(req.params.slug);
+
+      if (!formation) {
+        return res.status(404).json({ error: "Formation introuvable" });
+      }
+
+      const pdfBuffer = await generateProgrammePdf(formation);
+
+      res.set("Content-Type", "application/pdf");
+      res.set("Content-Disposition", `attachment; filename="programme-${formation.slug}.pdf"`);
       return res.send(pdfBuffer);
     })
   );

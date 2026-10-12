@@ -1828,6 +1828,16 @@ export function AdminWorkspace({
               <a href="#formation-section-identite">Identité</a>
               <a href="#formation-section-contenu">Contenu</a>
               <a href="#formation-section-pratique">Infos pratiques</a>
+              {editingFormationSlug ? (
+                <a
+                  className="admin-form-toc-pdf"
+                  href={`/api/admin/formations/${editingFormationSlug}/programme.pdf`}
+                  target="_blank"
+                  rel="noreferrer"
+                >
+                  Télécharger en PDF
+                </a>
+              ) : null}
             </nav>
             <form className="contact-form" onSubmit={handleFormationSubmit}>
               <div className="admin-form-section" id="formation-section-identite"><h3>Identité</h3><div className="form-grid">

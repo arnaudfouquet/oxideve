@@ -2889,6 +2889,19 @@ main {
   background: rgba(222, 244, 255, 0.6);
 }
 
+/* Export PDF du programme : poussé à droite de la barre de sections. */
+.admin-form-toc a.admin-form-toc-pdf {
+  margin-left: auto;
+  border-color: var(--color-green);
+  background: var(--color-green);
+  color: #ffffff;
+}
+
+.admin-form-toc a.admin-form-toc-pdf:hover {
+  border-color: var(--color-green);
+  background: #07b659;
+}
+
 .admin-programme-editor {
   display: grid;
   gap: 14px;
