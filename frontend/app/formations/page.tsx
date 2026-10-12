@@ -34,9 +34,9 @@ export default async function FormationsPage() {
   const sessionsByFormation = sessions
     .filter((session) => session.endDate >= today)
     .sort((left, right) => left.startDate.localeCompare(right.startDate))
-    .reduce<Record<string, { startDate: string; endDate: string; city: string }[]>>((accumulator, session) => {
+    .reduce<Record<string, { startDate: string; endDate: string; city: string; mode: string }[]>>((accumulator, session) => {
       const list = accumulator[session.formationSlug] || [];
-      list.push({ startDate: session.startDate, endDate: session.endDate, city: session.city });
+      list.push({ startDate: session.startDate, endDate: session.endDate, city: session.city, mode: session.mode });
       accumulator[session.formationSlug] = list;
       return accumulator;
     }, {});

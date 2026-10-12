@@ -8990,3 +8990,115 @@ a.ct-channel-value:hover {
     justify-content: space-between;
   }
 }
+
+/* ===================== CATALOGUE : TRI, PASTILLES, PAGINATION ===================== */
+
+.cat-results-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
+  margin-bottom: 12px;
+}
+
+.cat-results-bar .cat-results-count {
+  margin: 0;
+}
+
+.cat-sort {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 0.88rem;
+  color: var(--color-muted);
+  white-space: nowrap;
+}
+
+.cat-sort .ui-field {
+  min-height: 36px;
+  padding: 4px 10px;
+  font-size: 0.88rem;
+  width: auto;
+}
+
+/* Compteur de résultats par option de filtre. */
+.cat-check-count {
+  margin-left: auto;
+  padding: 1px 8px;
+  border-radius: 999px;
+  background: var(--color-light);
+  color: var(--color-muted);
+  font-size: 0.78rem;
+  font-weight: 700;
+}
+
+/* Pastilles des filtres actifs. */
+.cat-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 16px;
+}
+
+.cat-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 12px;
+  border: 1px solid var(--color-green);
+  border-radius: 999px;
+  background: var(--color-green-pale);
+  color: var(--color-navy);
+  font: inherit;
+  font-size: 0.85rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background-color 160ms ease;
+}
+
+.cat-chip:hover {
+  background: #c6f2db;
+}
+
+.cat-chip span {
+  font-size: 1rem;
+  line-height: 1;
+  color: var(--color-green);
+}
+
+.cat-chip-clear {
+  border-color: var(--border-subtle);
+  background: transparent;
+  color: var(--color-muted);
+  font-weight: 600;
+}
+
+.cat-chip-clear:hover {
+  background: var(--color-light);
+}
+
+/* Chargement progressif des résultats. */
+.cat-more {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  margin-top: 28px;
+}
+
+.cat-more .ui-button {
+  border-radius: 10px;
+}
+
+.cat-more-count {
+  color: var(--color-muted);
+  font-size: 0.85rem;
+}
+
+@media (max-width: 640px) {
+  .cat-results-bar {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+}

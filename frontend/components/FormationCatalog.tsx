@@ -5,7 +5,7 @@ import Link from "next/link";
 import type { Formation } from "../../shared/types";
 import { getCategoryTheme } from "@/lib/formation-theme";
 
-type SessionSummary = { startDate: string; endDate: string; city: string };
+type SessionSummary = { startDate: string; endDate: string; city: string; mode: string };
 
 type Props = {
   formations: Formation[];
@@ -16,6 +16,18 @@ type Props = {
   /** Prochaines sessions à venir, triées par date, par slug de formation. */
   sessionsByFormation: Record<string, SessionSummary[]>;
 };
+
+type SortKey = "session" | "price" | "duration" | "title";
+
+const SORT_OPTIONS: { value: SortKey; label: string }[] = [
+  { value: "session", label: "Prochaine session" },
+  { value: "price", label: "Prix croissant" },
+  { value: "duration", label: "Durée" },
+  { value: "title", label: "Ordre alphabétique" },
+];
+
+const PAGE_SIZE = 12;
+const REMOTE_MODE = "Distanciel";
 
 /** Minuscules sans accent, pour que "securite" trouve "Sécurité". */
 function normalize(value: string) {
@@ -30,7 +42,7 @@ function monthKey(date: string) {
   return date.slice(0, 7);
 }
 
-/** "2027-03" -> "mars 2027". */
+/** "2027-03" -> "Mars 2027". */
 function monthLabel(key: string) {
   const label = new Intl.DateTimeFormat("fr-FR", { month: "long", year: "numeric" }).format(new Date(`${key}-01T00:00:00`));
   return label.charAt(0).toUpperCase() + label.slice(1);
@@ -56,6 +68,12 @@ function parsePrice(price: string): number | null {
   return digits ? Number.parseInt(digits, 10) : null;
 }
 
+/** "1,5 jour" -> 1.5, pour pouvoir trier les durées. */
+function parseDuration(duration: string): number {
+  const match = duration.replace(",", ".").match(/[\d.]+/);
+  return match ? Number.parseFloat(match[0]) : Number.POSITIVE_INFINITY;
+}
+
 function FilterGroup({
   title,
   children,
@@ -78,23 +96,40 @@ function FilterGroup({
   );
 }
 
+/** Case à cocher d'une facette, avec le nombre de résultats correspondants. */
+function FacetCheck({
+  checked,
+  count,
+  label,
+  onChange,
+}: {
+  checked: boolean;
+  count: number;
+  label: string;
+  onChange: () => void;
+}) {
+  return (
+    <label className="cat-check">
+      <input checked={checked} onChange={onChange} type="checkbox" />
+      <span>{label}</span>
+      <span className="cat-check-count">{count}</span>
+    </label>
+  );
+}
+
 export function FormationCatalog({ formations, categories, durations, citiesByFormation, sessionsByFormation }: Props) {
   const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
   const [selectedSubCategories, setSelectedSubCategories] = useState<string[]>([]);
   const [selectedDurations, setSelectedDurations] = useState<string[]>([]);
   const [selectedCities, setSelectedCities] = useState<string[]>([]);
   const [selectedMonths, setSelectedMonths] = useState<string[]>([]);
+  const [remoteOnly, setRemoteOnly] = useState(false);
   const [cpfOnly, setCpfOnly] = useState(false);
   const [maxPrice, setMaxPrice] = useState(0);
   const [search, setSearch] = useState("");
-
-  // Pré-sélectionne le domaine quand on arrive depuis une carte de catégorie.
-  useEffect(() => {
-    const requested = new URLSearchParams(window.location.search).get("categorie");
-    if (requested && categories.includes(requested)) {
-      setSelectedCategories([requested]);
-    }
-  }, [categories]);
+  const [sort, setSort] = useState<SortKey>("session");
+  const [page, setPage] = useState(1);
+  const [hydrated, setHydrated] = useState(false);
 
   const priceCeiling = useMemo(() => {
     const values = formations.map((item) => parsePrice(item.price)).filter((value): value is number => value !== null);
@@ -102,25 +137,93 @@ export function FormationCatalog({ formations, categories, durations, citiesByFo
     return Math.ceil(Math.max(...values) / 100) * 100;
   }, [formations]);
 
+  // Restaure l'état depuis l'URL au premier rendu (lien partagé, retour arrière).
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    const list = (key: string) => (params.get(key) ? params.get(key)!.split(",").filter(Boolean) : []);
+
+    const requestedCategories = list("categorie").filter((item) => categories.includes(item));
+    if (requestedCategories.length) setSelectedCategories(requestedCategories);
+
+    setSelectedSubCategories(list("specialite"));
+    setSelectedDurations(list("duree"));
+    setSelectedCities(list("ville"));
+    setSelectedMonths(list("mois"));
+    setRemoteOnly(params.get("distanciel") === "1");
+    setCpfOnly(params.get("cpf") === "1");
+    setSearch(params.get("q") || "");
+
+    const price = Number.parseInt(params.get("prixMax") || "", 10);
+    if (!Number.isNaN(price)) setMaxPrice(price);
+
+    const requestedSort = params.get("tri");
+    if (SORT_OPTIONS.some((option) => option.value === requestedSort)) setSort(requestedSort as SortKey);
+
+    setHydrated(true);
+  }, [categories]);
+
   const activeMaxPrice = maxPrice || priceCeiling;
+
+  // Reflète l'état courant dans l'URL, sans empiler d'entrées d'historique.
+  useEffect(() => {
+    if (!hydrated) return;
+
+    const params = new URLSearchParams();
+    const set = (key: string, values: string[]) => {
+      if (values.length) params.set(key, values.join(","));
+    };
+
+    set("categorie", selectedCategories);
+    set("specialite", selectedSubCategories);
+    set("duree", selectedDurations);
+    set("ville", selectedCities);
+    set("mois", selectedMonths);
+    if (remoteOnly) params.set("distanciel", "1");
+    if (cpfOnly) params.set("cpf", "1");
+    if (search.trim()) params.set("q", search.trim());
+    if (maxPrice && maxPrice !== priceCeiling) params.set("prixMax", String(maxPrice));
+    if (sort !== "session") params.set("tri", sort);
+
+    const query = params.toString();
+    window.history.replaceState(null, "", query ? `?${query}` : window.location.pathname);
+  }, [
+    cpfOnly,
+    hydrated,
+    maxPrice,
+    priceCeiling,
+    remoteOnly,
+    search,
+    selectedCategories,
+    selectedCities,
+    selectedDurations,
+    selectedMonths,
+    selectedSubCategories,
+    sort,
+  ]);
 
   function toggle(list: string[], setList: (next: string[]) => void, value: string) {
     setList(list.includes(value) ? list.filter((item) => item !== value) : [...list, value]);
+    setPage(1);
   }
 
   /**
    * Applique tous les filtres sauf celui qu'on est en train de construire :
-   * cela permet de savoir quelles options d'une facette donnent encore des
-   * résultats, et donc de masquer celles qui n'en donnent aucun.
+   * cela permet de compter les résultats par option et de masquer celles qui
+   * n'en donnent aucun.
    */
-  function matches(formation: Formation, skip?: "category" | "subCategory" | "duration" | "city" | "cpf" | "month") {
+  function matches(
+    formation: Formation,
+    skip?: "category" | "subCategory" | "duration" | "city" | "cpf" | "month" | "remote",
+  ) {
     const needle = normalize(search.trim());
+    const sessions = sessionsByFormation[formation.slug] || [];
 
     if (skip !== "category" && selectedCategories.length && !selectedCategories.includes(formation.category)) return false;
     if (skip !== "subCategory" && selectedSubCategories.length && !selectedSubCategories.includes(formation.subCategory || ""))
       return false;
     if (skip !== "duration" && selectedDurations.length && !selectedDurations.includes(formation.duration)) return false;
     if (skip !== "cpf" && cpfOnly && !formation.cpfEligible) return false;
+    if (skip !== "remote" && remoteOnly && !sessions.some((session) => session.mode === REMOTE_MODE)) return false;
 
     if (skip !== "city" && selectedCities.length) {
       const cities = citiesByFormation[formation.slug] || [];
@@ -128,7 +231,7 @@ export function FormationCatalog({ formations, categories, durations, citiesByFo
     }
 
     if (skip !== "month" && selectedMonths.length) {
-      const months = (sessionsByFormation[formation.slug] || []).map((session) => monthKey(session.startDate));
+      const months = sessions.map((session) => monthKey(session.startDate));
       if (!months.some((month) => selectedMonths.includes(month))) return false;
     }
 
@@ -150,8 +253,7 @@ export function FormationCatalog({ formations, categories, durations, citiesByFo
         formation.audience,
       ]
         .filter(Boolean)
-        .join(" ")
-        .toLowerCase();
+        .join(" ");
 
       if (!normalize(haystack).includes(needle)) return false;
     }
@@ -159,70 +261,151 @@ export function FormationCatalog({ formations, categories, durations, citiesByFo
     return true;
   }
 
-  const results = useMemo(
-    () => formations.filter((formation) => matches(formation)),
+  const results = useMemo(() => {
+    const kept = formations.filter((formation) => matches(formation));
+
+    return kept.sort((left, right) => {
+      if (sort === "price") {
+        return (parsePrice(left.price) ?? Infinity) - (parsePrice(right.price) ?? Infinity);
+      }
+
+      if (sort === "duration") {
+        return parseDuration(left.duration) - parseDuration(right.duration);
+      }
+
+      if (sort === "title") {
+        return left.title.localeCompare(right.title, "fr");
+      }
+
+      // Par défaut : la formation dont la prochaine session arrive le plus tôt.
+      const leftDate = sessionsByFormation[left.slug]?.[0]?.startDate || "9999-12-31";
+      const rightDate = sessionsByFormation[right.slug]?.[0]?.startDate || "9999-12-31";
+      return leftDate.localeCompare(rightDate);
+    });
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [activeMaxPrice, cpfOnly, formations, search, selectedCategories, selectedCities, selectedDurations, selectedMonths, selectedSubCategories],
+  }, [
+    activeMaxPrice,
+    cpfOnly,
+    formations,
+    remoteOnly,
+    search,
+    selectedCategories,
+    selectedCities,
+    selectedDurations,
+    selectedMonths,
+    selectedSubCategories,
+    sessionsByFormation,
+    sort,
+  ]);
+
+  /** Compte les formations restantes si l'on cochait `value` sur cette facette. */
+  function countFor(skip: Parameters<typeof matches>[1], predicate: (formation: Formation) => boolean) {
+    return formations.filter((formation) => matches(formation, skip) && predicate(formation)).length;
+  }
+
+  const categoryFacets = useMemo(
+    () =>
+      categories
+        .map((category) => ({ value: category, count: countFor("category", (f) => f.category === category) }))
+        .filter((facet) => facet.count > 0),
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [categories, activeMaxPrice, cpfOnly, formations, remoteOnly, search, selectedCities, selectedDurations, selectedMonths, selectedSubCategories],
   );
 
-  // Options encore pertinentes compte tenu des autres filtres actifs.
-  const availableCategories = useMemo(() => {
-    const pool = formations.filter((formation) => matches(formation, "category"));
-    return categories.filter((category) => pool.some((formation) => formation.category === category));
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [activeMaxPrice, categories, cpfOnly, formations, search, selectedCities, selectedDurations, selectedMonths, selectedSubCategories]);
-
-  // Sous-familles pertinentes (ex. Électricité au sein de Sécurité au travail).
-  const availableSubCategories = useMemo(() => {
-    const pool = formations.filter((formation) => matches(formation, "subCategory"));
+  const subCategoryFacets = useMemo(() => {
     const values = new Set<string>();
-    pool.forEach((formation) => {
+    formations.forEach((formation) => {
       if (formation.subCategory) values.add(formation.subCategory);
     });
-    return Array.from(values).sort((left, right) => left.localeCompare(right, "fr"));
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [activeMaxPrice, cpfOnly, formations, search, selectedCategories, selectedCities, selectedDurations, selectedMonths, selectedSubCategories]);
 
-  const availableDurations = useMemo(() => {
-    const pool = formations.filter((formation) => matches(formation, "duration"));
-    return durations.filter((duration) => pool.some((formation) => formation.duration === duration));
+    return Array.from(values)
+      .sort((left, right) => left.localeCompare(right, "fr"))
+      .map((value) => ({ value, count: countFor("subCategory", (f) => f.subCategory === value) }))
+      .filter((facet) => facet.count > 0);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [activeMaxPrice, cpfOnly, durations, formations, search, selectedCategories, selectedCities, selectedMonths, selectedSubCategories]);
+  }, [activeMaxPrice, cpfOnly, formations, remoteOnly, search, selectedCategories, selectedCities, selectedDurations, selectedMonths]);
 
-  const availableCities = useMemo(() => {
-    const pool = formations.filter((formation) => matches(formation, "city"));
-    const cities = new Set<string>();
-    pool.forEach((formation) => (citiesByFormation[formation.slug] || []).forEach((city) => cities.add(city)));
-    return Array.from(cities).sort((left, right) => left.localeCompare(right, "fr"));
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [activeMaxPrice, citiesByFormation, cpfOnly, formations, search, selectedCategories, selectedDurations]);
-
-  // Mois ayant au moins une session à venir, triés chronologiquement.
-  const availableMonths = useMemo(() => {
-    const pool = formations.filter((formation) => matches(formation, "month"));
-    const months = new Set<string>();
-    pool.forEach((formation) =>
-      (sessionsByFormation[formation.slug] || []).forEach((session) => months.add(monthKey(session.startDate))),
+  const monthFacets = useMemo(() => {
+    const values = new Set<string>();
+    formations.forEach((formation) =>
+      (sessionsByFormation[formation.slug] || []).forEach((session) => values.add(monthKey(session.startDate))),
     );
-    return Array.from(months).sort();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [activeMaxPrice, cpfOnly, formations, search, selectedCategories, selectedCities, selectedDurations, selectedSubCategories, sessionsByFormation]);
 
-  const cpfAvailable = useMemo(
-    () => formations.filter((formation) => matches(formation, "cpf")).some((formation) => formation.cpfEligible),
+    return Array.from(values)
+      .sort()
+      .map((value) => ({
+        value,
+        count: countFor("month", (f) =>
+          (sessionsByFormation[f.slug] || []).some((session) => monthKey(session.startDate) === value),
+        ),
+      }))
+      .filter((facet) => facet.count > 0);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [activeMaxPrice, formations, search, selectedCategories, selectedCities, selectedDurations, selectedMonths, selectedSubCategories],
+  }, [activeMaxPrice, cpfOnly, formations, remoteOnly, search, selectedCategories, selectedCities, selectedDurations, selectedSubCategories, sessionsByFormation]);
+
+  const cityFacets = useMemo(() => {
+    const values = new Set<string>();
+    formations.forEach((formation) => (citiesByFormation[formation.slug] || []).forEach((city) => values.add(city)));
+
+    return Array.from(values)
+      .sort((left, right) => left.localeCompare(right, "fr"))
+      .map((value) => ({
+        value,
+        count: countFor("city", (f) => (citiesByFormation[f.slug] || []).includes(value)),
+      }))
+      .filter((facet) => facet.count > 0);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [activeMaxPrice, citiesByFormation, cpfOnly, formations, remoteOnly, search, selectedCategories, selectedDurations, selectedMonths, selectedSubCategories]);
+
+  const durationFacets = useMemo(
+    () =>
+      durations
+        .slice()
+        .sort((left, right) => parseDuration(left) - parseDuration(right))
+        .map((value) => ({ value, count: countFor("duration", (f) => f.duration === value) }))
+        .filter((facet) => facet.count > 0),
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [activeMaxPrice, cpfOnly, durations, formations, remoteOnly, search, selectedCategories, selectedCities, selectedMonths, selectedSubCategories],
   );
 
-  const hasActiveFilters =
-    selectedCategories.length > 0 ||
-    selectedSubCategories.length > 0 ||
-    selectedDurations.length > 0 ||
-    selectedCities.length > 0 ||
-    selectedMonths.length > 0 ||
-    cpfOnly ||
-    Boolean(search.trim()) ||
-    maxPrice > 0;
+  const cpfCount = countFor("cpf", (formation) => Boolean(formation.cpfEligible));
+  const remoteCount = countFor("remote", (formation) =>
+    (sessionsByFormation[formation.slug] || []).some((session) => session.mode === REMOTE_MODE),
+  );
+
+  /** Pastilles des filtres actifs, chacune supprimable d'un clic. */
+  const activeChips = useMemo(() => {
+    const chips: { key: string; label: string; clear: () => void }[] = [];
+
+    if (search.trim()) chips.push({ key: "q", label: `« ${search.trim()} »`, clear: () => setSearch("") });
+
+    selectedCategories.forEach((value) =>
+      chips.push({ key: `cat-${value}`, label: value, clear: () => toggle(selectedCategories, setSelectedCategories, value) }),
+    );
+    selectedSubCategories.forEach((value) =>
+      chips.push({ key: `sub-${value}`, label: value, clear: () => toggle(selectedSubCategories, setSelectedSubCategories, value) }),
+    );
+    selectedMonths.forEach((value) =>
+      chips.push({ key: `month-${value}`, label: monthLabel(value), clear: () => toggle(selectedMonths, setSelectedMonths, value) }),
+    );
+    selectedCities.forEach((value) =>
+      chips.push({ key: `city-${value}`, label: value, clear: () => toggle(selectedCities, setSelectedCities, value) }),
+    );
+    selectedDurations.forEach((value) =>
+      chips.push({ key: `dur-${value}`, label: value, clear: () => toggle(selectedDurations, setSelectedDurations, value) }),
+    );
+
+    if (remoteOnly) chips.push({ key: "remote", label: "À distance", clear: () => setRemoteOnly(false) });
+    if (cpfOnly) chips.push({ key: "cpf", label: "Finançable CPF", clear: () => setCpfOnly(false) });
+    if (maxPrice && maxPrice !== priceCeiling) {
+      chips.push({ key: "price", label: `Jusqu'à ${maxPrice} €`, clear: () => setMaxPrice(0) });
+    }
+
+    return chips;
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [cpfOnly, maxPrice, priceCeiling, remoteOnly, search, selectedCategories, selectedCities, selectedDurations, selectedMonths, selectedSubCategories]);
+
+  const hasActiveFilters = activeChips.length > 0;
 
   function resetFilters() {
     setSelectedCategories([]);
@@ -230,10 +413,16 @@ export function FormationCatalog({ formations, categories, durations, citiesByFo
     setSelectedDurations([]);
     setSelectedCities([]);
     setSelectedMonths([]);
+    setRemoteOnly(false);
     setCpfOnly(false);
     setMaxPrice(0);
     setSearch("");
+    setPage(1);
   }
+
+  const pageCount = Math.max(1, Math.ceil(results.length / PAGE_SIZE));
+  const currentPage = Math.min(page, pageCount);
+  const visibleResults = results.slice(0, currentPage * PAGE_SIZE);
 
   return (
     <div className="cat-layout">
@@ -257,78 +446,95 @@ export function FormationCatalog({ formations, categories, durations, citiesByFo
         <FilterGroup title="Recherche">
           <input
             className="ui-field cat-search"
-            onChange={(event) => setSearch(event.target.value)}
+            onChange={(event) => {
+              setSearch(event.target.value);
+              setPage(1);
+            }}
             placeholder="Mot-clé, métier, ville..."
             value={search}
           />
         </FilterGroup>
 
-        {availableCategories.length ? (
+        {categoryFacets.length ? (
           <FilterGroup title="Domaine">
-            {availableCategories.map((category) => (
-              <label className="cat-check" key={category}>
-                <input
-                  checked={selectedCategories.includes(category)}
-                  onChange={() => toggle(selectedCategories, setSelectedCategories, category)}
-                  type="checkbox"
-                />
-                <span>{category}</span>
-              </label>
+            {categoryFacets.map((facet) => (
+              <FacetCheck
+                checked={selectedCategories.includes(facet.value)}
+                count={facet.count}
+                key={facet.value}
+                label={facet.value}
+                onChange={() => toggle(selectedCategories, setSelectedCategories, facet.value)}
+              />
             ))}
           </FilterGroup>
         ) : null}
 
-        {availableSubCategories.length ? (
+        {subCategoryFacets.length ? (
           <FilterGroup title="Spécialité">
-            {availableSubCategories.map((subCategory) => (
-              <label className="cat-check" key={subCategory}>
-                <input
-                  checked={selectedSubCategories.includes(subCategory)}
-                  onChange={() => toggle(selectedSubCategories, setSelectedSubCategories, subCategory)}
-                  type="checkbox"
-                />
-                <span>{subCategory}</span>
-              </label>
+            {subCategoryFacets.map((facet) => (
+              <FacetCheck
+                checked={selectedSubCategories.includes(facet.value)}
+                count={facet.count}
+                key={facet.value}
+                label={facet.value}
+                onChange={() => toggle(selectedSubCategories, setSelectedSubCategories, facet.value)}
+              />
             ))}
           </FilterGroup>
         ) : null}
 
-        {availableMonths.length ? (
+        {monthFacets.length ? (
           <FilterGroup title="Prochaines dates">
-            {availableMonths.map((month) => (
-              <label className="cat-check" key={month}>
-                <input
-                  checked={selectedMonths.includes(month)}
-                  onChange={() => toggle(selectedMonths, setSelectedMonths, month)}
-                  type="checkbox"
-                />
-                <span>{monthLabel(month)}</span>
-              </label>
+            {monthFacets.map((facet) => (
+              <FacetCheck
+                checked={selectedMonths.includes(facet.value)}
+                count={facet.count}
+                key={facet.value}
+                label={monthLabel(facet.value)}
+                onChange={() => toggle(selectedMonths, setSelectedMonths, facet.value)}
+              />
             ))}
           </FilterGroup>
         ) : null}
 
-        {availableCities.length ? (
+        {cityFacets.length ? (
           <FilterGroup title="Ville">
-            {availableCities.map((city) => (
-              <label className="cat-check" key={city}>
-                <input
-                  checked={selectedCities.includes(city)}
-                  onChange={() => toggle(selectedCities, setSelectedCities, city)}
-                  type="checkbox"
-                />
-                <span>{city}</span>
-              </label>
+            {cityFacets.map((facet) => (
+              <FacetCheck
+                checked={selectedCities.includes(facet.value)}
+                count={facet.count}
+                key={facet.value}
+                label={facet.value}
+                onChange={() => toggle(selectedCities, setSelectedCities, facet.value)}
+              />
             ))}
           </FilterGroup>
         ) : null}
 
-        {cpfAvailable ? (
-          <FilterGroup title="Financement">
-            <label className="cat-check">
-              <input checked={cpfOnly} onChange={(event) => setCpfOnly(event.target.checked)} type="checkbox" />
-              <span>Finançable CPF</span>
-            </label>
+        {remoteCount || cpfCount ? (
+          <FilterGroup title="Modalité et financement">
+            {remoteCount ? (
+              <FacetCheck
+                checked={remoteOnly}
+                count={remoteCount}
+                label="Sessions à distance"
+                onChange={() => {
+                  setRemoteOnly((value) => !value);
+                  setPage(1);
+                }}
+              />
+            ) : null}
+            {cpfCount ? (
+              <FacetCheck
+                checked={cpfOnly}
+                count={cpfCount}
+                label="Finançable CPF"
+                onChange={() => {
+                  setCpfOnly((value) => !value);
+                  setPage(1);
+                }}
+              />
+            ) : null}
           </FilterGroup>
         ) : null}
 
@@ -342,7 +548,10 @@ export function FormationCatalog({ formations, categories, durations, citiesByFo
               className="cat-range"
               max={priceCeiling}
               min={0}
-              onChange={(event) => setMaxPrice(Number(event.target.value))}
+              onChange={(event) => {
+                setMaxPrice(Number(event.target.value));
+                setPage(1);
+              }}
               step={50}
               type="range"
               value={activeMaxPrice}
@@ -350,39 +559,85 @@ export function FormationCatalog({ formations, categories, durations, citiesByFo
           </FilterGroup>
         ) : null}
 
-        {availableDurations.length ? (
+        {durationFacets.length ? (
           <FilterGroup title="Durée">
-            {availableDurations.map((duration) => (
-              <label className="cat-check" key={duration}>
-                <input
-                  checked={selectedDurations.includes(duration)}
-                  onChange={() => toggle(selectedDurations, setSelectedDurations, duration)}
-                  type="checkbox"
-                />
-                <span>{duration}</span>
-              </label>
+            {durationFacets.map((facet) => (
+              <FacetCheck
+                checked={selectedDurations.includes(facet.value)}
+                count={facet.count}
+                key={facet.value}
+                label={facet.value}
+                onChange={() => toggle(selectedDurations, setSelectedDurations, facet.value)}
+              />
             ))}
           </FilterGroup>
         ) : null}
       </aside>
 
       <div className="cat-results">
-        <p className="cat-results-count">
-          {results.length} formation{results.length > 1 ? "s" : ""}
-          {hasActiveFilters ? " correspondant à vos critères" : " disponibles"}
-        </p>
+        <div className="cat-results-bar">
+          <p className="cat-results-count">
+            {results.length} formation{results.length > 1 ? "s" : ""}
+            {hasActiveFilters ? " correspondant à vos critères" : " disponibles"}
+          </p>
 
-        {results.length ? (
-          <div className="cat-results-list">
-            {results.map((formation) => (
-              <FormationResultCard
-                cities={citiesByFormation[formation.slug] || []}
-                formation={formation}
-                key={formation.slug}
-                sessions={sessionsByFormation[formation.slug] || []}
-              />
+          <label className="cat-sort">
+            <span>Trier par</span>
+            <select
+              className="ui-field"
+              onChange={(event) => {
+                setSort(event.target.value as SortKey);
+                setPage(1);
+              }}
+              value={sort}
+            >
+              {SORT_OPTIONS.map((option) => (
+                <option key={option.value} value={option.value}>
+                  {option.label}
+                </option>
+              ))}
+            </select>
+          </label>
+        </div>
+
+        {activeChips.length ? (
+          <div className="cat-chips">
+            {activeChips.map((chip) => (
+              <button className="cat-chip" key={chip.key} onClick={chip.clear} type="button">
+                {chip.label}
+                <span aria-hidden="true">×</span>
+              </button>
             ))}
+            <button className="cat-chip cat-chip-clear" onClick={resetFilters} type="button">
+              Tout effacer
+            </button>
           </div>
+        ) : null}
+
+        {visibleResults.length ? (
+          <>
+            <div className="cat-results-list">
+              {visibleResults.map((formation) => (
+                <FormationResultCard
+                  cities={citiesByFormation[formation.slug] || []}
+                  formation={formation}
+                  key={formation.slug}
+                  sessions={sessionsByFormation[formation.slug] || []}
+                />
+              ))}
+            </div>
+
+            {currentPage < pageCount ? (
+              <div className="cat-more">
+                <button className="ui-button ui-button-primary home-cta-arrow" onClick={() => setPage(currentPage + 1)} type="button">
+                  Voir plus de formations
+                </button>
+                <span className="cat-more-count">
+                  {visibleResults.length} sur {results.length}
+                </span>
+              </div>
+            ) : null}
+          </>
         ) : (
           <p className="catalog-empty">Aucune formation ne correspond à ces critères. Élargissez votre recherche.</p>
         )}
@@ -441,7 +696,7 @@ function FormationResultCard({
           <li>
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img alt="" src="/assets/formations/icone-public.svg" />
-            <span className="cat-result-meta-label">Pour qui&nbsp;:</span>
+            <span className="cat-result-meta-label">Pour qui :</span>
             <span className="cat-result-meta-value">{formation.audience}</span>
           </li>
         </ul>
