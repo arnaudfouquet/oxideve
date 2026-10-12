@@ -46,7 +46,7 @@ export default async function FormationsPage() {
       <Container>
         <div className="catalog-intro">
           {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img className="catalog-intro-illustration" alt="" src="/assets/home/illustration-home.png" />
+          <img className="catalog-intro-illustration" alt="" src="/assets/formations/illustration-2.png" />
           <div className="catalog-intro-copy">
             <h1>
               Nos formations <em>professionnelles</em>
