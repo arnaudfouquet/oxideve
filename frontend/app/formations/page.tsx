@@ -49,7 +49,9 @@ export default async function FormationsPage() {
           <img className="catalog-intro-illustration" alt="" src="/assets/formations/illustration-2.png" />
           <div className="catalog-intro-copy">
             <h1>
-              Nos formations <em>professionnelles</em>
+              Nos formations
+              <br />
+              <em>professionnelles</em>
             </h1>
           </div>
         </div>

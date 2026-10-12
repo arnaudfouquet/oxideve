@@ -5977,7 +5977,7 @@ main {
 .catalog-intro {
   display: grid;
   grid-template-columns: 280px minmax(0, 1fr);
-  align-items: end;
+  align-items: center;
   gap: 32px;
   margin-bottom: 12px;
 }
