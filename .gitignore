@@ -11,3 +11,4 @@ Ressources/
 backend/uploads/*
 !backend/uploads/articles
 !backend/uploads/articles/.gitkeep
+frontend/tsconfig.tsbuildinfo
