@@ -89,6 +89,9 @@ async function main() {
           stats: formation.stats || null,
           gallery: formation.gallery || null,
           relatedSlugs: formation.relatedSlugs || null,
+          levelLabel: formation.levelLabel || null,
+          subCategory: formation.subCategory || null,
+          cpfEligible: Boolean(formation.cpfEligible),
         },
         update: {
           title: formation.title,
@@ -122,6 +125,9 @@ async function main() {
           stats: formation.stats || null,
           gallery: formation.gallery || null,
           relatedSlugs: formation.relatedSlugs || null,
+          levelLabel: formation.levelLabel || null,
+          subCategory: formation.subCategory || null,
+          cpfEligible: Boolean(formation.cpfEligible),
         },
       });
     }
