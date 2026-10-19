@@ -98,4 +98,6 @@ module.exports = {
   setSessionCookie,
   clearSessionCookie,
   readSessionFromRequest,
+  // Exporté pour les pages Next, qui lisent le cookie sans requête Express.
+  readSessionToken,
 };

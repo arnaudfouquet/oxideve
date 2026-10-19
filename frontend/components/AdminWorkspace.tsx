@@ -3,6 +3,7 @@
 import { useEffect, useMemo, useState } from "react";
 import { Button } from "@/components/ui";
 import { DataTable } from "@/components/admin/DataTable";
+import { ArticleEditor } from "@/components/admin/ArticleEditor";
 import { Drawer } from "@/components/admin/Drawer";
 import { getCategoryTheme, type CategoryVisual } from "@/lib/formation-theme";
 import type { AdminUser, Article, BulletinInscriptionWithAttempts, Company, CrmInteraction, CrmTask, Formation, Participant, ProgrammeDay, Registration, RegistrationNote, Session } from "../../shared/types";
@@ -66,10 +67,15 @@ type ArticleDraft = {
   title: string;
   category: string;
   excerpt: string;
+  bodyHtml: string;
   readingTime: string;
   publishedAt: string;
   featuredFormationSlug: string;
   coverImageUrl: string;
+  published: boolean;
+  indexable: boolean;
+  seoTitle: string;
+  seoDescription: string;
 };
 
 function splitLines(value: string) {
@@ -255,10 +261,17 @@ function toArticleDraft(article?: Article): ArticleDraft {
     title: article?.title || "",
     category: article?.category || "",
     excerpt: article?.excerpt || "",
+    // L'éditeur reçoit le HTML brut stocké, jamais le rendu public filtré :
+    // sinon les tailles d'images et les blocs seraient perdus à chaque édition.
+    bodyHtml: article?.bodyHtml || "",
     readingTime: article?.readingTime || "",
-    publishedAt: article?.publishedAt || "",
+    publishedAt: article?.publishedAt || new Date().toISOString().slice(0, 10),
     featuredFormationSlug: article?.featuredFormationSlug || "",
     coverImageUrl: article?.coverImageUrl || "",
+    published: article?.published !== false,
+    indexable: article?.indexable !== false,
+    seoTitle: article?.seoTitle || "",
+    seoDescription: article?.seoDescription || "",
   };
 }
 
@@ -415,7 +428,6 @@ export function AdminWorkspace({
   const [formationDraft, setFormationDraft] = useState(toFormationDraft(initialFormations[0]));
   const [sessionDraft, setSessionDraft] = useState(toSessionDraft(initialSessions[0]));
   const [articleDraft, setArticleDraft] = useState(toArticleDraft(initialArticles[0]));
-  const [articleBodyParagraphs, setArticleBodyParagraphs] = useState<string[]>(toArticleBodyParagraphs(initialArticles[0]));
   const [articleSearch, setArticleSearch] = useState("");
   const [articleImageUploading, setArticleImageUploading] = useState(false);
 
@@ -1027,30 +1039,7 @@ export function AdminWorkspace({
     const article = articles.find((item) => item.slug === slug);
     setEditingArticleSlug(slug);
     setArticleDraft(toArticleDraft(article));
-    setArticleBodyParagraphs(toArticleBodyParagraphs(article));
     setFeedback("");
-  }
-
-  function addArticleParagraph() {
-    setArticleBodyParagraphs((current) => [...current, ""]);
-  }
-
-  function removeArticleParagraph(index: number) {
-    setArticleBodyParagraphs((current) => (current.length > 1 ? current.filter((_, i) => i !== index) : current));
-  }
-
-  function updateArticleParagraph(index: number, value: string) {
-    setArticleBodyParagraphs((current) => current.map((paragraph, i) => (i === index ? value : paragraph)));
-  }
-
-  function moveArticleParagraph(index: number, direction: -1 | 1) {
-    setArticleBodyParagraphs((current) => {
-      const target = index + direction;
-      if (target < 0 || target >= current.length) return current;
-      const next = [...current];
-      [next[index], next[target]] = [next[target], next[index]];
-      return next;
-    });
   }
 
   async function handleSessionSubmit(event: React.FormEvent<HTMLFormElement>) {
@@ -1206,6 +1195,7 @@ export function AdminWorkspace({
     setSuccess(result.message || "Formation enregistrée.");
   }
 
+  /** Image de couverture de l'article. */
   async function handleArticleImageChange(event: React.ChangeEvent<HTMLInputElement>) {
     const file = event.target.files?.[0];
     event.target.value = "";
@@ -1217,24 +1207,29 @@ export function AdminWorkspace({
     const formData = new FormData();
     formData.append("image", file);
 
-    const response = await fetch("/api/admin/uploads/article-image", {
-      method: "POST",
-      body: formData,
-    });
+    const response = await fetch("/api/admin/uploads/article-image", { method: "POST", body: formData });
     const result = (await response.json().catch(() => null)) as { data?: { url: string }; error?: string } | null;
 
     setArticleImageUploading(false);
 
     if (!response.ok || !result?.data?.url) {
-      setError(result?.error || "L'image n'a pas pu être envoyée.");
+      setError(result?.error || "L'image n'a pas pu être envoyée. Vérifiez le format et la taille (5 Mo).");
       return;
     }
 
     setArticleDraft((current) => ({ ...current, coverImageUrl: result.data!.url }));
   }
 
-  async function handleArticleSubmit(event: React.FormEvent<HTMLFormElement>) {
+  async function handleArticleSubmit(event: React.FormEvent<HTMLFormElement>, openPreview = false) {
     event.preventDefault();
+
+    // Le champ de contenu est masqué derrière l'éditeur : `required` bloquerait
+    // l'envoi sans message visible. On vérifie donc nous-mêmes.
+    if (!articleDraft.bodyHtml.replace(/<[^>]*>/g, "").trim()) {
+      setError("Le contenu de l'article est vide.");
+      return;
+    }
+
     setSaving(true);
     setFeedback("");
 
@@ -1243,11 +1238,15 @@ export function AdminWorkspace({
       title: articleDraft.title.trim(),
       category: articleDraft.category.trim(),
       excerpt: articleDraft.excerpt.trim(),
-      body: articleBodyParagraphs.map((paragraph) => paragraph.trim()).filter(Boolean),
+      bodyHtml: articleDraft.bodyHtml,
       readingTime: articleDraft.readingTime.trim(),
       publishedAt: articleDraft.publishedAt.trim(),
       featuredFormationSlug: articleDraft.featuredFormationSlug.trim(),
       coverImageUrl: articleDraft.coverImageUrl.trim(),
+      published: articleDraft.published,
+      indexable: articleDraft.indexable,
+      seoTitle: articleDraft.seoTitle.trim(),
+      seoDescription: articleDraft.seoDescription.trim(),
     };
 
     const isEditing = Boolean(editingArticleSlug);
@@ -1264,10 +1263,17 @@ export function AdminWorkspace({
       return;
     }
 
-    setArticles((current) => [...current.filter((item) => item.slug !== result.data?.slug && item.slug !== editingArticleSlug), result.data as Article]);
-    selectArticle((result.data as Article).slug);
+    const saved = result.data as Article;
+
+    setArticles((current) => [...current.filter((item) => item.slug !== saved.slug && item.slug !== editingArticleSlug), saved]);
+    selectArticle(saved.slug);
     setSaving(false);
     setSuccess(result.message || "Article enregistré.");
+
+    if (openPreview) {
+      // Un brouillon n'est visible qu'avec ?apercu=1 et une session admin.
+      window.open(`/actualites/${saved.slug}?apercu=1`, "_blank", "noopener");
+    }
   }
 
   async function handleDeleteArticle(slug: string, title: string) {
@@ -1930,7 +1936,7 @@ export function AdminWorkspace({
       {section === "editorial" ? (
         <div className="admin-dual-pane">
           <section className="admin-shell">
-            <div className="section-heading section-heading-tight"><div><span className="eyebrow">Editorial</span><h2>Articles</h2></div><Button variant="secondary" onClick={() => { setEditingArticleSlug(""); setArticleDraft(toArticleDraft()); setArticleBodyParagraphs(toArticleBodyParagraphs()); }}>Nouvel article</Button></div>
+            <div className="section-heading section-heading-tight"><div><span className="eyebrow">Editorial</span><h2>Articles</h2></div><Button variant="secondary" onClick={() => { setEditingArticleSlug(""); setArticleDraft(toArticleDraft()); }}>Nouvel article</Button></div>
             <label className="admin-list-search"><span>Recherche</span><input className="ui-field" value={articleSearch} onChange={(event) => setArticleSearch(event.target.value)} placeholder="Titre, catégorie..." /></label>
             <div className="admin-list admin-list-dense">
               {articles
@@ -2024,34 +2030,67 @@ export function AdminWorkspace({
                   {articleImageUploading ? <span className="admin-field-hint">Envoi en cours...</span> : null}
                 </div>
               </label>
-              <label><span>Extrait</span><textarea className="ui-field" rows={4} value={articleDraft.excerpt} onChange={(event) => setArticleDraft((current) => ({ ...current, excerpt: event.target.value }))} required /></label>
-              <div className="admin-programme-editor">
-                <div className="admin-programme-editor-header">
-                  <span>Corps de l&apos;article</span>
-                  <Button variant="secondary" type="button" onClick={addArticleParagraph}>Ajouter un paragraphe</Button>
-                </div>
-                {articleBodyParagraphs.map((paragraph, index) => (
-                  <div className="admin-article-paragraph" key={index}>
-                    <div className="admin-programme-row">
-                      <label className="admin-programme-title-field">
-                        <span>Paragraphe {index + 1}</span>
-                        <textarea
-                          className="ui-field"
-                          rows={4}
-                          value={paragraph}
-                          onChange={(event) => updateArticleParagraph(index, event.target.value)}
-                        />
-                      </label>
-                      <div className="admin-article-paragraph-actions">
-                        <Button variant="ghost" type="button" onClick={() => moveArticleParagraph(index, -1)} disabled={index === 0}>Monter</Button>
-                        <Button variant="ghost" type="button" onClick={() => moveArticleParagraph(index, 1)} disabled={index === articleBodyParagraphs.length - 1}>Descendre</Button>
-                        <Button variant="ghost" type="button" onClick={() => removeArticleParagraph(index)} disabled={articleBodyParagraphs.length <= 1}>Supprimer ce paragraphe</Button>
-                      </div>
-                    </div>
-                  </div>
-                ))}
+              <label>
+                <span>Accroche (optionnelle)</span>
+                <textarea
+                  className="ui-field"
+                  rows={3}
+                  value={articleDraft.excerpt}
+                  onChange={(event) => setArticleDraft((current) => ({ ...current, excerpt: event.target.value }))}
+                  placeholder="Laissez vide : les premières phrases de l'article seront utilisées."
+                />
+              </label>
+
+              <div className="admin-article-editor-field">
+                <span className="admin-article-editor-label">Contenu de l&apos;article</span>
+                <ArticleEditor
+                  key={editingArticleSlug || "nouvel-article"}
+                  onChange={(html) => setArticleDraft((current) => ({ ...current, bodyHtml: html }))}
+                  onError={setError}
+                  value={articleDraft.bodyHtml}
+                />
               </div>
-              <Button disabled={saving} type="submit">{saving ? "Enregistrement..." : editingArticleSlug ? "Mettre à jour" : "Créer l'article"}</Button>
+
+              <div className="admin-article-flags">
+                <label className="contact-form-full admin-checkbox-item admin-checkbox-boxed">
+                  <input
+                    checked={articleDraft.published}
+                    onChange={(event) => setArticleDraft((current) => ({ ...current, published: event.target.checked }))}
+                    type="checkbox"
+                  />
+                  <span>
+                    Publier sur le site
+                    <small className="admin-field-hint">Décoché, l&apos;article reste un brouillon invisible des visiteurs.</small>
+                  </span>
+                </label>
+                <label className="contact-form-full admin-checkbox-item admin-checkbox-boxed">
+                  <input
+                    checked={articleDraft.indexable}
+                    onChange={(event) => setArticleDraft((current) => ({ ...current, indexable: event.target.checked }))}
+                    type="checkbox"
+                  />
+                  <span>
+                    Référencer sur Google
+                    <small className="admin-field-hint">Décoché, l&apos;article sort des résultats mais reste accessible par son lien.</small>
+                  </span>
+                </label>
+              </div>
+
+              <ArticleSeoPanel draft={articleDraft} onChange={setArticleDraft} />
+
+              <div className="admin-article-actions">
+                <Button disabled={saving} type="submit">
+                  {saving ? "Enregistrement..." : editingArticleSlug ? "Mettre à jour" : "Créer l'article"}
+                </Button>
+                <Button
+                  disabled={saving}
+                  onClick={(event) => handleArticleSubmit(event as unknown as React.FormEvent<HTMLFormElement>, true)}
+                  type="button"
+                  variant="secondary"
+                >
+                  Enregistrer et voir l&apos;aperçu
+                </Button>
+              </div>
             </form>
           </section>
         </div>
@@ -3088,5 +3127,85 @@ function CategoryVisualRow({
         </Button>
       </div>
     </article>
+  );
+}
+
+
+/**
+ * Panneau « Référencement Google » : titre et description, avec compteurs et
+ * aperçu du résultat de recherche mis à jour pendant la frappe. Laissés vides,
+ * le titre et l'accroche de l'article sont utilisés.
+ */
+function ArticleSeoPanel({
+  draft,
+  onChange,
+}: {
+  draft: ArticleDraft;
+  onChange: (updater: (current: ArticleDraft) => ArticleDraft) => void;
+}) {
+  const TITLE_LIMIT = 60;
+  const DESCRIPTION_LIMIT = 160;
+
+  // Ce que Google affichera réellement : la valeur saisie, ou le repli.
+  const effectiveTitle = draft.seoTitle.trim() || draft.title.trim() || "Titre de l'article";
+  const effectiveDescription =
+    draft.seoDescription.trim() ||
+    draft.excerpt.trim() ||
+    draft.bodyHtml.replace(/<[^>]*>/g, " ").replace(/\s+/g, " ").trim().slice(0, DESCRIPTION_LIMIT) ||
+    "Description de l'article.";
+
+  const custom = Boolean(draft.seoTitle.trim() || draft.seoDescription.trim());
+
+  return (
+    <details className="admin-seo-panel">
+      <summary>
+        Référencement Google
+        <span className={`admin-seo-tag${custom ? " is-custom" : ""}`}>
+          {custom ? "personnalisé" : "valeurs automatiques"}
+        </span>
+      </summary>
+
+      <div className="admin-seo-body">
+        <label>
+          <span>
+            Titre pour Google
+            <em className={draft.seoTitle.length > TITLE_LIMIT ? "is-over" : ""}>
+              {draft.seoTitle.length} / {TITLE_LIMIT}
+            </em>
+          </span>
+          <input
+            className="ui-field"
+            onChange={(event) => onChange((current) => ({ ...current, seoTitle: event.target.value }))}
+            placeholder={draft.title || "Repris du titre de l'article"}
+            value={draft.seoTitle}
+          />
+        </label>
+
+        <label>
+          <span>
+            Description pour Google
+            <em className={draft.seoDescription.length > DESCRIPTION_LIMIT ? "is-over" : ""}>
+              {draft.seoDescription.length} / {DESCRIPTION_LIMIT}
+            </em>
+          </span>
+          <textarea
+            className="ui-field"
+            onChange={(event) => onChange((current) => ({ ...current, seoDescription: event.target.value }))}
+            placeholder="Reprise de l'accroche de l'article"
+            rows={3}
+            value={draft.seoDescription}
+          />
+        </label>
+
+        <div className="admin-seo-preview">
+          <span className="admin-seo-preview-label">Aperçu du résultat de recherche</span>
+          <div className="admin-seo-preview-card">
+            <span className="admin-seo-preview-url">oxideve.com › actualites › {draft.slug || "nouvel-article"}</span>
+            <strong className="admin-seo-preview-title">{effectiveTitle}</strong>
+            <span className="admin-seo-preview-description">{effectiveDescription}</span>
+          </div>
+        </div>
+      </div>
+    </details>
   );
 }

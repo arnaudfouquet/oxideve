@@ -148,15 +148,23 @@ const adminUserCreateSchema = z.object({
 });
 
 const articleSchema = z.object({
-  slug: z.string().min(3).max(160).regex(/^[a-z0-9-]+$/),
+  // Le slug est déduit du titre à la création ; il n'est pas imposé par le
+  // client et ne change plus ensuite.
+  slug: z.string().max(160).regex(/^[a-z0-9-]*$/).optional().default(""),
   title: z.string().min(5).max(220),
   category: z.string().min(2).max(80),
-  excerpt: z.string().min(20).max(600),
-  body: z.array(z.string().min(20).max(4000)).min(1).max(20),
-  readingTime: z.string().min(2).max(40),
+  // L'extrait et le temps de lecture sont calculés quand ils sont vides.
+  excerpt: z.string().max(600).optional().default(""),
+  readingTime: z.string().max(40).optional().default(""),
+  // Contenu riche de l'éditeur ; il est filtré côté serveur avant stockage.
+  bodyHtml: z.string().max(200000).optional().default(""),
   publishedAt: z.string().min(10).max(10),
   featuredFormationSlug: z.string().max(120).optional().default(""),
   coverImageUrl: z.string().max(500).optional(),
+  published: z.coerce.boolean().optional().default(true),
+  indexable: z.coerce.boolean().optional().default(true),
+  seoTitle: z.string().max(200).optional().default(""),
+  seoDescription: z.string().max(400).optional().default(""),
 });
 
 const companySchema = z.object({

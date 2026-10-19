@@ -88,6 +88,14 @@ accepte("bloc image + texte", '<div data-layout="texte-droite"><img src="/upload
   "<h3>Titre</h3>",
   "<p>Corps</p>",
 ]);
+accepte("bouton d'action interne", '<div data-layout="bouton"><a href="/contact">Nous contacter</a></div>', [
+  "article-block-bouton",
+  '<a href="/contact">Nous contacter</a>',
+]);
+refuse("bouton vers javascript:", '<div data-layout="bouton"><a href="javascript:alert(1)">Piege</a></div>', [
+  "javascript:",
+  "<a href",
+]);
 
 console.log("\n=== Cas limites signalés comme pièges ===\n");
 

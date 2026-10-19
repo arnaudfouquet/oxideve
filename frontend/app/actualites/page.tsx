@@ -3,7 +3,7 @@ import Link from "next/link";
 import { ButtonLink, Container } from "@/components/ui";
 import { formatArticleDate, getArticleCover } from "@/components/NewsCard";
 import { NewsCategoryFilter } from "@/components/NewsCategoryFilter";
-import { getArticles } from "@/lib/content";
+import { getPublishedArticles } from "@/lib/content";
 
 export const metadata: Metadata = {
   title: "Actus sur la formation",
@@ -13,7 +13,7 @@ export const metadata: Metadata = {
 export const dynamic = "force-dynamic";
 
 export default async function ActualitesPage() {
-  const articles = await getArticles();
+  const articles = await getPublishedArticles();
   const sorted = [...articles].sort((a, b) => b.publishedAt.localeCompare(a.publishedAt));
   const [featured, ...rest] = sorted;
 

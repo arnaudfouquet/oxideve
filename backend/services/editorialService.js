@@ -1,6 +1,49 @@
 const { randomUUID } = require("crypto");
 const blogArticles = require("../../shared/editorial-data.json");
 const { getPrismaClient } = require("./prismaClient");
+const { sanitizeArticleHtml, htmlToPlainText } = require("./articleSanitizer");
+const { uniqueSlug } = require("./slugify");
+
+/** ~200 mots par minute, arrondi à la minute supérieure. */
+function estimateReadingTime(text) {
+  const words = text.split(/\s+/).filter(Boolean).length;
+  return `${Math.max(1, Math.ceil(words / 200))} min`;
+}
+
+/** Coupe au dernier mot entier, puis ajoute une ellipse. */
+function truncateAtWord(text, limit) {
+  const clean = (text || "").trim();
+  if (clean.length <= limit) return clean;
+
+  const cut = clean.slice(0, limit);
+  const lastSpace = cut.lastIndexOf(" ");
+  return `${cut.slice(0, lastSpace > 0 ? lastSpace : limit).trim()}…`;
+}
+
+/**
+ * Prépare les champs calculés d'un article : contenu filtré, extrait et temps
+ * de lecture déduits du texte, métadonnées SEO tronquées proprement.
+ */
+function prepareArticle(payload) {
+  const bodyHtml = sanitizeArticleHtml(payload.bodyHtml || "");
+  const plainText = htmlToPlainText(bodyHtml);
+
+  const excerpt = (payload.excerpt || "").trim() || truncateAtWord(plainText, 200);
+
+  return {
+    bodyHtml,
+    // On conserve `body` en paragraphes bruts : les anciens articles et les
+    // exports continuent de fonctionner sans connaître le HTML.
+    body: plainText ? plainText.split(/(?<=\.)\s+(?=[A-ZÀ-Ý])/).slice(0, 40) : [],
+    excerpt,
+    readingTime: (payload.readingTime || "").trim() || estimateReadingTime(plainText),
+    // Vides, le titre et l'accroche de l'article prennent le relais.
+    seoTitle: truncateAtWord((payload.seoTitle || "").trim(), 60),
+    seoDescription: truncateAtWord((payload.seoDescription || "").trim(), 160),
+    published: payload.published !== false,
+    indexable: payload.indexable !== false,
+  };
+}
 
 const inMemoryArticles = blogArticles.map((article) => ({ ...article }));
 
@@ -16,10 +59,16 @@ function normalizeArticle(article) {
     category: article.category,
     excerpt: article.excerpt,
     body: Array.isArray(article.body) ? article.body : [],
+    bodyHtml: article.bodyHtml || undefined,
     readingTime: article.readingTime,
     publishedAt: typeof article.publishedAt === "string" ? article.publishedAt.slice(0, 10) : new Date(article.publishedAt).toISOString().slice(0, 10),
     featuredFormationSlug: article.featuredFormationSlug || undefined,
     coverImageUrl: article.coverImageUrl || undefined,
+    // Les anciens articles n'ont pas ces colonnes : ils sont publiés et indexés.
+    published: article.published !== false,
+    indexable: article.indexable !== false,
+    seoTitle: article.seoTitle || "",
+    seoDescription: article.seoDescription || "",
   };
 }
 
@@ -87,24 +136,38 @@ async function getArticleBySlug(slug) {
 
 async function createArticle(payload) {
   const prisma = getPrismaClient();
+  const prepared = prepareArticle(payload);
+
+  // Le slug est calculé à la création puis figé : une adresse déjà partagée
+  // ou indexée par Google ne doit jamais changer.
+  const existingSlugs = prisma
+    ? (await prisma.article.findMany({ select: { slug: true } })).map((item) => item.slug)
+    : inMemoryArticles.map((item) => item.slug);
+
+  const slug = uniqueSlug(payload.slug || payload.title, existingSlugs);
 
   if (!prisma) {
-    const article = normalizeArticle({ id: randomUUID(), ...payload });
+    const article = normalizeArticle({ id: randomUUID(), ...payload, ...prepared, slug });
     inMemoryArticles.push(article);
     return article;
   }
 
   const article = await prisma.article.create({
     data: {
-      slug: payload.slug,
+      slug,
       title: payload.title,
       category: payload.category,
-      excerpt: payload.excerpt,
-      body: payload.body,
-      readingTime: payload.readingTime,
+      excerpt: prepared.excerpt,
+      body: prepared.body,
+      bodyHtml: prepared.bodyHtml,
+      readingTime: prepared.readingTime,
       publishedAt: new Date(payload.publishedAt),
       featuredFormationSlug: payload.featuredFormationSlug || null,
       coverImageUrl: payload.coverImageUrl || null,
+      published: prepared.published,
+      indexable: prepared.indexable,
+      seoTitle: prepared.seoTitle,
+      seoDescription: prepared.seoDescription,
     },
   });
 
@@ -113,6 +176,7 @@ async function createArticle(payload) {
 
 async function updateArticle(slug, payload) {
   const prisma = getPrismaClient();
+  const prepared = prepareArticle(payload);
 
   if (!prisma) {
     const index = inMemoryArticles.findIndex((item) => item.slug === slug);
@@ -121,7 +185,8 @@ async function updateArticle(slug, payload) {
       throw new Error("Article not found");
     }
 
-    const updated = normalizeArticle({ ...inMemoryArticles[index], ...payload, slug });
+    // `slug` en dernier : il reste celui d'origine même si le titre change.
+    const updated = normalizeArticle({ ...inMemoryArticles[index], ...payload, ...prepared, slug });
     inMemoryArticles[index] = updated;
     return updated;
   }
@@ -131,9 +196,14 @@ async function updateArticle(slug, payload) {
     data: {
       title: payload.title,
       category: payload.category,
-      excerpt: payload.excerpt,
-      body: payload.body,
-      readingTime: payload.readingTime,
+      excerpt: prepared.excerpt,
+      body: prepared.body,
+      bodyHtml: prepared.bodyHtml,
+      readingTime: prepared.readingTime,
+      published: prepared.published,
+      indexable: prepared.indexable,
+      seoTitle: prepared.seoTitle,
+      seoDescription: prepared.seoDescription,
       publishedAt: new Date(payload.publishedAt),
       featuredFormationSlug: payload.featuredFormationSlug || null,
       coverImageUrl: payload.coverImageUrl || null,

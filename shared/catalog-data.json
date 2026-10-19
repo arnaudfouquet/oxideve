@@ -151,7 +151,8 @@
           "label": "Démarches administratives PV 36 kVA",
           "slug": "demarches-administratives-pv-36kva-batterie"
         }
-      ]
+      ],
+      "cpfEligible": false
     },
     {
       "id": "qualipv-bati-generateur-photovoltaique-competence-bati",
@@ -300,7 +301,8 @@
           "label": "Maintenance des installations photovoltaïques",
           "slug": "maintenance-installations-photovoltaiques"
         }
-      ]
+      ],
+      "cpfEligible": false
     },
     {
       "id": "qualipv-hp-module-haute-puissance-500kva",
@@ -449,7 +451,8 @@
           "label": "Démarches administratives PV supérieur à 36 kVA",
           "slug": "demarches-administratives-pv-superieur-36kva-batterie"
         }
-      ]
+      ],
+      "cpfEligible": false
     },
     {
       "id": "demarches-administratives-pv-36kva-batterie",
@@ -571,7 +574,8 @@
           "label": "QualiPV 36 kVA",
           "slug": "qualipv-36-generateur-photovoltaique-electricite"
         }
-      ]
+      ],
+      "cpfEligible": false
     },
     {
       "id": "demarches-administratives-pv-superieur-36kva-batterie",
@@ -685,7 +689,8 @@
           "label": "Démarches administratives PV 36 kVA en visio",
           "slug": "demarches-administratives-pv-36kva-batterie-visio"
         }
-      ]
+      ],
+      "cpfEligible": false
     },
     {
       "id": "demarches-administratives-pv-36kva-batterie-visio",
@@ -786,7 +791,8 @@
           "label": "QualiPV 36 kVA",
           "slug": "qualipv-36-generateur-photovoltaique-electricite"
         }
-      ]
+      ],
+      "cpfEligible": false
     },
     {
       "id": "maintenance-installations-photovoltaiques",
@@ -904,7 +910,8 @@
           "label": "Mise en service HUAWEI",
           "slug": "mise-en-service-certification-huawei"
         }
-      ]
+      ],
+      "cpfEligible": false
     },
     {
       "id": "mise-en-service-certification-huawei",
@@ -1001,7 +1008,8 @@
           "label": "Maintenance des installations photovoltaïques",
           "slug": "maintenance-installations-photovoltaiques"
         }
-      ]
+      ],
+      "cpfEligible": false
     },
     {
       "id": "mise-en-service-batterie-aura-bourgeois-global",
@@ -1098,7 +1106,8 @@
           "label": "QualiPV 36 kVA",
           "slug": "qualipv-36-generateur-photovoltaique-electricite"
         }
-      ]
+      ],
+      "cpfEligible": false
     },
     {
       "id": "pose-systemes-fixations-pv-surimposition",
@@ -1199,7 +1208,8 @@
           "label": "QualiPV 36 kVA",
           "slug": "qualipv-36-generateur-photovoltaique-electricite"
         }
-      ]
+      ],
+      "cpfEligible": false
     },
     {
       "id": "raccordement-electrique-pv-residentiel",
@@ -1300,7 +1310,8 @@
           "label": "Maintenance des installations photovoltaïques",
           "slug": "maintenance-installations-photovoltaiques"
         }
-      ]
+      ],
+      "cpfEligible": false
     },
     {
       "id": "tereva-solaire-pv-autoconsommation-niveau-2",
@@ -1411,7 +1422,8 @@
           "slug": "qualipv-36-generateur-photovoltaique-electricite"
         }
       ],
-      "subCategory": "Commerce"
+      "subCategory": "Commerce",
+      "cpfEligible": false
     },
     {
       "id": "tereva-solaire-pv-autoconsommation-niveau-3",
@@ -1522,7 +1534,8 @@
           "slug": "vendre-solaire-autoconsommation-2-jours"
         }
       ],
-      "subCategory": "Commerce"
+      "subCategory": "Commerce",
+      "cpfEligible": false
     },
     {
       "id": "vendre-solaire-autoconsommation-2-jours",
@@ -1641,7 +1654,8 @@
           "slug": "tereva-solaire-pv-autoconsommation-niveau-2"
         }
       ],
-      "subCategory": "Commerce"
+      "subCategory": "Commerce",
+      "cpfEligible": false
     },
     {
       "id": "attestation-aptitude-fluides-frigorigenes-categorie-1",
@@ -1878,7 +1892,8 @@
           "label": "QualiPAC",
           "slug": "qualipac-pompes-a-chaleur-habitat-individuel"
         }
-      ]
+      ],
+      "cpfEligible": false
     },
     {
       "id": "initiation-installation-climatisation",
@@ -2001,7 +2016,8 @@
           "slug": "maintenance-pompe-a-chaleur"
         }
       ],
-      "subCategory": "Climatisation"
+      "subCategory": "Climatisation",
+      "cpfEligible": false
     },
     {
       "id": "initiation-installation-ballons-thermodynamiques",
@@ -2102,7 +2118,8 @@
           "label": "Mise en service chaudières granulés et bois",
           "slug": "mise-en-service-entretien-chaudieres-granules-bois"
         }
-      ]
+      ],
+      "cpfEligible": false
     },
     {
       "id": "initiation-installation-pac-hitachi",
@@ -2224,7 +2241,8 @@
           "label": "Maintenance de la pompe à chaleur",
           "slug": "maintenance-pompe-a-chaleur"
         }
-      ]
+      ],
+      "cpfEligible": false
     },
     {
       "id": "initiation-multi-split-triple-c",
@@ -2339,7 +2357,8 @@
           "slug": "maintenance-pompe-a-chaleur"
         }
       ],
-      "subCategory": "Climatisation"
+      "subCategory": "Climatisation",
+      "cpfEligible": false
     },
     {
       "id": "maintenance-pompe-a-chaleur",
@@ -2461,7 +2480,8 @@
           "label": "Installation des pompes à chaleur Hitachi",
           "slug": "initiation-installation-pac-hitachi"
         }
-      ]
+      ],
+      "cpfEligible": false
     },
     {
       "id": "mise-en-service-entretien-chaudieres-granules-bois",
@@ -2584,7 +2604,8 @@
           "slug": "initiation-installation-ballons-thermodynamiques"
         }
       ],
-      "subCategory": ""
+      "subCategory": "",
+      "cpfEligible": false
     },
     {
       "id": "qualipac-pompes-a-chaleur-habitat-individuel",
@@ -2725,7 +2746,8 @@
           "label": "Initiation PAC air/eau",
           "slug": "initiation-pac-airh2o"
         }
-      ]
+      ],
+      "cpfEligible": false
     },
     {
       "id": "irve-niveau-1",
@@ -2852,7 +2874,8 @@
           "label": "Découverte de l'électricité",
           "slug": "decouverte-de-l-electricite"
         }
-      ]
+      ],
+      "cpfEligible": false
     },
     {
       "id": "irve-niveau-p2",
@@ -2973,7 +2996,8 @@
           "label": "Raccordement électrique PV résidentiel",
           "slug": "raccordement-electrique-pv-residentiel"
         }
-      ]
+      ],
+      "cpfEligible": false
     },
     {
       "id": "gestion-priorites-intra-entreprise",
@@ -3095,7 +3119,8 @@
           "label": "PowerPoint niveau avancé",
           "slug": "powerpoint-niveau-avance"
         }
-      ]
+      ],
+      "cpfEligible": false
     },
     {
       "id": "decouverte-de-l-electricite",
@@ -3189,7 +3214,8 @@
           "slug": "sst-initial"
         }
       ],
-      "subCategory": "Électricité"
+      "subCategory": "Électricité",
+      "cpfEligible": false
     },
     {
       "id": "prevention-chutes-hauteur-harnais-pont-fixe",
@@ -3296,7 +3322,8 @@
           "slug": "sst-initial"
         }
       ],
-      "subCategory": "Travail en hauteur"
+      "subCategory": "Travail en hauteur",
+      "cpfEligible": false
     },
     {
       "id": "sst-initial",
@@ -3518,7 +3545,8 @@
           "slug": "prevention-chutes-hauteur-harnais-pont-fixe"
         }
       ],
-      "subCategory": "Sauveteur secouriste du travail"
+      "subCategory": "Sauveteur secouriste du travail",
+      "cpfEligible": false
     },
     {
       "id": "decouvrir-intelligence-artificielle",
@@ -3619,7 +3647,8 @@
           "label": "Gestion des priorités",
           "slug": "gestion-priorites-intra-entreprise"
         }
-      ]
+      ],
+      "cpfEligible": false
     },
     {
       "id": "excel-niveau-1",
@@ -3720,7 +3749,8 @@
           "label": "Découvrir l'Intelligence Artificielle",
           "slug": "decouvrir-intelligence-artificielle"
         }
-      ]
+      ],
+      "cpfEligible": false
     },
     {
       "id": "excel-niveau-2",
@@ -3821,7 +3851,8 @@
           "label": "PowerPoint niveau avancé",
           "slug": "powerpoint-niveau-avance"
         }
-      ]
+      ],
+      "cpfEligible": false
     },
     {
       "id": "excel-niveau-avance",
@@ -3943,7 +3974,8 @@
           "label": "Découvrir l'Intelligence Artificielle",
           "slug": "decouvrir-intelligence-artificielle"
         }
-      ]
+      ],
+      "cpfEligible": false
     },
     {
       "id": "powerpoint-niveau-avance",
@@ -4044,7 +4076,8 @@
           "label": "Word niveau débutant",
           "slug": "word-niveau-debutant"
         }
-      ]
+      ],
+      "cpfEligible": false
     },
     {
       "id": "powerpoint-niveau-debutant",
@@ -4145,7 +4178,8 @@
           "label": "Excel niveau 1",
           "slug": "excel-niveau-1"
         }
-      ]
+      ],
+      "cpfEligible": false
     },
     {
       "id": "word-niveau-debutant",
@@ -4246,7 +4280,8 @@
           "label": "PowerPoint niveau avancé",
           "slug": "powerpoint-niveau-avance"
         }
-      ]
+      ],
+      "cpfEligible": false
     },
     {
       "category": "Sécurité au travail",
@@ -4368,7 +4403,8 @@
           "label": "Découverte de l'électricité",
           "slug": "decouverte-de-l-electricite"
         }
-      ]
+      ],
+      "cpfEligible": false
     },
     {
       "category": "Sécurité au travail",
@@ -4490,7 +4526,8 @@
           "label": "Découverte de l'électricité",
           "slug": "decouverte-de-l-electricite"
         }
-      ]
+      ],
+      "cpfEligible": false
     },
     {
       "category": "Sécurité au travail",
@@ -4654,7 +4691,8 @@
           "label": "Habilitation BP photovoltaïque",
           "slug": "habilitation-electrique-bp-photovoltaique"
         }
-      ]
+      ],
+      "cpfEligible": false
     },
     {
       "category": "Sécurité au travail",
@@ -4817,7 +4855,8 @@
           "label": "Recyclage BP photovoltaïque",
           "slug": "habilitation-electrique-recyclage-bp-photovoltaique"
         }
-      ]
+      ],
+      "cpfEligible": false
     },
     {
       "category": "Sécurité au travail",
@@ -4938,7 +4977,8 @@
           "label": "Habilitation B1V, BR, BE Essai, B2V, BC",
           "slug": "habilitation-electrique-b1v-br-be-essai-b2v-bc"
         }
-      ]
+      ],
+      "cpfEligible": false
     },
     {
       "category": "Sécurité au travail",
@@ -5066,7 +5106,8 @@
           "label": "Recyclage B1V, BR, BE Essai, B2V, BC",
           "slug": "habilitation-electrique-recyclage-b1v-br-be-essai-b2v-bc"
         }
-      ]
+      ],
+      "cpfEligible": false
     },
     {
       "location": "Toulouse",
@@ -5145,7 +5186,8 @@
       "price": "Nous consulter",
       "priceDetails": "Tarif communiqué sur demande, selon le financement mobilisé.",
       "seoTitle": "Bilan de compétences à Toulouse",
-      "seoDescription": "Bilan de compétences de 22 heures pour analyser vos compétences, définir votre projet professionnel et bâtir un plan d'action."
+      "seoDescription": "Bilan de compétences de 22 heures pour analyser vos compétences, définir votre projet professionnel et bâtir un plan d'action.",
+      "cpfEligible": true
     },
     {
       "location": "Dans votre entreprise",
@@ -5225,7 +5267,8 @@
       "price": "Nous consulter",
       "priceDetails": "Formation en intra-entreprise, tarif sur devis.",
       "seoTitle": "Formation autorisation de conduite en entreprise",
-      "seoDescription": "Formation à l'autorisation de conduite dans votre entreprise, en équivalence des recommandations R482 à R490."
+      "seoDescription": "Formation à l'autorisation de conduite dans votre entreprise, en équivalence des recommandations R482 à R490.",
+      "cpfEligible": false
     },
     {
       "location": "Montpellier et Toulouse",
@@ -5312,7 +5355,8 @@
       "price": "200 EUR",
       "priceDetails": "Tarif HT par participant, TVA non applicable (article 261B du CGI). Sur devis pour l'Occitanie.",
       "seoTitle": "Formation équipier de première intervention 3h30",
-      "seoDescription": "Formation incendie de 3 h 30 : alerte, extincteurs et évacuation, avec exercices pratiques sur bac à feu."
+      "seoDescription": "Formation incendie de 3 h 30 : alerte, extincteurs et évacuation, avec exercices pratiques sur bac à feu.",
+      "cpfEligible": false
     },
     {
       "location": "Montpellier et Toulouse",
@@ -5399,7 +5443,8 @@
       "price": "330 EUR",
       "priceDetails": "Tarif HT par participant, TVA non applicable (article 261B du CGI). Sur devis pour l'Occitanie.",
       "seoTitle": "Formation équipier de première intervention 7h",
-      "seoDescription": "Formation incendie d'une journée avec mise en situation en local enfumé et exercices sur feu réel."
+      "seoDescription": "Formation incendie d'une journée avec mise en situation en local enfumé et exercices sur feu réel.",
+      "cpfEligible": false
     },
     {
       "location": "Montpellier et Toulouse",
@@ -5494,7 +5539,8 @@
       "price": "320 EUR",
       "priceDetails": "Tarif HT par participant, TVA non applicable (article 261B du CGI). Sur devis pour l'Occitanie.",
       "seoTitle": "Formation PRAP Initial, certificat Acteur PRAP IBC",
-      "seoDescription": "Formation PRAP Initial de 14 heures sur 2 journées, certifiante INRS, pour prévenir les risques liés à l'activité physique."
+      "seoDescription": "Formation PRAP Initial de 14 heures sur 2 journées, certifiante INRS, pour prévenir les risques liés à l'activité physique.",
+      "cpfEligible": false
     },
     {
       "location": "Montpellier et Toulouse",
@@ -5592,7 +5638,8 @@
       "price": "650 EUR",
       "priceDetails": "Tarif HT par participant, TVA non applicable (article 261B du CGI).",
       "seoTitle": "Transformer votre savoir-faire en chiffre d'affaires",
-      "seoDescription": "Formation commerciale de 2 jours pour les artisans : analyse du besoin, devis argumenté, prospection et suivi client."
+      "seoDescription": "Formation commerciale de 2 jours pour les artisans : analyse du besoin, devis argumenté, prospection et suivi client.",
+      "cpfEligible": false
     }
   ],
   "sessions": [

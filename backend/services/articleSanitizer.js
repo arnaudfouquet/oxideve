@@ -112,9 +112,28 @@ function rebuildLayoutBlock(escapedBlock) {
     .map((item) => `<p>${item[1]}</p>`)
     .join("");
 
-  if (!images.length && !heading && !paragraphs) return "";
+  // Bouton d'appel à l'action : on ne garde que la destination et le libellé,
+  // en passant par la même liste blanche que les liens ordinaires.
+  const links = [
+    ...escapedBlock.matchAll(/&lt;a\b((?:(?!&gt;)[\s\S])*?)&gt;([\s\S]*?)&lt;\/a&gt;/gi),
+  ]
+    .map((item) => {
+      const href = decodeEntities(readAttribute(item[1], "href"));
+      if (!isAllowedHref(href)) return "";
 
-  return `<div class="article-block article-block-${escapeHtml(layout)}">${images.join("")}${heading}${paragraphs}</div>`;
+      const label = item[2].replace(/&lt;[\s\S]*?&gt;/g, "").trim();
+      if (!label) return "";
+
+      const external = href.startsWith("https://");
+      const extra = external ? ' target="_blank" rel="noopener noreferrer"' : "";
+
+      return `<a href="${escapeHtml(href)}"${extra}>${label}</a>`;
+    })
+    .join("");
+
+  if (!images.length && !heading && !paragraphs && !links) return "";
+
+  return `<div class="article-block article-block-${escapeHtml(layout)}">${images.join("")}${heading}${paragraphs}${links}</div>`;
 }
 
 /**
@@ -184,13 +203,18 @@ function sanitizeArticleHtml(input) {
   return output.trim();
 }
 
-/** Texte brut d'un article, pour l'extrait et le temps de lecture. */
+/**
+ * Texte brut d'un article, pour l'extrait et le temps de lecture.
+ * On décode les entités : ce texte est affiché par React, qui l'échappe à son
+ * tour. Sans décodage, une apostrophe ressortirait en `&amp;#39;` à l'écran.
+ */
 function htmlToPlainText(html) {
-  return sanitizeArticleHtml(html)
+  const withoutTags = sanitizeArticleHtml(html)
     .replace(/<[^>]*>/g, " ")
-    .replace(/&nbsp;/g, " ")
     .replace(/\s+/g, " ")
     .trim();
+
+  return decodeEntities(withoutTags).replace(/\s+/g, " ").trim();
 }
 
 module.exports = {

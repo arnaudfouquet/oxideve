@@ -203,6 +203,15 @@ export async function getArticles(): Promise<Article[]> {
   }
 }
 
+/**
+ * Articles visibles des visiteurs : les brouillons sont réservés à l'admin et
+ * à l'aperçu. `getArticles()` reste non filtré pour l'écran d'administration.
+ */
+export async function getPublishedArticles(): Promise<Article[]> {
+  const articles = await getArticles();
+  return articles.filter((article) => article.published !== false);
+}
+
 export async function getArticleBySlug(slug: string): Promise<Article | undefined> {
   try {
     const service = getEditorialService();

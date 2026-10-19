@@ -9405,3 +9405,243 @@ a.ct-channel-value:hover {
     margin-left: 0.5rem;
   }
 }
+
+
+/* ---------------------------------------------------------------
+   Editeur d'articles (admin)
+   --------------------------------------------------------------- */
+
+.article-editor {
+  display: grid;
+  gap: 0.6rem;
+}
+
+.article-editor-blocks {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  padding: 0.6rem 0.75rem;
+  border: 1px solid var(--color-light);
+  border-radius: 10px;
+  background: #fbfdfe;
+}
+
+.article-editor-blocks-label {
+  font-size: 0.78rem;
+  font-weight: 700;
+  color: var(--color-navy);
+}
+
+.article-editor-blocks button {
+  padding: 0.35rem 0.7rem;
+  border: 1px solid var(--color-blue-pale);
+  border-radius: 999px;
+  background: #ffffff;
+  color: var(--color-navy);
+  font: inherit;
+  font-size: 0.8rem;
+  cursor: pointer;
+}
+
+.article-editor-blocks button:hover:not(:disabled) {
+  border-color: var(--color-blue);
+  background: var(--color-blue-pale);
+}
+
+.article-editor-blocks button:disabled {
+  opacity: 0.5;
+  cursor: progress;
+}
+
+.article-editor-status {
+  font-size: 0.78rem;
+  color: var(--color-blue);
+}
+
+.article-editor-surface {
+  position: relative;
+}
+
+/* La zone de saisie doit rester confortable meme pour un article long. */
+.article-editor-surface .ql-container {
+  min-height: 320px;
+  font-family: var(--font-sans), sans-serif;
+  font-size: 0.95rem;
+}
+
+.article-editor-surface .ql-editor {
+  min-height: 320px;
+}
+
+/* Barre flottante au-dessus de l'element selectionne. */
+.article-editor-floating {
+  position: absolute;
+  z-index: 5;
+  display: flex;
+  gap: 0.25rem;
+  padding: 0.25rem;
+  border-radius: 8px;
+  background: var(--color-navy);
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.18);
+}
+
+.article-editor-floating button {
+  padding: 0.25rem 0.5rem;
+  border: 0;
+  border-radius: 5px;
+  background: transparent;
+  color: #ffffff;
+  font: inherit;
+  font-size: 0.76rem;
+  cursor: pointer;
+}
+
+.article-editor-floating button:hover {
+  background: rgba(255, 255, 255, 0.18);
+}
+
+.article-editor-floating button.is-danger:hover {
+  background: #ff4d4f;
+}
+
+/* ---------------------------------------------------------------
+   Blocs de mise en page, dans l'editeur ET sur le site public
+   --------------------------------------------------------------- */
+
+.ql-editor [data-layout],
+.article-block {
+  display: grid;
+  gap: 12px;
+  margin: 20px 0;
+}
+
+.ql-editor [data-layout="galerie-2"],
+.article-block-galerie-2 {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.ql-editor [data-layout="galerie-3"],
+.article-block-galerie-3 {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.ql-editor [data-layout="galerie-4"],
+.article-block-galerie-4 {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.ql-editor [data-layout^="image-texte"],
+.article-block-image-texte-gauche,
+.article-block-image-texte-droite {
+  grid-template-columns: minmax(0, 320px) minmax(0, 1fr);
+  align-items: start;
+}
+
+/* Image a droite : on inverse l'ordre sans toucher au balisage. */
+.ql-editor [data-layout="image-texte-droite"] img,
+.article-block-image-texte-droite img {
+  order: 2;
+}
+
+.ql-editor [data-layout] img,
+.article-block img {
+  width: 100%;
+  height: 100%;
+  max-height: 260px;
+  object-fit: cover;
+  border-radius: 12px;
+}
+
+.article-block-image-texte-gauche h3,
+.article-block-image-texte-droite h3,
+.article-block-image-texte-gauche p,
+.article-block-image-texte-droite p {
+  grid-column: 2;
+  margin: 0 0 8px;
+}
+
+.article-block-image-texte-droite h3,
+.article-block-image-texte-droite p {
+  grid-column: 1;
+}
+
+/* Bouton d'appel a l'action. */
+.ql-editor [data-layout="bouton"],
+.article-block-bouton {
+  display: block;
+  text-align: center;
+}
+
+.ql-editor [data-layout="bouton"] a,
+.article-block-bouton a {
+  display: inline-block;
+  padding: 12px 28px;
+  border-radius: 10px;
+  background: var(--color-green);
+  color: #ffffff;
+  font-weight: 700;
+  text-decoration: none;
+}
+
+/* Les images inserees seules sont alignees a gauche, pas centrees. */
+.ql-editor img,
+.news-article-body img {
+  display: block;
+  margin: 16px 0;
+  max-width: 100%;
+  height: auto;
+  border-radius: 12px;
+}
+
+/* Rendu public du corps d'article. */
+.news-article-body h2 {
+  margin: 28px 0 10px;
+  font-size: 1.5rem;
+  color: var(--color-navy);
+}
+
+.news-article-body h3 {
+  margin: 22px 0 8px;
+  font-size: 1.2rem;
+  color: var(--color-navy);
+}
+
+.news-article-body ul,
+.news-article-body ol {
+  margin: 12px 0;
+  padding-left: 22px;
+}
+
+.news-article-body li {
+  margin-bottom: 6px;
+}
+
+.news-article-body blockquote {
+  margin: 20px 0;
+  padding: 12px 18px;
+  border-left: 3px solid var(--color-green);
+  background: var(--color-green-pale);
+  font-style: italic;
+}
+
+.news-article-body a {
+  color: var(--color-blue);
+}
+
+@media (max-width: 760px) {
+  .ql-editor [data-layout="galerie-3"],
+  .article-block-galerie-3,
+  .ql-editor [data-layout^="image-texte"],
+  .article-block-image-texte-gauche,
+  .article-block-image-texte-droite {
+    grid-template-columns: 1fr;
+  }
+
+  .article-block-image-texte-gauche h3,
+  .article-block-image-texte-droite h3,
+  .article-block-image-texte-gauche p,
+  .article-block-image-texte-droite p {
+    grid-column: 1;
+  }
+}
