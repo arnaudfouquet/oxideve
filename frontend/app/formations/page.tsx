@@ -16,9 +16,6 @@ export default async function FormationsPage() {
   const categories = Array.from(new Set(formations.map((formation) => formation.category))).sort((left, right) =>
     left.localeCompare(right, "fr"),
   );
-  const durations = Array.from(new Set(formations.map((formation) => formation.duration))).sort((left, right) =>
-    left.localeCompare(right, "fr", { numeric: true }),
-  );
 
   // Villes réellement programmées, par formation : alimente le filtre Ville.
   const sessions = await getSessions();
@@ -60,7 +57,6 @@ export default async function FormationsPage() {
           categories={categories}
           citiesByFormation={citiesByFormation}
           sessionsByFormation={sessionsByFormation}
-          durations={durations}
           formations={formations}
         />
       </Container>

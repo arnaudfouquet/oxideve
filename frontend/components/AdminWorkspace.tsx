@@ -4,6 +4,7 @@ import { useEffect, useMemo, useState } from "react";
 import { Button } from "@/components/ui";
 import { DataTable } from "@/components/admin/DataTable";
 import { Drawer } from "@/components/admin/Drawer";
+import { getCategoryTheme } from "@/lib/formation-theme";
 import type { AdminUser, Article, BulletinInscriptionWithAttempts, Company, CrmInteraction, CrmTask, Formation, Participant, PendingSyncSession, ProgrammeDay, Registration, RegistrationNote, Session } from "../../shared/types";
 
 type Props = {
@@ -44,6 +45,8 @@ type FormationDraft = {
   levelLabel: string;
   subCategory: string;
   cpfEligible: boolean;
+  bannerImage: string;
+  bannerPosition: string;
 };
 
 type SessionDraft = {
@@ -198,6 +201,8 @@ function toFormationDraft(formation?: Formation): FormationDraft {
       levelLabel: "",
       subCategory: "",
       cpfEligible: false,
+      bannerImage: "",
+      bannerPosition: "",
     };
   }
 
@@ -225,6 +230,8 @@ function toFormationDraft(formation?: Formation): FormationDraft {
     levelLabel: formation.levelLabel || "",
     subCategory: formation.subCategory || "",
     cpfEligible: Boolean(formation.cpfEligible),
+    bannerImage: formation.bannerImage || "",
+    bannerPosition: formation.bannerPosition || "",
   };
 }
 
@@ -1261,6 +1268,8 @@ export function AdminWorkspace({
       levelLabel: formationDraft.levelLabel.trim(),
       subCategory: formationDraft.subCategory.trim(),
       cpfEligible: formationDraft.cpfEligible,
+      bannerImage: formationDraft.bannerImage.trim(),
+      bannerPosition: formationDraft.bannerPosition.trim(),
     };
 
     const isEditing = Boolean(editingFormationSlug);
@@ -1930,6 +1939,7 @@ export function AdminWorkspace({
                   <input type="checkbox" checked={formationDraft.cpfEligible} onChange={(event) => setFormationDraft((current) => ({ ...current, cpfEligible: event.target.checked }))} />
                   <span>Finançable CPF</span>
                 </label>
+                <FormationBannerField draft={formationDraft} onChange={setFormationDraft} />
               </div></div>
               <div className="admin-form-section" id="formation-section-contenu"><h3>Contenu</h3>
                 <label>
@@ -2677,6 +2687,90 @@ export function AdminWorkspace({
         </section>
       ) : null}
       </div>
+    </div>
+  );
+}
+
+/**
+ * Photo de bannière de la formation : on peut remplacer la photo héritée de la
+ * sous-catégorie et ajuster son cadrage, avec un aperçu au même format que la
+ * page publique.
+ */
+function FormationBannerField({
+  draft,
+  onChange,
+}: {
+  draft: FormationDraft;
+  onChange: (updater: (current: FormationDraft) => FormationDraft) => void;
+}) {
+  const theme = getCategoryTheme(draft.category, draft.subCategory, {
+    bannerImage: draft.bannerImage,
+    bannerPosition: draft.bannerPosition,
+  });
+
+  // Le cadrage est stocké en "X% Y%" ; on le découpe pour piloter deux curseurs.
+  const parts = (theme.bannerPosition || "50% 50%").split(/\s+/);
+  const positionX = Number.parseInt(parts[0], 10);
+  const positionY = Number.parseInt(parts[1] ?? parts[0], 10);
+  const safeX = Number.isFinite(positionX) ? positionX : 50;
+  const safeY = Number.isFinite(positionY) ? positionY : 50;
+
+  function setPosition(x: number, y: number) {
+    onChange((current) => ({ ...current, bannerPosition: `${x}% ${y}%` }));
+  }
+
+  return (
+    <div className="admin-banner-field">
+      <label>
+        <span>Photo de la formation (optionnel)</span>
+        <input
+          className="ui-field"
+          value={draft.bannerImage}
+          onChange={(event) => onChange((current) => ({ ...current, bannerImage: event.target.value }))}
+          placeholder="/assets/formations/banner-securite.webp"
+        />
+        <small className="admin-field-hint">
+          Laissez vide pour reprendre automatiquement la photo de la sous-catégorie, ou à défaut celle de la catégorie.
+        </small>
+      </label>
+
+      <div className="admin-banner-preview">
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img alt="Aperçu de la bannière" src={theme.banner} style={{ objectPosition: `${safeX}% ${safeY}%` }} />
+      </div>
+
+      <div className="admin-banner-sliders">
+        <label>
+          <span>Cadrage horizontal : {safeX}%</span>
+          <input
+            type="range"
+            min={0}
+            max={100}
+            value={safeX}
+            onChange={(event) => setPosition(Number(event.target.value), safeY)}
+          />
+        </label>
+        <label>
+          <span>Cadrage vertical : {safeY}%</span>
+          <input
+            type="range"
+            min={0}
+            max={100}
+            value={safeY}
+            onChange={(event) => setPosition(safeX, Number(event.target.value))}
+          />
+        </label>
+      </div>
+
+      {draft.bannerPosition ? (
+        <button
+          className="admin-banner-reset"
+          type="button"
+          onClick={() => onChange((current) => ({ ...current, bannerPosition: "" }))}
+        >
+          Rétablir le cadrage par défaut
+        </button>
+      ) : null}
     </div>
   );
 }

@@ -8,7 +8,7 @@
       "category": "Photovoltaïque",
       "duration": "3 jours",
       "durationDetails": "3 jours, soit 21 heures de formation, avec alternance d'apports techniques, d'études de cas et de mises en situation terrain.",
-      "location": "Montpellier et distanciel tutoré",
+      "location": "Montpellier et distanciel",
       "audience": "Installateurs photovoltaïques et responsables techniques",
       "summary": "Préparez vos équipes à concevoir, poser et contrôler des générateurs photovoltaïques raccordés au réseau jusqu'à 36 kVA.",
       "description": "Cette formation accompagne les électriciens et installateurs qui doivent intervenir sur des installations photovoltaïques jusqu'à 36 kVA en respectant les exigences de sécurité, de raccordement et de qualification QualiPV compétence électrique.",
@@ -585,7 +585,7 @@
       "category": "Photovoltaïque",
       "duration": "1 jour",
       "durationDetails": "1 jour, soit 7 heures de formation, pour aborder les formalités administratives propres aux projets photovoltaïques de plus de 36 kVA avec batterie.",
-      "location": "Montpellier et distanciel tutoré",
+      "location": "Montpellier et distanciel",
       "audience": "Chargés d'affaires, bureaux d'études et coordinateurs projet",
       "summary": "Préparez les dossiers administratifs des projets photovoltaïques supérieurs à 36 kVA incluant une batterie de stockage.",
       "description": "Le parcours revient sur les autorisations, les échanges administratifs et la structuration documentaire des projets photovoltaïques de moyenne et forte puissance, batterie de stockage comprise.",
@@ -700,7 +700,7 @@
       "category": "Photovoltaïque",
       "duration": "1 jour",
       "durationDetails": "1 jour, soit 7 heures de formation en visioconférence, pour traiter les démarches administratives d'un projet photovoltaïque jusqu'à 36 kVA avec batterie.",
-      "location": "Distanciel tutoré",
+      "location": "Distanciel",
       "audience": "Installateurs, chargés d'affaires et assistants administratifs à distance",
       "summary": "Suivez à distance une formation complète sur les démarches administratives d'un projet photovoltaïque jusqu'à 36 kVA avec batterie.",
       "description": "Cette session en visioconférence reprend les formalités, interlocuteurs, pièces et délais d'un projet photovoltaïque résidentiel ou petit tertiaire jusqu'à 36 kVA avec batterie, dans un format entièrement à distance.",
@@ -771,7 +771,7 @@
         },
         {
           "question": "Cette formation est-elle finançable par mon OPCO ?",
-          "answer": "Oui, les sessions en distanciel tutoré sont éligibles à une prise en charge par les OPCO du secteur."
+          "answer": "Oui, les sessions en distanciel sont éligibles à une prise en charge par les OPCO du secteur."
         }
       ],
       "stats": {
@@ -1665,7 +1665,7 @@
       "category": "Photovoltaïque",
       "duration": "1 jour",
       "durationDetails": "1 jour, soit 7 heures de formation, pour structurer un discours commercial clair sur le photovoltaïque et l'autoconsommation en résidentiel et petit tertiaire.",
-      "location": "Montpellier et distanciel tutoré",
+      "location": "Montpellier et distanciel",
       "audience": "Chargés d'affaires, commerciaux et responsables développement",
       "summary": "Présentez le solaire photovoltaïque et l'autoconsommation en résidentiel et petit tertiaire avec un discours clair et crédible.",
       "description": "Cette formation d'une journée aide les équipes commerciales à expliquer les usages, le retour sur investissement, les points de vigilance et les attentes clients autour de l'autoconsommation en résidentiel et petit tertiaire.",
@@ -1767,7 +1767,7 @@
       "category": "Photovoltaïque",
       "duration": "2 jours",
       "durationDetails": "2 jours, soit 14 heures de formation, version approfondie pour structurer un discours commercial complet sur le photovoltaïque et l'autoconsommation.",
-      "location": "Montpellier et distanciel tutoré",
+      "location": "Montpellier et distanciel",
       "audience": "Chargés d'affaires, commerciaux et responsables développement",
       "summary": "Approfondissez en deux jours votre discours commercial sur le solaire photovoltaïque et l'autoconsommation en résidentiel et petit tertiaire.",
       "description": "Version approfondie de la formation commerciale sur l'autoconsommation, avec davantage de mises en situation et de traitement d'objections pour les équipes commerciales en résidentiel et petit tertiaire.",
@@ -2016,7 +2016,8 @@
           "label": "Initiation au multi-split TRIPLE C",
           "slug": "initiation-multi-split-triple-c"
         }
-      ]
+      ],
+      "cpfEligible": true
     },
     {
       "id": "initiation-pac-airh2o",
@@ -3914,7 +3915,7 @@
         }
       ],
       "subCategory": "Sauveteur secouriste du travail",
-      "cpfEligible": true
+      "cpfEligible": false
     },
     {
       "id": "sst-recyclage",
@@ -4027,7 +4028,7 @@
       "category": "Bureautique",
       "duration": "1 jour",
       "durationDetails": "1 jour, soit 7 heures de formation, pour découvrir les usages concrets de l'intelligence artificielle dans le travail quotidien.",
-      "location": "Montpellier et distanciel tutoré",
+      "location": "Montpellier et distanciel",
       "audience": "Tout collaborateur souhaitant découvrir les outils d'intelligence artificielle",
       "summary": "Découvrez les usages concrets de l'intelligence artificielle générative pour gagner en efficacité au quotidien.",
       "description": "Cette formation d'initiation présente les principes de l'intelligence artificielle générative, ses usages professionnels courants et les bonnes pratiques d'utilisation en toute confidentialité.",
@@ -4129,7 +4130,7 @@
       "category": "Bureautique",
       "duration": "1 jour",
       "durationDetails": "1 jour, soit 7 heures de formation, pour acquérir les bases d'Excel : saisie, mise en forme et premières formules.",
-      "location": "Montpellier et distanciel tutoré",
+      "location": "Montpellier et distanciel",
       "audience": "Toute personne débutant sur Excel",
       "summary": "Acquérez les bases d'Excel : saisie, mise en forme, calculs simples et premières formules.",
       "description": "Cette formation d'initiation permet de prendre en main l'interface Excel, de saisir et mettre en forme des données, et d'utiliser les premières formules de calcul courantes.",
@@ -4231,7 +4232,7 @@
       "category": "Bureautique",
       "duration": "1 jour",
       "durationDetails": "1 jour, soit 7 heures de formation, pour approfondir les formules, les tableaux croisés dynamiques et la mise en forme conditionnelle.",
-      "location": "Montpellier et distanciel tutoré",
+      "location": "Montpellier et distanciel",
       "audience": "Utilisateurs ayant suivi Excel niveau 1 ou disposant de bases équivalentes",
       "summary": "Approfondissez vos usages d'Excel avec les formules conditionnelles, les tableaux croisés dynamiques et la mise en forme avancée.",
       "description": "Cette formation intermédiaire permet d'exploiter des formules plus avancées, de construire des tableaux croisés dynamiques et de mettre en forme des données de façon conditionnelle.",
@@ -4333,7 +4334,7 @@
       "category": "Bureautique",
       "duration": "2 jours",
       "durationDetails": "2 jours, soit 14 heures de formation, pour maîtriser les fonctions avancées, les macros simples et l'automatisation de tableaux.",
-      "location": "Montpellier et distanciel tutoré",
+      "location": "Montpellier et distanciel",
       "audience": "Utilisateurs confirmés ayant suivi Excel niveau 2 ou disposant d'une pratique équivalente",
       "summary": "Maîtrisez les fonctions avancées d'Excel, les macros simples et l'automatisation de vos tableaux de bord.",
       "description": "Cette formation avancée traite les fonctions complexes, l'imbrication de formules, l'introduction aux macros et la construction de tableaux de bord automatisés.",
@@ -4456,7 +4457,7 @@
       "category": "Bureautique",
       "duration": "1 jour",
       "durationDetails": "1 jour, soit 7 heures de formation, pour concevoir des présentations professionnelles avancées avec PowerPoint.",
-      "location": "Montpellier et distanciel tutoré",
+      "location": "Montpellier et distanciel",
       "audience": "Utilisateurs ayant des bases de PowerPoint souhaitant perfectionner leurs présentations",
       "summary": "Perfectionnez vos présentations PowerPoint avec une mise en forme avancée, des animations et une structure impactante.",
       "description": "Cette formation avancée permet de structurer un message clair, d'exploiter les masques de diapositives, les animations et les transitions pour produire des présentations professionnelles percutantes.",
@@ -4558,7 +4559,7 @@
       "category": "Bureautique",
       "duration": "1 jour",
       "durationDetails": "1 jour, soit 7 heures de formation, pour découvrir PowerPoint et créer une présentation simple et claire.",
-      "location": "Montpellier et distanciel tutoré",
+      "location": "Montpellier et distanciel",
       "audience": "Toute personne débutant sur PowerPoint",
       "summary": "Découvrez PowerPoint et créez votre première présentation claire, structurée et bien mise en forme.",
       "description": "Cette formation d'initiation permet de prendre en main l'interface PowerPoint, de créer des diapositives, d'insérer du texte et des images, et de structurer une présentation simple.",
@@ -4660,7 +4661,7 @@
       "category": "Bureautique",
       "duration": "1 jour",
       "durationDetails": "1 jour, soit 7 heures de formation, pour découvrir Word et rédiger des documents professionnels bien mis en forme.",
-      "location": "Montpellier et distanciel tutoré",
+      "location": "Montpellier et distanciel",
       "audience": "Toute personne débutant sur Word",
       "summary": "Découvrez Word et apprenez à rédiger, mettre en forme et organiser des documents professionnels simples.",
       "description": "Cette formation d'initiation permet de prendre en main l'interface Word, de saisir et mettre en forme du texte, d'insérer des tableaux et images, et de structurer un document professionnel.",
@@ -4786,7 +4787,7 @@
     {
       "id": "sess-demarches-administratives-pv-36kva-batterie-1",
       "formationSlug": "demarches-administratives-pv-36kva-batterie",
-      "city": "Distanciel tutoré",
+      "city": "Distanciel",
       "startDate": "2026-09-06",
       "endDate": "2026-09-07",
       "seatsLeft": 9,
@@ -4822,7 +4823,7 @@
     {
       "id": "sess-mise-en-service-certification-bourgeois-global-1",
       "formationSlug": "mise-en-service-certification-bourgeois-global",
-      "city": "Distanciel tutoré",
+      "city": "Distanciel",
       "startDate": "2026-10-12",
       "endDate": "2026-10-12",
       "seatsLeft": 7,
@@ -4858,7 +4859,7 @@
     {
       "id": "sess-raccordement-electrique-pv-residentiel-1",
       "formationSlug": "raccordement-electrique-pv-residentiel",
-      "city": "Distanciel tutoré",
+      "city": "Distanciel",
       "startDate": "2026-11-17",
       "endDate": "2026-11-17",
       "seatsLeft": 11,
@@ -4894,7 +4895,7 @@
     {
       "id": "sess-vendre-solaire-autoconsommation-2-jours-1",
       "formationSlug": "vendre-solaire-autoconsommation-2-jours",
-      "city": "Distanciel tutoré",
+      "city": "Distanciel",
       "startDate": "2026-12-23",
       "endDate": "2026-12-24",
       "seatsLeft": 9,
@@ -4930,7 +4931,7 @@
     {
       "id": "sess-initiation-installation-ballons-thermodynamiques-1",
       "formationSlug": "initiation-installation-ballons-thermodynamiques",
-      "city": "Distanciel tutoré",
+      "city": "Distanciel",
       "startDate": "2027-01-28",
       "endDate": "2027-01-28",
       "seatsLeft": 7,
@@ -4966,7 +4967,7 @@
     {
       "id": "sess-mise-en-service-entretien-chaudieres-granules-bois-1",
       "formationSlug": "mise-en-service-entretien-chaudieres-granules-bois",
-      "city": "Distanciel tutoré",
+      "city": "Distanciel",
       "startDate": "2027-03-05",
       "endDate": "2027-03-06",
       "seatsLeft": 11,
@@ -5002,7 +5003,7 @@
     {
       "id": "sess-gestion-priorites-intra-entreprise-1",
       "formationSlug": "gestion-priorites-intra-entreprise",
-      "city": "Distanciel tutoré",
+      "city": "Distanciel",
       "startDate": "2027-04-10",
       "endDate": "2027-04-10",
       "seatsLeft": 9,
@@ -5029,7 +5030,7 @@
     {
       "id": "sess-habilitation-electrique-recyclage-1-5-jour-1",
       "formationSlug": "habilitation-electrique-recyclage-1-5-jour",
-      "city": "Distanciel tutoré",
+      "city": "Distanciel",
       "startDate": "2027-05-16",
       "endDate": "2027-05-16",
       "seatsLeft": 7,
@@ -5065,7 +5066,7 @@
     {
       "id": "sess-decouvrir-intelligence-artificielle-1",
       "formationSlug": "decouvrir-intelligence-artificielle",
-      "city": "Distanciel tutoré",
+      "city": "Distanciel",
       "startDate": "2027-06-21",
       "endDate": "2027-06-21",
       "seatsLeft": 11,
@@ -5101,7 +5102,7 @@
     {
       "id": "sess-powerpoint-niveau-avance-1",
       "formationSlug": "powerpoint-niveau-avance",
-      "city": "Distanciel tutoré",
+      "city": "Distanciel",
       "startDate": "2027-07-27",
       "endDate": "2027-07-27",
       "seatsLeft": 9,

@@ -137,6 +137,28 @@ function generateQuizPdf(quiz, attemptResult) {
         doc.moveDown(0.5);
       });
 
+      // Conseil de niveau, identique à celui affiché à l'écran après le quiz.
+      const scoreOnTen = Math.round((attemptResult.attempt.scoreOn20 / 2) * 10) / 10;
+      const belowThreshold = scoreOnTen < 5;
+
+      drawSectionTitle(doc, "Votre niveau");
+      drawParagraph(doc, `Vous avez obtenu le score de ${scoreOnTen} / 10.`, {
+        color: NAVY,
+        font: "Helvetica-Bold",
+        size: 11,
+      });
+      drawParagraph(doc, "Si vous avez obtenu un score :");
+      drawParagraph(
+        doc,
+        "- Inférieur à 5/10 : Niveau de connaissance trop juste, nous vous conseillons de demander l'envoi du référentiel à contact@oxideve.com afin que vous puissiez débuter les révisions",
+        { color: belowThreshold ? NAVY : MUTED, font: belowThreshold ? "Helvetica-Bold" : "Helvetica" },
+      );
+      drawParagraph(
+        doc,
+        "- Supérieur à 5/10 : Niveau de prérequis correct, nous vous souhaitons une bonne formation",
+        { color: belowThreshold ? MUTED : NAVY, font: belowThreshold ? "Helvetica" : "Helvetica-Bold" },
+      );
+
       doc.moveDown(0.6);
       drawParagraph(
         doc,

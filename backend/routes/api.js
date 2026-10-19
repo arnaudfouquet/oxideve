@@ -113,6 +113,8 @@ const formationSchema = z.object({
   levelLabel: z.string().max(60).optional().default(""),
   subCategory: z.string().max(80).optional().default(""),
   cpfEligible: z.coerce.boolean().optional().default(false),
+  bannerImage: z.string().max(500).optional().default(""),
+  bannerPosition: z.string().max(40).optional().default(""),
 });
 
 const sessionSchema = z.object({

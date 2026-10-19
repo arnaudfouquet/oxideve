@@ -92,6 +92,10 @@ async function main() {
           levelLabel: formation.levelLabel || null,
           subCategory: formation.subCategory || null,
           cpfEligible: Boolean(formation.cpfEligible),
+          // Cadrage de bannière : posé à la création seulement, pour ne pas
+          // écraser les réglages faits dans l'admin à chaque déploiement.
+          bannerImage: formation.bannerImage || null,
+          bannerPosition: formation.bannerPosition || null,
         },
         update: {
           title: formation.title,

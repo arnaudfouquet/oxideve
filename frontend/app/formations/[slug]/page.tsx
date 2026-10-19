@@ -46,7 +46,7 @@ export default async function FormationDetailPage({ params }: Props) {
     .slice(0, 3);
   const suggestions = (relatedFormations.length ? relatedFormations : similarFormations).slice(0, 3);
 
-  const theme = getCategoryTheme(formation.category, formation.subCategory);
+  const theme = getCategoryTheme(formation.category, formation.subCategory, formation);
   const sessionCities = Array.from(new Set(sessions.map((session) => session.city)));
   const displayLocation = sessionCities.length ? sessionCities.join(", ") : formation.location;
 
@@ -84,7 +84,11 @@ export default async function FormationDetailPage({ params }: Props) {
       {/* BANNIÈRE DE CATÉGORIE */}
       <div className="fd-banner">
         {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img alt={formation.category} src={theme.banner} />
+        <img
+          alt={formation.category}
+          src={theme.banner}
+          style={theme.bannerPosition ? { objectPosition: theme.bannerPosition } : undefined}
+        />
       </div>
 
       {/* EN-TÊTE : titre + cartes info */}

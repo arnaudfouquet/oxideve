@@ -10,7 +10,6 @@ type SessionSummary = { startDate: string; endDate: string; city: string; mode: 
 type Props = {
   formations: Formation[];
   categories: string[];
-  durations: string[];
   /** Villes des sessions programmées, par slug de formation. */
   citiesByFormation: Record<string, string[]>;
   /** Prochaines sessions à venir, triées par date, par slug de formation. */
@@ -19,6 +18,9 @@ type Props = {
 
 type SortKey = "session" | "price" | "duration" | "title";
 
+/** Dispositifs de financement proposés en filtre. */
+type FundingKey = "opco" | "cpf" | "france-travail";
+
 const SORT_OPTIONS: { value: SortKey; label: string }[] = [
   { value: "session", label: "Prochaine session" },
   { value: "price", label: "Prix croissant" },
@@ -26,8 +28,22 @@ const SORT_OPTIONS: { value: SortKey; label: string }[] = [
   { value: "title", label: "Ordre alphabétique" },
 ];
 
+const FUNDING_OPTIONS: { value: FundingKey; label: string }[] = [
+  { value: "opco", label: "OPCO" },
+  { value: "cpf", label: "CPF" },
+  { value: "france-travail", label: "France Travail" },
+];
+
 const PAGE_SIZE = 12;
 const REMOTE_MODE = "Distanciel";
+
+/**
+ * OPCO et France Travail concernent toutes les formations ; le CPF dépend de
+ * l'éligibilité portée par la formation.
+ */
+function matchesFunding(formation: Formation, funding: FundingKey) {
+  return funding === "cpf" ? Boolean(formation.cpfEligible) : true;
+}
 
 /** Minuscules sans accent, pour que "securite" trouve "Sécurité". */
 function normalize(value: string) {
@@ -117,25 +133,16 @@ function FacetCheck({
   );
 }
 
-export function FormationCatalog({ formations, categories, durations, citiesByFormation, sessionsByFormation }: Props) {
+export function FormationCatalog({ formations, categories, citiesByFormation, sessionsByFormation }: Props) {
   const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
-  const [selectedSubCategories, setSelectedSubCategories] = useState<string[]>([]);
-  const [selectedDurations, setSelectedDurations] = useState<string[]>([]);
   const [selectedCities, setSelectedCities] = useState<string[]>([]);
   const [selectedMonths, setSelectedMonths] = useState<string[]>([]);
+  const [selectedFunding, setSelectedFunding] = useState<FundingKey[]>([]);
   const [remoteOnly, setRemoteOnly] = useState(false);
-  const [cpfOnly, setCpfOnly] = useState(false);
-  const [maxPrice, setMaxPrice] = useState(0);
   const [search, setSearch] = useState("");
   const [sort, setSort] = useState<SortKey>("session");
   const [page, setPage] = useState(1);
   const [hydrated, setHydrated] = useState(false);
-
-  const priceCeiling = useMemo(() => {
-    const values = formations.map((item) => parsePrice(item.price)).filter((value): value is number => value !== null);
-    if (!values.length) return 0;
-    return Math.ceil(Math.max(...values) / 100) * 100;
-  }, [formations]);
 
   // Restaure l'état depuis l'URL au premier rendu (lien partagé, retour arrière).
   useEffect(() => {
@@ -145,24 +152,19 @@ export function FormationCatalog({ formations, categories, durations, citiesByFo
     const requestedCategories = list("categorie").filter((item) => categories.includes(item));
     if (requestedCategories.length) setSelectedCategories(requestedCategories);
 
-    setSelectedSubCategories(list("specialite"));
-    setSelectedDurations(list("duree"));
     setSelectedCities(list("ville"));
     setSelectedMonths(list("mois"));
+    setSelectedFunding(list("financement").filter((item): item is FundingKey =>
+      FUNDING_OPTIONS.some((option) => option.value === item),
+    ));
     setRemoteOnly(params.get("distanciel") === "1");
-    setCpfOnly(params.get("cpf") === "1");
     setSearch(params.get("q") || "");
-
-    const price = Number.parseInt(params.get("prixMax") || "", 10);
-    if (!Number.isNaN(price)) setMaxPrice(price);
 
     const requestedSort = params.get("tri");
     if (SORT_OPTIONS.some((option) => option.value === requestedSort)) setSort(requestedSort as SortKey);
 
     setHydrated(true);
   }, [categories]);
-
-  const activeMaxPrice = maxPrice || priceCeiling;
 
   // Reflète l'état courant dans l'URL, sans empiler d'entrées d'historique.
   useEffect(() => {
@@ -174,34 +176,18 @@ export function FormationCatalog({ formations, categories, durations, citiesByFo
     };
 
     set("categorie", selectedCategories);
-    set("specialite", selectedSubCategories);
-    set("duree", selectedDurations);
     set("ville", selectedCities);
     set("mois", selectedMonths);
+    set("financement", selectedFunding);
     if (remoteOnly) params.set("distanciel", "1");
-    if (cpfOnly) params.set("cpf", "1");
     if (search.trim()) params.set("q", search.trim());
-    if (maxPrice && maxPrice !== priceCeiling) params.set("prixMax", String(maxPrice));
     if (sort !== "session") params.set("tri", sort);
 
     const query = params.toString();
     window.history.replaceState(null, "", query ? `?${query}` : window.location.pathname);
-  }, [
-    cpfOnly,
-    hydrated,
-    maxPrice,
-    priceCeiling,
-    remoteOnly,
-    search,
-    selectedCategories,
-    selectedCities,
-    selectedDurations,
-    selectedMonths,
-    selectedSubCategories,
-    sort,
-  ]);
+  }, [hydrated, remoteOnly, search, selectedCategories, selectedCities, selectedFunding, selectedMonths, sort]);
 
-  function toggle(list: string[], setList: (next: string[]) => void, value: string) {
+  function toggle<T extends string>(list: T[], setList: (next: T[]) => void, value: T) {
     setList(list.includes(value) ? list.filter((item) => item !== value) : [...list, value]);
     setPage(1);
   }
@@ -211,19 +197,16 @@ export function FormationCatalog({ formations, categories, durations, citiesByFo
    * cela permet de compter les résultats par option et de masquer celles qui
    * n'en donnent aucun.
    */
-  function matches(
-    formation: Formation,
-    skip?: "category" | "subCategory" | "duration" | "city" | "cpf" | "month" | "remote",
-  ) {
+  function matches(formation: Formation, skip?: "category" | "city" | "month" | "remote" | "funding") {
     const needle = normalize(search.trim());
     const sessions = sessionsByFormation[formation.slug] || [];
 
     if (skip !== "category" && selectedCategories.length && !selectedCategories.includes(formation.category)) return false;
-    if (skip !== "subCategory" && selectedSubCategories.length && !selectedSubCategories.includes(formation.subCategory || ""))
-      return false;
-    if (skip !== "duration" && selectedDurations.length && !selectedDurations.includes(formation.duration)) return false;
-    if (skip !== "cpf" && cpfOnly && !formation.cpfEligible) return false;
     if (skip !== "remote" && remoteOnly && !sessions.some((session) => session.mode === REMOTE_MODE)) return false;
+
+    if (skip !== "funding" && selectedFunding.length) {
+      if (!selectedFunding.some((funding) => matchesFunding(formation, funding))) return false;
+    }
 
     if (skip !== "city" && selectedCities.length) {
       const cities = citiesByFormation[formation.slug] || [];
@@ -234,9 +217,6 @@ export function FormationCatalog({ formations, categories, durations, citiesByFo
       const months = sessions.map((session) => monthKey(session.startDate));
       if (!months.some((month) => selectedMonths.includes(month))) return false;
     }
-
-    const price = parsePrice(formation.price);
-    if (price !== null && activeMaxPrice && price > activeMaxPrice) return false;
 
     if (needle) {
       // On cherche aussi dans les villes réellement programmées : le champ
@@ -283,20 +263,7 @@ export function FormationCatalog({ formations, categories, durations, citiesByFo
       return leftDate.localeCompare(rightDate);
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [
-    activeMaxPrice,
-    cpfOnly,
-    formations,
-    remoteOnly,
-    search,
-    selectedCategories,
-    selectedCities,
-    selectedDurations,
-    selectedMonths,
-    selectedSubCategories,
-    sessionsByFormation,
-    sort,
-  ]);
+  }, [formations, remoteOnly, search, selectedCategories, selectedCities, selectedFunding, selectedMonths, sessionsByFormation, sort]);
 
   /** Compte les formations restantes si l'on cochait `value` sur cette facette. */
   function countFor(skip: Parameters<typeof matches>[1], predicate: (formation: Formation) => boolean) {
@@ -309,21 +276,8 @@ export function FormationCatalog({ formations, categories, durations, citiesByFo
         .map((category) => ({ value: category, count: countFor("category", (f) => f.category === category) }))
         .filter((facet) => facet.count > 0),
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [categories, activeMaxPrice, cpfOnly, formations, remoteOnly, search, selectedCities, selectedDurations, selectedMonths, selectedSubCategories],
+    [categories, formations, remoteOnly, search, selectedCities, selectedFunding, selectedMonths],
   );
-
-  const subCategoryFacets = useMemo(() => {
-    const values = new Set<string>();
-    formations.forEach((formation) => {
-      if (formation.subCategory) values.add(formation.subCategory);
-    });
-
-    return Array.from(values)
-      .sort((left, right) => left.localeCompare(right, "fr"))
-      .map((value) => ({ value, count: countFor("subCategory", (f) => f.subCategory === value) }))
-      .filter((facet) => facet.count > 0);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [activeMaxPrice, cpfOnly, formations, remoteOnly, search, selectedCategories, selectedCities, selectedDurations, selectedMonths]);
 
   const monthFacets = useMemo(() => {
     const values = new Set<string>();
@@ -341,7 +295,7 @@ export function FormationCatalog({ formations, categories, durations, citiesByFo
       }))
       .filter((facet) => facet.count > 0);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [activeMaxPrice, cpfOnly, formations, remoteOnly, search, selectedCategories, selectedCities, selectedDurations, selectedSubCategories, sessionsByFormation]);
+  }, [formations, remoteOnly, search, selectedCategories, selectedCities, selectedFunding, sessionsByFormation]);
 
   const cityFacets = useMemo(() => {
     const values = new Set<string>();
@@ -355,20 +309,18 @@ export function FormationCatalog({ formations, categories, durations, citiesByFo
       }))
       .filter((facet) => facet.count > 0);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [activeMaxPrice, citiesByFormation, cpfOnly, formations, remoteOnly, search, selectedCategories, selectedDurations, selectedMonths, selectedSubCategories]);
+  }, [citiesByFormation, formations, remoteOnly, search, selectedCategories, selectedFunding, selectedMonths]);
 
-  const durationFacets = useMemo(
+  const fundingFacets = useMemo(
     () =>
-      durations
-        .slice()
-        .sort((left, right) => parseDuration(left) - parseDuration(right))
-        .map((value) => ({ value, count: countFor("duration", (f) => f.duration === value) }))
-        .filter((facet) => facet.count > 0),
+      FUNDING_OPTIONS.map((option) => ({
+        ...option,
+        count: countFor("funding", (formation) => matchesFunding(formation, option.value)),
+      })).filter((facet) => facet.count > 0),
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [activeMaxPrice, cpfOnly, durations, formations, remoteOnly, search, selectedCategories, selectedCities, selectedMonths, selectedSubCategories],
+    [formations, remoteOnly, search, selectedCategories, selectedCities, selectedMonths],
   );
 
-  const cpfCount = countFor("cpf", (formation) => Boolean(formation.cpfEligible));
   const remoteCount = countFor("remote", (formation) =>
     (sessionsByFormation[formation.slug] || []).some((session) => session.mode === REMOTE_MODE),
   );
@@ -382,40 +334,31 @@ export function FormationCatalog({ formations, categories, durations, citiesByFo
     selectedCategories.forEach((value) =>
       chips.push({ key: `cat-${value}`, label: value, clear: () => toggle(selectedCategories, setSelectedCategories, value) }),
     );
-    selectedSubCategories.forEach((value) =>
-      chips.push({ key: `sub-${value}`, label: value, clear: () => toggle(selectedSubCategories, setSelectedSubCategories, value) }),
-    );
     selectedMonths.forEach((value) =>
       chips.push({ key: `month-${value}`, label: monthLabel(value), clear: () => toggle(selectedMonths, setSelectedMonths, value) }),
     );
     selectedCities.forEach((value) =>
       chips.push({ key: `city-${value}`, label: value, clear: () => toggle(selectedCities, setSelectedCities, value) }),
     );
-    selectedDurations.forEach((value) =>
-      chips.push({ key: `dur-${value}`, label: value, clear: () => toggle(selectedDurations, setSelectedDurations, value) }),
-    );
+    selectedFunding.forEach((value) => {
+      const label = FUNDING_OPTIONS.find((option) => option.value === value)?.label || value;
+      chips.push({ key: `fund-${value}`, label, clear: () => toggle(selectedFunding, setSelectedFunding, value) });
+    });
 
     if (remoteOnly) chips.push({ key: "remote", label: "À distance", clear: () => setRemoteOnly(false) });
-    if (cpfOnly) chips.push({ key: "cpf", label: "Finançable CPF", clear: () => setCpfOnly(false) });
-    if (maxPrice && maxPrice !== priceCeiling) {
-      chips.push({ key: "price", label: `Jusqu'à ${maxPrice} €`, clear: () => setMaxPrice(0) });
-    }
 
     return chips;
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [cpfOnly, maxPrice, priceCeiling, remoteOnly, search, selectedCategories, selectedCities, selectedDurations, selectedMonths, selectedSubCategories]);
+  }, [remoteOnly, search, selectedCategories, selectedCities, selectedFunding, selectedMonths]);
 
   const hasActiveFilters = activeChips.length > 0;
 
   function resetFilters() {
     setSelectedCategories([]);
-    setSelectedSubCategories([]);
-    setSelectedDurations([]);
     setSelectedCities([]);
     setSelectedMonths([]);
+    setSelectedFunding([]);
     setRemoteOnly(false);
-    setCpfOnly(false);
-    setMaxPrice(0);
     setSearch("");
     setPage(1);
   }
@@ -469,20 +412,6 @@ export function FormationCatalog({ formations, categories, durations, citiesByFo
           </FilterGroup>
         ) : null}
 
-        {subCategoryFacets.length ? (
-          <FilterGroup title="Spécialité">
-            {subCategoryFacets.map((facet) => (
-              <FacetCheck
-                checked={selectedSubCategories.includes(facet.value)}
-                count={facet.count}
-                key={facet.value}
-                label={facet.value}
-                onChange={() => toggle(selectedSubCategories, setSelectedSubCategories, facet.value)}
-              />
-            ))}
-          </FilterGroup>
-        ) : null}
-
         {monthFacets.length ? (
           <FilterGroup title="Prochaines dates">
             {monthFacets.map((facet) => (
@@ -511,65 +440,31 @@ export function FormationCatalog({ formations, categories, durations, citiesByFo
           </FilterGroup>
         ) : null}
 
-        {remoteCount || cpfCount ? (
-          <FilterGroup title="Modalité et financement">
-            {remoteCount ? (
+        {fundingFacets.length ? (
+          <FilterGroup title="Financement">
+            {fundingFacets.map((facet) => (
               <FacetCheck
-                checked={remoteOnly}
-                count={remoteCount}
-                label="Sessions à distance"
-                onChange={() => {
-                  setRemoteOnly((value) => !value);
-                  setPage(1);
-                }}
-              />
-            ) : null}
-            {cpfCount ? (
-              <FacetCheck
-                checked={cpfOnly}
-                count={cpfCount}
-                label="Finançable CPF"
-                onChange={() => {
-                  setCpfOnly((value) => !value);
-                  setPage(1);
-                }}
-              />
-            ) : null}
-          </FilterGroup>
-        ) : null}
-
-        {priceCeiling ? (
-          <FilterGroup title="Prix de la formation">
-            <div className="cat-range-values">
-              <span>0 €</span>
-              <span>{activeMaxPrice} €</span>
-            </div>
-            <input
-              className="cat-range"
-              max={priceCeiling}
-              min={0}
-              onChange={(event) => {
-                setMaxPrice(Number(event.target.value));
-                setPage(1);
-              }}
-              step={50}
-              type="range"
-              value={activeMaxPrice}
-            />
-          </FilterGroup>
-        ) : null}
-
-        {durationFacets.length ? (
-          <FilterGroup title="Durée">
-            {durationFacets.map((facet) => (
-              <FacetCheck
-                checked={selectedDurations.includes(facet.value)}
+                checked={selectedFunding.includes(facet.value)}
                 count={facet.count}
                 key={facet.value}
-                label={facet.value}
-                onChange={() => toggle(selectedDurations, setSelectedDurations, facet.value)}
+                label={facet.label}
+                onChange={() => toggle(selectedFunding, setSelectedFunding, facet.value)}
               />
             ))}
+          </FilterGroup>
+        ) : null}
+
+        {remoteCount ? (
+          <FilterGroup title="Modalité">
+            <FacetCheck
+              checked={remoteOnly}
+              count={remoteCount}
+              label="Sessions à distance"
+              onChange={() => {
+                setRemoteOnly((value) => !value);
+                setPage(1);
+              }}
+            />
           </FilterGroup>
         ) : null}
       </aside>
@@ -656,7 +551,7 @@ function FormationResultCard({
   cities: string[];
   sessions: SessionSummary[];
 }) {
-  const theme = getCategoryTheme(formation.category, formation.subCategory);
+  const theme = getCategoryTheme(formation.category, formation.subCategory, formation);
   const location = cities.length ? cities.join(", ") : formation.location;
   const nextSessions = sessions.slice(0, 2);
 
@@ -711,7 +606,7 @@ function FormationResultCard({
 
       <div className="cat-result-visual">
         {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img alt="" src={theme.banner} />
+        <img alt="" src={theme.banner} style={theme.bannerPosition ? { objectPosition: theme.bannerPosition } : undefined} />
       </div>
     </article>
   );

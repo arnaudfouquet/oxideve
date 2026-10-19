@@ -6,6 +6,8 @@
 export type CategoryTheme = {
   banner: string;
   blurb: string;
+  /** Cadrage de la photo, au format CSS `object-position`. */
+  bannerPosition?: string;
 };
 
 const THEMES: Record<string, CategoryTheme> = {
@@ -56,16 +58,41 @@ const FALLBACK: CategoryTheme = {
  * la bannière de la catégorie parente.
  */
 // Visuels provisoires (Unsplash) en attendant les photos Oxideve définitives.
-const SUBCATEGORY_BANNERS: Record<string, string> = {
-  Électricité: "https://images.unsplash.com/photo-1621905251189-08b45d6a269e?auto=format&fit=crop&w=1200&q=80",
-  "Travail en hauteur": "https://images.unsplash.com/photo-1504328345606-18bbc8c9d7d1?auto=format&fit=crop&w=1200&q=80",
-  "Sauveteur secouriste du travail": "https://images.unsplash.com/photo-1576091160550-2173dba999ef?auto=format&fit=crop&w=1200&q=80",
-  Incendie: "https://images.unsplash.com/photo-1582139329536-e7284fece509?auto=format&fit=crop&w=1200&q=80",
+// `position` donne le cadrage par défaut, que l'admin peut surcharger formation
+// par formation via le champ "cadrage de la photo".
+const SUBCATEGORY_BANNERS: Record<string, { url: string; position: string }> = {
+  Électricité: {
+    url: "https://images.unsplash.com/photo-1565608438257-fac3c27beb36?auto=format&fit=crop&w=1200&q=80",
+    position: "50% 50%",
+  },
+  "Travail en hauteur": {
+    url: "https://images.unsplash.com/photo-1581094794329-c8112a89af12?auto=format&fit=crop&w=1200&q=80",
+    position: "50% 40%",
+  },
+  "Sauveteur secouriste du travail": {
+    url: "https://images.unsplash.com/photo-1587293852726-70cdb56c2866?auto=format&fit=crop&w=1200&q=80",
+    position: "50% 45%",
+  },
+  Incendie: {
+    url: "https://images.unsplash.com/photo-1599045118108-bf9954418b76?auto=format&fit=crop&w=1200&q=80",
+    position: "50% 50%",
+  },
 };
 
-export function getCategoryTheme(category: string, subCategory?: string | null): CategoryTheme {
+/**
+ * Visuel à afficher pour une formation. L'ordre de priorité est : photo saisie
+ * dans l'admin, puis photo de la sous-famille, puis photo de la catégorie.
+ */
+export function getCategoryTheme(
+  category: string,
+  subCategory?: string | null,
+  overrides?: { bannerImage?: string | null; bannerPosition?: string | null },
+): CategoryTheme {
   const base = THEMES[category] || FALLBACK;
-  const subBanner = subCategory ? SUBCATEGORY_BANNERS[subCategory] : undefined;
+  const sub = subCategory ? SUBCATEGORY_BANNERS[subCategory] : undefined;
 
-  return subBanner ? { ...base, banner: subBanner } : base;
+  const banner = overrides?.bannerImage || sub?.url || base.banner;
+  const bannerPosition = overrides?.bannerPosition || sub?.position || base.bannerPosition;
+
+  return { ...base, banner, bannerPosition };
 }

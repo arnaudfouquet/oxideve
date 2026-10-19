@@ -57,6 +57,10 @@ export type Formation = {
   subCategory?: string | null;
   /** Affiche le badge "Finançable CPF" sur les cartes et la page détail. */
   cpfEligible?: boolean;
+  /** Photo de bannière propre à la formation, sinon celle de la sous-catégorie. */
+  bannerImage?: string | null;
+  /** Cadrage de la bannière, au format CSS `object-position` (ex. "50% 30%"). */
+  bannerPosition?: string | null;
   queovalIdentFOR?: string | null;
   videoUrl?: string | null;
   rgeBadge?: RgeBadge | null;
