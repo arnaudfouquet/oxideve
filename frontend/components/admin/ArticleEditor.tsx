@@ -124,7 +124,7 @@ export function ArticleEditor({ value, onChange, onError }: Props) {
 
       const quill = new Quill(containerRef.current, {
         theme: "snow",
-        placeholder: "",
+        placeholder: "Rédigez votre article...",
         modules: {
           toolbar: {
             container: [
@@ -160,6 +160,24 @@ export function ArticleEditor({ value, onChange, onError }: Props) {
       if (value) {
         quill.clipboard.dangerouslyPasteHTML(value);
       }
+
+      // Infobulles en français : Quill ne pose que des libellés anglais.
+      const TOOLTIPS: Record<string, string> = {
+        ".ql-bold": "Gras",
+        ".ql-italic": "Italique",
+        ".ql-underline": "Souligné",
+        ".ql-list[value='ordered']": "Liste numérotée",
+        ".ql-list[value='bullet']": "Liste à puces",
+        ".ql-blockquote": "Citation",
+        ".ql-link": "Insérer un lien",
+        ".ql-image": "Insérer une image",
+        ".ql-clean": "Effacer la mise en forme",
+      };
+
+      const toolbar = containerRef.current?.previousElementSibling;
+      Object.entries(TOOLTIPS).forEach(([selector, label]) => {
+        toolbar?.querySelector(selector)?.setAttribute("title", label);
+      });
 
       quill.on("text-change", () => {
         onChangeRef.current(quill.root.innerHTML);

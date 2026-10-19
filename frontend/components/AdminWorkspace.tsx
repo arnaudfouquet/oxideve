@@ -4,6 +4,7 @@ import { useEffect, useMemo, useState } from "react";
 import { Button } from "@/components/ui";
 import { DataTable } from "@/components/admin/DataTable";
 import { ArticleEditor } from "@/components/admin/ArticleEditor";
+import { getArticleCover } from "@/components/NewsCard";
 import { Drawer } from "@/components/admin/Drawer";
 import { getCategoryTheme, type CategoryVisual } from "@/lib/formation-theme";
 import type { AdminUser, Article, BulletinInscriptionWithAttempts, Company, CrmInteraction, CrmTask, Formation, Participant, ProgrammeDay, Registration, RegistrationNote, Session } from "../../shared/types";
@@ -255,12 +256,32 @@ function toSessionDraft(session?: Session): SessionDraft {
   };
 }
 
+/**
+ * Vrai si l'extrait correspond au début du contenu : c'est alors celui que le
+ * serveur a généré, pas un texte écrit par l'utilisateur.
+ */
+function isGeneratedExcerpt(article: Article) {
+  if (!article.excerpt || !article.bodyHtml) return false;
+
+  const plain = article.bodyHtml
+    .replace(/<[^>]*>/g, " ")
+    .replace(/&#39;/g, "'")
+    .replace(/&amp;/g, "&")
+    .replace(/\s+/g, " ")
+    .trim();
+
+  return plain.startsWith(article.excerpt.replace(/…$/, "").trim().slice(0, 60));
+}
+
 function toArticleDraft(article?: Article): ArticleDraft {
   return {
     slug: article?.slug || "",
     title: article?.title || "",
     category: article?.category || "",
-    excerpt: article?.excerpt || "",
+    // L'extrait est recalculé à chaque enregistrement quand il est vide. On ne
+    // le pré-remplit donc que s'il diffère de ce qui serait généré, sinon
+    // l'utilisateur croit avoir écrit un texte qu'il n'a pas saisi.
+    excerpt: article?.excerpt && !isGeneratedExcerpt(article) ? article.excerpt : "",
     // L'éditeur reçoit le HTML brut stocké, jamais le rendu public filtré :
     // sinon les tailles d'images et les blocs seraient perdus à chaque édition.
     bodyHtml: article?.bodyHtml || "",
@@ -273,10 +294,6 @@ function toArticleDraft(article?: Article): ArticleDraft {
     seoTitle: article?.seoTitle || "",
     seoDescription: article?.seoDescription || "",
   };
-}
-
-function toArticleBodyParagraphs(article?: Article): string[] {
-  return article?.body && article.body.length > 0 ? [...article.body] : [""];
 }
 
 type DetailFieldProps = {
@@ -1934,37 +1951,56 @@ export function AdminWorkspace({
       ) : null}
 
       {section === "editorial" ? (
-        <div className="admin-dual-pane">
-          <section className="admin-shell">
-            <div className="section-heading section-heading-tight"><div><span className="eyebrow">Editorial</span><h2>Articles</h2></div><Button variant="secondary" onClick={() => { setEditingArticleSlug(""); setArticleDraft(toArticleDraft()); }}>Nouvel article</Button></div>
-            <label className="admin-list-search"><span>Recherche</span><input className="ui-field" value={articleSearch} onChange={(event) => setArticleSearch(event.target.value)} placeholder="Titre, catégorie..." /></label>
-            <div className="admin-list admin-list-dense">
-              {articles
-                .filter((article) => !articleSearch.trim() || `${article.title} ${article.category}`.toLowerCase().includes(articleSearch.trim().toLowerCase()))
-                .sort((a, b) => compareDateDesc(a.publishedAt, b.publishedAt)).map((article) => (
-                <div className={`admin-list-item admin-list-item-with-action${editingArticleSlug === article.slug ? " active" : ""}`} key={article.slug}>
-                  <button className="admin-list-item-main" onClick={() => selectArticle(article.slug)} type="button">
-                    <strong>{article.title}</strong>
-                    <span>{article.category}</span>
-                    <span>{formatDateLabel(article.publishedAt)}</span>
-                  </button>
-                  <button
-                    className="admin-copy-button admin-copy-button-danger"
-                    onClick={() => handleDeleteArticle(article.slug, article.title)}
-                    type="button"
-                  >
-                    Supprimer
-                  </button>
-                </div>
-              ))}
+        <div className="admin-editorial">
+          <div className="admin-editorial-head">
+            <div>
+              <h2>Blog</h2>
+              <span>{articles.length} article{articles.length > 1 ? "s" : ""}</span>
             </div>
-          </section>
+            <div className="admin-editorial-head-actions">
+              {editingArticleSlug ? (
+                <Button
+                  onClick={() => {
+                    setEditingArticleSlug("");
+                    setArticleDraft(toArticleDraft());
+                  }}
+                  variant="secondary"
+                >
+                  Nouvel article
+                </Button>
+              ) : null}
+              <a className="admin-editorial-link" href="/actualites" rel="noopener" target="_blank">
+                Voir le blog
+              </a>
+            </div>
+          </div>
+
           <section className="admin-shell">
-            <div className="section-heading section-heading-tight"><div><span className="eyebrow">Edition</span><h2>{editingArticleSlug ? "Modifier l'article" : "Créer un article"}</h2></div></div>
+            <span className="admin-editorial-form-title">
+              {editingArticleSlug ? "Modifier l'article" : "Nouvel article"}
+            </span>
             <form className="contact-form" onSubmit={handleArticleSubmit}>
+              <label className="admin-article-title-field">
+                <span>Titre de l&apos;article</span>
+                <input
+                  className="ui-field"
+                  onChange={(event) => setArticleDraft((current) => ({ ...current, title: event.target.value }))}
+                  placeholder="Pourquoi se former au photovoltaïque en 2026"
+                  required
+                  value={articleDraft.title}
+                />
+                {/* Le slug est calculé puis figé : on l'affiche, on ne le saisit pas. */}
+                {editingArticleSlug ? (
+                  <small className="admin-field-hint">
+                    Adresse de la page : <code>/actualites/{articleDraft.slug}</code> — figée pour ne pas casser les
+                    liens déjà partagés.
+                  </small>
+                ) : (
+                  <small className="admin-field-hint">L&apos;adresse de la page sera déduite du titre.</small>
+                )}
+              </label>
+
               <div className="form-grid">
-                <label><span>Slug</span><input className="ui-field" disabled={Boolean(editingArticleSlug)} value={articleDraft.slug} onChange={(event) => setArticleDraft((current) => ({ ...current, slug: event.target.value }))} required /></label>
-                <label><span>Titre</span><input className="ui-field" value={articleDraft.title} onChange={(event) => setArticleDraft((current) => ({ ...current, title: event.target.value }))} required /></label>
                 <label>
                   <span>Catégorie</span>
                   {isAddingArticleCategory ? (
@@ -2001,43 +2037,55 @@ export function AdminWorkspace({
                     </select>
                   )}
                 </label>
-                <label><span>Lecture</span><input className="ui-field" value={articleDraft.readingTime} onChange={(event) => setArticleDraft((current) => ({ ...current, readingTime: event.target.value }))} required /></label>
                 <label><span>Publication</span><input className="ui-field" type="date" value={articleDraft.publishedAt} onChange={(event) => setArticleDraft((current) => ({ ...current, publishedAt: event.target.value }))} required /></label>
                 <label><span>Formation liée</span><select className="ui-field" value={articleDraft.featuredFormationSlug} onChange={(event) => setArticleDraft((current) => ({ ...current, featuredFormationSlug: event.target.value }))}><option value="">Aucune</option>{formations.map((formation) => <option key={formation.slug} value={formation.slug}>{formation.title}</option>)}</select></label>
               </div>
-              <label>
-                <span>Image de couverture</span>
-                <div className="admin-article-image-field">
-                  {articleDraft.coverImageUrl ? (
-                    <div className="admin-article-image-preview">
-                      <img src={articleDraft.coverImageUrl} alt="Aperçu de l'image de couverture" />
-                      <Button
-                        variant="ghost"
-                        type="button"
-                        onClick={() => setArticleDraft((current) => ({ ...current, coverImageUrl: "" }))}
-                      >
-                        Retirer l&apos;image
-                      </Button>
-                    </div>
-                  ) : null}
+              <div className="admin-article-cover">
+                <span className="admin-article-editor-label">Image de couverture</span>
+                {articleDraft.coverImageUrl ? (
+                  <div className="admin-article-image-preview">
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                    <img src={articleDraft.coverImageUrl} alt="Aperçu de l'image de couverture" />
+                    <button
+                      className="admin-banner-reset"
+                      type="button"
+                      onClick={() => setArticleDraft((current) => ({ ...current, coverImageUrl: "" }))}
+                    >
+                      Retirer l&apos;image
+                    </button>
+                  </div>
+                ) : null}
+                <label className="admin-upload-button">
                   <input
-                    className="ui-field"
-                    type="file"
                     accept="image/jpeg,image/png,image/webp"
-                    onChange={handleArticleImageChange}
                     disabled={articleImageUploading}
+                    onChange={handleArticleImageChange}
+                    type="file"
                   />
-                  {articleImageUploading ? <span className="admin-field-hint">Envoi en cours...</span> : null}
-                </div>
-              </label>
+                  <span>
+                    {articleImageUploading
+                      ? "Envoi en cours..."
+                      : articleDraft.coverImageUrl
+                        ? "Remplacer l'image"
+                        : "Choisir une image"}
+                  </span>
+                </label>
+                <small className="admin-field-hint">JPG, PNG ou WEBP, 5 Mo maximum.</small>
+              </div>
+
               <label>
-                <span>Accroche (optionnelle)</span>
+                <span>
+                  Accroche
+                  <em className="admin-field-optional">
+                    {articleDraft.excerpt.trim() ? "personnalisée" : "générée automatiquement"}
+                  </em>
+                </span>
                 <textarea
                   className="ui-field"
                   rows={3}
                   value={articleDraft.excerpt}
                   onChange={(event) => setArticleDraft((current) => ({ ...current, excerpt: event.target.value }))}
-                  placeholder="Laissez vide : les premières phrases de l'article seront utilisées."
+                  placeholder="Laissez vide : les premières phrases de l'article seront reprises."
                 />
               </label>
 
@@ -2049,6 +2097,10 @@ export function AdminWorkspace({
                   onError={setError}
                   value={articleDraft.bodyHtml}
                 />
+                <small className="admin-field-hint">
+                  Mise en forme disponible dans la barre d&apos;outils : titres, gras, italique, listes, liens et
+                  citations. Les blocs ci-dessus insèrent galeries, image + texte et bouton d&apos;action.
+                </small>
               </div>
 
               <div className="admin-article-flags">
@@ -2060,7 +2112,10 @@ export function AdminWorkspace({
                   />
                   <span>
                     Publier sur le site
-                    <small className="admin-field-hint">Décoché, l&apos;article reste un brouillon invisible des visiteurs.</small>
+                    <small className="admin-field-hint">
+                      Décoché : brouillon, invisible des visiteurs. Vous pouvez le relire avec « Enregistrer et voir
+                      l&apos;aperçu ».
+                    </small>
                   </span>
                 </label>
                 <label className="contact-form-full admin-checkbox-item admin-checkbox-boxed">
@@ -2071,7 +2126,10 @@ export function AdminWorkspace({
                   />
                   <span>
                     Référencer sur Google
-                    <small className="admin-field-hint">Décoché, l&apos;article sort des résultats mais reste accessible par son lien.</small>
+                    <small className="admin-field-hint">
+                      Coché : l&apos;article est ajouté au plan du site. Décoché : il reste accessible par son lien mais
+                      demande aux moteurs de ne pas le référencer.
+                    </small>
                   </span>
                 </label>
               </div>
@@ -2092,6 +2150,86 @@ export function AdminWorkspace({
                 </Button>
               </div>
             </form>
+          </section>
+
+          <section className="admin-shell">
+            <div className="admin-editorial-list-head">
+              <h3>Articles</h3>
+              <input
+                className="ui-field"
+                onChange={(event) => setArticleSearch(event.target.value)}
+                placeholder="Rechercher un titre, une catégorie..."
+                value={articleSearch}
+              />
+            </div>
+
+            <table className="admin-editorial-table">
+              <thead>
+                <tr>
+                  <th>Image</th>
+                  <th>Titre</th>
+                  <th>Catégorie</th>
+                  <th>Publié</th>
+                  <th>Date</th>
+                  <th aria-label="Actions" />
+                </tr>
+              </thead>
+              <tbody>
+                {articles
+                  .filter(
+                    (article) =>
+                      !articleSearch.trim() ||
+                      `${article.title} ${article.category}`.toLowerCase().includes(articleSearch.trim().toLowerCase()),
+                  )
+                  .sort((a, b) => compareDateDesc(a.publishedAt, b.publishedAt))
+                  .map((article) => (
+                    <tr className={editingArticleSlug === article.slug ? "is-active" : ""} key={article.slug}>
+                      <td>
+                        {/* eslint-disable-next-line @next/next/no-img-element */}
+                        <img alt="" className="admin-editorial-thumb" src={getArticleCover(article)} />
+                      </td>
+                      <td>
+                        <strong>{article.title}</strong>
+                        <span className="admin-editorial-slug">/actualites/{article.slug}</span>
+                      </td>
+                      <td>
+                        <span className="admin-editorial-category">{article.category}</span>
+                      </td>
+                      <td>
+                        <span className={article.published === false ? "admin-editorial-draft" : ""}>
+                          {article.published === false ? "Brouillon" : "Oui"}
+                        </span>
+                        <span className="admin-editorial-slug">
+                          {article.indexable === false ? "Non référencé" : "Référencé"}
+                        </span>
+                      </td>
+                      <td>{formatDateLabel(article.publishedAt)}</td>
+                      <td>
+                        <div className="admin-editorial-row-actions">
+                          <a
+                            className="admin-copy-button"
+                            href={`/actualites/${article.slug}${article.published === false ? "?apercu=1" : ""}`}
+                            rel="noopener"
+                            target="_blank"
+                          >
+                            Aperçu
+                          </a>
+                          <button className="admin-copy-button" onClick={() => selectArticle(article.slug)} type="button">
+                            Modifier
+                          </button>
+                          <button
+                            className="admin-copy-button admin-copy-button-danger"
+                            onClick={() => handleDeleteArticle(article.slug, article.title)}
+                            type="button"
+                          >
+                            Supprimer
+                          </button>
+                        </div>
+                      </td>
+                    </tr>
+                  ))}
+              </tbody>
+            </table>
           </section>
         </div>
       ) : null}

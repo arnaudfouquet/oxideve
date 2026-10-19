@@ -9645,3 +9645,406 @@ a.ct-channel-value:hover {
     grid-column: 1;
   }
 }
+
+
+/* ---------------------------------------------------------------
+   Ecran Editorial : la liste reste etroite, l'edition prend la place
+   --------------------------------------------------------------- */
+
+.admin-editorial-pane {
+  grid-template-columns: minmax(260px, 320px) minmax(0, 1fr);
+}
+
+/* Le titre est le premier champ, en pleine largeur. */
+.contact-form label.admin-article-title-field {
+  gap: 6px;
+}
+
+.admin-article-title-field input {
+  font-size: 1.05rem;
+  font-weight: 700;
+}
+
+.admin-article-title-field code {
+  padding: 1px 5px;
+  border-radius: 4px;
+  background: var(--color-light);
+  font-size: 0.74rem;
+}
+
+/* Etiquette discrete signalant qu'une valeur est automatique. */
+.admin-field-optional {
+  margin-left: 0.5rem;
+  padding: 1px 7px;
+  border-radius: 999px;
+  background: var(--color-blue-pale);
+  color: var(--color-navy);
+  font-size: 0.68rem;
+  font-style: normal;
+  font-weight: 400;
+}
+
+/* Image de couverture : bouton d'envoi, pas un champ fichier brut. */
+.admin-article-cover {
+  display: grid;
+  gap: 0.5rem;
+  justify-items: start;
+  padding: 0.85rem;
+  border: 1px solid var(--color-light);
+  border-radius: 10px;
+  background: #fbfdfe;
+}
+
+.admin-article-cover .admin-field-hint {
+  margin: 0;
+}
+
+.admin-article-image-preview {
+  display: grid;
+  gap: 0.4rem;
+  justify-items: start;
+}
+
+.admin-article-image-preview img {
+  width: 100%;
+  max-width: 320px;
+  height: 140px;
+  object-fit: cover;
+  border-radius: 10px;
+}
+
+.admin-article-editor-label {
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: var(--color-navy);
+}
+
+.admin-article-editor-field {
+  display: grid;
+  gap: 0.4rem;
+}
+
+/* Les deux cases publication / referencement cote a cote. */
+.admin-article-flags {
+  display: grid;
+  gap: 0.75rem;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+}
+
+.admin-article-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+  padding-top: 0.5rem;
+}
+
+/* Panneau SEO replie. */
+.admin-seo-panel {
+  border: 1px solid var(--color-light);
+  border-radius: 10px;
+  background: #fbfdfe;
+}
+
+.admin-seo-panel > summary {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 0.7rem 0.85rem;
+  font-size: 0.86rem;
+  font-weight: 700;
+  color: var(--color-navy);
+  cursor: pointer;
+}
+
+.admin-seo-tag {
+  padding: 1px 8px;
+  border-radius: 999px;
+  background: var(--color-light);
+  color: var(--color-muted);
+  font-size: 0.7rem;
+  font-weight: 400;
+}
+
+.admin-seo-tag.is-custom {
+  background: var(--color-green-pale);
+  color: var(--color-navy);
+}
+
+.admin-seo-body {
+  display: grid;
+  gap: 0.75rem;
+  padding: 0 0.85rem 0.85rem;
+}
+
+.admin-seo-body label > span {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 0.5rem;
+}
+
+.admin-seo-body label em {
+  font-size: 0.72rem;
+  font-style: normal;
+  color: var(--color-muted);
+}
+
+.admin-seo-body label em.is-over {
+  color: #ff4d4f;
+  font-weight: 700;
+}
+
+/* Apercu du resultat de recherche Google. */
+.admin-seo-preview {
+  display: grid;
+  gap: 0.35rem;
+}
+
+.admin-seo-preview-label {
+  font-size: 0.74rem;
+  color: var(--color-muted);
+}
+
+.admin-seo-preview-card {
+  display: grid;
+  gap: 2px;
+  padding: 0.75rem 0.85rem;
+  border: 1px solid var(--color-light);
+  border-radius: 8px;
+  background: #ffffff;
+}
+
+.admin-seo-preview-url {
+  font-size: 0.74rem;
+  color: #4d5156;
+}
+
+.admin-seo-preview-title {
+  font-family: arial, sans-serif;
+  font-size: 1.05rem;
+  font-weight: 400;
+  color: #1a0dab;
+  line-height: 1.3;
+}
+
+.admin-seo-preview-description {
+  font-family: arial, sans-serif;
+  font-size: 0.8rem;
+  color: #4d5156;
+  line-height: 1.5;
+}
+
+@media (max-width: 1100px) {
+  .admin-editorial-pane {
+    grid-template-columns: 1fr;
+  }
+}
+
+
+/* Libelles de la barre d'outils Quill en francais. On surcharge ici plutot
+   que de modifier le fichier vendu, pour pouvoir le mettre a jour. */
+.article-editor .ql-snow .ql-picker.ql-header .ql-picker-label::before,
+.article-editor .ql-snow .ql-picker.ql-header .ql-picker-item::before {
+  content: "Texte normal";
+}
+
+.article-editor .ql-snow .ql-picker.ql-header .ql-picker-label[data-value="2"]::before,
+.article-editor .ql-snow .ql-picker.ql-header .ql-picker-item[data-value="2"]::before {
+  content: "Titre de section";
+}
+
+.article-editor .ql-snow .ql-picker.ql-header .ql-picker-label[data-value="3"]::before,
+.article-editor .ql-snow .ql-picker.ql-header .ql-picker-item[data-value="3"]::before {
+  content: "Sous-titre";
+}
+
+/* Le selecteur de niveau doit etre assez large pour les libelles francais. */
+.article-editor .ql-snow .ql-picker.ql-header {
+  width: 150px;
+}
+
+.article-editor .ql-toolbar.ql-snow {
+  border-radius: 10px 10px 0 0;
+  border-color: var(--color-light);
+}
+
+.article-editor .ql-container.ql-snow {
+  border-radius: 0 0 10px 10px;
+  border-color: var(--color-light);
+}
+
+
+/* ---------------------------------------------------------------
+   Ecran Blog : formulaire pleine largeur, liste en tableau dessous
+   --------------------------------------------------------------- */
+
+.admin-editorial {
+  display: grid;
+  gap: 20px;
+}
+
+.admin-editorial-head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.admin-editorial-head h2 {
+  margin: 0;
+  font-size: 1.4rem;
+  color: var(--color-navy);
+}
+
+.admin-editorial-head span {
+  font-size: 0.8rem;
+  color: var(--color-muted);
+}
+
+.admin-editorial-head-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+}
+
+.admin-editorial-link {
+  padding: 0.4rem 0.9rem;
+  border: 1px solid var(--color-light);
+  border-radius: 999px;
+  background: #ffffff;
+  color: var(--color-navy);
+  font-size: 0.8rem;
+  text-decoration: none;
+}
+
+.admin-editorial-link:hover {
+  border-color: var(--color-blue);
+  color: var(--color-blue);
+}
+
+.admin-editorial-form-title {
+  display: block;
+  margin-bottom: 0.9rem;
+  font-size: 0.92rem;
+  font-weight: 700;
+  color: var(--color-navy);
+}
+
+/* Le contenu est la zone de travail principale : on lui donne de la hauteur. */
+.admin-editorial .article-editor-surface .ql-container,
+.admin-editorial .article-editor-surface .ql-editor {
+  min-height: 420px;
+}
+
+.admin-editorial-list-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 0.9rem;
+}
+
+.admin-editorial-list-head h3 {
+  margin: 0;
+  font-size: 1rem;
+  color: var(--color-navy);
+}
+
+.admin-editorial-list-head input {
+  max-width: 320px;
+}
+
+/* Tableau des articles. */
+.admin-editorial-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.84rem;
+}
+
+.admin-editorial-table th {
+  padding: 0 10px 8px;
+  border-bottom: 1px solid var(--color-light);
+  color: var(--color-muted);
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-align: left;
+  text-transform: uppercase;
+}
+
+.admin-editorial-table td {
+  padding: 10px;
+  border-bottom: 1px solid var(--color-light);
+  vertical-align: middle;
+}
+
+.admin-editorial-table tr.is-active td {
+  background: var(--color-blue-pale);
+}
+
+.admin-editorial-table td strong {
+  display: block;
+  color: var(--color-navy);
+}
+
+.admin-editorial-thumb {
+  width: 44px;
+  height: 36px;
+  object-fit: cover;
+  border-radius: 6px;
+  display: block;
+}
+
+.admin-editorial-slug {
+  display: block;
+  font-size: 0.72rem;
+  color: var(--color-muted);
+}
+
+.admin-editorial-category {
+  display: inline-block;
+  padding: 2px 9px;
+  border-radius: 999px;
+  background: var(--color-green-pale);
+  color: var(--color-navy);
+  font-size: 0.72rem;
+}
+
+.admin-editorial-draft {
+  color: #c77700;
+  font-weight: 700;
+}
+
+.admin-editorial-row-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.35rem;
+}
+
+.admin-editorial-row-actions a.admin-copy-button {
+  text-decoration: none;
+  line-height: 1.6;
+}
+
+@media (max-width: 900px) {
+  .admin-editorial-table thead {
+    display: none;
+  }
+
+  .admin-editorial-table tr {
+    display: grid;
+    gap: 4px;
+    padding: 10px 0;
+    border-bottom: 1px solid var(--color-light);
+  }
+
+  .admin-editorial-table td {
+    padding: 0 10px;
+    border: 0;
+  }
+
+  .admin-editorial-row-actions {
+    justify-content: flex-start;
+    padding-top: 6px;
+  }
+}
