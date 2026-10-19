@@ -1,6 +1,6 @@
 import type { Formation, Session } from "../../shared/types";
 import { formatDateRange } from "@/lib/dates";
-import { Badge, Button, ButtonLink, Card } from "@/components/ui";
+import { Button, ButtonLink, Card } from "@/components/ui";
 
 type Props = {
   session: Session;
@@ -26,13 +26,13 @@ export function SessionCard({
 
   return (
     <Card className={classes.join(" ")}>
-      <div className="session-card-head">
-        <Badge>{session.city}</Badge>
-        <Badge tone="accent">{formatDateRange(session.startDate, session.endDate)}</Badge>
-      </div>
+      {/* La date est l'information qu'on cherche en premier : elle fait le
+          titre de la carte, la ville et la modalité la complètent. */}
+      <strong className="session-card-date">{formatDateRange(session.startDate, session.endDate)}</strong>
       {hideFormationTitle ? null : <h3>{formation?.title || session.formationSlug}</h3>}
       <div className="session-card-meta">
-        <span>{session.mode}</span>
+        <span className="session-card-city">{session.city}</span>
+        <span className="session-card-mode">&middot; {session.mode}</span>
       </div>
       {onSelect ? (
         <Button

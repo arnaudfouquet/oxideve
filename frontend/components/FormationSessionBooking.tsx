@@ -56,7 +56,9 @@ export function FormationSessionBooking({ formation, sessions }: Props) {
       <div className="fd-signup-form" ref={formRef}>
         {selectedSession ? (
           <p className="contact-card-session-summary">
-            Session choisie : <strong>{selectedSession.city}</strong>, du{" "}
+            Session choisie : <strong>{selectedSession.city}</strong>
+            {/* « du » n'a de sens que pour une période, pas pour une journée. */}
+            {selectedSession.startDate === selectedSession.endDate ? ", le " : ", du "}
             {formatDateRange(selectedSession.startDate, selectedSession.endDate)}
           </p>
         ) : null}
