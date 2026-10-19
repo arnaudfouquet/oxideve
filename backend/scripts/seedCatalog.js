@@ -96,6 +96,7 @@ async function main() {
           // écraser les réglages faits dans l'admin à chaque déploiement.
           bannerImage: formation.bannerImage || null,
           bannerPosition: formation.bannerPosition || null,
+          tilePosition: formation.tilePosition || null,
         },
         update: {
           title: formation.title,

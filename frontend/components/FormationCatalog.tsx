@@ -561,7 +561,12 @@ function FormationResultCard({
         <div className="cat-result-head">
           <span className="formation-tile-category">{formation.category}</span>
           <span className="formation-tile-duration">{formation.duration}</span>
-          {formation.cpfEligible ? <span className="formation-tile-cpf">Finançable CPF</span> : null}
+          {/* Dispositifs de financement, dans le même ordre que le filtre. */}
+          {FUNDING_OPTIONS.filter((option) => matchesFunding(formation, option.value)).map((option) => (
+            <span className={`formation-tile-funding formation-tile-funding-${option.value}`} key={option.value}>
+              {option.label}
+            </span>
+          ))}
         </div>
 
         <h3 className="cat-result-title">
@@ -606,7 +611,7 @@ function FormationResultCard({
 
       <div className="cat-result-visual">
         {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img alt="" src={theme.banner} style={theme.bannerPosition ? { objectPosition: theme.bannerPosition } : undefined} />
+        <img alt="" src={theme.banner} style={theme.tilePosition ? { objectPosition: theme.tilePosition } : undefined} />
       </div>
     </article>
   );

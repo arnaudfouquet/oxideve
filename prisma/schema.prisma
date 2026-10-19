@@ -55,6 +55,7 @@ model Formation {
   cpfEligible     Boolean       @default(false)
   bannerImage     String?
   bannerPosition  String?
+  tilePosition    String?
   createdAt       DateTime      @default(now())
   updatedAt       DateTime      @updatedAt
   sessions        Session[]

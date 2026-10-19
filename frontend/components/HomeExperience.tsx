@@ -49,7 +49,7 @@ const categoryColors: Record<string, string> = {
   "Bornes de recharge": "charge",
   "Sécurité au travail": "safety",
   Bureautique: "office",
-  "Traitement d'air": "air",
+  "Fluides frigorigènes": "air",
 };
 
 function monthKey(value: string) {

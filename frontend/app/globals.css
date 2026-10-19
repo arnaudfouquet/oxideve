@@ -6192,6 +6192,7 @@ main {
 .cat-result-head {
   display: flex;
   align-items: center;
+  flex-wrap: wrap;
   gap: 10px;
 }
 
@@ -9155,4 +9156,86 @@ a.ct-channel-value:hover {
   font-size: 0.82rem;
   cursor: pointer;
   text-decoration: underline;
+}
+
+
+/* Deux cadrages distincts : banniere de la fiche et tuile du catalogue. */
+.admin-crop-grid {
+  display: grid;
+  gap: 0.9rem;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+}
+
+.admin-crop {
+  display: grid;
+  gap: 0.5rem;
+  align-content: start;
+  padding: 0.75rem;
+  border: 1px solid var(--color-light);
+  border-radius: 10px;
+  background: #fff;
+}
+
+.admin-crop-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 0.5rem;
+}
+
+.admin-crop-head strong {
+  font-size: 0.86rem;
+  color: var(--color-navy);
+}
+
+.admin-crop .admin-field-hint {
+  margin: 0;
+}
+
+.admin-crop-preview {
+  overflow: hidden;
+  border-radius: 8px;
+  background: var(--color-light);
+}
+
+.admin-crop-preview img {
+  display: block;
+  width: 100%;
+  object-fit: cover;
+}
+
+/* Bandeau tres large de la page formation (pleine largeur sur 330px). */
+.admin-crop-preview-banner img {
+  aspect-ratio: 1440 / 330;
+}
+
+/* Vignette verticale de la tuile du catalogue (190px de large, pleine hauteur). */
+.admin-crop-preview-tile {
+  justify-self: start;
+  width: 160px;
+}
+
+.admin-crop-preview-tile img {
+  aspect-ratio: 190 / 300;
+}
+
+
+/* Etiquettes de financement sur les tuiles du catalogue. */
+.formation-tile-funding {
+  padding: 6px 14px;
+  border-radius: 999px;
+  background: var(--color-blue-pale);
+  color: var(--color-navy);
+  font-style: italic;
+  font-size: 0.86rem;
+  white-space: nowrap;
+}
+
+/* Le CPF reste mis en avant : c'est le seul dispositif qui ne concerne pas
+   toutes les formations. */
+.formation-tile-funding-cpf {
+  background: var(--color-green);
+  color: #ffffff;
+  font-weight: 700;
+  font-style: normal;
 }

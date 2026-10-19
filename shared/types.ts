@@ -59,8 +59,10 @@ export type Formation = {
   cpfEligible?: boolean;
   /** Photo de bannière propre à la formation, sinon celle de la sous-catégorie. */
   bannerImage?: string | null;
-  /** Cadrage de la bannière, au format CSS `object-position` (ex. "50% 30%"). */
+  /** Cadrage de la bannière de la page formation, au format CSS `object-position`. */
   bannerPosition?: string | null;
+  /** Cadrage de la photo dans la tuile du catalogue, au format CSS `object-position`. */
+  tilePosition?: string | null;
   queovalIdentFOR?: string | null;
   videoUrl?: string | null;
   rgeBadge?: RgeBadge | null;

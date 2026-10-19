@@ -30,6 +30,29 @@ function isBootstrapLoginAllowed(req) {
   return safeEqual(user, expectedUser) && safeEqual(password, expectedPassword);
 }
 
+/**
+ * Vrai uniquement pour une requête émise depuis la machine locale sur un
+ * serveur lancé en mode development. En production NODE_ENV vaut "production",
+ * donc ce contournement y est toujours inactif.
+ */
+function isLocalDevRequest(req) {
+  if (process.env.NODE_ENV !== "development") return false;
+
+  const address = req.socket?.remoteAddress || "";
+  return address === "127.0.0.1" || address === "::1" || address === "::ffff:127.0.0.1";
+}
+
+/** Premier compte admin, pour que les routes qui tracent l'auteur fonctionnent. */
+async function getFirstAdminUserId() {
+  try {
+    const { listAdminUsers } = require("../services/adminUserService");
+    const users = await listAdminUsers();
+    return users?.[0]?.id || null;
+  } catch (error) {
+    return null;
+  }
+}
+
 function sendUnauthorized(req, res) {
   if (req.baseUrl.startsWith("/api")) {
     return res.status(401).json({ error: "Authentification admin requise." });
@@ -42,7 +65,12 @@ async function adminAuth(req, res, next) {
     return next();
   }
 
-  if (process.env.NODE_ENV === "development" && !process.env.DATABASE_URL) {
+  if (isLocalDevRequest(req)) {
+    // Confort de développement : la requête vient de la machine locale et le
+    // serveur tourne en mode development, on saute l'écran de connexion.
+    // Jamais actif en production (NODE_ENV y vaut "production").
+    const firstAdmin = await getFirstAdminUserId();
+    if (firstAdmin) req.adminUserId = firstAdmin;
     return next();
   }
 

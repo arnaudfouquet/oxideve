@@ -46,8 +46,8 @@ const categories = [
   },
   {
     label: "Climatisation et fluides frigorigènes",
-    category: "Traitement d'air",
-    description: "Intervenez en conformité sur les équipements de traitement d'air.",
+    category: "Fluides frigorigènes",
+    description: "Intervenez en conformité sur les équipements de climatisation et de réfrigération.",
     image: "/assets/formations/banner-clim.webp",
   },
 ];

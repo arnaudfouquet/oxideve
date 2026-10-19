@@ -6,8 +6,10 @@
 export type CategoryTheme = {
   banner: string;
   blurb: string;
-  /** Cadrage de la photo, au format CSS `object-position`. */
+  /** Cadrage de la bannière de la page formation (CSS `object-position`). */
   bannerPosition?: string;
+  /** Cadrage de la photo dans la tuile du catalogue (CSS `object-position`). */
+  tilePosition?: string;
 };
 
 const THEMES: Record<string, CategoryTheme> = {
@@ -41,10 +43,10 @@ const THEMES: Record<string, CategoryTheme> = {
     blurb:
       "Sécurisez vos interventions et répondez à vos obligations réglementaires avec nos formations sécurité.",
   },
-  "Traitement d'air": {
+  "Fluides frigorigènes": {
     banner: "/assets/formations/banner-clim.webp",
     blurb:
-      "Climatisation et fluides frigorigènes : intervenez en conformité sur les équipements de traitement d'air.",
+      "Climatisation et fluides frigorigènes : intervenez en conformité sur les équipements de climatisation et de réfrigération.",
   },
 };
 
@@ -58,41 +60,50 @@ const FALLBACK: CategoryTheme = {
  * la bannière de la catégorie parente.
  */
 // Visuels provisoires (Unsplash) en attendant les photos Oxideve définitives.
-// `position` donne le cadrage par défaut, que l'admin peut surcharger formation
-// par formation via le champ "cadrage de la photo".
-const SUBCATEGORY_BANNERS: Record<string, { url: string; position: string }> = {
+// Les deux formats n'ont pas le même cadrage : la bannière de la page formation
+// est très large et basse, la tuile du catalogue est presque carrée. Chacun a
+// donc son réglage par défaut, surchargeable formation par formation.
+const SUBCATEGORY_BANNERS: Record<string, { url: string; banner: string; tile: string }> = {
   Électricité: {
     url: "https://images.unsplash.com/photo-1565608438257-fac3c27beb36?auto=format&fit=crop&w=1200&q=80",
-    position: "50% 50%",
+    banner: "50% 50%",
+    tile: "50% 50%",
   },
   "Travail en hauteur": {
     url: "https://images.unsplash.com/photo-1581094794329-c8112a89af12?auto=format&fit=crop&w=1200&q=80",
-    position: "50% 40%",
+    banner: "50% 40%",
+    tile: "50% 30%",
   },
   "Sauveteur secouriste du travail": {
     url: "https://images.unsplash.com/photo-1587293852726-70cdb56c2866?auto=format&fit=crop&w=1200&q=80",
-    position: "50% 45%",
+    banner: "50% 45%",
+    tile: "50% 35%",
   },
   Incendie: {
     url: "https://images.unsplash.com/photo-1599045118108-bf9954418b76?auto=format&fit=crop&w=1200&q=80",
-    position: "50% 50%",
+    banner: "50% 50%",
+    tile: "50% 45%",
   },
 };
 
 /**
- * Visuel à afficher pour une formation. L'ordre de priorité est : photo saisie
- * dans l'admin, puis photo de la sous-famille, puis photo de la catégorie.
+ * Visuel à afficher pour une formation. L'ordre de priorité est : réglage saisi
+ * dans l'admin, puis valeur de la sous-famille, puis valeur de la catégorie.
+ * `bannerPosition` sert à la page formation, `tilePosition` à la tuile du
+ * catalogue : les deux sont indépendants.
  */
 export function getCategoryTheme(
   category: string,
   subCategory?: string | null,
-  overrides?: { bannerImage?: string | null; bannerPosition?: string | null },
+  overrides?: { bannerImage?: string | null; bannerPosition?: string | null; tilePosition?: string | null },
 ): CategoryTheme {
   const base = THEMES[category] || FALLBACK;
   const sub = subCategory ? SUBCATEGORY_BANNERS[subCategory] : undefined;
 
-  const banner = overrides?.bannerImage || sub?.url || base.banner;
-  const bannerPosition = overrides?.bannerPosition || sub?.position || base.bannerPosition;
-
-  return { ...base, banner, bannerPosition };
+  return {
+    ...base,
+    banner: overrides?.bannerImage || sub?.url || base.banner,
+    bannerPosition: overrides?.bannerPosition || sub?.banner || base.bannerPosition,
+    tilePosition: overrides?.tilePosition || sub?.tile || base.tilePosition,
+  };
 }

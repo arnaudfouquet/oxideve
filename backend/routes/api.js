@@ -115,6 +115,7 @@ const formationSchema = z.object({
   cpfEligible: z.coerce.boolean().optional().default(false),
   bannerImage: z.string().max(500).optional().default(""),
   bannerPosition: z.string().max(40).optional().default(""),
+  tilePosition: z.string().max(40).optional().default(""),
 });
 
 const sessionSchema = z.object({

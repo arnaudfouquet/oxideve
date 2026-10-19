@@ -47,6 +47,7 @@ type FormationDraft = {
   cpfEligible: boolean;
   bannerImage: string;
   bannerPosition: string;
+  tilePosition: string;
 };
 
 type SessionDraft = {
@@ -203,6 +204,7 @@ function toFormationDraft(formation?: Formation): FormationDraft {
       cpfEligible: false,
       bannerImage: "",
       bannerPosition: "",
+      tilePosition: "",
     };
   }
 
@@ -232,6 +234,7 @@ function toFormationDraft(formation?: Formation): FormationDraft {
     cpfEligible: Boolean(formation.cpfEligible),
     bannerImage: formation.bannerImage || "",
     bannerPosition: formation.bannerPosition || "",
+    tilePosition: formation.tilePosition || "",
   };
 }
 
@@ -1270,6 +1273,7 @@ export function AdminWorkspace({
       cpfEligible: formationDraft.cpfEligible,
       bannerImage: formationDraft.bannerImage.trim(),
       bannerPosition: formationDraft.bannerPosition.trim(),
+      tilePosition: formationDraft.tilePosition.trim(),
     };
 
     const isEditing = Boolean(editingFormationSlug);
@@ -2691,10 +2695,74 @@ export function AdminWorkspace({
   );
 }
 
+/** "50% 30%" -> [50, 30], avec repli sur le centre si la valeur est vide. */
+function parsePosition(value: string | undefined): [number, number] {
+  const parts = (value || "50% 50%").split(/\s+/);
+  const x = Number.parseInt(parts[0], 10);
+  const y = Number.parseInt(parts[1] ?? parts[0], 10);
+
+  return [Number.isFinite(x) ? x : 50, Number.isFinite(y) ? y : 50];
+}
+
 /**
- * Photo de bannière de la formation : on peut remplacer la photo héritée de la
- * sous-catégorie et ajuster son cadrage, avec un aperçu au même format que la
- * page publique.
+ * Aperçu d'un format (bannière ou tuile) avec ses deux curseurs de cadrage.
+ * `shape` ne change que les proportions de l'aperçu, pour coller au rendu réel.
+ */
+function BannerCropPreview({
+  image,
+  label,
+  hint,
+  shape,
+  value,
+  onChange,
+  onReset,
+}: {
+  image: string;
+  label: string;
+  hint: string;
+  shape: "banner" | "tile";
+  value: string;
+  onChange: (next: string) => void;
+  onReset: () => void;
+}) {
+  const [x, y] = parsePosition(value);
+
+  return (
+    <div className="admin-crop">
+      <div className="admin-crop-head">
+        <strong>{label}</strong>
+        {value ? (
+          <button className="admin-banner-reset" type="button" onClick={onReset}>
+            Cadrage par défaut
+          </button>
+        ) : null}
+      </div>
+      <p className="admin-field-hint">{hint}</p>
+
+      <div className={`admin-crop-preview admin-crop-preview-${shape}`}>
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img alt={`Aperçu : ${label}`} src={image} style={{ objectPosition: `${x}% ${y}%` }} />
+      </div>
+
+      <div className="admin-banner-sliders">
+        <label>
+          <span>Horizontal : {x}%</span>
+          <input type="range" min={0} max={100} value={x} onChange={(event) => onChange(`${event.target.value}% ${y}%`)} />
+        </label>
+        <label>
+          <span>Vertical : {y}%</span>
+          <input type="range" min={0} max={100} value={y} onChange={(event) => onChange(`${x}% ${event.target.value}%`)} />
+        </label>
+      </div>
+    </div>
+  );
+}
+
+/**
+ * Photo de la formation : on peut remplacer celle héritée de la sous-catégorie
+ * et régler séparément son cadrage pour la bannière de la page formation et
+ * pour la tuile du catalogue, les deux formats n'ayant pas les mêmes
+ * proportions.
  */
 function FormationBannerField({
   draft,
@@ -2706,18 +2774,8 @@ function FormationBannerField({
   const theme = getCategoryTheme(draft.category, draft.subCategory, {
     bannerImage: draft.bannerImage,
     bannerPosition: draft.bannerPosition,
+    tilePosition: draft.tilePosition,
   });
-
-  // Le cadrage est stocké en "X% Y%" ; on le découpe pour piloter deux curseurs.
-  const parts = (theme.bannerPosition || "50% 50%").split(/\s+/);
-  const positionX = Number.parseInt(parts[0], 10);
-  const positionY = Number.parseInt(parts[1] ?? parts[0], 10);
-  const safeX = Number.isFinite(positionX) ? positionX : 50;
-  const safeY = Number.isFinite(positionY) ? positionY : 50;
-
-  function setPosition(x: number, y: number) {
-    onChange((current) => ({ ...current, bannerPosition: `${x}% ${y}%` }));
-  }
 
   return (
     <div className="admin-banner-field">
@@ -2734,43 +2792,26 @@ function FormationBannerField({
         </small>
       </label>
 
-      <div className="admin-banner-preview">
-        {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img alt="Aperçu de la bannière" src={theme.banner} style={{ objectPosition: `${safeX}% ${safeY}%` }} />
+      <div className="admin-crop-grid">
+        <BannerCropPreview
+          image={theme.banner}
+          label="Bannière de la page formation"
+          hint="Bandeau large en haut de la fiche."
+          shape="banner"
+          value={theme.bannerPosition || ""}
+          onChange={(next) => onChange((current) => ({ ...current, bannerPosition: next }))}
+          onReset={() => onChange((current) => ({ ...current, bannerPosition: "" }))}
+        />
+        <BannerCropPreview
+          image={theme.banner}
+          label="Tuile du catalogue"
+          hint="Vignette affichée à droite de chaque résultat."
+          shape="tile"
+          value={theme.tilePosition || ""}
+          onChange={(next) => onChange((current) => ({ ...current, tilePosition: next }))}
+          onReset={() => onChange((current) => ({ ...current, tilePosition: "" }))}
+        />
       </div>
-
-      <div className="admin-banner-sliders">
-        <label>
-          <span>Cadrage horizontal : {safeX}%</span>
-          <input
-            type="range"
-            min={0}
-            max={100}
-            value={safeX}
-            onChange={(event) => setPosition(Number(event.target.value), safeY)}
-          />
-        </label>
-        <label>
-          <span>Cadrage vertical : {safeY}%</span>
-          <input
-            type="range"
-            min={0}
-            max={100}
-            value={safeY}
-            onChange={(event) => setPosition(safeX, Number(event.target.value))}
-          />
-        </label>
-      </div>
-
-      {draft.bannerPosition ? (
-        <button
-          className="admin-banner-reset"
-          type="button"
-          onClick={() => onChange((current) => ({ ...current, bannerPosition: "" }))}
-        >
-          Rétablir le cadrage par défaut
-        </button>
-      ) : null}
     </div>
   );
 }
