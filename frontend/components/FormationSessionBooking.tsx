@@ -4,7 +4,6 @@ import { useRef, useState } from "react";
 import type { Formation, Session } from "../../shared/types";
 import { ContactForm } from "@/components/ContactForm";
 import { SessionCard } from "@/components/SessionCard";
-import { Title } from "@/components/ui";
 import { formatDateRange } from "@/lib/dates";
 
 type Props = {
@@ -25,15 +24,25 @@ export function FormationSessionBooking({ formation, sessions }: Props) {
     firstField?.focus({ preventScroll: true });
   }
 
+  // Un seul niveau de carte : le titre et le cadre sont portés par la section
+  // de la page, on n'en rajoute pas ici.
   return (
     <div className="session-booking-stack">
-      {sessions.length > 1 ? (
-        <div>
-          <Title eyebrow="Sessions" title="Sessions disponibles" />
+      <p className="fd-signup-note">
+        Ceci constitue la première étape de votre inscription. Dès réception de votre demande, vous serez contactés
+        pour valider celle-ci.
+      </p>
+
+      {sessions.length ? (
+        <div className="fd-signup-sessions">
+          <span className="fd-signup-subtitle">
+            {sessions.length > 1 ? "Choisissez votre session" : "Session programmée"}
+          </span>
           <div className="session-grid">
             {sessions.map((session) => (
               <SessionCard
                 formation={formation}
+                hideFormationTitle
                 isSelected={session.id === selectedSessionId}
                 key={session.id}
                 onSelect={handleSelectSession}
@@ -43,14 +52,12 @@ export function FormationSessionBooking({ formation, sessions }: Props) {
           </div>
         </div>
       ) : null}
-      <div className="contact-card contact-card-form" ref={formRef}>
-        <Title eyebrow="Inscription" title={`Préparer votre inscription à ${formation.shortTitle}`} />
-        <p className="contact-card-note">
-          Ceci constitue la première étape de votre inscription. Dès réception de votre demande, vous serez contactés pour valider celle-ci.
-        </p>
+
+      <div className="fd-signup-form" ref={formRef}>
         {selectedSession ? (
           <p className="contact-card-session-summary">
-            Session choisie : <strong>{selectedSession.city}</strong>, du {formatDateRange(selectedSession.startDate, selectedSession.endDate)}
+            Session choisie : <strong>{selectedSession.city}</strong>, du{" "}
+            {formatDateRange(selectedSession.startDate, selectedSession.endDate)}
           </p>
         ) : null}
         <ContactForm defaultFormationSlug={formation.slug} selectedSessionId={selectedSessionId} />

@@ -1,6 +1,6 @@
 import type { Formation, Session } from "../../shared/types";
 import { formatDateRange } from "@/lib/dates";
-import { Badge, Button, ButtonLink, Card, Text } from "@/components/ui";
+import { Badge, Button, ButtonLink, Card } from "@/components/ui";
 
 type Props = {
   session: Session;
@@ -8,9 +8,18 @@ type Props = {
   compact?: boolean;
   isSelected?: boolean;
   onSelect?: (sessionId: string) => void;
+  /** Sur la page d'une formation, répéter son titre dans chaque carte est inutile. */
+  hideFormationTitle?: boolean;
 };
 
-export function SessionCard({ session, formation, compact = false, isSelected = false, onSelect }: Props) {
+export function SessionCard({
+  session,
+  formation,
+  compact = false,
+  isSelected = false,
+  onSelect,
+  hideFormationTitle = false,
+}: Props) {
   const classes = ["session-card"];
   if (compact) classes.push("session-card-compact");
   if (isSelected) classes.push("session-card-selected");
@@ -21,8 +30,7 @@ export function SessionCard({ session, formation, compact = false, isSelected = 
         <Badge>{session.city}</Badge>
         <Badge tone="accent">{formatDateRange(session.startDate, session.endDate)}</Badge>
       </div>
-      <h3>{formation?.title || session.formationSlug}</h3>
-      <Text tone="muted">Session organisée à {session.city}</Text>
+      {hideFormationTitle ? null : <h3>{formation?.title || session.formationSlug}</h3>}
       <div className="session-card-meta">
         <span>{session.mode}</span>
       </div>

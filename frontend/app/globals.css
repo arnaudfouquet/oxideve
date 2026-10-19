@@ -1073,7 +1073,19 @@ main {
 .session-grid {
   display: grid;
   gap: var(--space-3);
-  grid-template-columns: repeat(auto-fit, minmax(280px, 380px));
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+@media (max-width: 1000px) {
+  .session-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 680px) {
+  .session-grid {
+    grid-template-columns: 1fr;
+  }
 }
 
 .session-booking-stack {
@@ -6565,12 +6577,12 @@ main {
   min-width: 0;
 }
 
+/* L'épingle vit dans le bandeau, entre le texte et le bouton : en position
+   absolue elle débordait au-dessus du cadre. */
 .fd-local-pin {
-  position: absolute;
-  top: -14px;
-  left: 62%;
-  width: 46px;
-  height: 58px;
+  flex: 0 0 auto;
+  width: 34px;
+  height: 42px;
   pointer-events: none;
 }
 
@@ -6658,19 +6670,21 @@ main {
 }
 
 /* Pastille "?" qui déborde du coin haut-droit de la carte Description. */
+/* La pastille chevauche le coin de la carte sans sortir de la colonne :
+   décalée de -22px elle empiétait sur la carte voisine. */
 .fd-help-badge {
   position: absolute;
-  top: -22px;
-  right: -22px;
+  top: -20px;
+  right: 24px;
   display: grid;
   place-items: center;
-  width: 76px;
-  height: 76px;
+  width: 60px;
+  height: 60px;
   border-radius: 50%;
   background: var(--color-blue);
   color: #ffffff;
   font-family: var(--font-sans), sans-serif;
-  font-size: 2.2rem;
+  font-size: 1.7rem;
   font-weight: 800;
   line-height: 1;
 }
@@ -6947,9 +6961,21 @@ main {
   background: #ffffff;
 }
 
+/* Seuls l'intitulé et l'introduction sont centrés : tout centrer déréglait
+   l'alignement des cartes de session et du formulaire. */
 .fd-signup-card {
   padding: 40px 44px 44px;
+}
+
+.fd-signup-card > .fd-pill,
+.fd-signup-card > h2 {
+  display: block;
+  margin-inline: auto;
   text-align: center;
+}
+
+.fd-signup-card > .fd-pill {
+  width: fit-content;
 }
 
 .fd-signup-card h2 {
@@ -10055,4 +10081,34 @@ a.ct-channel-value:hover {
   margin-top: 4px;
   font-size: 0.72rem;
   color: var(--color-muted);
+}
+
+/* Section inscription : un seul cadre, porte par la page. */
+.fd-signup-note {
+  margin: 0 auto 28px;
+  max-width: 620px;
+  text-align: center;
+  color: var(--color-muted);
+}
+
+.fd-signup-sessions {
+  display: grid;
+  gap: 14px;
+  margin-bottom: 32px;
+}
+
+.fd-signup-subtitle {
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: var(--color-navy);
+}
+
+/* Le formulaire est separe des sessions par un filet, pas par une carte. */
+.fd-signup-form {
+  padding-top: 28px;
+  border-top: 1px solid var(--color-light);
+}
+
+.fd-signup-form .contact-card-session-summary {
+  margin: 0 0 20px;
 }
