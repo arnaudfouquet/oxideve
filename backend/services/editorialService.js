@@ -25,7 +25,22 @@ function truncateAtWord(text, limit) {
  * de lecture déduits du texte, métadonnées SEO tronquées proprement.
  */
 function prepareArticle(payload) {
-  const bodyHtml = sanitizeArticleHtml(payload.bodyHtml || "");
+  const raw = payload.bodyHtml || "";
+
+  // Garde-fou : un contenu sans la moindre balise signale presque toujours un
+  // texte déjà aplati qu'on s'apprête à réécrire par-dessus le vrai HTML. On
+  // le réenveloppe en paragraphes plutôt que de perdre la mise en forme.
+  const bodyHtml = /<[a-z][\s\S]*>/i.test(raw)
+    ? sanitizeArticleHtml(raw)
+    : sanitizeArticleHtml(
+        raw
+          .split(/\n\s*\n/)
+          .map((paragraph) => paragraph.trim())
+          .filter(Boolean)
+          .map((paragraph) => `<p>${paragraph}</p>`)
+          .join(""),
+      );
+
   const plainText = htmlToPlainText(bodyHtml);
 
   const excerpt = (payload.excerpt || "").trim() || truncateAtWord(plainText, 200);
