@@ -255,11 +255,21 @@ export type Article = {
   title: string;
   category: string;
   excerpt: string;
+  /** Paragraphes bruts : conservés pour les articles créés avant l'éditeur. */
   body: string[];
+  /** Contenu riche filtré, prioritaire sur `body` quand il est renseigné. */
+  bodyHtml?: string;
   readingTime: string;
   publishedAt: string;
   featuredFormationSlug?: string;
   coverImageUrl?: string;
+  /** Faux = brouillon, invisible des visiteurs. */
+  published?: boolean;
+  /** Faux = noindex et exclusion du sitemap. */
+  indexable?: boolean;
+  /** Vides : le titre et l'accroche de l'article sont utilisés. */
+  seoTitle?: string;
+  seoDescription?: string;
 };
 
 export type ParticipantQuizSummary = {

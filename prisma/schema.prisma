@@ -175,10 +175,19 @@ model Article {
   category             String
   excerpt              String    @db.Text
   body                 Json
+  // Contenu riche produit par l'éditeur, déjà filtré avant enregistrement.
+  // `body` reste alimenté en paragraphes bruts pour les anciens articles.
+  bodyHtml             String?   @db.Text
   readingTime          String
   publishedAt          DateTime
   featuredFormationSlug String?
   coverImageUrl        String?
+  // Brouillon tant que `published` est faux ; `indexable` pilote le noindex
+  // et la présence dans le sitemap.
+  published            Boolean   @default(true)
+  indexable            Boolean   @default(true)
+  seoTitle             String    @default("")
+  seoDescription       String?   @db.Text
   createdAt            DateTime  @default(now())
   updatedAt            DateTime  @updatedAt
 }
