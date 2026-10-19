@@ -9207,16 +9207,19 @@ a.ct-channel-value:hover {
 /* Bandeau tres large de la page formation (pleine largeur sur 330px). */
 .admin-crop-preview-banner img {
   aspect-ratio: 1440 / 330;
+  max-height: 120px;
 }
 
-/* Vignette verticale de la tuile du catalogue (190px de large, pleine hauteur). */
+/* Vignette verticale de la tuile du catalogue (190px de large, pleine hauteur).
+   Largeur bridee pour que l'apercu ne devore pas le tiroir. */
 .admin-crop-preview-tile {
   justify-self: start;
-  width: 160px;
+  width: 110px;
 }
 
 .admin-crop-preview-tile img {
   aspect-ratio: 190 / 300;
+  max-height: 174px;
 }
 
 
@@ -9234,8 +9237,171 @@ a.ct-channel-value:hover {
 /* Le CPF reste mis en avant : c'est le seul dispositif qui ne concerne pas
    toutes les formations. */
 .formation-tile-funding-cpf {
-  background: var(--color-green);
+  padding: 4px 10px;
+  border-radius: 6px;
+  background: #ff4d4f;
   color: #ffffff;
+  font-style: italic;
   font-weight: 700;
-  font-style: normal;
+  font-size: 0.78rem;
+}
+
+.formation-tile-funding-cpf::before {
+  content: "⚠ ";
+}
+
+
+/* Champ occupant les deux colonnes de la grille du formulaire admin. */
+.contact-form .contact-form-full,
+.admin-drawer-body .form-grid > .contact-form-full {
+  grid-column: 1 / -1;
+}
+
+/* Case a cocher presentee comme un encadre, et non comme un champ orphelin. */
+.contact-form label.admin-checkbox-boxed {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.6rem;
+  padding: 0.7rem 0.85rem;
+  border: 1px solid var(--color-light);
+  border-radius: 10px;
+  background: #fbfdfe;
+}
+
+.contact-form label.admin-checkbox-boxed input {
+  margin-top: 0.15rem;
+}
+
+.contact-form label.admin-checkbox-boxed > span {
+  display: grid;
+  gap: 0.15rem;
+}
+
+.contact-form label.admin-checkbox-boxed .admin-field-hint {
+  margin: 0;
+  font-weight: 400;
+}
+
+/* En-tete du bloc photo. */
+.admin-banner-head {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.admin-banner-head strong {
+  font-size: 0.9rem;
+  color: var(--color-navy);
+}
+
+.admin-banner-tag {
+  padding: 2px 8px;
+  border-radius: 999px;
+  background: var(--color-blue-pale);
+  color: var(--color-navy);
+  font-size: 0.72rem;
+}
+
+.admin-banner-actions {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+}
+
+/* Bouton d'envoi : l'input file natif est masque derriere un libelle. */
+.admin-upload-button {
+  display: inline-flex;
+  cursor: pointer;
+}
+
+.admin-upload-button input {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.admin-upload-button span {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.45rem 0.95rem;
+  border-radius: 10px;
+  background: var(--color-blue);
+  color: #ffffff;
+  font-size: 0.84rem;
+  font-weight: 700;
+}
+
+.admin-upload-button input:disabled + span {
+  opacity: 0.6;
+  cursor: progress;
+}
+
+/* Saisie manuelle du chemin, repliee par defaut. */
+.admin-banner-url summary {
+  cursor: pointer;
+  font-size: 0.8rem;
+  color: var(--color-blue);
+}
+
+.admin-banner-url input {
+  margin-top: 0.4rem;
+}
+
+
+/* Ecran Visuels : une ligne par categorie / sous-categorie. */
+.admin-visual-list {
+  display: grid;
+  gap: 0.9rem;
+  margin-top: 1rem;
+}
+
+.admin-visual-row {
+  display: grid;
+  grid-template-columns: minmax(180px, 230px) minmax(0, 1fr) auto;
+  align-items: start;
+  gap: 1rem;
+  padding: 0.9rem;
+  border: 1px solid var(--color-light);
+  border-radius: 12px;
+  background: #ffffff;
+}
+
+/* Une sous-categorie est decalee et marquee, pour montrer la hierarchie. */
+.admin-visual-row-subCategory {
+  margin-left: 1.5rem;
+  border-left: 3px solid var(--color-blue-pale);
+  background: #fbfdfe;
+}
+
+.admin-visual-identity {
+  display: grid;
+  gap: 0.4rem;
+  justify-items: start;
+}
+
+.admin-visual-identity strong {
+  font-size: 0.92rem;
+  color: var(--color-navy);
+}
+
+.admin-visual-meta {
+  font-size: 0.76rem;
+  color: var(--color-muted);
+}
+
+.admin-visual-actions {
+  align-self: center;
+}
+
+@media (max-width: 900px) {
+  .admin-visual-row {
+    grid-template-columns: 1fr;
+  }
+
+  .admin-visual-row-subCategory {
+    margin-left: 0.5rem;
+  }
 }

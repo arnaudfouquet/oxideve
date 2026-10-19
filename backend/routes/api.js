@@ -14,7 +14,8 @@ const {
   updateSession,
 } = require("../services/catalogService");
 const { createArticle, deleteArticle, getArticleBySlug, listArticles, updateArticle } = require("../services/editorialService");
-const { handleArticleImageUpload } = require("../middleware/articleImageUpload");
+const { handleArticleImageUpload, handleFormationImageUpload } = require("../middleware/articleImageUpload");
+const { listCategoryVisuals, saveCategoryVisual } = require("../services/categoryVisualService");
 const { createCompany, listCompanies, updateCompany } = require("../services/companyService");
 const { createCrmInteraction, createCrmTask, listCrmInteractions, listCrmTasks, updateCrmTask } = require("../services/crmService");
 const {
@@ -29,7 +30,6 @@ const {
   deleteRegistration,
   MANUAL_STATUSES,
 } = require("../services/registrationService");
-const { syncQueovalCalendar, listPendingSyncSessions, resolvePendingSyncSession } = require("../services/queovalService");
 const { createBulletinInscription, listBulletinInscriptions, getBulletinInscriptionById } = require("../services/bulletinInscriptionService");
 const { listParticipants } = require("../services/participantsService");
 const { generateBulletinPdf, generateQuizPdf } = require("../services/pdfService");
@@ -114,6 +114,14 @@ const formationSchema = z.object({
   subCategory: z.string().max(80).optional().default(""),
   cpfEligible: z.coerce.boolean().optional().default(false),
   bannerImage: z.string().max(500).optional().default(""),
+  bannerPosition: z.string().max(40).optional().default(""),
+  tilePosition: z.string().max(40).optional().default(""),
+});
+
+const categoryVisualSchema = z.object({
+  scope: z.enum(["category", "subCategory"]),
+  name: z.string().min(1).max(120),
+  image: z.string().max(500).optional().default(""),
   bannerPosition: z.string().max(40).optional().default(""),
   tilePosition: z.string().max(40).optional().default(""),
 });
@@ -832,6 +840,35 @@ function createApiRouter() {
   );
 
   router.post(
+    "/admin/uploads/formation-image",
+    handleFormationImageUpload,
+    asyncHandler(async (req, res) => {
+      if (!req.file) {
+        return res.status(400).json({ error: "Aucun fichier reçu." });
+      }
+
+      return res.status(201).json({ data: { url: `/uploads/formations/${req.file.filename}` } });
+    })
+  );
+
+  router.get(
+    "/admin/category-visuals",
+    asyncHandler(async (_req, res) => {
+      const visuals = await listCategoryVisuals();
+      res.json({ data: visuals });
+    })
+  );
+
+  router.put(
+    "/admin/category-visuals",
+    asyncHandler(async (req, res) => {
+      const payload = categoryVisualSchema.parse(req.body);
+      const visual = await saveCategoryVisual(payload);
+      res.json({ data: visual, message: "Visuel enregistré" });
+    })
+  );
+
+  router.post(
     "/admin/articles",
     asyncHandler(async (req, res) => {
       const payload = articleSchema.parse(req.body);
@@ -854,37 +891,6 @@ function createApiRouter() {
     asyncHandler(async (req, res) => {
       const article = await deleteArticle(req.params.slug);
       res.json({ data: article, message: "Article supprimé" });
-    })
-  );
-
-  router.post(
-    "/admin/queoval/sync",
-    asyncHandler(async (req, res) => {
-      const payload = z
-        .object({ externalIds: z.array(z.string().min(1)).min(1).max(200) })
-        .parse(req.body);
-      const summary = await syncQueovalCalendar(payload.externalIds);
-      res.json({
-        data: summary,
-        message: `Synchronisation terminée : ${summary.matched} session(s) mise(s) à jour, ${summary.pending} en attente de rattachement.`,
-      });
-    })
-  );
-
-  router.get(
-    "/admin/queoval/pending",
-    asyncHandler(async (_req, res) => {
-      const pending = await listPendingSyncSessions();
-      res.json({ data: pending });
-    })
-  );
-
-  router.post(
-    "/admin/queoval/pending/:id/resolve",
-    asyncHandler(async (req, res) => {
-      const payload = z.object({ formationSlug: z.string().min(2) }).parse(req.body);
-      const session = await resolvePendingSyncSession(req.params.id, payload.formationSlug);
-      res.status(201).json({ data: session, message: "Session rattachée au calendrier" });
     })
   );
 

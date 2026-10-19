@@ -4,8 +4,8 @@ import { useEffect, useMemo, useState } from "react";
 import { Button } from "@/components/ui";
 import { DataTable } from "@/components/admin/DataTable";
 import { Drawer } from "@/components/admin/Drawer";
-import { getCategoryTheme } from "@/lib/formation-theme";
-import type { AdminUser, Article, BulletinInscriptionWithAttempts, Company, CrmInteraction, CrmTask, Formation, Participant, PendingSyncSession, ProgrammeDay, Registration, RegistrationNote, Session } from "../../shared/types";
+import { getCategoryTheme, type CategoryVisual } from "@/lib/formation-theme";
+import type { AdminUser, Article, BulletinInscriptionWithAttempts, Company, CrmInteraction, CrmTask, Formation, Participant, ProgrammeDay, Registration, RegistrationNote, Session } from "../../shared/types";
 
 type Props = {
   initialArticles: Article[];
@@ -19,7 +19,7 @@ type Props = {
   initialParticipants: Participant[];
 };
 
-type Section = "dashboard" | "sessions" | "participants" | "clients" | "formations" | "editorial" | "accounts";
+type Section = "dashboard" | "sessions" | "participants" | "clients" | "formations" | "visuels" | "editorial" | "accounts";
 
 type FormationDraft = {
   slug: string;
@@ -284,7 +284,8 @@ const NAV_ITEMS: { value: Section; label: string; icon: string }[] = [
   { value: "sessions", label: "Sessions", icon: "◷" },
   { value: "participants", label: "Inscriptions", icon: "◍" },
   { value: "clients", label: "Clients", icon: "◈" },
-  { value: "formations", label: "Catalogue", icon: "▤" },
+  { value: "formations", label: "Formations", icon: "▤" },
+  { value: "visuels", label: "Visuels", icon: "◩" },
   { value: "editorial", label: "Editorial", icon: "✎" },
   { value: "accounts", label: "Comptes", icon: "◉" },
 ];
@@ -495,10 +496,6 @@ export function AdminWorkspace({
     refreshAdminData();
   }
 
-  const [queovalSyncing, setQueovalSyncing] = useState(false);
-  const [queovalStageIds, setQueovalStageIds] = useState("");
-  const [pendingSessions, setPendingSessions] = useState<PendingSyncSession[]>([]);
-  const [pendingFormationChoice, setPendingFormationChoice] = useState<Record<string, string>>({});
 
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
@@ -518,23 +515,6 @@ export function AdminWorkspace({
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-
-  useEffect(() => {
-    if (section !== "sessions") return;
-
-    let cancelled = false;
-
-    fetch("/api/admin/queoval/pending")
-      .then((response) => response.json())
-      .then((result: { data?: PendingSyncSession[] }) => {
-        if (!cancelled && result?.data) setPendingSessions(result.data);
-      })
-      .catch(() => undefined);
-
-    return () => {
-      cancelled = true;
-    };
-  }, [section]);
 
   const [databaseConnected, setDatabaseConnected] = useState<boolean | null>(null);
 
@@ -1171,77 +1151,6 @@ export function AdminWorkspace({
     }
   }
 
-  async function loadPendingSessions() {
-    const response = await fetch("/api/admin/queoval/pending");
-    const result = (await response.json().catch(() => null)) as { data?: PendingSyncSession[] } | null;
-
-    if (response.ok && result?.data) {
-      setPendingSessions(result.data);
-    }
-  }
-
-  async function handleQueovalSync() {
-    const externalIds = queovalStageIds
-      .split(/[\s,;]+/)
-      .map((value) => value.trim())
-      .filter(Boolean);
-
-    if (!externalIds.length) {
-      setError("Indiquez au moins un identifiant de stage Queoval.");
-      return;
-    }
-
-    setQueovalSyncing(true);
-    setFeedback("");
-
-    const response = await fetch("/api/admin/queoval/sync", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ externalIds }),
-    });
-    const result = (await response.json().catch(() => null)) as { data?: { matched: number; pending: number; total: number }; error?: string; message?: string } | null;
-
-    setQueovalSyncing(false);
-
-    if (!response.ok || !result?.data) {
-      setError(result?.error || "La synchronisation Queoval a échoué.");
-      return;
-    }
-
-    await loadPendingSessions();
-    setSuccess(result.message || "Synchronisation Queoval terminée.");
-  }
-
-  async function handleResolvePendingSession(pendingId: string) {
-    const formationSlug = pendingFormationChoice[pendingId];
-
-    if (!formationSlug) {
-      setError("Choisissez une formation avant de rattacher cette session.");
-      return;
-    }
-
-    setSaving(true);
-    setFeedback("");
-
-    const response = await fetch(`/api/admin/queoval/pending/${pendingId}/resolve`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ formationSlug }),
-    });
-    const result = (await response.json().catch(() => null)) as { data?: Session; error?: string; message?: string } | null;
-
-    setSaving(false);
-
-    if (!response.ok || !result?.data) {
-      setError(result?.error || "Le rattachement a échoué.");
-      return;
-    }
-
-    setSessions((current) => [...current.filter((item) => item.id !== result.data?.id), result.data as Session]);
-    setPendingSessions((current) => current.filter((item) => item.id !== pendingId));
-    setSuccess(result.message || "Session rattachée.");
-  }
-
   async function handleFormationSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
     setSaving(true);
@@ -1431,7 +1340,7 @@ export function AdminWorkspace({
               </div>
             </div>
             <div className="admin-metric-grid">
-              <article className="admin-metric-card"><span>Catalogue</span><strong>{formations.length}</strong><small>formations</small></article>
+              <article className="admin-metric-card"><span>Formations</span><strong>{formations.length}</strong><small>formations</small></article>
               <article className="admin-metric-card"><span>Sessions</span><strong>{sessions.filter((session) => isUpcoming(session)).length}</strong><small>à venir</small></article>
               <article className="admin-metric-card"><span>Articles</span><strong>{articles.length}</strong><small>publiés</small></article>
             </div>
@@ -1620,41 +1529,6 @@ export function AdminWorkspace({
             />
           </section>
 
-          <details className="admin-collapsible">
-            <summary>Synchronisation Queoval (optionnel)</summary>
-            <section className="admin-shell">
-              <div className="section-heading section-heading-tight">
-                <div><span className="eyebrow">Queoval</span><h2>Synchronisation du calendrier</h2><p>Colle les identifiants de stage Queoval (visibles dans l'URL de la fiche stage, ex. stage-detail/191738) séparés par des virgules ou espaces.</p></div>
-              </div>
-              <div className="admin-bulk-grid">
-                <label><span>Identifiants de stage</span><input className="ui-field" value={queovalStageIds} onChange={(event) => setQueovalStageIds(event.target.value)} placeholder="191738, 192274, 192282..." /></label>
-                <Button onClick={handleQueovalSync} disabled={queovalSyncing}>{queovalSyncing ? "Synchronisation..." : "Synchroniser Queoval"}</Button>
-              </div>
-              {pendingSessions.length ? (
-                <div className="admin-list admin-list-dense">
-                  {pendingSessions.map((pending) => (
-                    <div className="admin-list-item" key={pending.id}>
-                      <strong>{pending.externalTitle}</strong>
-                      <span>{formatSessionRange(pending.startDate, pending.endDate)} · {pending.city || "À distance"}</span>
-                      <div className="admin-bulk-grid">
-                        <select
-                          className="ui-field"
-                          value={pendingFormationChoice[pending.id] || ""}
-                          onChange={(event) => setPendingFormationChoice((current) => ({ ...current, [pending.id]: event.target.value }))}
-                        >
-                          <option value="">Choisir la formation</option>
-                          {formations.map((formation) => <option key={formation.slug} value={formation.slug}>{formation.title}</option>)}
-                        </select>
-                        <Button onClick={() => handleResolvePendingSession(pending.id)} disabled={saving || !pendingFormationChoice[pending.id]}>Rattacher</Button>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              ) : (
-                <p className="admin-empty-state">Aucune session Queoval en attente de rattachement.</p>
-              )}
-            </section>
-          </details>
 
           <Drawer
             open={sessionDrawerOpen}
@@ -1785,7 +1659,7 @@ export function AdminWorkspace({
 
       {section === "formations" ? (
         <section className="admin-shell">
-          <div className="section-heading section-heading-tight"><div><span className="eyebrow">Catalogue</span><h2>Formations</h2></div><Button onClick={openNewFormationDrawer}>Nouvelle formation</Button></div>
+          <div className="section-heading section-heading-tight"><div><span className="eyebrow">Oxideve</span><h2>Formations</h2></div><Button onClick={openNewFormationDrawer}>Nouvelle formation</Button></div>
           <div className="admin-filter-grid admin-filter-grid-compact">
             <label><span>Recherche</span><input className="ui-field" value={formationSearch} onChange={(event) => setFormationSearch(event.target.value)} placeholder="Nom, catégorie..." /></label>
             <label>
@@ -1939,11 +1813,16 @@ export function AdminWorkspace({
                   </select>
                   <small className="admin-field-hint">Permet de filtrer plus finement dans le catalogue (ex. Électricité, Travail en hauteur).</small>
                 </label>
-                <label className="admin-checkbox-item">
+                <label className="contact-form-full admin-checkbox-item admin-checkbox-boxed">
                   <input type="checkbox" checked={formationDraft.cpfEligible} onChange={(event) => setFormationDraft((current) => ({ ...current, cpfEligible: event.target.checked }))} />
-                  <span>Finançable CPF</span>
+                  <span>
+                    Finançable CPF
+                    <small className="admin-field-hint">Affiche l&apos;étiquette CPF sur la tuile et la fiche.</small>
+                  </span>
                 </label>
-                <FormationBannerField draft={formationDraft} onChange={setFormationDraft} />
+                <div className="contact-form-full">
+                  <FormationBannerField draft={formationDraft} onChange={setFormationDraft} onError={setError} />
+                </div>
               </div></div>
               <div className="admin-form-section" id="formation-section-contenu"><h3>Contenu</h3>
                 <label>
@@ -2042,6 +1921,10 @@ export function AdminWorkspace({
             </form>
           </Drawer>
         </section>
+      ) : null}
+
+      {section === "visuels" ? (
+        <CategoryVisualsPanel formations={formations} onError={setError} onFeedback={setFeedback} />
       ) : null}
 
       {section === "editorial" ? (
@@ -2759,44 +2642,173 @@ function BannerCropPreview({
 }
 
 /**
- * Photo de la formation : on peut remplacer celle héritée de la sous-catégorie
- * et régler séparément son cadrage pour la bannière de la page formation et
- * pour la tuile du catalogue, les deux formats n'ayant pas les mêmes
- * proportions.
+ * Photo de la formation : envoi direct d'un fichier ou saisie d'un chemin, puis
+ * réglage séparé du cadrage pour la bannière de la page formation et pour la
+ * tuile du catalogue, les deux formats n'ayant pas les mêmes proportions.
  */
 function FormationBannerField({
   draft,
   onChange,
+  onError,
 }: {
   draft: FormationDraft;
   onChange: (updater: (current: FormationDraft) => FormationDraft) => void;
+  onError: (message: string) => void;
 }) {
-  const theme = getCategoryTheme(draft.category, draft.subCategory, {
-    bannerImage: draft.bannerImage,
-    bannerPosition: draft.bannerPosition,
-    tilePosition: draft.tilePosition,
-  });
+  const [uploading, setUploading] = useState(false);
+  const [visuals, setVisuals] = useState<Record<string, CategoryVisual>>({});
+
+  // Les visuels de catégorie sont réglés dans l'onglet Visuels : on les relit
+  // ici pour que l'aperçu de la fiche montre exactement ce que verra le public.
+  useEffect(() => {
+    let cancelled = false;
+
+    fetch("/api/admin/category-visuals")
+      .then((response) => response.json())
+      .then((result) => {
+        if (cancelled) return;
+        const index: Record<string, CategoryVisual> = {};
+        ((result?.data || []) as CategoryVisual[]).forEach((visual) => {
+          index[`${visual.scope}:${visual.name}`] = visual;
+        });
+        setVisuals(index);
+      })
+      .catch(() => {
+        /* on retombe sur les visuels par défaut */
+      });
+
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+
+  const theme = getCategoryTheme(
+    draft.category,
+    draft.subCategory,
+    {
+      bannerImage: draft.bannerImage,
+      bannerPosition: draft.bannerPosition,
+      tilePosition: draft.tilePosition,
+    },
+    visuals,
+  );
+
+  // Vrai tant qu'aucune photo propre n'est définie : on affiche alors celle
+  // héritée de la sous-catégorie ou de la catégorie.
+  const isInherited = !draft.bannerImage.trim();
+
+  async function handleUpload(file: File | undefined) {
+    if (!file) return;
+
+    setUploading(true);
+
+    const formData = new FormData();
+    formData.append("image", file);
+
+    const response = await fetch("/api/admin/uploads/formation-image", { method: "POST", body: formData });
+    const result = (await response.json().catch(() => null)) as { data?: { url: string }; error?: string } | null;
+
+    setUploading(false);
+
+    if (!response.ok || !result?.data?.url) {
+      onError(result?.error || "L'image n'a pas pu être envoyée.");
+      return;
+    }
+
+    onChange((current) => ({ ...current, bannerImage: result.data!.url }));
+  }
+
+  // Par défaut on montre simplement les deux visuels hérités : le réglage par
+  // catégorie se fait dans l'onglet Visuels. L'utilisateur n'ouvre les réglages
+  // que s'il veut vraiment une photo propre à cette formation.
+  if (isInherited) {
+    return (
+      <div className="admin-banner-field">
+        <div className="admin-banner-head">
+          <strong>Photo de la formation</strong>
+          <span className="admin-banner-tag">Reprise de la catégorie</span>
+        </div>
+
+        <div className="admin-crop-grid">
+          <figure className="admin-crop">
+            <figcaption className="admin-crop-head">
+              <strong>Bannière de la fiche</strong>
+            </figcaption>
+            <div className="admin-crop-preview admin-crop-preview-banner">
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img alt="Bannière héritée" src={theme.banner} style={{ objectPosition: theme.bannerPosition }} />
+            </div>
+          </figure>
+          <figure className="admin-crop">
+            <figcaption className="admin-crop-head">
+              <strong>Tuile du catalogue</strong>
+            </figcaption>
+            <div className="admin-crop-preview admin-crop-preview-tile">
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img alt="Tuile héritée" src={theme.banner} style={{ objectPosition: theme.tilePosition }} />
+            </div>
+          </figure>
+        </div>
+
+        <p className="admin-field-hint">
+          Ces visuels viennent de la catégorie et se modifient dans l&apos;onglet <strong>Visuels</strong>, pour toutes
+          les formations concernées à la fois.
+        </p>
+
+        <label className="admin-upload-button">
+          <input
+            accept="image/jpeg,image/png,image/webp"
+            disabled={uploading}
+            onChange={(event) => {
+              handleUpload(event.target.files?.[0]);
+              event.target.value = "";
+            }}
+            type="file"
+          />
+          <span>{uploading ? "Envoi en cours..." : "Vous souhaitez une image spécifique pour cette formation ?"}</span>
+        </label>
+      </div>
+    );
+  }
 
   return (
     <div className="admin-banner-field">
-      <label>
-        <span>Photo de la formation (optionnel)</span>
-        <input
-          className="ui-field"
-          value={draft.bannerImage}
-          onChange={(event) => onChange((current) => ({ ...current, bannerImage: event.target.value }))}
-          placeholder="/assets/formations/banner-securite.webp"
-        />
-        <small className="admin-field-hint">
-          Laissez vide pour reprendre automatiquement la photo de la sous-catégorie, ou à défaut celle de la catégorie.
-        </small>
-      </label>
+      <div className="admin-banner-head">
+        <strong>Photo propre à cette formation</strong>
+      </div>
+
+      <div className="admin-banner-actions">
+        <label className="admin-upload-button">
+          <input
+            accept="image/jpeg,image/png,image/webp"
+            disabled={uploading}
+            onChange={(event) => {
+              handleUpload(event.target.files?.[0]);
+              event.target.value = "";
+            }}
+            type="file"
+          />
+          <span>{uploading ? "Envoi en cours..." : "Remplacer l'image"}</span>
+        </label>
+
+        <button
+          className="admin-banner-reset"
+          type="button"
+          onClick={() =>
+            onChange((current) => ({ ...current, bannerImage: "", bannerPosition: "", tilePosition: "" }))
+          }
+        >
+          Revenir à la photo de la catégorie
+        </button>
+      </div>
+
+      <p className="admin-field-hint">JPG, PNG ou WEBP, 5 Mo maximum. Réglez ensuite le cadrage pour chaque format.</p>
 
       <div className="admin-crop-grid">
         <BannerCropPreview
           image={theme.banner}
-          label="Bannière de la page formation"
-          hint="Bandeau large en haut de la fiche."
+          label="Bannière de la fiche"
+          hint="Bandeau large en haut de la page formation."
           shape="banner"
           value={theme.bannerPosition || ""}
           onChange={(next) => onChange((current) => ({ ...current, bannerPosition: next }))}
@@ -2805,7 +2817,7 @@ function FormationBannerField({
         <BannerCropPreview
           image={theme.banner}
           label="Tuile du catalogue"
-          hint="Vignette affichée à droite de chaque résultat."
+          hint="Vignette à droite de chaque résultat."
           shape="tile"
           value={theme.tilePosition || ""}
           onChange={(next) => onChange((current) => ({ ...current, tilePosition: next }))}
@@ -2813,5 +2825,268 @@ function FormationBannerField({
         />
       </div>
     </div>
+  );
+}
+
+
+/**
+ * Écran « Visuels » : photo et cadrages par catégorie et par sous-catégorie.
+ * Une formation peut toujours surcharger ces valeurs dans sa propre fiche.
+ */
+function CategoryVisualsPanel({
+  formations,
+  onError,
+  onFeedback,
+}: {
+  formations: Formation[];
+  onError: (message: string) => void;
+  onFeedback: (message: string) => void;
+}) {
+  const [visuals, setVisuals] = useState<Record<string, CategoryVisual>>({});
+  const [loading, setLoading] = useState(true);
+  const [savingKey, setSavingKey] = useState("");
+
+  // Les entrées à afficher sont déduites du catalogue : pas de liste figée.
+  const entries = useMemo(() => {
+    const categories = new Set<string>();
+    const subCategories = new Map<string, string>();
+
+    formations.forEach((formation) => {
+      if (formation.category) categories.add(formation.category);
+      if (formation.subCategory) subCategories.set(formation.subCategory, formation.category);
+    });
+
+    const rows: { scope: "category" | "subCategory"; name: string; parent?: string; count: number }[] = [];
+
+    Array.from(categories)
+      .sort((left, right) => left.localeCompare(right, "fr"))
+      .forEach((category) => {
+        rows.push({
+          scope: "category",
+          name: category,
+          count: formations.filter((f) => f.category === category).length,
+        });
+
+        Array.from(subCategories.entries())
+          .filter(([, parent]) => parent === category)
+          .sort((left, right) => left[0].localeCompare(right[0], "fr"))
+          .forEach(([subCategory]) => {
+            rows.push({
+              scope: "subCategory",
+              name: subCategory,
+              parent: category,
+              count: formations.filter((f) => f.subCategory === subCategory).length,
+            });
+          });
+      });
+
+    return rows;
+  }, [formations]);
+
+  useEffect(() => {
+    let cancelled = false;
+
+    fetch("/api/admin/category-visuals")
+      .then((response) => response.json())
+      .then((result) => {
+        if (cancelled) return;
+        const list = (result?.data || []) as CategoryVisual[];
+        const index: Record<string, CategoryVisual> = {};
+        list.forEach((visual) => {
+          index[`${visual.scope}:${visual.name}`] = visual;
+        });
+        setVisuals(index);
+      })
+      .catch(() => {
+        if (!cancelled) onError("Les visuels n'ont pas pu être chargés.");
+      })
+      .finally(() => {
+        if (!cancelled) setLoading(false);
+      });
+
+    return () => {
+      cancelled = true;
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  function update(key: string, patch: Partial<CategoryVisual>) {
+    setVisuals((current) => ({ ...current, [key]: { ...current[key], ...patch } as CategoryVisual }));
+  }
+
+  async function save(scope: "category" | "subCategory", name: string) {
+    const key = `${scope}:${name}`;
+    const visual = visuals[key] || {};
+
+    setSavingKey(key);
+    onFeedback("");
+
+    const response = await fetch("/api/admin/category-visuals", {
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        scope,
+        name,
+        image: visual.image || "",
+        bannerPosition: visual.bannerPosition || "",
+        tilePosition: visual.tilePosition || "",
+      }),
+    });
+
+    setSavingKey("");
+
+    if (!response.ok) {
+      onError("Le visuel n'a pas pu être enregistré.");
+      return;
+    }
+
+    onFeedback(`Visuel enregistré pour « ${name} ».`);
+  }
+
+  if (loading) {
+    return (
+      <section className="admin-shell">
+        <p>Chargement des visuels...</p>
+      </section>
+    );
+  }
+
+  return (
+    <section className="admin-shell">
+      <div className="section-heading section-heading-tight">
+        <div>
+          <span className="eyebrow">Oxideve</span>
+          <h2>Visuels</h2>
+        </div>
+      </div>
+      <p className="admin-field-hint">
+        Photo et cadrages appliqués à toutes les formations d&apos;une catégorie ou d&apos;une sous-catégorie. Une
+        formation peut toujours définir sa propre photo depuis sa fiche.
+      </p>
+
+      <div className="admin-visual-list">
+        {entries.map((entry) => {
+          const key = `${entry.scope}:${entry.name}`;
+          const visual = visuals[key] || { scope: entry.scope, name: entry.name };
+
+          return (
+            <CategoryVisualRow
+              busy={savingKey === key}
+              entry={entry}
+              key={key}
+              onChange={(patch) => update(key, patch)}
+              onError={onError}
+              onSave={() => save(entry.scope, entry.name)}
+              visual={visual}
+            />
+          );
+        })}
+      </div>
+    </section>
+  );
+}
+
+/** Une ligne de l'écran Visuels : envoi d'image + deux cadrages. */
+function CategoryVisualRow({
+  entry,
+  visual,
+  busy,
+  onChange,
+  onSave,
+  onError,
+}: {
+  entry: { scope: "category" | "subCategory"; name: string; parent?: string; count: number };
+  visual: CategoryVisual;
+  busy: boolean;
+  onChange: (patch: Partial<CategoryVisual>) => void;
+  onSave: () => void;
+  onError: (message: string) => void;
+}) {
+  const [uploading, setUploading] = useState(false);
+
+  // Aperçu : la photo saisie ici, sinon celle héritée du thème.
+  const theme = getCategoryTheme(
+    entry.scope === "category" ? entry.name : entry.parent || "",
+    entry.scope === "subCategory" ? entry.name : null,
+  );
+  const image = visual.image || theme.banner;
+
+  async function handleUpload(file: File | undefined) {
+    if (!file) return;
+
+    setUploading(true);
+
+    const formData = new FormData();
+    formData.append("image", file);
+
+    const response = await fetch("/api/admin/uploads/formation-image", { method: "POST", body: formData });
+    const result = (await response.json().catch(() => null)) as { data?: { url: string }; error?: string } | null;
+
+    setUploading(false);
+
+    if (!response.ok || !result?.data?.url) {
+      onError(result?.error || "L'image n'a pas pu être envoyée.");
+      return;
+    }
+
+    onChange({ image: result.data.url });
+  }
+
+  return (
+    <article className={`admin-visual-row admin-visual-row-${entry.scope}`}>
+      <div className="admin-visual-identity">
+        <strong>{entry.name}</strong>
+        <span className="admin-visual-meta">
+          {entry.scope === "category" ? "Catégorie" : `Sous-catégorie de ${entry.parent}`} · {entry.count} formation
+          {entry.count > 1 ? "s" : ""}
+        </span>
+
+        <label className="admin-upload-button">
+          <input
+            accept="image/jpeg,image/png,image/webp"
+            disabled={uploading}
+            onChange={(event) => {
+              handleUpload(event.target.files?.[0]);
+              event.target.value = "";
+            }}
+            type="file"
+          />
+          <span>{uploading ? "Envoi..." : "Changer la photo"}</span>
+        </label>
+
+        {visual.image ? (
+          <button className="admin-banner-reset" type="button" onClick={() => onChange({ image: "" })}>
+            Photo par défaut
+          </button>
+        ) : null}
+      </div>
+
+      <div className="admin-crop-grid">
+        <BannerCropPreview
+          hint="Bandeau large en haut de la fiche."
+          image={image}
+          label="Bannière"
+          onChange={(next) => onChange({ bannerPosition: next })}
+          onReset={() => onChange({ bannerPosition: "" })}
+          shape="banner"
+          value={visual.bannerPosition || theme.bannerPosition || ""}
+        />
+        <BannerCropPreview
+          hint="Vignette du catalogue."
+          image={image}
+          label="Tuile"
+          onChange={(next) => onChange({ tilePosition: next })}
+          onReset={() => onChange({ tilePosition: "" })}
+          shape="tile"
+          value={visual.tilePosition || theme.tilePosition || ""}
+        />
+      </div>
+
+      <div className="admin-visual-actions">
+        <Button disabled={busy} onClick={onSave} type="button">
+          {busy ? "Enregistrement..." : "Enregistrer"}
+        </Button>
+      </div>
+    </article>
   );
 }

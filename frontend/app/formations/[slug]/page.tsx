@@ -3,8 +3,8 @@ import { notFound } from "next/navigation";
 import { FormationCatalogCard } from "@/components/FormationCatalog";
 import { FormationSessionBooking } from "@/components/FormationSessionBooking";
 import { ButtonLink, Container } from "@/components/ui";
-import { getCategoryTheme } from "@/lib/formation-theme";
-import { getFormationBySlug, getFormations, getSessionsForFormation, getSiteUrl } from "@/lib/content";
+import { getCategoryTheme, indexCategoryVisuals } from "@/lib/formation-theme";
+import { getCategoryVisuals, getFormationBySlug, getFormations, getSessionsForFormation, getSiteUrl } from "@/lib/content";
 
 export const dynamic = "force-dynamic";
 
@@ -46,7 +46,12 @@ export default async function FormationDetailPage({ params }: Props) {
     .slice(0, 3);
   const suggestions = (relatedFormations.length ? relatedFormations : similarFormations).slice(0, 3);
 
-  const theme = getCategoryTheme(formation.category, formation.subCategory, formation);
+  const theme = getCategoryTheme(
+    formation.category,
+    formation.subCategory,
+    formation,
+    indexCategoryVisuals(await getCategoryVisuals()),
+  );
   const sessionCities = Array.from(new Set(sessions.map((session) => session.city)));
   const displayLocation = sessionCities.length ? sessionCities.join(", ") : formation.location;
 

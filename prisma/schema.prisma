@@ -40,7 +40,6 @@ model Formation {
   handicapPolicy  String?       @db.Text
   seoTitle        String
   seoDescription  String        @db.Text
-  queovalIdentFOR String?       @unique
   videoUrl        String?
   rgeBadge        Json?
   priceMemberLabel String?
@@ -61,6 +60,21 @@ model Formation {
   sessions        Session[]
 }
 
+// Visuel associé à une catégorie ou à une sous-catégorie de formation.
+// `scope` vaut "category" ou "subCategory", `name` est le libellé concerné.
+// Une formation peut toujours surcharger ces valeurs.
+model CategoryVisual {
+  id             String   @id @default(cuid())
+  scope          String
+  name           String
+  image          String?
+  bannerPosition String?
+  tilePosition   String?
+  updatedAt      DateTime @updatedAt
+
+  @@unique([scope, name])
+}
+
 model Session {
   id                String        @id @default(cuid())
   formationSlug     String
@@ -77,17 +91,6 @@ model Session {
   updatedAt         DateTime      @updatedAt
   formation         Formation     @relation(fields: [formationSlug], references: [slug], onDelete: Cascade)
   inscriptions      Inscription[]
-}
-
-model PendingSyncSession {
-  id            String    @id @default(cuid())
-  externalId    String    @unique
-  externalTitle String
-  city          String?
-  startDate     DateTime
-  endDate       DateTime
-  externalState String
-  createdAt     DateTime  @default(now())
 }
 
 model Inscription {

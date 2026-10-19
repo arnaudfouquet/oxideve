@@ -2,6 +2,7 @@ import "server-only";
 import catalogData from "../../shared/catalog-data.json";
 import type { Article, BulletinInscriptionWithAttempts, CatalogData, Company, CrmInteraction, CrmTask, Formation, Participant, QuizAttempt, Registration, Session } from "../../shared/types";
 import { blogArticles } from "./editorial";
+import type { CategoryVisual } from "./formation-theme";
 
 const catalog = catalogData as CatalogData;
 
@@ -209,6 +210,22 @@ export async function getArticleBySlug(slug: string): Promise<Article | undefine
     return article ?? undefined;
   } catch {
     return blogArticles.find((article) => article.slug === slug);
+  }
+}
+
+/**
+ * Visuels de catégorie et de sous-catégorie réglés dans l'admin. En cas
+ * d'erreur on renvoie une liste vide : les visuels codés en dur prennent alors
+ * le relais, plutôt que de casser la page.
+ */
+export async function getCategoryVisuals(): Promise<CategoryVisual[]> {
+  try {
+    const service = require("../../backend/services/categoryVisualService.js") as {
+      listCategoryVisuals: () => Promise<CategoryVisual[]>;
+    };
+    return await service.listCategoryVisuals();
+  } catch {
+    return [];
   }
 }
 

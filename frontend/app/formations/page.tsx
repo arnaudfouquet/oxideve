@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { Container } from "@/components/ui";
 import { FormationCatalog } from "@/components/FormationCatalog";
-import { getFormations, getSessions } from "@/lib/content";
+import { getCategoryVisuals, getFormations, getSessions } from "@/lib/content";
 
 export const dynamic = "force-dynamic";
 
@@ -13,6 +13,7 @@ export const metadata: Metadata = {
 
 export default async function FormationsPage() {
   const formations = await getFormations();
+  const categoryVisuals = await getCategoryVisuals();
   const categories = Array.from(new Set(formations.map((formation) => formation.category))).sort((left, right) =>
     left.localeCompare(right, "fr"),
   );
@@ -54,6 +55,7 @@ export default async function FormationsPage() {
         </div>
 
         <FormationCatalog
+          categoryVisuals={categoryVisuals}
           categories={categories}
           citiesByFormation={citiesByFormation}
           sessionsByFormation={sessionsByFormation}

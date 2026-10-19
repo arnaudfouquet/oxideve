@@ -52,7 +52,6 @@ function normalizeFormation(formation) {
     bannerImage: formation.bannerImage || "",
     bannerPosition: formation.bannerPosition || "",
     tilePosition: formation.tilePosition || "",
-    queovalIdentFOR: formation.queovalIdentFOR || null,
     videoUrl: formation.videoUrl || null,
     rgeBadge: formation.rgeBadge || null,
     priceMemberLabel: formation.priceMemberLabel || null,

@@ -3,7 +3,7 @@
 import { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
 import type { Formation } from "../../shared/types";
-import { getCategoryTheme } from "@/lib/formation-theme";
+import { getCategoryTheme, indexCategoryVisuals, type CategoryVisual } from "@/lib/formation-theme";
 
 type SessionSummary = { startDate: string; endDate: string; city: string; mode: string };
 
@@ -14,6 +14,8 @@ type Props = {
   citiesByFormation: Record<string, string[]>;
   /** Prochaines sessions à venir, triées par date, par slug de formation. */
   sessionsByFormation: Record<string, SessionSummary[]>;
+  /** Visuels de catégorie et sous-catégorie réglés dans l'admin. */
+  categoryVisuals?: CategoryVisual[];
 };
 
 type SortKey = "session" | "price" | "duration" | "title";
@@ -133,7 +135,15 @@ function FacetCheck({
   );
 }
 
-export function FormationCatalog({ formations, categories, citiesByFormation, sessionsByFormation }: Props) {
+export function FormationCatalog({
+  formations,
+  categories,
+  citiesByFormation,
+  sessionsByFormation,
+  categoryVisuals = [],
+}: Props) {
+  const visualIndex = useMemo(() => indexCategoryVisuals(categoryVisuals), [categoryVisuals]);
+
   const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
   const [selectedCities, setSelectedCities] = useState<string[]>([]);
   const [selectedMonths, setSelectedMonths] = useState<string[]>([]);
@@ -518,6 +528,7 @@ export function FormationCatalog({ formations, categories, citiesByFormation, se
                   formation={formation}
                   key={formation.slug}
                   sessions={sessionsByFormation[formation.slug] || []}
+                  visuals={visualIndex}
                 />
               ))}
             </div>
@@ -546,12 +557,14 @@ function FormationResultCard({
   formation,
   cities,
   sessions,
+  visuals,
 }: {
   formation: Formation;
   cities: string[];
   sessions: SessionSummary[];
+  visuals: Record<string, CategoryVisual>;
 }) {
-  const theme = getCategoryTheme(formation.category, formation.subCategory, formation);
+  const theme = getCategoryTheme(formation.category, formation.subCategory, formation, visuals);
   const location = cities.length ? cities.join(", ") : formation.location;
   const nextSessions = sessions.slice(0, 2);
 

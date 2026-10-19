@@ -86,24 +86,63 @@ const SUBCATEGORY_BANNERS: Record<string, { url: string; banner: string; tile: s
   },
 };
 
+/** Visuel saisi dans l'admin pour une catégorie ou une sous-catégorie. */
+export type CategoryVisual = {
+  scope: "category" | "subCategory";
+  name: string;
+  image?: string | null;
+  bannerPosition?: string | null;
+  tilePosition?: string | null;
+};
+
+/** Index des visuels admin, par portée et libellé, pour un accès direct. */
+export function indexCategoryVisuals(visuals: CategoryVisual[]): Record<string, CategoryVisual> {
+  const index: Record<string, CategoryVisual> = {};
+  visuals.forEach((visual) => {
+    index[`${visual.scope}:${visual.name}`] = visual;
+  });
+  return index;
+}
+
 /**
- * Visuel à afficher pour une formation. L'ordre de priorité est : réglage saisi
- * dans l'admin, puis valeur de la sous-famille, puis valeur de la catégorie.
- * `bannerPosition` sert à la page formation, `tilePosition` à la tuile du
- * catalogue : les deux sont indépendants.
+ * Visuel à afficher pour une formation, du plus précis au plus général :
+ * réglage de la formation, puis visuel admin de la sous-catégorie, puis valeur
+ * codée de la sous-catégorie, puis visuel admin de la catégorie, puis valeur
+ * codée de la catégorie. `bannerPosition` sert à la page formation,
+ * `tilePosition` à la tuile du catalogue : les deux sont indépendants.
  */
 export function getCategoryTheme(
   category: string,
   subCategory?: string | null,
   overrides?: { bannerImage?: string | null; bannerPosition?: string | null; tilePosition?: string | null },
+  visuals?: Record<string, CategoryVisual>,
 ): CategoryTheme {
   const base = THEMES[category] || FALLBACK;
   const sub = subCategory ? SUBCATEGORY_BANNERS[subCategory] : undefined;
 
+  const adminSub = subCategory ? visuals?.[`subCategory:${subCategory}`] : undefined;
+  const adminCategory = visuals?.[`category:${category}`];
+
+  // Première valeur non vide de la liste, du plus précis au plus général.
+  const pick = (...values: (string | null | undefined)[]) => values.find((value) => value) || undefined;
+
   return {
     ...base,
-    banner: overrides?.bannerImage || sub?.url || base.banner,
-    bannerPosition: overrides?.bannerPosition || sub?.banner || base.bannerPosition,
-    tilePosition: overrides?.tilePosition || sub?.tile || base.tilePosition,
+    banner:
+      pick(overrides?.bannerImage, adminSub?.image, sub?.url, adminCategory?.image, base.banner) || base.banner,
+    bannerPosition: pick(
+      overrides?.bannerPosition,
+      adminSub?.bannerPosition,
+      sub?.banner,
+      adminCategory?.bannerPosition,
+      base.bannerPosition,
+    ),
+    tilePosition: pick(
+      overrides?.tilePosition,
+      adminSub?.tilePosition,
+      sub?.tile,
+      adminCategory?.tilePosition,
+      base.tilePosition,
+    ),
   };
 }

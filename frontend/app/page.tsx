@@ -32,10 +32,13 @@ const advantages = [
 ];
 
 const keyStats = [
-  { value: "843", label: "Personnes formées", detail: "1er trimestre 2024", image: "/assets/home/stat-personnes.jpg" },
-  { value: "166", label: "Journée de formation", detail: "1er trimestre 2024", image: "/assets/home/stat-journees.jpg" },
-  { value: "3,78/4", label: "Taux de satisfaction client", detail: "1er trimestre 2024", image: "/assets/home/stat-satisfaction.jpg" },
-  { value: "14", label: "Années d'expérience", detail: "", image: "/assets/home/stat-experience.jpg" },
+  { value: "270", label: "Personnes formées", detail: "1er semestre 2026", image: "/assets/home/stat-personnes.jpg" },
+  { value: "3 993", label: "Heures de formation", detail: "1er semestre 2026", image: "/assets/home/stat-journees.jpg" },
+  // Pas de visuel dédié aux sessions : on réutilise une photo de catégorie
+  // plutôt que de répéter celle d'une autre statistique.
+  { value: "55", label: "Sessions de formation réalisées", detail: "1er semestre 2026", image: "/assets/home/cat-securite.jpg" },
+  { value: "96,5 %", label: "Taux de satisfaction client", detail: "1er semestre 2026", image: "/assets/home/stat-satisfaction.jpg" },
+  { value: "8", label: "Années d'expérience", detail: "", image: "/assets/home/stat-experience.jpg" },
 ];
 
 const faqItems = [

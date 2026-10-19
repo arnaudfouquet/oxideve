@@ -63,7 +63,6 @@ export type Formation = {
   bannerPosition?: string | null;
   /** Cadrage de la photo dans la tuile du catalogue, au format CSS `object-position`. */
   tilePosition?: string | null;
-  queovalIdentFOR?: string | null;
   videoUrl?: string | null;
   rgeBadge?: RgeBadge | null;
   priceMemberLabel?: string | null;
@@ -82,16 +81,6 @@ export type Session = {
   startDate: string;
   endDate: string;
   mode: string;
-};
-
-export type PendingSyncSession = {
-  id: string;
-  externalId: string;
-  externalTitle: string;
-  city: string | null;
-  startDate: string;
-  endDate: string;
-  externalState: string;
 };
 
 export type Registration = {
