@@ -75,10 +75,16 @@ export default async function FormationDetailPage({ params }: Props) {
     })),
   };
 
-  const facts = [
+  const facts: { icon: string; label: string; value: string; cpf?: boolean; funding?: boolean }[] = [
     { icon: "/assets/formations/icone-heure.svg", label: "Durée", value: formation.duration },
     { icon: "/assets/formations/icone-lieu.svg", label: "Lieu", value: displayLocation },
-    { icon: "/assets/formations/icone-euro.svg", label: "Tarif", value: formation.price, cpf: formation.cpfEligible },
+    {
+      icon: "/assets/formations/icone-euro.svg",
+      label: "Tarif",
+      value: formation.price,
+      cpf: formation.cpfEligible,
+      funding: true,
+    },
     { icon: "/assets/formations/icone-public.svg", label: "Public", value: formation.audience },
   ];
 
@@ -124,7 +130,13 @@ export default async function FormationDetailPage({ params }: Props) {
                   <img alt="" src={fact.icon} />
                   <span className="fd-fact-label">{fact.label}</span>
                   <strong className="fd-fact-value">{fact.value}</strong>
-                  {fact.cpf ? <span className="formation-tile-cpf">Finançable CPF</span> : null}
+                  {fact.cpf ? <span className="formation-tile-funding-cpf">Finançable CPF</span> : null}
+                  {/* Dispositifs de financement, comme sur les tuiles du catalogue. */}
+                  {fact.funding ? (
+                    <span className="fd-fact-funding">
+                      {formation.cpfEligible ? "OPCO · CPF · France Travail" : "OPCO · France Travail"}
+                    </span>
+                  ) : null}
                 </div>
               ))}
             </div>

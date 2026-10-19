@@ -10048,3 +10048,11 @@ a.ct-channel-value:hover {
     padding-top: 6px;
   }
 }
+
+/* Dispositifs de financement sous le tarif, sur la fiche formation. */
+.fd-fact-funding {
+  display: block;
+  margin-top: 4px;
+  font-size: 0.72rem;
+  color: var(--color-muted);
+}
