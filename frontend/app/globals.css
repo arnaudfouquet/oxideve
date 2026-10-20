@@ -5094,13 +5094,19 @@ main {
 .home-hero::before {
   content: "";
   position: absolute;
-  top: -20%;
-  bottom: -20%;
-  left: var(--hero-band-left, 38%);
-  right: -60%;
+  /* La zone verte occupe tout le hero et une seule arête est taillée en
+     biais. Une rotation laissait du blanc dans le coin haut-droit dès que
+     l'angle dépassait quelques degrés, le bord supérieur de la bande
+     plongeant vers la droite ; ici les trois autres coins sont toujours
+     couverts par construction. */
+  inset: 0;
   background: #edfcf4;
-  transform: rotate(var(--hero-band-angle, 14deg));
-  transform-origin: top left;
+  clip-path: polygon(
+    var(--hero-band-left, 38%) 0,
+    100% 0,
+    100% 100%,
+    calc(var(--hero-band-left, 38%) - var(--hero-band-slope, 18%)) 100%
+  );
   pointer-events: none;
 }
 
@@ -10389,4 +10395,16 @@ a.ct-channel-value:hover {
 .home-faq-cta-actions .home-faq-cta-button {
   width: min(100%, 320px);
   justify-content: space-between;
+}
+
+/* Reglages du hero valides via le generateur (/outils/hero). */
+.home-hero {
+  --hero-image-width: 74%;
+  --hero-band-left: 70%;
+  --hero-band-slope: 30%;
+  --hero-corner-left: -10px;
+  --hero-corner-bottom: -25px;
+  --hero-corner-width: 280px;
+  --hero-corner-height: 375px;
+  --hero-corner-slope: 32%;
 }

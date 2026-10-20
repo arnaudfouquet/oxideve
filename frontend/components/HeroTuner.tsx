@@ -11,15 +11,16 @@ import { Container } from "@/components/ui";
  * des variables CSS, et le panneau du bas produit le CSS à recopier.
  */
 
+/** Valeurs retenues par Oxideve, reprises comme réglage par défaut. */
 const DEFAULTS = {
   imageWidth: 74,
-  bandLeft: 38,
-  bandAngle: 14,
-  cornerLeft: 0,
-  cornerBottom: 0,
-  cornerWidth: 190,
-  cornerHeight: 150,
-  cornerSlope: 55,
+  bandLeft: 70,
+  bandSlope: 30,
+  cornerLeft: -10,
+  cornerBottom: -25,
+  cornerWidth: 280,
+  cornerHeight: 375,
+  cornerSlope: 32,
 };
 
 type Settings = typeof DEFAULTS;
@@ -28,8 +29,8 @@ const STORAGE_KEY = "oxideve-hero-tuner";
 
 const FIELDS: { key: keyof Settings; label: string; min: number; max: number; step: number; unit: string }[] = [
   { key: "imageWidth", label: "Largeur de l'image", min: 20, max: 100, step: 1, unit: "%" },
-  { key: "bandLeft", label: "Bande verte : départ horizontal", min: 0, max: 100, step: 1, unit: "%" },
-  { key: "bandAngle", label: "Bande verte : inclinaison", min: -45, max: 45, step: 1, unit: "deg" },
+  { key: "bandLeft", label: "Bande verte : départ en haut", min: 0, max: 100, step: 1, unit: "%" },
+  { key: "bandSlope", label: "Bande verte : décalage du bas", min: -40, max: 80, step: 1, unit: "%" },
   { key: "cornerWidth", label: "Coin bas-gauche : largeur", min: 0, max: 600, step: 5, unit: "px" },
   { key: "cornerHeight", label: "Coin bas-gauche : hauteur", min: 0, max: 500, step: 5, unit: "px" },
   { key: "cornerSlope", label: "Coin bas-gauche : pente", min: 0, max: 100, step: 1, unit: "%" },
@@ -62,7 +63,7 @@ export function HeroTuner() {
   const cssVariables = {
     "--hero-image-width": `${settings.imageWidth}%`,
     "--hero-band-left": `${settings.bandLeft}%`,
-    "--hero-band-angle": `${settings.bandAngle}deg`,
+    "--hero-band-slope": `${settings.bandSlope}%`,
     "--hero-corner-left": `${settings.cornerLeft}px`,
     "--hero-corner-bottom": `${settings.cornerBottom}px`,
     "--hero-corner-width": `${settings.cornerWidth}px`,
@@ -77,7 +78,7 @@ export function HeroTuner() {
         ".home-hero {",
         `  --hero-image-width: ${settings.imageWidth}%;`,
         `  --hero-band-left: ${settings.bandLeft}%;`,
-        `  --hero-band-angle: ${settings.bandAngle}deg;`,
+        `  --hero-band-slope: ${settings.bandSlope}%;`,
         `  --hero-corner-left: ${settings.cornerLeft}px;`,
         `  --hero-corner-bottom: ${settings.cornerBottom}px;`,
         `  --hero-corner-width: ${settings.cornerWidth}px;`,
