@@ -2,9 +2,17 @@ import { ButtonLink, Container } from "@/components/ui";
 import { HomeSessionsCarousel } from "@/components/HomeSessionsCarousel";
 import { FranceMap } from "@/components/FranceMap";
 import { TestimonialCarousel } from "@/components/TestimonialCarousel";
-import { getFormations, getPublishedReviews, getSessions } from "@/lib/content";
+import type { Metadata } from "next";
+import { getFormations, getPublishedReviews, getSessions, getSiteUrl } from "@/lib/content";
 
 export const dynamic = "force-dynamic";
+
+export const metadata: Metadata = {
+  // La page d'accueil n'avait aucune canonique propre.
+  alternates: { canonical: "/" },
+  description:
+    "Organisme de formation professionnelle certifié Qualiopi : photovoltaïque, pompes à chaleur, fluides frigorigènes, sécurité et bureautique. Sessions à Toulouse, Montpellier et Perpignan, finançables par votre OPCO.",
+};
 
 /** Ouvre le catalogue avec le filtre de domaine déjà appliqué. */
 function categoryAnchor(category: string) {
@@ -80,8 +88,29 @@ export default async function HomePage() {
     href: categoryAnchor(category.match),
   }));
 
+  // Catalogue d'offres : indique à Google les domaines enseignés et le nombre
+  // de formations de chacun.
+  const catalogJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "OfferCatalog",
+    name: "Catalogue des formations Oxideve",
+    url: `${getSiteUrl()}/formations`,
+    numberOfItems: formations.length,
+    itemListElement: categoriesWithCount
+      .filter((category) => category.count > 0)
+      .map((category, index) => ({
+        "@type": "OfferCatalog",
+        position: index + 1,
+        name: category.label,
+        url: `${getSiteUrl()}${categoryAnchor(category.match)}`,
+        numberOfItems: category.count,
+      })),
+  };
+
   return (
     <>
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(catalogJsonLd) }} />
+
       {/* HERO */}
       <section className="home-hero">
         <Container className="home-hero-inner">

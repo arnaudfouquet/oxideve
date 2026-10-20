@@ -55,6 +55,9 @@ export type Formation = {
   levelLabel?: string | null;
   /** Sous-famille au sein de la catégorie (ex. "Électricité" pour la sécurité). */
   subCategory?: string | null;
+  /** Titre et description optimisés pour les moteurs de recherche. */
+  seoTitle?: string;
+  seoDescription?: string;
   /** Affiche le badge "Finançable CPF" sur les cartes et la page détail. */
   cpfEligible?: boolean;
   /** Photo de bannière propre à la formation, sinon celle de la sous-catégorie. */

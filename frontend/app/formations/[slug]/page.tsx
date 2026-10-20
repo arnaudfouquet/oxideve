@@ -5,6 +5,7 @@ import { FormationSessionBooking } from "@/components/FormationSessionBooking";
 import { ButtonLink, Container } from "@/components/ui";
 import { getCategoryTheme, indexCategoryVisuals } from "@/lib/formation-theme";
 import { getCategoryVisuals, getFormationBySlug, getFormations, getSessionsForFormation, getSiteUrl } from "@/lib/content";
+import type { Formation } from "../../../../shared/types";
 
 export const dynamic = "force-dynamic";
 
@@ -20,11 +21,36 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     return { title: "Formation introuvable" };
   }
 
+  // Le gabarit du layout ajoute déjà « | Oxideve » : le répéter ici donnait
+  // « ... | Oxideve | Oxideve » et gaspillait la place affichée par Google.
+  // On privilégie le seoTitle, qui contient le mot « Formation ».
+  const title = formation.seoTitle?.trim() || formation.title;
+  const description = formation.seoDescription?.trim() || formation.summary;
+  const cover = theme(formation).banner;
+
   return {
-    title: `${formation.title} | Oxideve`,
-    description: formation.summary,
+    title,
+    description,
     alternates: { canonical: `/formations/${formation.slug}` },
+    openGraph: {
+      type: "website",
+      title: `${title} | Oxideve`,
+      description,
+      url: `${getSiteUrl()}/formations/${formation.slug}`,
+      images: [cover],
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: `${title} | Oxideve`,
+      description,
+      images: [cover],
+    },
   };
+}
+
+/** Visuel de la formation, pour les aperçus de partage. */
+function theme(formation: Formation) {
+  return getCategoryTheme(formation.category, formation.subCategory, formation);
 }
 
 export default async function FormationDetailPage({ params }: Props) {
@@ -56,23 +82,42 @@ export default async function FormationDetailPage({ params }: Props) {
   const displayLocation = sessionCities.length ? sessionCities.join(", ") : formation.location;
 
   const siteUrl = getSiteUrl();
+
+  // Montant en chiffres pour les données structurées ; absent quand le tarif
+  // est « Nous consulter ».
+  const priceAmount = formation.price.replace(/[^\d]/g, "");
+
   const jsonLd = {
     "@context": "https://schema.org",
-    "@type": "Course",
-    name: formation.title,
-    description: formation.description,
-    provider: { "@type": "Organization", name: "Oxideve", url: siteUrl },
-    hasCourseInstance: sessions.map((session) => ({
-      "@type": "Event",
-      name: `${formation.title} - session ${session.city}`,
-      startDate: session.startDate,
-      endDate: session.endDate,
-      eventAttendanceMode:
-        session.mode === "Hybride"
-          ? "https://schema.org/MixedEventAttendanceMode"
-          : "https://schema.org/OfflineEventAttendanceMode",
-      location: { "@type": "Place", name: session.city },
-    })),
+    "@graph": [
+      {
+        "@type": "Course",
+        name: formation.title,
+        description: formation.description,
+        url: `${siteUrl}/formations/${formation.slug}`,
+        provider: { "@type": "EducationalOrganization", name: "Oxideve", url: siteUrl },
+        ...(priceAmount
+          ? { offers: { "@type": "Offer", price: priceAmount, priceCurrency: "EUR", url: `${siteUrl}/formations/${formation.slug}` } }
+          : {}),
+        hasCourseInstance: sessions.map((session) => ({
+          "@type": "CourseInstance",
+          courseMode: session.mode === "Distanciel" ? "online" : "onsite",
+          name: `${formation.title} - session ${session.city}`,
+          startDate: session.startDate,
+          endDate: session.endDate,
+          location: { "@type": "Place", name: session.city },
+        })),
+      },
+      {
+        // Fil d'Ariane : Google peut afficher le chemin sous le titre.
+        "@type": "BreadcrumbList",
+        itemListElement: [
+          { "@type": "ListItem", position: 1, name: "Accueil", item: siteUrl },
+          { "@type": "ListItem", position: 2, name: "Formations", item: `${siteUrl}/formations` },
+          { "@type": "ListItem", position: 3, name: formation.title },
+        ],
+      },
+    ],
   };
 
   const facts: { icon: string; label: string; value: string; cpf?: boolean; funding?: boolean }[] = [

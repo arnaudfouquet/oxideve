@@ -49,6 +49,10 @@ function normalizeFormation(formation) {
     levelLabel: formation.levelLabel || "",
     subCategory: formation.subCategory || "",
     cpfEligible: Boolean(formation.cpfEligible),
+    // Renseignés en base mais jamais renvoyés : la page détail retombait donc
+    // sur le titre et le résumé au lieu des valeurs optimisées.
+    seoTitle: formation.seoTitle || "",
+    seoDescription: formation.seoDescription || "",
     bannerImage: formation.bannerImage || "",
     bannerPosition: formation.bannerPosition || "",
     tilePosition: formation.tilePosition || "",
