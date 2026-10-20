@@ -16,6 +16,7 @@ const {
 const { createArticle, deleteArticle, getArticleBySlug, listArticles, updateArticle } = require("../services/editorialService");
 const { handleArticleImageUpload, handleFormationImageUpload } = require("../middleware/articleImageUpload");
 const { listCategoryVisuals, saveCategoryVisual } = require("../services/categoryVisualService");
+const { listReviews, createReview, updateReview, deleteReview } = require("../services/reviewService");
 const { createCompany, listCompanies, updateCompany } = require("../services/companyService");
 const { createCrmInteraction, createCrmTask, listCrmInteractions, listCrmTasks, updateCrmTask } = require("../services/crmService");
 const {
@@ -124,6 +125,17 @@ const categoryVisualSchema = z.object({
   image: z.string().max(500).optional().default(""),
   bannerPosition: z.string().max(40).optional().default(""),
   tilePosition: z.string().max(40).optional().default(""),
+});
+
+const reviewSchema = z.object({
+  author: z.string().min(2).max(160),
+  rating: z.coerce.number().int().min(1).max(5).default(5),
+  quote: z.string().min(5).max(2000),
+  source: z.string().max(60).optional().default("Google"),
+  city: z.string().max(80).optional().default(""),
+  period: z.string().max(60).optional().default(""),
+  published: z.coerce.boolean().optional().default(true),
+  position: z.coerce.number().int().min(0).max(999).optional().default(0),
 });
 
 const sessionSchema = z.object({
@@ -856,6 +868,40 @@ function createApiRouter() {
       }
 
       return res.status(201).json({ data: { url: `/uploads/formations/${req.file.filename}` } });
+    })
+  );
+
+  router.get(
+    "/admin/reviews",
+    asyncHandler(async (_req, res) => {
+      const reviews = await listReviews();
+      res.json({ data: reviews });
+    })
+  );
+
+  router.post(
+    "/admin/reviews",
+    asyncHandler(async (req, res) => {
+      const payload = reviewSchema.parse(req.body);
+      const review = await createReview(payload);
+      res.status(201).json({ data: review, message: "Avis ajouté" });
+    })
+  );
+
+  router.patch(
+    "/admin/reviews/:id",
+    asyncHandler(async (req, res) => {
+      const payload = reviewSchema.parse(req.body);
+      const review = await updateReview(req.params.id, payload);
+      res.json({ data: review, message: "Avis mis à jour" });
+    })
+  );
+
+  router.delete(
+    "/admin/reviews/:id",
+    asyncHandler(async (req, res) => {
+      const review = await deleteReview(req.params.id);
+      res.json({ data: review, message: "Avis supprimé" });
     })
   );
 

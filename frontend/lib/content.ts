@@ -3,6 +3,7 @@ import catalogData from "../../shared/catalog-data.json";
 import type { Article, BulletinInscriptionWithAttempts, CatalogData, Company, CrmInteraction, CrmTask, Formation, Participant, QuizAttempt, Registration, Session } from "../../shared/types";
 import { blogArticles } from "./editorial";
 import type { CategoryVisual } from "./formation-theme";
+import type { Review } from "../../shared/types";
 
 const catalog = catalogData as CatalogData;
 
@@ -233,6 +234,19 @@ export async function getCategoryVisuals(): Promise<CategoryVisual[]> {
       listCategoryVisuals: () => Promise<CategoryVisual[]>;
     };
     return await service.listCategoryVisuals();
+  } catch {
+    return [];
+  }
+}
+
+/** Avis publiés, pour le carrousel de la page d'accueil. */
+export async function getPublishedReviews(): Promise<Review[]> {
+  try {
+    const service = require("../../backend/services/reviewService.js") as {
+      listReviews: () => Promise<Review[]>;
+    };
+    const reviews = await service.listReviews();
+    return reviews.filter((review) => review.published !== false);
   } catch {
     return [];
   }

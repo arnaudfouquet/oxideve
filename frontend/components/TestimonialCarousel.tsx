@@ -1,17 +1,4 @@
-type Review = {
-  name: string;
-  source: string;
-  rating: number;
-  quote: string;
-};
-
-const reviews: Review[] = [
-  { name: "Sophie Marchand", source: "Google", rating: 5, quote: "Formation très concrète, le formateur s'appuie sur des cas réels du métier. Je recommande sans hésiter." },
-  { name: "Karim Belloumi", source: "Google", rating: 5, quote: "Equipe à l'écoute et plateaux techniques bien équipés. On repart avec des compétences réellement applicables." },
-  { name: "Julie Ferreira", source: "Google", rating: 4, quote: "Bon rythme, contenu clair. Quelques modules pourraient être un peu plus approfondis mais globalement très satisfaite." },
-  { name: "Thomas Ridel", source: "Google", rating: 5, quote: "Excellent accompagnement avant et après la session. L'organisme répond vite et le suivi est sérieux." },
-  { name: "Nadia Cherfi", source: "Google", rating: 5, quote: "Formateurs expérimentés et pédagogues. La partie pratique m'a permis de vraiment prendre en main les outils." },
-];
+import type { Review } from "../../shared/types";
 
 function initials(name: string) {
   return name
@@ -35,10 +22,13 @@ function ReviewCard({ item }: { item: Review }) {
   return (
     <article className="review-card">
       <div className="review-card-head">
-        <span className="review-avatar">{initials(item.name)}</span>
+        <span className="review-avatar">{initials(item.author)}</span>
         <div>
-          <strong>{item.name}</strong>
-          <span className="review-source">{item.source}</span>
+          <strong>{item.author}</strong>
+          {/* Source, agence et période quand elles sont renseignées. */}
+          <span className="review-source">
+            {[item.source, item.city, item.period].filter(Boolean).join(" · ")}
+          </span>
         </div>
       </div>
       <Stars rating={item.rating} />
@@ -47,8 +37,11 @@ function ReviewCard({ item }: { item: Review }) {
   );
 }
 
-export function TestimonialCarousel() {
+export function TestimonialCarousel({ reviews }: { reviews: Review[] }) {
+  // Piste doublée pour que le défilement en boucle soit continu.
   const track = [...reviews, ...reviews];
+
+  if (!reviews.length) return null;
 
   return (
     <div className="review-carousel">
@@ -58,7 +51,7 @@ export function TestimonialCarousel() {
       <div className="review-track-viewport">
         <div className="review-track">
           {track.map((item, index) => (
-            <ReviewCard item={item} key={`${item.name}-${index}`} />
+            <ReviewCard item={item} key={`${item.id}-${index}`} />
           ))}
         </div>
       </div>

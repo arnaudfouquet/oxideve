@@ -3,7 +3,7 @@
     {
       "id": "qualipv-36-generateur-photovoltaique-electricite",
       "slug": "qualipv-36-generateur-photovoltaique-electricite",
-      "title": "Formation QualiPV Electricité - 36 kVA sur 3 jours",
+      "title": "QualiPV Electricité - 36 kVA sur 3 jours",
       "shortTitle": "QualiPV 36 kVA",
       "category": "Photovoltaïque",
       "duration": "3 jours",
@@ -157,7 +157,7 @@
     {
       "id": "qualipv-bati-generateur-photovoltaique-competence-bati",
       "slug": "qualipv-bati-generateur-photovoltaique-competence-bati",
-      "title": "Formation QualiPV Bâti",
+      "title": "QualiPV Bâti - Générateur photovoltaïque raccordé au réseau",
       "shortTitle": "QualiPV Bâti",
       "category": "Photovoltaïque",
       "duration": "3 jours",
@@ -307,7 +307,7 @@
     {
       "id": "qualipv-hp-module-haute-puissance-500kva",
       "slug": "qualipv-hp-module-haute-puissance-500kva",
-      "title": "Formation QualiPV Haute Puissance - 500 kVA RGE",
+      "title": "QualiPV Haute Puissance - 500 kVA RGE",
       "shortTitle": "QualiPV HP 500 kVA",
       "category": "Photovoltaïque",
       "duration": "4 jours",
@@ -457,7 +457,7 @@
     {
       "id": "demarches-administratives-pv-36kva-batterie",
       "slug": "demarches-administratives-pv-36kva-batterie",
-      "title": "Formation Démarches administratives 36 kWc incluant BATTERIE",
+      "title": "Démarches administratives 36 kWc incluant BATTERIE",
       "shortTitle": "Démarches PV 36 kVA",
       "category": "Photovoltaïque",
       "duration": "1,5 jour",
@@ -797,7 +797,7 @@
     {
       "id": "maintenance-installations-photovoltaiques",
       "slug": "maintenance-installations-photovoltaiques",
-      "title": "Formation Maintenance des installations photovoltaïques",
+      "title": "Maintenance des installations photovoltaïques",
       "shortTitle": "Maintenance PV",
       "category": "Photovoltaïque",
       "duration": "1 jour",
@@ -916,7 +916,7 @@
     {
       "id": "mise-en-service-certification-huawei",
       "slug": "mise-en-service-certification-huawei",
-      "title": "Formation Mise en service et certification HUAWEI",
+      "title": "Mise en service et certification HUAWEI",
       "shortTitle": "Certification HUAWEI",
       "category": "Photovoltaïque",
       "duration": "1 jour",
@@ -1112,7 +1112,7 @@
     {
       "id": "pose-systemes-fixations-pv-surimposition",
       "slug": "pose-systemes-fixations-pv-surimposition",
-      "title": "Formation Module Pose Photovoltaïque",
+      "title": "Module Pose Photovoltaïque",
       "shortTitle": "Pose fixations PV",
       "category": "Photovoltaïque",
       "duration": "1 jour",
@@ -1660,7 +1660,7 @@
     {
       "id": "attestation-aptitude-fluides-frigorigenes-categorie-1",
       "slug": "attestation-aptitude-fluides-frigorigenes-categorie-1",
-      "title": "Formation Attestation Manipulation fluides frigorigènes cat1",
+      "title": "Attestation Manipulation fluides frigorigènes cat1",
       "shortTitle": "Attestation fluides frigo",
       "category": "Fluides frigorigènes",
       "duration": "5 jours",
@@ -2363,7 +2363,7 @@
     {
       "id": "maintenance-pompe-a-chaleur",
       "slug": "maintenance-pompe-a-chaleur",
-      "title": "Formation maintenance pompe à chaleur",
+      "title": "Maintenance des pompes à chaleur",
       "shortTitle": "Maintenance PAC",
       "category": "Pompes à chaleur",
       "duration": "1 jour",
@@ -2610,7 +2610,7 @@
     {
       "id": "qualipac-pompes-a-chaleur-habitat-individuel",
       "slug": "qualipac-pompes-a-chaleur-habitat-individuel",
-      "title": "Formation QUALIPAC RGE",
+      "title": "QualiPAC RGE - Pompes à chaleur en habitat individuel",
       "shortTitle": "QualiPAC",
       "category": "Pompes à chaleur",
       "duration": "5 jours",
@@ -2752,7 +2752,7 @@
     {
       "id": "irve-niveau-1",
       "slug": "irve-niveau-1",
-      "title": "Formation IRVE certifiée - Infrastructures de Recharge pour Véhicules Electriques Niveau P1",
+      "title": "IRVE certifiée - Infrastructures de Recharge pour Véhicules Electriques Niveau P1",
       "shortTitle": "IRVE Niveau 1",
       "category": "Bornes de recharge",
       "duration": "1 jour",
@@ -2880,7 +2880,7 @@
     {
       "id": "irve-niveau-p2",
       "slug": "irve-niveau-p2",
-      "title": "Formation IRVE certifiée - Infrastructures de Recharge pour Véhicules Electriques Niveau P2",
+      "title": "IRVE certifiée - Infrastructures de Recharge pour Véhicules Electriques Niveau P2",
       "shortTitle": "IRVE Niveau P2",
       "category": "Bornes de recharge",
       "duration": "2 jours",
@@ -3220,7 +3220,7 @@
     {
       "id": "prevention-chutes-hauteur-harnais-pont-fixe",
       "slug": "prevention-chutes-hauteur-harnais-pont-fixe",
-      "title": "Formation Prévention des risques liés au travail en hauteur",
+      "title": "Prévention des risques liés au travail en hauteur",
       "shortTitle": "Travail en hauteur",
       "category": "Sécurité au travail",
       "duration": "0,5 jour",
@@ -3328,7 +3328,7 @@
     {
       "id": "sst-initial",
       "slug": "sst-initial",
-      "title": "Formation SST (santé et sécurité au travail) initial",
+      "title": "SST (santé et sécurité au travail) initial",
       "shortTitle": "SST Initial",
       "category": "Sécurité au travail",
       "duration": "2 jours",
@@ -3452,7 +3452,7 @@
     {
       "id": "sst-recyclage",
       "slug": "sst-recyclage",
-      "title": "Formation SST Recyclage",
+      "title": "SST Recyclage",
       "shortTitle": "SST Recyclage",
       "category": "Sécurité au travail",
       "duration": "1 jour",
@@ -3551,7 +3551,7 @@
     {
       "id": "decouvrir-intelligence-artificielle",
       "slug": "decouvrir-intelligence-artificielle",
-      "title": "Formation Découvrir l'intelligence artificielle",
+      "title": "Découvrir l'intelligence artificielle",
       "shortTitle": "Découvrir l'IA",
       "category": "Bureautique",
       "duration": "1 jour",
@@ -4515,7 +4515,7 @@
       "price": "200 EUR",
       "priceMember": "180 EUR",
       "priceDetails": "Tarif HT par participant, TVA non applicable (article 261B du CGI).",
-      "seoTitle": "Recyclage habilitation électrique B0 H0 H0V",
+      "seoTitle": "Formation Recyclage habilitation électrique B0 H0 H0V",
       "seoDescription": "Formation de recyclage d'une journée pour maintenir votre habilitation électrique B0, H0 et H0V.",
       "relatedSlugs": [
         {
@@ -4680,7 +4680,7 @@
       "price": "620 EUR",
       "priceMember": "590 EUR",
       "priceDetails": "Tarif HT par participant, TVA non applicable (article 261B du CGI).",
-      "seoTitle": "Habilitation électrique B1V BR BE Essai B2V BC",
+      "seoTitle": "Formation Habilitation électrique B1V BR BE Essai B2V BC",
       "seoDescription": "Formation de 3 jours aux habilitations électriques B1V, BR, BE Essai, B2V et BC, théorie et mises en situation.",
       "relatedSlugs": [
         {
@@ -4844,7 +4844,7 @@
       "price": "350 EUR",
       "priceMember": "320 EUR",
       "priceDetails": "Tarif HT par participant, TVA non applicable (article 261B du CGI).",
-      "seoTitle": "Recyclage habilitation électrique B1V BR B2V BC",
+      "seoTitle": "Formation Recyclage habilitation électrique B1V BR B2V BC",
       "seoDescription": "Formation de recyclage de 1,5 jour pour maintenir les habilitations électriques B1V, BR, BE Essai, B2V et BC.",
       "relatedSlugs": [
         {
@@ -4966,7 +4966,7 @@
       "price": "200 EUR",
       "priceMember": "180 EUR",
       "priceDetails": "Tarif HT par participant, TVA non applicable (article 261B du CGI).",
-      "seoTitle": "Habilitation électrique BP photovoltaïque",
+      "seoTitle": "Formation Habilitation électrique BP photovoltaïque",
       "seoDescription": "Formation d'une journée à l'habilitation électrique BP pour les opérations élémentaires sur chaîne photovoltaïque.",
       "relatedSlugs": [
         {
@@ -5095,7 +5095,7 @@
       "price": "200 EUR",
       "priceMember": "180 EUR",
       "priceDetails": "Tarif HT par participant, TVA non applicable (article 261B du CGI).",
-      "seoTitle": "Recyclage habilitation électrique BP photovoltaïque",
+      "seoTitle": "Formation Recyclage habilitation électrique BP",
       "seoDescription": "Formation de recyclage d'une journée pour maintenir l'habilitation électrique BP sur chaîne photovoltaïque.",
       "relatedSlugs": [
         {
@@ -5124,7 +5124,7 @@
       "relatedSlugs": [],
       "id": "bilan-de-competences",
       "slug": "bilan-de-competences",
-      "title": "Formation Bilan de compétences",
+      "title": "Bilan de compétences",
       "shortTitle": "Bilan de compétences",
       "category": "Accompagnement",
       "subCategory": "",
@@ -5185,7 +5185,7 @@
       "certification": "Quiz d'évaluation et questionnaire à chaud en fin de bilan, puis questionnaire de suivi six mois après. Le bilan peut déboucher sur un projet de formation ou une démarche de VAE.",
       "price": "Nous consulter",
       "priceDetails": "Tarif communiqué sur demande, selon le financement mobilisé.",
-      "seoTitle": "Bilan de compétences à Toulouse",
+      "seoTitle": "Formation Bilan de compétences à Toulouse",
       "seoDescription": "Bilan de compétences de 22 heures pour analyser vos compétences, définir votre projet professionnel et bâtir un plan d'action.",
       "cpfEligible": true
     },
@@ -5637,7 +5637,7 @@
       "certification": "Évaluation formative tout au long de la formation, avec un QCM à la fin de chaque journée. À l'issue : attestation de fin de formation.",
       "price": "650 EUR",
       "priceDetails": "Tarif HT par participant, TVA non applicable (article 261B du CGI).",
-      "seoTitle": "Transformer votre savoir-faire en chiffre d'affaires",
+      "seoTitle": "Formation Transformer votre savoir-faire en chiffre",
       "seoDescription": "Formation commerciale de 2 jours pour les artisans : analyse du besoin, devis argumenté, prospection et suivi client.",
       "cpfEligible": false
     }

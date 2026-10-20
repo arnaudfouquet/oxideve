@@ -60,6 +60,23 @@ model Formation {
   sessions        Session[]
 }
 
+// Avis client affiché sur la page d'accueil, saisi depuis l'admin.
+model Review {
+  id        String   @id @default(cuid())
+  author    String
+  rating    Int      @default(5)
+  quote     String   @db.Text
+  source    String   @default("Google")
+  // Agence concernée : "Montpellier", "Toulouse" ou vide.
+  city      String?
+  // Date affichée ("septembre 2026") ; texte libre car reprise de Google.
+  period    String?
+  published Boolean  @default(true)
+  position  Int      @default(0)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
 // Visuel associé à une catégorie ou à une sous-catégorie de formation.
 // `scope` vaut "category" ou "subCategory", `name` est le libellé concerné.
 // Une formation peut toujours surcharger ces valeurs.

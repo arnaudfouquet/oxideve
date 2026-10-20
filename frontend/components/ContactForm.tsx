@@ -174,7 +174,7 @@ export function ContactForm({
         Besoin
         <textarea className="ui-field contact-form-textarea" name="message" rows={5} placeholder="Objectif, nombre de stagiaires, besoin de financement, délais..." />
       </label>
-      <button className="ui-button ui-button-primary" type="submit" disabled={status === "loading"}>
+      <button className="ui-button ui-button-primary home-cta-arrow" type="submit" disabled={status === "loading"}>
         {status === "loading" ? "Envoi..." : submitLabel}
       </button>
       {message ? <p className={`form-status ${status}`}>{message}</p> : null}

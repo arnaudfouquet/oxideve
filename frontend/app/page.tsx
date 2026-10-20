@@ -2,7 +2,7 @@ import { ButtonLink, Container } from "@/components/ui";
 import { HomeSessionsCarousel } from "@/components/HomeSessionsCarousel";
 import { FranceMap } from "@/components/FranceMap";
 import { TestimonialCarousel } from "@/components/TestimonialCarousel";
-import { getFormations, getSessions } from "@/lib/content";
+import { getFormations, getPublishedReviews, getSessions } from "@/lib/content";
 
 export const dynamic = "force-dynamic";
 
@@ -72,6 +72,7 @@ const faqItems = [
 export default async function HomePage() {
   const formations = await getFormations();
   const sessions = await getSessions();
+  const reviews = await getPublishedReviews();
 
   const categoriesWithCount = homeCategories.map((category) => ({
     ...category,
@@ -236,7 +237,7 @@ export default async function HomePage() {
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img alt="4,7/5 sur les avis stagiaires" src="/assets/home/bulle-note.png" />
           </div>
-          <TestimonialCarousel />
+          <TestimonialCarousel reviews={reviews} />
           <ButtonLink href="/contact" variant="primary" className="home-reviews-cta home-cta-arrow">
             Je partage mon avis
           </ButtonLink>

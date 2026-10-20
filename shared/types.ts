@@ -302,3 +302,16 @@ export type CatalogData = {
   sessions: Session[];
   articles?: Article[];
 };
+
+/** Avis client affiche sur la page d accueil. */
+export type Review = {
+  id: string;
+  author: string;
+  rating: number;
+  quote: string;
+  source: string;
+  city?: string;
+  period?: string;
+  published?: boolean;
+  position?: number;
+};

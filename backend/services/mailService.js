@@ -224,7 +224,8 @@ async function sendQuizResultEmail({ quizTitle, attempt, pdfBuffer }) {
   }
 }
 
-const INTERNAL_NOTIFICATION_EMAIL = "oxideve@yopmail.com";
+/** Destinataire des notifications internes, surchargeable via .env. */
+const INTERNAL_NOTIFICATION_EMAIL = process.env.NOTIFICATION_EMAIL || "contactoxideve@yopmail.com";
 
 function buildInternalRegistrationHtml({ registration, formation, session }) {
   const formationTitle = formation?.title || registration.formationSlug;

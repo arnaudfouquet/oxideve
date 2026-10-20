@@ -96,13 +96,30 @@ function FilterGroup({
   title,
   children,
   defaultOpen = true,
+  alwaysOpen = false,
 }: {
   title: string;
   children: React.ReactNode;
   defaultOpen?: boolean;
+  alwaysOpen?: boolean;
 }) {
+  // Sur mobile les groupes sont repliés : dépliés, ils repoussaient la
+  // première formation très bas dans la page.
+  const [open, setOpen] = useState(defaultOpen);
+
+  useEffect(() => {
+    if (alwaysOpen) return;
+
+    const narrow = window.matchMedia("(max-width: 1024px)");
+    const sync = () => setOpen(narrow.matches ? false : defaultOpen);
+
+    sync();
+    narrow.addEventListener("change", sync);
+    return () => narrow.removeEventListener("change", sync);
+  }, [alwaysOpen, defaultOpen]);
+
   return (
-    <details className="cat-filter-group" open={defaultOpen}>
+    <details className="cat-filter-group" open={open} onToggle={(event) => setOpen(event.currentTarget.open)}>
       <summary>
         <span>{title}</span>
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
@@ -396,7 +413,8 @@ export function FormationCatalog({
           ) : null}
         </div>
 
-        <FilterGroup title="Recherche">
+        {/* La recherche reste dépliée, y compris sur mobile. */}
+        <FilterGroup alwaysOpen title="Recherche">
           <input
             className="ui-field cat-search"
             onChange={(event) => {
