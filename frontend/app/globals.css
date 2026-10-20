@@ -10400,8 +10400,8 @@ a.ct-channel-value:hover {
 /* Reglages du hero valides via le generateur (/outils/hero). */
 .home-hero {
   --hero-image-width: 74%;
-  --hero-band-left: 70%;
-  --hero-band-slope: 30%;
+  --hero-band-left: 67%;
+  --hero-band-slope: 23%;
   --hero-corner-left: -10px;
   --hero-corner-bottom: -25px;
   --hero-corner-width: 280px;

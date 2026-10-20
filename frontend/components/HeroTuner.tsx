@@ -14,8 +14,8 @@ import { Container } from "@/components/ui";
 /** Valeurs retenues par Oxideve, reprises comme réglage par défaut. */
 const DEFAULTS = {
   imageWidth: 74,
-  bandLeft: 70,
-  bandSlope: 30,
+  bandLeft: 67,
+  bandSlope: 23,
   cornerLeft: -10,
   cornerBottom: -25,
   cornerWidth: 280,
