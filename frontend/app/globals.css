@@ -5088,18 +5088,18 @@ main {
 }
 
 /* Zone vert très pâle, bord oblique descendant vers la gauche.
-   L'obliquité est obtenue par une rotation d'angle fixe plutôt que par un
-   clip-path en pourcentages : la pente reste identique quelle que soit la
-   largeur de l'écran, au lieu de s'aplatir sur grand écran. */
+   L'obliquité vient d'une rotation d'angle fixe et non d'un clip-path en
+   pourcentages : la pente reste identique quelle que soit la largeur.
+   Toutes les valeurs sont réglables depuis le générateur (/outils/hero). */
 .home-hero::before {
   content: "";
   position: absolute;
   top: -20%;
   bottom: -20%;
-  left: 38%;
+  left: var(--hero-band-left, 38%);
   right: -60%;
   background: #edfcf4;
-  transform: rotate(14deg);
+  transform: rotate(var(--hero-band-angle, 14deg));
   transform-origin: top left;
   pointer-events: none;
 }
@@ -5108,12 +5108,12 @@ main {
 .home-hero::after {
   content: "";
   position: absolute;
-  left: 0;
-  bottom: 0;
-  width: 190px;
-  height: 150px;
+  left: var(--hero-corner-left, 0px);
+  bottom: var(--hero-corner-bottom, 0px);
+  width: var(--hero-corner-width, 190px);
+  height: var(--hero-corner-height, 150px);
   background: #edfcf4;
-  clip-path: polygon(0 55%, 100% 100%, 0 100%);
+  clip-path: polygon(0 var(--hero-corner-slope, 55%), 100% 100%, 0 100%);
   pointer-events: none;
 }
 
@@ -5161,14 +5161,19 @@ main {
 
 /* Bouton avec icône flèche ronde blanche à droite (reprend la maquette) */
 /* Même arrondi que les boutons des pages Financement et Qui sommes-nous :
-   un coin à 10 px plutôt qu'une pilule complète. */
+   un coin à 10 px plutôt qu'une pilule complète.
+   `--arrow-icon` porte le chevron ; chaque variante de couleur redéfinit la
+   variable correspondante. */
 .home-cta-arrow {
+  --arrow-icon: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%2309cf65' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='9 6 15 12 9 18'/%3E%3C/svg%3E");
+  position: relative;
   border-radius: 10px;
   padding-right: 10px;
   gap: 14px;
   background: var(--color-green);
   box-shadow: none;
 }
+
 
 .home-cta-arrow:hover {
   transform: none;
@@ -5183,7 +5188,9 @@ main {
   position: relative;
 }
 
-/* La pastille blanche est le dernier élément du bouton (flex). */
+/* Pastille blanche portant le chevron, dessinée en une seule boîte : le
+   chevron est l'image de fond, il reste donc centré sur le rond même quand le
+   bouton occupe toute la largeur (un positionnement absolu les séparait). */
 .home-cta-arrow::after {
   content: "";
   display: inline-block;
@@ -5191,24 +5198,11 @@ main {
   width: 30px;
   height: 30px;
   border-radius: 50%;
-  background: #ffffff;
-}
-
-/* Le chevron se superpose à la pastille. Son centre doit tomber sur celui du
-   rond : padding droit (10px) + rayon (15px), moins la moitié du chevron. */
-.home-cta-arrow::before {
-  content: "";
-  position: absolute;
-  /* padding droit + rayon du rond - moitié du chevron = 10 + 15 - 10 */
-  right: 15px;
-  top: 50%;
-  width: 20px;
-  height: 20px;
-  transform: translateY(-50%);
-  background-color: var(--arrow-color, var(--color-green));
-  -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='9 6 15 12 9 18'/%3E%3C/svg%3E") center / contain no-repeat;
-  mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='9 6 15 12 9 18'/%3E%3C/svg%3E") center / contain no-repeat;
-  pointer-events: none;
+  background-color: #ffffff;
+  background-image: var(--arrow-icon);
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: 20px 20px;
 }
 
 .home-hero-visual {
@@ -5222,7 +5216,8 @@ main {
 .home-hero-visual img {
   position: relative;
   z-index: 1;
-  width: 100%;
+  /* Réglable depuis le générateur (/outils/hero). */
+  width: var(--hero-image-width, 74%);
   height: auto;
   object-fit: contain;
 }
@@ -5948,17 +5943,19 @@ main {
   display: inline-grid;
   place-items: center;
   flex: 0 0 auto;
-  width: 36px;
-  height: 36px;
+  /* 38 px comme les cartes catégories, pour un chevron de même taille. */
+  width: 38px;
+  height: 38px;
   border-radius: 50%;
   background: var(--color-navy);
   color: #ffffff;
   transition: transform 180ms ease;
 }
 
+/* Même gabarit que les chevrons des cartes catégories. */
 .home-faq-chevron svg {
-  width: 18px;
-  height: 18px;
+  width: 25px;
+  height: 25px;
   display: block;
 }
 
@@ -7765,14 +7762,10 @@ main {
   color: var(--color-green);
 }
 
-/* Bouton blanc sur fond coloré : la pastille devient verte et le chevron
-   blanc, soit l'inverse du bouton vert. */
+/* Bouton blanc sur fond coloré : la pastille devient verte, le chevron blanc
+   (voir --arrow-icon plus bas). */
 .fin-cta-white::after {
-  background: var(--color-green);
-}
-
-.fin-cta-white::before {
-  background-color: #ffffff;
+  background-color: var(--color-green);
 }
 
 .fin-cta-white:hover {
@@ -10209,4 +10202,189 @@ a.ct-channel-value:hover {
   margin-top: auto;
   width: 100%;
   justify-content: center;
+}
+
+
+/* Couleur du chevron par variante de bouton. Le trace est une image de fond :
+   il ne peut pas heriter de --arrow-color, chaque variante fournit donc son
+   propre --arrow-icon. */
+.home-faq-cta-button.home-cta-arrow,
+.qsn-commitment-cta.home-cta-arrow,
+.fin-cta-blue.home-cta-arrow,
+.ct-cta-blue.home-cta-arrow {
+  --arrow-icon: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23009cdc' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='9 6 15 12 9 18'/%3E%3C/svg%3E");
+}
+
+.fd-local-cta.home-cta-arrow {
+  --arrow-icon: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23004d6d' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='9 6 15 12 9 18'/%3E%3C/svg%3E");
+}
+
+/* Bouton blanc sur fond colore : rond vert, chevron blanc. */
+.fin-cta-white.home-cta-arrow {
+  --arrow-icon: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23ffffff' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='9 6 15 12 9 18'/%3E%3C/svg%3E");
+}
+
+
+/* ---------------------------------------------------------------
+   Generateur de reglages du hero (/outils/hero)
+   --------------------------------------------------------------- */
+
+.hero-tuner {
+  display: grid;
+  gap: 20px;
+  padding: 24px;
+  background: #f4f7f9;
+  min-height: 100vh;
+}
+
+.hero-tuner-head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.hero-tuner-head h1 {
+  margin: 0 0 6px;
+  font-size: 1.4rem;
+  color: var(--color-navy);
+}
+
+.hero-tuner-head p {
+  margin: 0;
+  max-width: 620px;
+  font-size: 0.88rem;
+  color: var(--color-muted);
+}
+
+.hero-tuner-reset {
+  flex: 0 0 auto;
+  padding: 0.45rem 1rem;
+  border: 1px solid var(--color-light);
+  border-radius: 999px;
+  background: #ffffff;
+  color: var(--color-navy);
+  font: inherit;
+  font-size: 0.82rem;
+  cursor: pointer;
+}
+
+/* L'apercu est encadre pour qu'on voie ou s'arrete le hero. */
+.hero-tuner-preview {
+  border: 1px solid var(--color-light);
+  border-radius: 14px;
+  overflow: hidden;
+  background: #ffffff;
+}
+
+.hero-tuner-panel {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(300px, 380px);
+  gap: 20px;
+  align-items: start;
+}
+
+.hero-tuner-fields {
+  display: grid;
+  gap: 0.9rem;
+  padding: 1rem 1.2rem;
+  border-radius: 12px;
+  background: #ffffff;
+}
+
+.hero-tuner-field {
+  display: grid;
+  gap: 0.3rem;
+}
+
+.hero-tuner-field > span {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 0.5rem;
+  font-size: 0.82rem;
+  color: var(--color-navy);
+}
+
+.hero-tuner-field em {
+  font-style: normal;
+  font-weight: 700;
+  color: var(--color-blue);
+}
+
+.hero-tuner-field input[type="range"] {
+  width: 100%;
+  accent-color: var(--color-blue);
+}
+
+.hero-tuner-output {
+  padding: 1rem 1.2rem;
+  border-radius: 12px;
+  background: #ffffff;
+}
+
+.hero-tuner-output-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 0.6rem;
+}
+
+.hero-tuner-output-head strong {
+  font-size: 0.86rem;
+  color: var(--color-navy);
+}
+
+.hero-tuner-output-head button {
+  padding: 0.3rem 0.8rem;
+  border: 0;
+  border-radius: 999px;
+  background: var(--color-blue);
+  color: #ffffff;
+  font: inherit;
+  font-size: 0.78rem;
+  cursor: pointer;
+}
+
+.hero-tuner-output pre {
+  margin: 0;
+  padding: 0.8rem;
+  border-radius: 8px;
+  background: var(--color-navy);
+  color: #e8f6fb;
+  font-size: 0.76rem;
+  line-height: 1.6;
+  overflow-x: auto;
+}
+
+.hero-tuner-hint {
+  margin: 0.6rem 0 0;
+  font-size: 0.76rem;
+  color: var(--color-muted);
+}
+
+.hero-tuner-hint code {
+  padding: 1px 5px;
+  border-radius: 4px;
+  background: var(--color-light);
+}
+
+@media (max-width: 1000px) {
+  .hero-tuner-panel {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Les deux boutons du bloc « Un projet de formation ? » partagent la meme
+   largeur : alignes a gauche et dimensionnes par leur texte, ils donnaient
+   un bord droit en escalier. */
+.home-faq-cta-actions {
+  display: grid;
+  gap: 10px;
+  margin-top: 18px;
+}
+
+.home-faq-cta-actions .home-faq-cta-button {
+  width: 100%;
+  justify-content: space-between;
 }

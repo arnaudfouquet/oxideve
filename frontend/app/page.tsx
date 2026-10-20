@@ -270,12 +270,14 @@ export default async function HomePage() {
               <div className="home-faq-cta-card">
                 <h3>Un projet de formation ?</h3>
                 <p>Notre équipe vous accompagne pour trouver la formation adaptée à votre besoin et répondre à vos questions</p>
-                <ButtonLink href="/contact" variant="primary" className="home-faq-cta-button home-cta-arrow">
-                  Échanger avec notre équipe
-                </ButtonLink>
-                <ButtonLink href="/formations" variant="primary" className="home-faq-cta-button home-cta-arrow">
-                  Découvrir nos formations
-                </ButtonLink>
+                <div className="home-faq-cta-actions">
+                  <ButtonLink href="/contact" variant="primary" className="home-faq-cta-button home-cta-arrow">
+                    Échanger avec notre équipe
+                  </ButtonLink>
+                  <ButtonLink href="/formations" variant="primary" className="home-faq-cta-button home-cta-arrow">
+                    Découvrir nos formations
+                  </ButtonLink>
+                </div>
               </div>
             </div>
             <div className="home-faq-list">
