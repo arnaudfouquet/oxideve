@@ -5087,25 +5087,31 @@ main {
   padding: 56px 0 64px;
 }
 
-/* Zone vert très pâle : bord oblique descendant du haut-droit vers le
-   bas-gauche (le blanc forme un coin en haut à gauche). */
+/* Zone vert très pâle, bord oblique descendant vers la gauche.
+   L'obliquité est obtenue par une rotation d'angle fixe plutôt que par un
+   clip-path en pourcentages : la pente reste identique quelle que soit la
+   largeur de l'écran, au lieu de s'aplatir sur grand écran. */
 .home-hero::before {
   content: "";
   position: absolute;
-  inset: 0;
+  top: -20%;
+  bottom: -20%;
+  left: 38%;
+  right: -60%;
   background: #edfcf4;
-  clip-path: polygon(48% 0, 100% 0, 100% 100%, 20% 100%);
+  transform: rotate(14deg);
+  transform-origin: top left;
   pointer-events: none;
 }
 
-/* Coin vert pâle en bas à gauche, hypoténuse descendant vers la gauche */
+/* Coin vert pâle en bas à gauche : taille fixe, donc angle constant. */
 .home-hero::after {
   content: "";
   position: absolute;
   left: 0;
   bottom: 0;
-  width: 14%;
-  height: 46%;
+  width: 190px;
+  height: 150px;
   background: #edfcf4;
   clip-path: polygon(0 55%, 100% 100%, 0 100%);
   pointer-events: none;
@@ -5154,8 +5160,10 @@ main {
 }
 
 /* Bouton avec icône flèche ronde blanche à droite (reprend la maquette) */
+/* Même arrondi que les boutons des pages Financement et Qui sommes-nous :
+   un coin à 10 px plutôt qu'une pilule complète. */
 .home-cta-arrow {
-  border-radius: 999px;
+  border-radius: 10px;
   padding-right: 10px;
   gap: 14px;
   background: var(--color-green);
@@ -5167,18 +5175,40 @@ main {
   box-shadow: 0 6px 18px rgba(9, 207, 101, 0.3);
 }
 
+/* Chevron dessiné plutôt que le caractère « › », dont le rendu était fin et
+   mal centré selon les polices. Le pastillage blanc est porté par ::after et
+   le chevron par ::before, via un masque : la couleur suit ainsi
+   --arrow-color, que plusieurs sections redéfinissent. */
+.home-cta-arrow {
+  position: relative;
+}
+
+/* La pastille blanche est le dernier élément du bouton (flex). */
 .home-cta-arrow::after {
-  content: "›";
-  display: inline-grid;
-  place-items: center;
+  content: "";
+  display: inline-block;
+  flex: 0 0 auto;
   width: 30px;
   height: 30px;
   border-radius: 50%;
   background: #ffffff;
-  color: var(--arrow-color, var(--color-green));
-  font-size: 1.2rem;
-  font-weight: 800;
-  line-height: 1;
+}
+
+/* Le chevron se superpose à la pastille. Son centre doit tomber sur celui du
+   rond : padding droit (10px) + rayon (15px), moins la moitié du chevron. */
+.home-cta-arrow::before {
+  content: "";
+  position: absolute;
+  /* padding droit + rayon du rond - moitié du chevron = 10 + 15 - 10 */
+  right: 15px;
+  top: 50%;
+  width: 20px;
+  height: 20px;
+  transform: translateY(-50%);
+  background-color: var(--arrow-color, var(--color-green));
+  -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='9 6 15 12 9 18'/%3E%3C/svg%3E") center / contain no-repeat;
+  mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='9 6 15 12 9 18'/%3E%3C/svg%3E") center / contain no-repeat;
+  pointer-events: none;
 }
 
 .home-hero-visual {
@@ -5273,17 +5303,30 @@ main {
   line-height: 1;
 }
 
+.home-category-arrow svg {
+  width: 25px;
+  height: 25px;
+}
+
 .home-category-arrow.is-light {
   background: #ffffff;
   color: var(--color-blue);
 }
 
+/* Carte « Toutes nos formations » : le titre reste centré et le chevron se
+   place dans le coin bas-droit, comme sur la maquette. */
 .home-category-card.is-accent {
+  position: relative;
   justify-content: center;
   align-items: flex-start;
-  gap: 24px;
   padding: 32px;
   background: linear-gradient(135deg, var(--color-green), var(--color-blue));
+}
+
+.home-category-card.is-accent .home-category-arrow {
+  position: absolute;
+  right: 24px;
+  bottom: 24px;
 }
 
 .home-category-accent-title {
@@ -5344,7 +5387,7 @@ main {
   gap: 20px;
   width: max-content;
   padding: 6px 24px;
-  animation: home-sessions-scroll 130s linear infinite;
+  animation: home-sessions-scroll 170s linear infinite;
 }
 
 .home-sessions-track.is-reverse {
@@ -5362,7 +5405,8 @@ main {
 
 .home-session-card {
   display: flex;
-  align-items: flex-start;
+  /* L'icône est centrée sur la hauteur de la tuile, pas collée en haut. */
+  align-items: center;
   gap: 16px;
   flex: 0 0 auto;
   width: 420px;
@@ -7082,8 +7126,9 @@ main {
   align-items: center;
   width: min(1200px, calc(100% - 32px));
   margin: 0 auto;
-  min-height: 620px;
-  padding: 56px 0;
+  /* Hero agrandi de 20 % : 620 -> 744 px. */
+  min-height: 744px;
+  padding: 68px 0;
 }
 
 .qsn-hero-copy {
@@ -7720,9 +7765,14 @@ main {
   color: var(--color-green);
 }
 
+/* Bouton blanc sur fond coloré : la pastille devient verte et le chevron
+   blanc, soit l'inverse du bouton vert. */
 .fin-cta-white::after {
   background: var(--color-green);
-  color: #ffffff;
+}
+
+.fin-cta-white::before {
+  background-color: #ffffff;
 }
 
 .fin-cta-white:hover {

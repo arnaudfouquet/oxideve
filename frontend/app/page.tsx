@@ -120,14 +120,22 @@ export default async function HomePage() {
                   <strong>{category.label}</strong>
                   <span className="home-category-foot">
                     <span className="home-category-count">{category.count} formation{category.count > 1 ? "s" : ""}</span>
-                    <span className="home-category-arrow" aria-hidden="true">›</span>
+                    <span className="home-category-arrow" aria-hidden="true">
+                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
+                        <polyline points="9 6 15 12 9 18" />
+                      </svg>
+                    </span>
                   </span>
                 </span>
               </a>
             ))}
             <a className="home-category-card is-accent" href="/formations">
               <span className="home-category-accent-title">Toutes nos formations</span>
-              <span className="home-category-arrow is-light" aria-hidden="true">›</span>
+              <span className="home-category-arrow is-light" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
+                  <polyline points="9 6 15 12 9 18" />
+                </svg>
+              </span>
             </a>
           </div>
         </Container>

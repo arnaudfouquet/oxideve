@@ -20,6 +20,9 @@ const CATEGORY_ICONS: Record<string, string> = {
   IRVE: "/assets/home/icone-irve.png",
   "Sécurité au travail": "/assets/home/icone-securite.png",
   Bureautique: "/assets/home/icone-bureautique.png",
+  // Pas de visuel dédié aux fluides : on reprend celui de la pompe à chaleur,
+  // le domaine technique étant le même (froid et climatisation).
+  "Fluides frigorigènes": "/assets/home/icone-pompe-chaleur.png",
 };
 
 function formatDateRange(startDate: string, endDate: string) {
