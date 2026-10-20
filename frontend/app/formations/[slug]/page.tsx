@@ -129,7 +129,15 @@ export default async function FormationDetailPage({ params }: Props) {
                   {/* eslint-disable-next-line @next/next/no-img-element */}
                   <img alt="" src={fact.icon} />
                   <span className="fd-fact-label">{fact.label}</span>
-                  <strong className="fd-fact-value">{fact.value}</strong>
+                  {/* La taille s'adapte à la longueur : « Installateurs
+                      photovoltaïques et techniciens mise en service » ne peut
+                      pas s'afficher au même corps que « 1 jour ». */}
+                  <strong
+                    className="fd-fact-value"
+                    data-length={fact.value.length > 60 ? "tres-long" : fact.value.length > 28 ? "long" : undefined}
+                  >
+                    {fact.value}
+                  </strong>
                   {fact.cpf ? <span className="formation-tile-funding-cpf">Finançable CPF</span> : null}
                   {/* Dispositifs de financement, comme sur les tuiles du catalogue. */}
                   {fact.funding ? (

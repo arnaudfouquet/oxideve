@@ -247,7 +247,10 @@ export async function getPublishedReviews(): Promise<Review[]> {
     };
     const reviews = await service.listReviews();
     return reviews.filter((review) => review.published !== false);
-  } catch {
+  } catch (error) {
+    // Sans trace, une panne de base faisait disparaître le carrousel sans
+    // qu'aucun message ne l'explique.
+    console.error("[content] Les avis n'ont pas pu être chargés", error);
     return [];
   }
 }
