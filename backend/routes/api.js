@@ -66,7 +66,10 @@ const inscriptionSchema = z.object({
   email: z.string().email(),
   phone: z.string().min(8).max(30),
   formationSlug: z.string().min(2),
-  sessionId: z.string().min(2),
+  // Facultative : 35 formations sur 49 n'ont aucune session programmée, et le
+  // formulaire de leur page envoyait une session vide, rejetée en erreur 500.
+  // Une demande sans date est légitime : l'équipe propose ensuite une session.
+  sessionId: z.string().max(120).optional().default(""),
   message: z.string().max(1000).optional().default(""),
 });
 
@@ -328,18 +331,19 @@ function createApiRouter() {
 
       const registration = await createRegistration(payload);
 
-      try {
-        const [formation, sessions] = await Promise.all([
-          getFormationBySlug(registration.formationSlug),
-          listSessions(),
-        ]);
-        const session = sessions.find((item) => item.id === registration.sessionId) || null;
-        await sendInternalRegistrationNotification({ registration, formation, session });
-      } catch (error) {
-        console.error("[api] Échec de l'envoi de la notification interne de pré-inscription", error);
-      }
-
+      // On répond tout de suite : le visiteur attendait jusqu'ici l'envoi de
+      // l'email interne, soit plusieurs secondes (voire un échec apparent)
+      // quand le serveur SMTP est lent. La notification part ensuite.
       res.status(201).json({ data: registration, message: "Inscription enregistrée" });
+
+      Promise.all([getFormationBySlug(registration.formationSlug), listSessions()])
+        .then(([formation, sessions]) => {
+          const session = sessions.find((item) => item.id === registration.sessionId) || null;
+          return sendInternalRegistrationNotification({ registration, formation, session });
+        })
+        .catch((error) => {
+          console.error("[api] Échec de l'envoi de la notification interne de pré-inscription", error);
+        });
     })
   );
 

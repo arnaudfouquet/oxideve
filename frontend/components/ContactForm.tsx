@@ -150,11 +150,17 @@ export function ContactForm({
               name="sessionId"
               value={selectedSessionId}
               onChange={(event) => setSelectedSessionId(event.target.value)}
-              required
+              // Obligatoire seulement s'il existe des dates : sinon le visiteur
+              // ne pouvait rien choisir et le navigateur bloquait l'envoi.
+              required={availableSessions.length > 0}
               disabled={!selectedFormationSlug}
             >
-              <option disabled value="">
-                {selectedFormationSlug ? "Choisir une session" : "Sélectionnez d'abord une formation"}
+              <option disabled={availableSessions.length > 0} value="">
+                {!selectedFormationSlug
+                  ? "Sélectionnez d'abord une formation"
+                  : availableSessions.length
+                    ? "Choisir une session"
+                    : "Pas encore de date : nous vous en proposerons une"}
               </option>
               {availableSessions.map((session) => (
                 <option key={session.id} value={session.id}>

@@ -1,27 +1,37 @@
-let prismaSingleton = null;
-let loggedMode = false;
+/**
+ * Le client est conservé sur globalThis et non dans une variable du module.
+ *
+ * Next.js embarque ce fichier dans plusieurs bundles (une copie par route, en
+ * plus de celle chargée par Express), et en développement il le réévalue à
+ * chaque modification. Avec une variable de module, chaque copie créait son
+ * propre PrismaClient et son propre pool de connexions : elles s'accumulaient
+ * jusqu'à l'erreur MySQL « Too many connections », qui vidait silencieusement
+ * les listes (avis, inscriptions). globalThis est partagé par toutes les
+ * copies d'un même processus : il n'y a plus qu'un client.
+ */
+const store = globalThis;
 
 function getPrismaClient() {
   if (!process.env.DATABASE_URL) {
-    if (!loggedMode) {
+    if (!store.__oxidevePrismaModeLogged) {
       console.warn("[prismaClient] DATABASE_URL absente : mode dégradé en mémoire (aucune donnée persistée entre redémarrages).");
-      loggedMode = true;
+      store.__oxidevePrismaModeLogged = true;
     }
     return null;
   }
 
-  if (prismaSingleton) {
-    return prismaSingleton;
+  if (store.__oxidevePrisma) {
+    return store.__oxidevePrisma;
   }
 
   try {
     const { PrismaClient } = require("@prisma/client");
-    prismaSingleton = new PrismaClient();
-    if (!loggedMode) {
+    store.__oxidevePrisma = new PrismaClient();
+    if (!store.__oxidevePrismaModeLogged) {
       console.log("[prismaClient] Client Prisma initialisé, connecté à la base de données.");
-      loggedMode = true;
+      store.__oxidevePrismaModeLogged = true;
     }
-    return prismaSingleton;
+    return store.__oxidevePrisma;
   } catch (error) {
     console.warn("Prisma client unavailable, falling back to in-memory mode", error.message);
     return null;

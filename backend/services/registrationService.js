@@ -63,7 +63,8 @@ async function createRegistration(payload) {
         email: payload.email,
         phone: payload.phone,
         formationSlug: payload.formationSlug,
-        sessionId: payload.sessionId,
+        // Chaîne vide -> null : "" violerait la clé étrangère vers Session.
+        sessionId: payload.sessionId || null,
         message: payload.message,
       },
     });
