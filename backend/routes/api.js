@@ -314,6 +314,18 @@ function createApiRouter() {
     honeypotGuard,
     asyncHandler(async (req, res) => {
       const payload = inscriptionSchema.parse(req.body);
+
+      // La session doit exister en base : si le catalogue a ete redeploye sans
+      // reseed, la page propose des sessions absentes de la base et l'insertion
+      // echouait sur la cle etrangere, avec une erreur 500 incomprehensible.
+      const knownSessions = await listSessions();
+      if (payload.sessionId && !knownSessions.some((item) => item.id === payload.sessionId)) {
+        return res.status(409).json({
+          error:
+            "Cette session n'est plus disponible. Rechargez la page pour voir les dates à jour, ou contactez-nous directement.",
+        });
+      }
+
       const registration = await createRegistration(payload);
 
       try {
