@@ -1240,7 +1240,12 @@ export function AdminWorkspace({
   return (
     <div className="admin-shell-v2">
       <nav className="admin-shell-v2-sidebar">
-        <div className="admin-shell-v2-brand">Oxideve</div>
+        <div className="admin-shell-v2-brand">
+          {/* Logo bleu/gris : la barre laterale est claire, la version blanche
+              du site y serait invisible. */}
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img alt="Oxideve" src="/assets/admin/oxideve-logo.png" />
+        </div>
         <div className="admin-shell-v2-nav">
           {NAV_ITEMS.map((item) => {
             const newRegistrationsCount =

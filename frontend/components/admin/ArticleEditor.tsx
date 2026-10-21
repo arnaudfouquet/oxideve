@@ -119,6 +119,20 @@ export function ArticleEditor({ value, onChange, onError }: Props) {
 
       if (cancelled || !containerRef.current) return;
 
+      // Le chargement du script est asynchrone : deux montages rapproches
+      // (React en mode strict, ou une reouverture du formulaire) pouvaient
+      // tous deux arriver ici et instancier Quill deux fois, ce qui laissait
+      // une barre d'outils en double au-dessus de l'editeur.
+      if (quillRef.current) return;
+
+      // Quill insere sa barre d'outils AVANT le conteneur, dans le parent.
+      // React, qui ne connait que le conteneur, ne la supprime pas lors d'un
+      // demontage : on nettoie donc les barres laissees par un montage
+      // precedent avant d'en creer une nouvelle.
+      containerRef.current.parentElement
+        ?.querySelectorAll(":scope > .ql-toolbar")
+        .forEach((element) => element.remove());
+
       const Quill = (window as unknown as { Quill: new (el: Element, options: unknown) => QuillInstance }).Quill;
       if (!Quill) return;
 
@@ -193,6 +207,14 @@ export function ArticleEditor({ value, onChange, onError }: Props) {
 
     return () => {
       cancelled = true;
+
+      // Meme nettoyage au demontage, pour ne rien laisser dans le DOM.
+      containerRef.current?.parentElement
+        ?.querySelectorAll(":scope > .ql-toolbar")
+        .forEach((element) => element.remove());
+
+      if (containerRef.current) containerRef.current.innerHTML = "";
+      quillRef.current = null;
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
