@@ -3090,6 +3090,26 @@ main {
   font-size: 0.88rem;
 }
 
+/* Editorial, Avis et Comptes reutilisent .contact-form, la classe du
+   formulaire public : leurs libelles et champs etaient donc au gabarit du
+   site (16 px, 53 px de haut) alors que Sessions, Clients et Formations
+   utilisent le gabarit compact de l'admin (12 px, 32 px). On aligne les
+   premiers sur les seconds, sans toucher au formulaire public. */
+.admin-shell .contact-form label {
+  gap: 4px;
+  font-size: 0.82rem;
+}
+
+.admin-shell .contact-form .ui-field {
+  min-height: 38px;
+  padding: 6px 12px;
+  font-size: 0.88rem;
+}
+
+.admin-shell .contact-form .form-grid {
+  gap: 12px;
+}
+
 .admin-list-item-meta {
   color: var(--color-muted);
   font-size: 0.85rem;
@@ -9908,8 +9928,10 @@ a.ct-channel-value:hover {
   gap: 6px;
 }
 
+/* Le titre reste le champ principal, mais au gabarit de l'admin : il montait
+   a 1.05rem, soit nettement plus que les autres champs du formulaire. */
 .admin-article-title-field input {
-  font-size: 1.05rem;
+  font-size: 0.95rem;
   font-weight: 700;
 }
 

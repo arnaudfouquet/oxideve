@@ -353,7 +353,9 @@ export function AdminWorkspace({
   const [editingSessionId, setEditingSessionId] = useState(initialSessions[0]?.id || "");
   const [customCities, setCustomCities] = useState<string[]>([]);
   const [newCityInput, setNewCityInput] = useState("");
-  const [editingArticleSlug, setEditingArticleSlug] = useState(initialArticles[0]?.slug || "");
+  // Vide au depart : l'ecran Editorial ouvrait d'emblee le premier article en
+  // modification, ce qui laissait croire qu'on editait sans l'avoir demande.
+  const [editingArticleSlug, setEditingArticleSlug] = useState("");
   const [selectedParticipantId, setSelectedParticipantId] = useState("");
 
   const [participantSearch, setParticipantSearch] = useState("");
@@ -366,7 +368,7 @@ export function AdminWorkspace({
 
   const [formationDraft, setFormationDraft] = useState(toFormationDraft(initialFormations[0]));
   const [sessionDraft, setSessionDraft] = useState(toSessionDraft(initialSessions[0]));
-  const [articleDraft, setArticleDraft] = useState(toArticleDraft(initialArticles[0]));
+  const [articleDraft, setArticleDraft] = useState(toArticleDraft());
   const [articleSearch, setArticleSearch] = useState("");
   const [articleImageUploading, setArticleImageUploading] = useState(false);
 
