@@ -39,6 +39,7 @@ const {
   sendBulletinConfirmationEmail,
   sendQuizResultEmail,
   sendInternalRegistrationNotification,
+  sendRegistrationAcknowledgement,
   sendInternalBulletinNotification,
   sendLearnerQuizInviteEmail,
 } = require("../services/mailService");
@@ -339,10 +340,15 @@ function createApiRouter() {
       Promise.all([getFormationBySlug(registration.formationSlug), listSessions()])
         .then(([formation, sessions]) => {
           const session = sessions.find((item) => item.id === registration.sessionId) || null;
-          return sendInternalRegistrationNotification({ registration, formation, session });
+          return Promise.all([
+            sendInternalRegistrationNotification({ registration, formation, session }),
+            // Accusé de réception au prospect : il n'avait aucune trace de sa
+            // demande jusqu'ici.
+            sendRegistrationAcknowledgement({ registration, formation, session }),
+          ]);
         })
         .catch((error) => {
-          console.error("[api] Échec de l'envoi de la notification interne de pré-inscription", error);
+          console.error("[api] Échec de l'envoi des emails de pré-inscription", error);
         });
     })
   );

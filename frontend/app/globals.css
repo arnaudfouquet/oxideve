@@ -10829,3 +10829,46 @@ body.is-resizing-columns {
   padding: 0 18px;
   font-size: 0.86rem;
 }
+
+/* Pastille d anciennete des demandes non qualifiees (admin). */
+.admin-waiting {
+  font-weight: 700;
+}
+
+.admin-waiting-fresh {
+  color: var(--color-muted);
+}
+
+/* Au-dela de 2 jours : orange. Au-dela de 5 : rouge. */
+.admin-waiting-late {
+  color: #c77700;
+}
+
+.admin-waiting-urgent {
+  color: #d23b3b;
+}
+
+/* Encart des fiches sans date programmee. */
+.fd-signup-nodate {
+  display: grid;
+  gap: 6px;
+  margin: 0 auto 28px;
+  max-width: 640px;
+  padding: 16px 20px;
+  border: 1px solid rgba(9, 207, 101, 0.3);
+  border-radius: 12px;
+  background: var(--color-green-pale);
+  text-align: left;
+}
+
+.fd-signup-nodate strong {
+  color: var(--color-navy);
+  font-size: 0.95rem;
+}
+
+.fd-signup-nodate p {
+  margin: 0;
+  color: var(--color-muted);
+  font-size: 0.86rem;
+  line-height: 1.55;
+}

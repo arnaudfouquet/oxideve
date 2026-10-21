@@ -12,6 +12,8 @@ type Props = {
   sessions?: Session[];
   showSelectors?: boolean;
   submitLabel?: string;
+  /** Invite a indiquer ses disponibilites quand aucune date n est programmee. */
+  askAvailability?: boolean;
 };
 
 export function ContactForm({
@@ -22,6 +24,7 @@ export function ContactForm({
   sessions = [],
   showSelectors = false,
   submitLabel = "J'envoie mes informations pour me pré-inscrire",
+  askAvailability = false,
 }: Props) {
   const [status, setStatus] = useState<"idle" | "loading" | "success" | "error">("idle");
   const [message, setMessage] = useState("");
@@ -177,8 +180,17 @@ export function ContactForm({
         </>
       )}
       <label>
-        Besoin
-        <textarea className="ui-field contact-form-textarea" name="message" rows={5} placeholder="Objectif, nombre de stagiaires, besoin de financement, délais..." />
+        {askAvailability ? "Vos disponibilités et votre besoin" : "Besoin"}
+        <textarea
+          className="ui-field contact-form-textarea"
+          name="message"
+          rows={5}
+          placeholder={
+            askAvailability
+              ? "Périodes qui vous conviennent, nombre de stagiaires, lieu souhaité, besoin de financement..."
+              : "Objectif, nombre de stagiaires, besoin de financement, délais..."
+          }
+        />
       </label>
       <button className="ui-button ui-button-primary home-cta-arrow" type="submit" disabled={status === "loading"}>
         {status === "loading" ? "Envoi..." : submitLabel}

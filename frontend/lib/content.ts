@@ -100,13 +100,26 @@ function mergeByKey<T>(primary: T[], fallback: T[], getKey: (item: T) => string)
   return [...merged.values()];
 }
 
+/**
+ * La base est la seule référence : le fichier du catalogue ne sert que de
+ * secours quand la base est injoignable.
+ *
+ * Auparavant les deux sources étaient fusionnées, si bien qu'une formation ou
+ * une session supprimée dans l'admin réapparaissait sur le site tant qu'elle
+ * figurait dans le fichier — et qu'une session du fichier absente de la base
+ * s'affichait alors que toute inscription dessus échouait.
+ */
 export async function getFormations(): Promise<Formation[]> {
   try {
     const service = getCatalogService();
-    return mergeByKey(await service.listFormations(), catalog.formations, (formation) => formation.slug).sort(
-      (left, right) => left.title.localeCompare(right.title, "fr"),
-    );
-  } catch {
+    const formations = await service.listFormations();
+
+    // Base vide (jamais alimentée) : on sert le fichier plutôt qu'un site nu.
+    if (!formations.length) return catalog.formations;
+
+    return [...formations].sort((left, right) => left.title.localeCompare(right.title, "fr"));
+  } catch (error) {
+    console.error("[content] Les formations n'ont pas pu être chargées depuis la base", error);
     return catalog.formations;
   }
 }
@@ -119,10 +132,13 @@ export async function getFormationBySlug(slug: string): Promise<Formation | unde
 export async function getSessions(): Promise<Session[]> {
   try {
     const service = getCatalogService();
-    return mergeByKey(await service.listSessions(), catalog.sessions, (session) => session.id).sort(
-      (left, right) => left.startDate.localeCompare(right.startDate),
-    );
-  } catch {
+    const sessions = await service.listSessions();
+
+    // Aucune session en base : le site n'en affiche aucune. On ne retombe pas
+    // sur le fichier, sinon on proposerait des dates inexistantes en base.
+    return [...sessions].sort((left, right) => left.startDate.localeCompare(right.startDate));
+  } catch (error) {
+    console.error("[content] Les sessions n'ont pas pu être chargées depuis la base", error);
     return catalog.sessions;
   }
 }

@@ -444,11 +444,77 @@ async function sendLearnerQuizInviteEmail({ learner, formation, quizUrl }) {
   }
 }
 
+
+/**
+ * Accusé de réception envoyé au prospect après une pré-inscription.
+ *
+ * Jusqu'ici seule l'équipe était prévenue : le visiteur n'avait aucune trace
+ * de sa demande, ce qui génère des relances et de l'inquiétude.
+ */
+async function sendRegistrationAcknowledgement({ registration, formation, session }) {
+  const transporter = getTransporter();
+
+  if (!transporter || !registration.email) {
+    return { sent: false, reason: transporter ? "no_email" : "smtp_not_configured" };
+  }
+
+  const formationTitle = formation?.title || registration.formationSlug;
+  const sessionSummary = session ? `${formatDate(session.startDate)} au ${formatDate(session.endDate)}` : null;
+  const prenom = (registration.contactName || "").trim().split(/\s+/)[0] || "";
+
+  const html = `
+    <div style="font-family: Arial, sans-serif; color: #004d6d; max-width: 560px; margin: 0 auto;">
+      ${buildEmailLogoHeader()}
+      <h2 style="color: #004d6d;">Nous avons bien reçu votre demande</h2>
+      <p>Bonjour${prenom ? ` ${prenom}` : ""},</p>
+      <p>
+        Nous avons bien reçu votre demande d'information concernant la formation
+        <strong>${formationTitle}</strong>${sessionSummary ? ` (session du ${sessionSummary})` : ""}.
+      </p>
+      ${
+        sessionSummary
+          ? ""
+          : `<p>
+              Aucune date n'est encore programmée pour cette formation : notre équipe vous proposera
+              une session adaptée à vos disponibilités.
+            </p>`
+      }
+      <p><strong>Notre équipe vous recontacte sous 48 heures ouvrées</strong> pour préciser votre besoin
+      et vous accompagner dans les démarches de financement (OPCO, CPF, France Travail).</p>
+      <p style="margin-top: 24px;">
+        Une question d'ici là ? Écrivez-nous à
+        <a href="mailto:contact@oxideve.com" style="color: #009cdc;">contact@oxideve.com</a>
+        ou appelez le <strong>06.36.44.55.93</strong>.
+      </p>
+      <p style="margin-top: 32px; color: #4d6a78; font-size: 0.85rem;">
+        Oxideve - Organisme de formation professionnelle<br />
+        39 av Jean François Champollion, 31100 Toulouse
+      </p>
+    </div>
+  `;
+
+  try {
+    await transporter.sendMail({
+      from: process.env.MAIL_FROM || "no-reply@oxideve.fr",
+      to: registration.email,
+      subject: `Votre demande d'information — ${formationTitle}`,
+      html,
+      attachments: logoAttachment(),
+    });
+
+    return { sent: true };
+  } catch (error) {
+    console.error("[mailService] Échec de l'envoi de l'accusé de réception au prospect", error);
+    return { sent: false, reason: "send_error" };
+  }
+}
+
 module.exports = {
   isSmtpConfigured,
   sendBulletinConfirmationEmail,
   sendQuizResultEmail,
   sendInternalRegistrationNotification,
+  sendRegistrationAcknowledgement,
   sendInternalBulletinNotification,
   sendLearnerQuizInviteEmail,
 };

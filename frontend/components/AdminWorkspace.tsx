@@ -135,6 +135,28 @@ function formatRegistrationDate(value: string) {
   return `${get("day")}/${get("month")}/${get("year")} ${get("hour")}:${get("minute")}`;
 }
 
+/**
+ * Nombre de jours depuis la réception d'une demande encore à qualifier.
+ * Renvoie null dès que la demande a été traitée : l'ancienneté n'a alors plus
+ * d'intérêt.
+ */
+function waitingDays(row: { status: string; firstContactAt: string }) {
+  if (row.status !== "Pré-inscription (à qualifier)") return null;
+
+  const reception = new Date(row.firstContactAt);
+  if (Number.isNaN(reception.getTime())) return null;
+
+  const jour = 24 * 60 * 60 * 1000;
+  return Math.max(0, Math.floor((Date.now() - reception.getTime()) / jour));
+}
+
+/** Au-delà de 2 jours la demande est en retard, au-delà de 5 elle est urgente. */
+function waitingTone(days: number) {
+  if (days >= 5) return "urgent";
+  if (days >= 2) return "late";
+  return "fresh";
+}
+
 function formatShortDateTimeFr(value: string) {
   const date = new Date(value);
   const parts = new Intl.DateTimeFormat("fr-FR", {
@@ -2340,10 +2362,19 @@ export function AdminWorkspace({
                   sortValue: (row) => row.firstContactAt,
                   render: (row) => {
                     const [day, time] = formatShortDateTimeFr(row.firstContactAt).split(" - ");
+                    const attente = waitingDays(row);
                     return (
                       <span className="admin-cell-stack">
                         <strong>{day}</strong>
-                        <small>{time}</small>
+                        {/* Une demande non qualifiée depuis plusieurs jours est
+                            signalée ici, sinon elle se perd dans la liste. */}
+                        {attente !== null ? (
+                          <small className={`admin-waiting admin-waiting-${waitingTone(attente)}`}>
+                            {attente === 0 ? "aujourd'hui" : `depuis ${attente} j`}
+                          </small>
+                        ) : (
+                          <small>{time}</small>
+                        )}
                       </span>
                     );
                   },

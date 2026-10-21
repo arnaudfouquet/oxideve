@@ -154,6 +154,9 @@ async function main() {
           startDate: new Date(session.startDate),
           endDate: new Date(session.endDate),
           mode: session.mode,
+          // Marque d'origine : permet de distinguer les sessions issues du
+          // catalogue de celles créées dans l'admin.
+          source: "catalog",
         },
         update: {
           formationSlug: session.formationSlug,
@@ -161,7 +164,35 @@ async function main() {
           startDate: new Date(session.startDate),
           endDate: new Date(session.endDate),
           mode: session.mode,
+          source: "catalog",
         },
+      });
+    }
+
+    /*
+     * Sessions fantômes : créées par une exécution précédente du catalogue,
+     * puis retirées du fichier. Elles restaient affichées sur le site alors
+     * qu'elles n'existaient plus, et toute inscription sur l'une d'elles
+     * échouait. On ne supprime que celles portant la marque "catalog" ou
+     * l'ancien format d'identifiant (`...-1`, `...-2`), jamais une session
+     * saisie dans l'admin.
+     */
+    const currentSessionIds = sessions.map((session) => session.id);
+    const obsoletes = await prisma.session.findMany({
+      where: {
+        id: { notIn: currentSessionIds },
+        OR: [{ source: "catalog" }, { id: { endsWith: "-1" } }, { id: { endsWith: "-2" } }, { id: { endsWith: "-3" } }],
+      },
+      select: { id: true, startDate: true, city: true },
+    });
+
+    if (obsoletes.length) {
+      // Les inscriptions liées sont conservées : la relation est en
+      // onDelete: SetNull, leur session passe simplement à « non planifiée ».
+      await prisma.session.deleteMany({ where: { id: { in: obsoletes.map((item) => item.id) } } });
+      console.log(`Removed ${obsoletes.length} obsolete session(s) no longer present in the catalog:`);
+      obsoletes.slice(0, 10).forEach((item) => {
+        console.log(`  - ${item.startDate.toISOString().slice(0, 10)} ${item.city}`);
       });
     }
 

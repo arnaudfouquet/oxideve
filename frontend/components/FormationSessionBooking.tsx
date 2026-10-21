@@ -29,9 +29,24 @@ export function FormationSessionBooking({ formation, sessions }: Props) {
   return (
     <div className="session-booking-stack">
       <p className="fd-signup-note">
-        Ceci constitue la première étape de votre inscription. Dès réception de votre demande, vous serez contactés
-        pour valider celle-ci.
+        {sessions.length
+          ? "Ceci constitue la première étape de votre inscription. Dès réception de votre demande, vous serez contactés pour valider celle-ci."
+          : "Dès réception de votre demande, notre équipe vous recontacte pour organiser une session adaptée à vos disponibilités."}
       </p>
+
+      {/* Sans date programmée, un formulaire d'inscription classique laissait
+          croire à une erreur : on explique la démarche et on demande les
+          disponibilités, information utile pour planifier la session. */}
+      {sessions.length ? null : (
+        <div className="fd-signup-nodate">
+          <strong>Pas encore de date programmée pour cette formation</strong>
+          <p>
+            Cette formation est organisée à la demande, en inter-entreprises ou directement dans vos locaux.
+            Indiquez vos disponibilités souhaitées dans le message ci-dessous : nous vous proposons une session
+            sous 48 heures ouvrées.
+          </p>
+        </div>
+      )}
 
       {sessions.length ? (
         <div className="fd-signup-sessions">
@@ -62,7 +77,11 @@ export function FormationSessionBooking({ formation, sessions }: Props) {
             {formatDateRange(selectedSession.startDate, selectedSession.endDate)}
           </p>
         ) : null}
-        <ContactForm defaultFormationSlug={formation.slug} selectedSessionId={selectedSessionId} />
+        <ContactForm
+          askAvailability={!sessions.length}
+          defaultFormationSlug={formation.slug}
+          selectedSessionId={selectedSessionId}
+        />
       </div>
     </div>
   );
