@@ -10373,6 +10373,31 @@ a.ct-channel-value:hover {
   justify-content: center;
 }
 
+/* Ces boutons reprennent le vert des boutons d'action du site : le variant
+   primary est un degrade bleu, qui jurait avec la bordure verte de la carte
+   selectionnee. L'etat non choisi reste discret pour que la session retenue
+   se distingue au premier coup d'oeil. */
+.session-card .session-card-select.ui-button-secondary {
+  color: var(--color-navy);
+  background: var(--color-white);
+  border: 1px solid rgba(9, 207, 101, 0.45);
+  box-shadow: none;
+}
+
+.session-card .session-card-select.ui-button-secondary:hover {
+  border-color: var(--color-green);
+  background: rgba(9, 207, 101, 0.08);
+}
+
+.session-card .session-card-select.ui-button-primary {
+  background: var(--color-green);
+  box-shadow: none;
+}
+
+.session-card .session-card-select.ui-button-primary:hover {
+  box-shadow: 0 6px 18px rgba(9, 207, 101, 0.3);
+}
+
 
 /* Couleur du chevron par variante de bouton. Le trace est une image de fond :
    il ne peut pas heriter de --arrow-color, chaque variante fournit donc son
