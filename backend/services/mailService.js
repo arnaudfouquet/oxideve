@@ -509,8 +509,66 @@ async function sendRegistrationAcknowledgement({ registration, formation, sessio
   }
 }
 
+/**
+ * Export hebdomadaire : les agents gardent une copie hors ligne des demandes
+ * et des sessions a venir, utilisable si le site est indisponible.
+ */
+async function sendWeeklyExportEmail({ buffer, fileName, registrationsCount, sessionsCount }) {
+  const transporter = getTransporter();
+
+  if (!transporter) {
+    console.warn("[mailService] SMTP_HOST non configuré : export hebdomadaire non envoyé.");
+    return { sent: false, reason: "smtp_not_configured" };
+  }
+
+  const from = process.env.MAIL_FROM || "no-reply@oxideve.fr";
+  const recipients = (process.env.WEEKLY_EXPORT_EMAIL || INTERNAL_NOTIFICATION_EMAIL)
+    .split(",")
+    .map((address) => address.trim())
+    .filter(Boolean);
+
+  const today = new Date().toLocaleDateString("fr-FR", { day: "2-digit", month: "long", year: "numeric" });
+
+  const html = `
+    <div style="font-family: Arial, sans-serif; color: #004d6d; max-width: 560px; margin: 0 auto;">
+      ${buildEmailLogoHeader()}
+      <h2 style="color: #004d6d;">Export hebdomadaire du ${today}</h2>
+      <p>Vous trouverez en pièce jointe la liste à jour des demandes et des sessions à venir.</p>
+      <p><strong>Demandes :</strong> ${registrationsCount}</p>
+      <p><strong>Sessions à venir :</strong> ${sessionsCount}</p>
+      <p style="margin-top: 24px; color: #4d6a78; font-size: 13px;">
+        Ce fichier est une copie de sauvegarde : il reste consultable même si le site est indisponible.
+        Les informations à jour restent celles de l'espace d'administration.
+      </p>
+    </div>
+  `;
+
+  try {
+    await transporter.sendMail({
+      from,
+      to: recipients,
+      subject: `Oxideve — inscrits et formations en cours (${today})`,
+      html,
+      attachments: [
+        ...logoAttachment(),
+        {
+          filename: fileName,
+          content: buffer,
+          contentType: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+        },
+      ],
+    });
+
+    return { sent: true, recipients };
+  } catch (error) {
+    console.error("[mailService] Échec de l'envoi de l'export hebdomadaire", error);
+    return { sent: false, reason: "send_error" };
+  }
+}
+
 module.exports = {
   isSmtpConfigured,
+  sendWeeklyExportEmail,
   sendBulletinConfirmationEmail,
   sendQuizResultEmail,
   sendInternalRegistrationNotification,

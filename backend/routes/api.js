@@ -19,6 +19,8 @@ const { listCategoryVisuals, saveCategoryVisual } = require("../services/categor
 const { listReviews, createReview, updateReview, deleteReview } = require("../services/reviewService");
 const { createCompany, listCompanies, updateCompany } = require("../services/companyService");
 const { createCrmInteraction, createCrmTask, listCrmInteractions, listCrmTasks, updateCrmTask } = require("../services/crmService");
+const { buildWeeklyExportWorkbook, weeklyExportFileName } = require("../services/weeklyExportService");
+const { runWeeklyExport } = require("../scheduler");
 const {
   createRegistration,
   createManualRegistration,
@@ -588,6 +590,37 @@ function createApiRouter() {
   router.get("/admin/system-status", (_req, res) => {
     res.json({ data: { databaseConnected: isDatabaseConnected() } });
   });
+
+  // Telechargement direct de l'export, sans attendre l'envoi du vendredi.
+  router.get(
+    "/admin/export-hebdomadaire",
+    asyncHandler(async (_req, res) => {
+      const { buffer } = await buildWeeklyExportWorkbook();
+
+      res.setHeader("Content-Type", "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
+      res.setHeader("Content-Disposition", `attachment; filename="${weeklyExportFileName()}"`);
+      res.send(buffer);
+    })
+  );
+
+  // Declenche l'envoi par mail a la demande, pour verifier le parametrage.
+  router.post(
+    "/admin/export-hebdomadaire/envoyer",
+    asyncHandler(async (_req, res) => {
+      const result = await runWeeklyExport();
+
+      if (!result.sent) {
+        return res.status(502).json({
+          error:
+            result.reason === "smtp_not_configured"
+              ? "SMTP non configuré : l'export n'a pas pu être envoyé."
+              : "L'envoi de l'export a échoué.",
+        });
+      }
+
+      res.json({ data: result, message: `Export envoyé à ${result.recipients.join(", ")}` });
+    })
+  );
 
   router.get(
     "/admin/bulletin-inscriptions/:id/pdf",

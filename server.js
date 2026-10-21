@@ -2,6 +2,7 @@ const path = require("path");
 const fs = require("fs");
 const next = require("next");
 const { createBackendApp } = require("./backend/createApp");
+const { startScheduler } = require("./backend/scheduler");
 
 function loadDotEnv(filePath) {
   if (!fs.existsSync(filePath)) {
@@ -59,8 +60,15 @@ async function start() {
     console.log(`Oxideve listening on http://${host}:${port}`);
   });
 
+  const scheduledTasks = startScheduler();
+
   const shutdown = (signal) => {
     console.log(`Received ${signal}, shutting down`);
+
+    if (scheduledTasks) {
+      scheduledTasks.stop();
+    }
+
     server.close((error) => {
       if (error) {
         console.error("HTTP server shutdown failed", error);
