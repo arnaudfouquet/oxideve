@@ -1729,8 +1729,10 @@ main {
   font-weight: 700;
 }
 
+/* Pas de min-height : elle imposait 140 px (environ 5 lignes) et annulait
+   l'attribut rows du champ. La hauteur suit desormais rows, et le visiteur
+   peut toujours agrandir le champ. */
 .contact-form-textarea {
-  min-height: 140px;
   resize: vertical;
 }
 
