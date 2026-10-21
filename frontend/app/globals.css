@@ -7789,6 +7789,19 @@ main {
   color: var(--color-muted);
 }
 
+/* Compteur de caracteres : la limite est un conseil, pas un blocage, d'ou
+   l'avertissement en orange plutot qu'en rouge. */
+.admin-field-counter {
+  margin: 4px 0 0;
+  font-size: 0.78rem;
+  color: var(--color-muted);
+}
+
+.admin-field-counter-over {
+  color: #c77700;
+  font-weight: 600;
+}
+
 .admin-article-image-field {
   display: grid;
   gap: 10px;

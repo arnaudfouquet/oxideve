@@ -177,32 +177,15 @@ function toSessionDraft(session?: Session): SessionDraft {
   };
 }
 
-/**
- * Vrai si l'extrait correspond au début du contenu : c'est alors celui que le
- * serveur a généré, pas un texte écrit par l'utilisateur.
- */
-function isGeneratedExcerpt(article: Article) {
-  if (!article.excerpt || !article.bodyHtml) return false;
-
-  const plain = article.bodyHtml
-    .replace(/<[^>]*>/g, " ")
-    .replace(/&#39;/g, "'")
-    .replace(/&amp;/g, "&")
-    .replace(/\s+/g, " ")
-    .trim();
-
-  return plain.startsWith(article.excerpt.replace(/…$/, "").trim().slice(0, 60));
-}
-
 function toArticleDraft(article?: Article): ArticleDraft {
   return {
     slug: article?.slug || "",
     title: article?.title || "",
     category: article?.category || "",
-    // L'extrait est recalculé à chaque enregistrement quand il est vide. On ne
-    // le pré-remplit donc que s'il diffère de ce qui serait généré, sinon
-    // l'utilisateur croit avoir écrit un texte qu'il n'a pas saisi.
-    excerpt: article?.excerpt && !isGeneratedExcerpt(article) ? article.excerpt : "",
+    // L'accroche est desormais obligatoire : on charge celle enregistree,
+    // meme si elle avait ete generee, pour que l'auteur la reprenne plutot
+    // que de se retrouver devant un champ vide a chaque modification.
+    excerpt: article?.excerpt || "",
     // L'éditeur reçoit le HTML brut stocké, jamais le rendu public filtré :
     // sinon les tailles d'images et les blocs seraient perdus à chaque édition.
     bodyHtml: article?.bodyHtml || "",
@@ -2001,20 +1984,31 @@ export function AdminWorkspace({
                 <small className="admin-field-hint">JPG, PNG ou WEBP, 5 Mo maximum.</small>
               </div>
 
+              {/* L'accroche sert de meta description sur Google et de resume
+                  lors des partages : laissee vide, le serveur reprenait les
+                  200 premiers caracteres de l'article, souvent coupes en plein
+                  milieu. Elle est donc demandee explicitement. */}
               <label>
-                <span>
-                  Accroche
-                  <em className="admin-field-optional">
-                    {articleDraft.excerpt.trim() ? "personnalisée" : "générée automatiquement"}
-                  </em>
-                </span>
+                <span>Accroche</span>
+                <small className="admin-field-hint">
+                  Résumé affiché sur Google et lors des partages. 155 caractères environ.
+                </small>
                 <textarea
                   className="ui-field"
+                  required
                   rows={3}
                   value={articleDraft.excerpt}
                   onChange={(event) => setArticleDraft((current) => ({ ...current, excerpt: event.target.value }))}
-                  placeholder="Laissez vide : les premières phrases de l'article seront reprises."
+                  placeholder="Résumez l'article en une phrase, avec le mot-clé principal."
                 />
+                <small
+                  className={`admin-field-counter${
+                    articleDraft.excerpt.trim().length > 155 ? " admin-field-counter-over" : ""
+                  }`}
+                >
+                  {articleDraft.excerpt.trim().length} / 155 caractères conseillés
+                  {articleDraft.excerpt.trim().length > 155 ? " — Google coupera la fin" : ""}
+                </small>
               </label>
 
               <div className="admin-article-editor-field">
