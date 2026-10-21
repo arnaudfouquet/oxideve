@@ -61,9 +61,6 @@ export default async function ContactPage() {
           <h2 className="ct-card-title">
             Parlez-nous de <em>votre projet</em>
           </h2>
-          <p className="ct-card-lead">
-            Renseignez vos coordonnées et le contexte de votre demande.
-          </p>
           <ContactForm
             defaultFormationSlug={firstFormation?.slug}
             defaultSessionId={firstSession?.id}
