@@ -45,26 +45,24 @@ export default async function ContactPage() {
     <main className="ct-page">
       <section className="ct-hero">
         <Container className="ct-hero-inner">
-          <span className="ct-pill">Contact</span>
           <h1 className="ct-hero-title">
             Nous <em>contacter</em>
           </h1>
           <p className="ct-hero-lead">
-            Une question sur une formation, un financement ou une inscription ? Décrivez-nous votre
-            besoin : notre équipe vous rappelle et vous oriente vers le parcours adapté.
+            Une question sur une formation, un financement ou une inscription ?
+            <br />
+            Décrivez-nous votre besoin : notre équipe vous rappelle et vous oriente vers le parcours adapté.
           </p>
         </Container>
       </section>
 
       <Container className="ct-layout">
         <div className="ct-form-card">
-          <span className="ct-pill ct-pill-green">Votre demande</span>
           <h2 className="ct-card-title">
             Parlez-nous de <em>votre projet</em>
           </h2>
           <p className="ct-card-lead">
-            Renseignez vos coordonnées et le contexte de votre demande. Les champs marqués sont
-            nécessaires au traitement de votre dossier.
+            Renseignez vos coordonnées et le contexte de votre demande.
           </p>
           <ContactForm
             defaultFormationSlug={firstFormation?.slug}
@@ -106,7 +104,7 @@ export default async function ContactPage() {
               <ButtonLink href="/formations" variant="primary" className="home-cta-arrow ct-cta-blue">
                 Voir les formations
               </ButtonLink>
-              <ButtonLink href="/financement" variant="primary" className="home-cta-arrow ct-cta-green">
+              <ButtonLink href="/financement" variant="primary" className="home-cta-arrow ct-cta-blue">
                 Financer ma formation
               </ButtonLink>
             </div>

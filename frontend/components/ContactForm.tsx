@@ -184,7 +184,7 @@ export function ContactForm({
         <textarea
           className="ui-field contact-form-textarea"
           name="message"
-          rows={5}
+          rows={3}
           placeholder={
             askAvailability
               ? "Périodes qui vous conviennent, nombre de stagiaires, lieu souhaité, besoin de financement..."
