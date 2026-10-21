@@ -7,6 +7,7 @@ import { ArticleEditor } from "@/components/admin/ArticleEditor";
 import { getArticleCover } from "@/components/NewsCard";
 import { Drawer } from "@/components/admin/Drawer";
 import { getCategoryTheme, type CategoryVisual } from "@/lib/formation-theme";
+import { formatDateRange } from "@/lib/dates";
 import type { AdminUser, Article, Review, BulletinInscriptionWithAttempts, Company, CrmInteraction, CrmTask, Formation, Participant, ProgrammeDay, Registration, RegistrationNote, Session } from "../../shared/types";
 
 type Props = {
@@ -2339,23 +2340,51 @@ export function AdminWorkspace({
 
             <DataTable
               columns={[
+                // Dix colonnes ne tenaient pas en largeur : les informations
+                // liées sont regroupées deux par deux dans une même cellule
+                // (ligne principale + ligne secondaire en gris).
                 {
                   key: "firstContactAt",
-                  label: "Date",
+                  label: "Reçue le",
                   sortable: true,
-                  width: "118px",
+                  width: "88px",
                   sortValue: (row) => row.firstContactAt,
-                  render: (row) => formatShortDateTimeFr(row.firstContactAt),
+                  render: (row) => {
+                    const [day, time] = formatShortDateTimeFr(row.firstContactAt).split(" - ");
+                    return (
+                      <span className="admin-cell-stack">
+                        <strong>{day}</strong>
+                        <small>{time}</small>
+                      </span>
+                    );
+                  },
                 },
-                { key: "fullName", label: "Nom", sortable: true, sortValue: (row) => row.fullName, render: (row) => row.fullName },
-                { key: "company", label: "Entreprise", sortable: true, sortValue: (row) => row.company, render: (row) => row.company },
-                { key: "phone", label: "Téléphone", render: (row) => row.phone },
-                { key: "email", label: "Email", render: (row) => row.email },
+                {
+                  key: "fullName",
+                  label: "Contact",
+                  sortable: true,
+                  sortValue: (row) => row.fullName,
+                  render: (row) => (
+                    <span className="admin-cell-stack">
+                      <strong>{row.fullName}</strong>
+                      <small>{row.company}</small>
+                    </span>
+                  ),
+                },
+                {
+                  key: "email",
+                  label: "Coordonnées",
+                  render: (row) => (
+                    <span className="admin-cell-stack">
+                      <span className="admin-cell-email">{row.email}</span>
+                      <small>{row.phone}</small>
+                    </span>
+                  ),
+                },
                 {
                   key: "formation",
                   label: "Formation",
                   sortable: true,
-                  width: "150px",
                   sortValue: (row) => formations.find((item) => item.slug === row.formationSlug)?.shortTitle || row.formationSlug,
                   render: (row) => formations.find((item) => item.slug === row.formationSlug)?.shortTitle || row.formationSlug,
                 },
@@ -2366,22 +2395,21 @@ export function AdminWorkspace({
                   sortValue: (row) => sessions.find((item) => item.id === row.sessionId)?.startDate || "",
                   render: (row) => {
                     const session = sessions.find((item) => item.id === row.sessionId);
-                    return session ? formatSessionRange(session.startDate, session.endDate) : "—";
+                    if (!session) return "—";
+                    return (
+                      <span className="admin-cell-stack">
+                        <strong>{formatDateRange(session.startDate, session.endDate)}</strong>
+                        <small>{session.city}</small>
+                      </span>
+                    );
                   },
-                },
-                {
-                  key: "sessionCity",
-                  label: "Ville",
-                  sortable: true,
-                  sortValue: (row) => sessions.find((item) => item.id === row.sessionId)?.city || "",
-                  render: (row) => sessions.find((item) => item.id === row.sessionId)?.city || "—",
                 },
                 {
                   key: "status",
                   label: "Statut",
                   sortable: true,
                   sortValue: (row) => row.status,
-                  width: "190px",
+                  width: "150px",
                   render: (row) =>
                     row.registrationId && !AUTOMATIC_REGISTRATION_STATUSES.includes(row.status) ? (
                       <select
@@ -2403,8 +2431,8 @@ export function AdminWorkspace({
                 },
                 {
                   key: "actions",
-                  label: "Actions",
-                  width: "110px",
+                  label: "",
+                  width: "76px",
                   render: (row) => (
                     <div className="admin-row-actions">
                       {row.status !== "Non intéressé" && row.status !== "Inscription complétée" ? (

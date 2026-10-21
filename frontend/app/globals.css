@@ -10652,3 +10652,59 @@ a.ct-channel-value:hover {
     padding: 14px 28px 48px;
   }
 }
+
+
+/* ---------------------------------------------------------------
+   Tableaux de l'admin : tout tient dans la largeur de la fenetre
+   La variante compacte imposait nowrap + ellipsis a chaque cellule :
+   aucune colonne ne pouvait retrecir, d'ou le defilement horizontal.
+   --------------------------------------------------------------- */
+
+.admin-data-table-compact td {
+  white-space: normal;
+  overflow: visible;
+  text-overflow: clip;
+  max-width: none;
+}
+
+/* Cellule sur deux lignes : information principale + complement en gris. */
+.admin-cell-stack {
+  display: grid;
+  gap: 1px;
+  line-height: 1.3;
+}
+
+.admin-cell-stack strong {
+  font-weight: 600;
+  color: var(--color-navy);
+}
+
+.admin-cell-stack small {
+  font-size: 0.74rem;
+  color: var(--color-muted);
+}
+
+/* Un email ne contient pas d'espace : on l'autorise a se couper n'importe
+   ou plutot que d'elargir la colonne. */
+.admin-cell-email {
+  overflow-wrap: anywhere;
+  word-break: break-word;
+}
+
+/* Boutons d'action toujours alignes sur une ligne. */
+.admin-row-actions {
+  flex-wrap: nowrap;
+  gap: 4px;
+  justify-content: flex-end;
+}
+
+/* Selecteur de statut et badges a la largeur de leur colonne. */
+.admin-data-table .admin-inline-select {
+  width: 100%;
+  min-width: 0;
+}
+
+.admin-data-table .admin-status-badge {
+  white-space: normal;
+  line-height: 1.25;
+}
