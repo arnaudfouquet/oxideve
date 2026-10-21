@@ -6342,12 +6342,16 @@ main {
   gap: 8px;
 }
 
+/* Alignement en haut : quand la valeur passe sur deux lignes (« Pour qui »
+   des fiches au public detaille), un alignement centre faisait descendre
+   l'icone et le libelle au milieu du bloc, desalignes des autres lignes. */
 .cat-result-meta li {
   display: flex;
-  align-items: baseline;
+  align-items: flex-start;
   gap: 8px;
   color: var(--color-navy);
   font-size: 0.9rem;
+  line-height: 1.45;
 }
 
 /* Les SVG fournis sont gris très clair : on les recolore en vert de marque. */
@@ -6355,7 +6359,10 @@ main {
   width: 18px;
   height: 18px;
   flex: 0 0 auto;
-  align-self: center;
+  /* Centree sur la PREMIERE ligne de texte (hauteur de ligne 1.45em), et non
+     sur l'ensemble du bloc : l'icone reste ainsi face au libelle. */
+  align-self: flex-start;
+  margin-top: calc((1.45em - 18px) / 2);
   object-fit: contain;
   filter: brightness(0) saturate(100%) invert(62%) sepia(62%) saturate(2093%) hue-rotate(107deg) brightness(97%) contrast(92%);
 }
