@@ -17,8 +17,6 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     "/formations",
     "/financement",
     "/actualites",
-    "/calendrier",
-    "/inscriptions",
     "/contact",
     "/mentions-legales",
     "/politique-confidentialite",

@@ -8,7 +8,6 @@ export const metadata: Metadata = {
   description: "Contactez Oxideve pour obtenir des informations ou réserver une formation.",
 };
 
-const contactAddress = "39 av Jean François Champollion, 31100 Toulouse";
 const contactEmail = "contact@oxideve.com";
 const contactPhone = "06.36.44.55.93";
 
@@ -22,12 +21,6 @@ type ContactChannel = {
 
 const channels: ContactChannel[] = [
   {
-    icon: "/assets/formations/icone-lieu.svg",
-    label: "Nous rendre visite",
-    value: contactAddress,
-    hint: "Siège et centre de formation à Toulouse.",
-  },
-  {
     icon: "/assets/formations/icone-public.svg",
     label: "Nous écrire",
     value: contactEmail,
@@ -40,30 +33,6 @@ const channels: ContactChannel[] = [
     value: contactPhone,
     hint: "Du lundi au vendredi, de 9h à 18h.",
     href: `tel:+33${contactPhone.replace(/\D/g, "").slice(1)}`,
-  },
-];
-
-const legalItems = [
-  "Organisme de formation déclaré auprès du préfet de l'Occitanie n° 76 66 022 09 66",
-  "SIRET : 840 764 310 000 24",
-  "APE : 8559A",
-];
-
-const assurances = [
-  {
-    icon: "/assets/formations/icone-euro.svg",
-    title: "Financements accompagnés",
-    text: "OPCO, CPF, France Travail ou autofinancement : nous vous guidons dans vos démarches.",
-  },
-  {
-    icon: "/assets/formations/icone-heure.svg",
-    title: "Réponse rapide",
-    text: "Chaque demande est étudiée par un conseiller et traitée sous 48 heures ouvrées.",
-  },
-  {
-    icon: "/assets/formations/icone-public.svg",
-    title: "Parcours sur mesure",
-    text: "Sessions inter, intra ou formats adaptés à vos équipes et à vos contraintes.",
   },
 ];
 
@@ -127,15 +96,6 @@ export default async function ContactPage() {
             ))}
           </div>
 
-          <div className="ct-legal-card">
-            <h3 className="ct-legal-title">Informations administratives</h3>
-            <ul className="ct-legal-list">
-              {legalItems.map((item) => (
-                <li key={item}>{item}</li>
-              ))}
-            </ul>
-          </div>
-
           <div className="ct-links-card">
             <h3 className="ct-links-title">Avant de nous écrire</h3>
             <p className="ct-links-text">
@@ -153,23 +113,6 @@ export default async function ContactPage() {
           </div>
         </aside>
       </Container>
-
-      <section className="ct-assurance">
-        <Container>
-          <div className="ct-assurance-grid">
-            {assurances.map((item) => (
-              <article className="ct-assurance-card" key={item.title}>
-                <span className="ct-assurance-icon" aria-hidden="true">
-                  {/* eslint-disable-next-line @next/next/no-img-element */}
-                  <img src={item.icon} alt="" />
-                </span>
-                <h3 className="ct-assurance-title">{item.title}</h3>
-                <p className="ct-assurance-text">{item.text}</p>
-              </article>
-            ))}
-          </div>
-        </Container>
-      </section>
     </main>
   );
 }

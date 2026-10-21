@@ -43,7 +43,7 @@ export function SessionCard({
           {isSelected ? "Session sélectionnée" : "Choisir cette session"}
         </Button>
       ) : (
-        <ButtonLink href={`/inscriptions?formationSlug=${session.formationSlug}&sessionId=${session.id}`} variant="secondary">
+        <ButtonLink href={`/formations/${session.formationSlug}#inscription`} variant="secondary">
           Choisir cette session
         </ButtonLink>
       )}

@@ -283,7 +283,7 @@ export function HomeCalendarSection({ formations, sessions }: Props) {
                       <strong>{session.formationTitle}</strong>
                       <span>{formatDateRange(session.startDate, session.endDate)}</span>
                       <span>{session.category} · {session.city} · {session.mode}</span>
-                      <Link className="ui-button ui-button-card" href={`/inscriptions?formationSlug=${session.formationSlug}&sessionId=${session.id}`}>
+                      <Link className="ui-button ui-button-card" href={`/formations/${session.formationSlug}#inscription`}>
                         Découvrir
                       </Link>
                     </li>

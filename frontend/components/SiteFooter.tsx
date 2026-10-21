@@ -11,13 +11,10 @@ const navLinks = [
 
 const logoUrl = "https://oxideve.com/wp-content/uploads/2024/11/LOGO_OXIDEVE_BLANC_WEB_SVG.svg";
 
-function categoryAnchor(category: string) {
-  return `/formations#category-${category
-    .normalize("NFD")
-    .replace(/[̀-ͯ]/g, "")
-    .toLowerCase()
-    .replace(/[^a-z0-9]+/g, "-")
-    .replace(/^-+|-+$/g, "")}`;
+// Le catalogue restaure ses filtres depuis l'URL via ?categorie=<nom exact>
+// (voir FormationCatalog.tsx). Une ancre #category-... ne cochait donc rien.
+function categoryHref(category: string) {
+  return `/formations?categorie=${encodeURIComponent(category)}`;
 }
 
 export async function SiteFooter() {
@@ -50,7 +47,7 @@ export async function SiteFooter() {
             <h3>Formations principales</h3>
             <div className="site-footer-links">
               {categories.map((category) => (
-                <Link href={categoryAnchor(category)} key={category}>
+                <Link href={categoryHref(category)} key={category}>
                   {category}
                 </Link>
               ))}
@@ -65,6 +62,14 @@ export async function SiteFooter() {
               <span>{contactAddress}</span>
             </div>
           </div>
+        </div>
+
+        {/* Mentions administratives deplacees depuis la page contact, qui a ete
+            allegee : elles ont leur place sur toutes les pages. */}
+        <div className="site-footer-legal">
+          <span>Organisme de formation déclaré auprès du préfet de l'Occitanie n° 76 66 022 09 66</span>
+          <span>SIRET : 840 764 310 000 24</span>
+          <span>APE : 8559A</span>
         </div>
 
         <div className="site-footer-bottom">
