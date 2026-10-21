@@ -1359,7 +1359,6 @@ export function AdminWorkspace({
           <section className="admin-shell">
             <div className="section-heading section-heading-tight">
               <div>
-                <span className="eyebrow">Vue d&apos;ensemble</span>
                 <h2>Dashboard</h2>
                 <p>Catalogue, sessions et suivi des leads. Pour la liste détaillée, voir l&apos;onglet Inscriptions.</p>
               </div>
@@ -1374,7 +1373,6 @@ export function AdminWorkspace({
           <section className="admin-shell">
             <div className="section-heading section-heading-tight">
               <div>
-                <span className="eyebrow">Suivi</span>
                 <h2>Leads et conversion</h2>
                 <p>Répartition des inscriptions par statut, tous canaux confondus.</p>
               </div>
@@ -1428,7 +1426,7 @@ export function AdminWorkspace({
         <div className="admin-stack-grid">
           <section className="admin-shell">
             <div className="section-heading section-heading-tight">
-              <div><span className="eyebrow">Planning</span><h2>Sessions</h2></div>
+              <div><h2>Sessions</h2></div>
               <Button onClick={openNewSessionDrawer}>Nouvelle session</Button>
             </div>
             <div className="admin-filter-grid admin-filter-grid-compact">
@@ -1684,7 +1682,7 @@ export function AdminWorkspace({
 
       {section === "formations" ? (
         <section className="admin-shell">
-          <div className="section-heading section-heading-tight"><div><span className="eyebrow">Oxideve</span><h2>Formations</h2></div><Button onClick={openNewFormationDrawer}>Nouvelle formation</Button></div>
+          <div className="section-heading section-heading-tight"><div><h2>Formations</h2></div><Button onClick={openNewFormationDrawer}>Nouvelle formation</Button></div>
           <div className="admin-filter-grid admin-filter-grid-compact">
             <label><span>Recherche</span><input className="ui-field" value={formationSearch} onChange={(event) => setFormationSearch(event.target.value)} placeholder="Nom, catégorie..." /></label>
             <label>
@@ -1707,11 +1705,6 @@ export function AdminWorkspace({
                 render: (row) => (
                   <div className="admin-formation-title-cell">
                     <strong>{row.title}</strong>
-                    {/* Le titre court n'est affiché que s'il apporte une
-                        information : souvent il répète le titre. */}
-                    {row.shortTitle && row.shortTitle.trim() !== row.title.trim() ? (
-                      <span>{row.shortTitle}</span>
-                    ) : null}
                   </div>
                 ),
               },
@@ -2247,7 +2240,6 @@ export function AdminWorkspace({
           <section className="admin-shell">
             <div className="section-heading section-heading-tight">
               <div>
-                <span className="eyebrow">Sécurité</span>
                 <h2>Comptes administrateurs</h2>
                 <p>Créez un identifiant pour chaque personne qui gère le site. Chacun se connecte avec son propre email et mot de passe.</p>
               </div>
@@ -2274,7 +2266,6 @@ export function AdminWorkspace({
           <section className="admin-shell">
             <div className="section-heading section-heading-tight">
               <div>
-                <span className="eyebrow">Accès</span>
                 <h2>Comptes existants</h2>
               </div>
             </div>
@@ -2311,7 +2302,6 @@ export function AdminWorkspace({
           <section className="admin-shell">
             <div className="section-heading section-heading-tight">
               <div>
-                <span className="eyebrow">Suivi</span>
                 <h2>Inscriptions</h2>
               </div>
               <Button onClick={openManualRegistrationDrawer}>Ajouter une inscription</Button>
@@ -2362,7 +2352,7 @@ export function AdminWorkspace({
                   key: "fullName",
                   label: "Contact",
                   sortable: true,
-                  width: "170px",
+                  width: "17%",
                   sortValue: (row) => row.fullName,
                   render: (row) => (
                     <span className="admin-cell-stack">
@@ -2374,7 +2364,7 @@ export function AdminWorkspace({
                 {
                   key: "email",
                   label: "Coordonnées",
-                  width: "185px",
+                  width: "19%",
                   render: (row) => (
                     <span className="admin-cell-stack">
                       <span className="admin-cell-email">{row.email}</span>
@@ -2386,6 +2376,7 @@ export function AdminWorkspace({
                   key: "formation",
                   label: "Formation",
                   sortable: true,
+                  width: "13%",
                   sortValue: (row) => formations.find((item) => item.slug === row.formationSlug)?.shortTitle || row.formationSlug,
                   render: (row) => formations.find((item) => item.slug === row.formationSlug)?.shortTitle || row.formationSlug,
                 },
@@ -2393,7 +2384,7 @@ export function AdminWorkspace({
                   key: "sessionDates",
                   label: "Session",
                   sortable: true,
-                  width: "190px",
+                  width: "17%",
                   sortValue: (row) => sessions.find((item) => item.id === row.sessionId)?.startDate || "",
                   render: (row) => {
                     const session = sessions.find((item) => item.id === row.sessionId);
@@ -2411,7 +2402,7 @@ export function AdminWorkspace({
                   label: "Statut",
                   sortable: true,
                   sortValue: (row) => row.status,
-                  width: "185px",
+                  width: "16%",
                   render: (row) =>
                     row.registrationId && !AUTOMATIC_REGISTRATION_STATUSES.includes(row.status) ? (
                       <select
@@ -2492,6 +2483,7 @@ export function AdminWorkspace({
               getRowClassName={(row) => (row.status === "Pré-inscription (à qualifier)" ? "admin-data-table-row-new" : "")}
               pageSize={15}
               className="admin-data-table-compact admin-data-table-inscriptions"
+              resizeKey="inscriptions"
             />
           </section>
 
@@ -2685,7 +2677,7 @@ export function AdminWorkspace({
       {section === "clients" ? (
         <section className="admin-shell">
           <div className="section-heading section-heading-tight">
-            <div><span className="eyebrow">CRM</span><h2>Clients</h2></div>
+            <div><h2>Clients</h2></div>
           </div>
 
           <div className="admin-filter-grid admin-filter-grid-compact">
@@ -3169,7 +3161,6 @@ function CategoryVisualsPanel({
     <section className="admin-shell">
       <div className="section-heading section-heading-tight">
         <div>
-          <span className="eyebrow">Oxideve</span>
           <h2>Visuels</h2>
         </div>
       </div>

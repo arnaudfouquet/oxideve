@@ -4578,8 +4578,8 @@ main {
 /* Admin dashboard v2 — Linear/Notion/Vercel-style sober shell. Scoped under .admin-shell-v2 so it never touches public-site rules. */
 .admin-shell-v2 {
   display: grid;
-  /* 168 px suffisent aux libellés : la largeur gagnée profite aux tableaux. */
-  grid-template-columns: 168px minmax(0, 1fr);
+  /* Légèrement élargie (168 -> 184 px) pour que les libellés respirent. */
+  grid-template-columns: 184px minmax(0, 1fr);
   min-height: 100vh;
   background: #f7f8fa;
 }
@@ -10715,4 +10715,117 @@ a.ct-channel-value:hover {
    largeur, prend l espace restant. */
 .admin-data-table-inscriptions {
   table-layout: fixed;
+}
+
+
+/* ---------------------------------------------------------------
+   Colonnes redimensionnables (tableau des inscriptions)
+   --------------------------------------------------------------- */
+
+.admin-data-table-resizable th {
+  position: relative;
+}
+
+/* Poignee collee au bord droit de l'en-tete, entierement A L'INTERIEUR de la
+   cellule : les en-tetes collants forment chacun leur propre couche, et une
+   poignee qui debordait etait recouverte par la cellule voisine, donc
+   impossible a saisir. */
+.admin-col-resizer {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 2;
+  width: 10px;
+  cursor: col-resize;
+}
+
+.admin-col-resizer::after {
+  content: "";
+  position: absolute;
+  top: 25%;
+  bottom: 25%;
+  right: 0;
+  width: 2px;
+  border-radius: 2px;
+  background: transparent;
+  transition: background-color 120ms ease;
+}
+
+.admin-data-table-resizable th:hover .admin-col-resizer::after {
+  background: var(--color-light);
+}
+
+.admin-col-resizer:hover::after,
+body.is-resizing-columns .admin-col-resizer::after {
+  background: var(--color-blue);
+}
+
+/* Pendant le glissement : curseur stable et pas de selection de texte. */
+body.is-resizing-columns {
+  cursor: col-resize;
+  user-select: none;
+}
+
+.admin-col-reset {
+  justify-self: end;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: var(--color-blue);
+  font: inherit;
+  font-size: 0.76rem;
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+/* ---------------------------------------------------------------
+   Fenetres laterales (popups) de l'admin : typographie reduite
+   Les libelles en gras taille courante et les champs de 52 px
+   donnaient un formulaire massif pour quelques informations.
+   --------------------------------------------------------------- */
+
+.admin-drawer-body {
+  padding: 18px 22px;
+  gap: 14px;
+  font-size: 0.86rem;
+}
+
+.admin-drawer-body .contact-form {
+  gap: 14px;
+}
+
+.admin-drawer-body .form-grid {
+  gap: 10px 14px;
+}
+
+.admin-drawer-body .contact-form label {
+  gap: 4px;
+  font-size: 0.78rem;
+  font-weight: 600;
+}
+
+.admin-drawer-body .ui-field {
+  min-height: 38px;
+  padding: 8px 12px;
+  font-size: 0.86rem;
+}
+
+.admin-drawer-body textarea.ui-field {
+  min-height: 90px;
+}
+
+.admin-drawer-body h3 {
+  font-size: 0.95rem;
+}
+
+.admin-drawer-body p,
+.admin-drawer-body .admin-field-hint {
+  font-size: 0.78rem;
+}
+
+.admin-drawer-body .ui-button {
+  min-height: 38px;
+  padding: 0 18px;
+  font-size: 0.86rem;
 }
