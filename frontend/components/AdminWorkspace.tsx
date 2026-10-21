@@ -1706,7 +1706,11 @@ export function AdminWorkspace({
                 render: (row) => (
                   <div className="admin-formation-title-cell">
                     <strong>{row.title}</strong>
-                    <span>{row.shortTitle}</span>
+                    {/* Le titre court n'est affiché que s'il apporte une
+                        information : souvent il répète le titre. */}
+                    {row.shortTitle && row.shortTitle.trim() !== row.title.trim() ? (
+                      <span>{row.shortTitle}</span>
+                    ) : null}
                   </div>
                 ),
               },
@@ -2339,7 +2343,7 @@ export function AdminWorkspace({
                   key: "firstContactAt",
                   label: "Date",
                   sortable: true,
-                  width: "160px",
+                  width: "118px",
                   sortValue: (row) => row.firstContactAt,
                   render: (row) => formatShortDateTimeFr(row.firstContactAt),
                 },
@@ -2357,7 +2361,7 @@ export function AdminWorkspace({
                 },
                 {
                   key: "sessionDates",
-                  label: "Date de formation",
+                  label: "Session",
                   sortable: true,
                   sortValue: (row) => sessions.find((item) => item.id === row.sessionId)?.startDate || "",
                   render: (row) => {

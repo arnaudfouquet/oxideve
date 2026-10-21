@@ -4578,7 +4578,8 @@ main {
 /* Admin dashboard v2 — Linear/Notion/Vercel-style sober shell. Scoped under .admin-shell-v2 so it never touches public-site rules. */
 .admin-shell-v2 {
   display: grid;
-  grid-template-columns: 196px minmax(0, 1fr);
+  /* 168 px suffisent aux libellés : la largeur gagnée profite aux tableaux. */
+  grid-template-columns: 168px minmax(0, 1fr);
   min-height: 100vh;
   background: #f7f8fa;
 }
@@ -10553,4 +10554,101 @@ a.ct-channel-value:hover {
   display: -webkit-box;
   -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
+}
+
+
+/* ---------------------------------------------------------------
+   Densite des tableaux de l'admin
+   Les lignes etaient hautes et le tableau debordait en largeur : la
+   colonne Actions sortait de l'ecran et les boutons s'empilaient.
+   --------------------------------------------------------------- */
+
+/* Plus de marge laterale perdue : l'admin travaille en pleine largeur. */
+.admin-shell-v2-main {
+  padding: 14px 20px 40px;
+}
+
+/* Les en-tetes peuvent passer a la ligne plutot que d'elargir le tableau. */
+.admin-data-table th {
+  white-space: normal;
+  font-size: 0.72rem;
+  line-height: 1.25;
+}
+
+.admin-data-table th,
+.admin-data-table td {
+  padding: 7px 10px;
+  font-size: 0.82rem;
+}
+
+/* Les valeurs longues sont bridees en largeur et passent a la ligne plutot
+   que d etirer le tableau. On evite l ellipsis, qui masquerait l information
+   sans moyen de la lire. */
+.admin-data-table td {
+  max-width: 240px;
+  overflow-wrap: anywhere;
+}
+
+/* Colonnes etroites : pas de retour a la ligne inutile. */
+.admin-data-table td:first-child,
+.admin-data-table .admin-cell-tight {
+  white-space: nowrap;
+}
+
+/* Les boutons d'action restent sur une seule ligne. */
+.admin-table-actions {
+  flex-wrap: nowrap;
+  gap: 5px;
+  justify-content: flex-end;
+}
+
+.admin-icon-button {
+  width: 24px;
+  height: 24px;
+  font-size: 0.78rem;
+}
+
+/* Les selecteurs de statut dans les lignes : plus compacts. */
+.admin-data-table select.ui-field,
+.admin-data-table input.ui-field {
+  min-height: 28px;
+  padding: 2px 8px;
+  font-size: 0.78rem;
+}
+
+/* Barre de filtres plus ramassee. */
+.admin-filter-grid {
+  gap: 10px;
+}
+
+.admin-filter-grid label {
+  gap: 4px;
+  font-size: 0.78rem;
+}
+
+.admin-filter-grid .ui-field {
+  min-height: 32px;
+  padding: 4px 10px;
+  font-size: 0.82rem;
+}
+
+/* En-tete de section : moins de hauteur perdue avant le tableau. */
+.admin-shell .section-heading-tight {
+  margin-bottom: 10px;
+}
+
+.admin-shell .section-heading-tight h2 {
+  font-size: 1.25rem;
+}
+
+.admin-shell .section-heading-tight p {
+  margin: 4px 0 0;
+  font-size: 0.8rem;
+}
+
+@media (min-width: 1500px) {
+  /* Sur grand ecran on laisse respirer un peu plus. */
+  .admin-shell-v2-main {
+    padding: 14px 28px 48px;
+  }
 }
