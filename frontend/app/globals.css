@@ -10708,3 +10708,11 @@ a.ct-channel-value:hover {
   white-space: normal;
   line-height: 1.25;
 }
+
+/* Tableau des inscriptions : largeurs de colonnes imposees. En mise en page
+   automatique, le navigateur elargissait Contact et Coordonnees selon leur
+   contenu au detriment de Session et Statut. La colonne Formation, sans
+   largeur, prend l espace restant. */
+.admin-data-table-inscriptions {
+  table-layout: fixed;
+}

@@ -2313,7 +2313,6 @@ export function AdminWorkspace({
               <div>
                 <span className="eyebrow">Suivi</span>
                 <h2>Inscriptions</h2>
-                <p>Toutes les demandes, du premier contact à l&apos;inscription complétée — pré-inscriptions rapides et bulletins d&apos;inscription fusionnés en une seule liste par personne.</p>
               </div>
               <Button onClick={openManualRegistrationDrawer}>Ajouter une inscription</Button>
             </div>
@@ -2347,7 +2346,7 @@ export function AdminWorkspace({
                   key: "firstContactAt",
                   label: "Reçue le",
                   sortable: true,
-                  width: "88px",
+                  width: "100px",
                   sortValue: (row) => row.firstContactAt,
                   render: (row) => {
                     const [day, time] = formatShortDateTimeFr(row.firstContactAt).split(" - ");
@@ -2363,6 +2362,7 @@ export function AdminWorkspace({
                   key: "fullName",
                   label: "Contact",
                   sortable: true,
+                  width: "170px",
                   sortValue: (row) => row.fullName,
                   render: (row) => (
                     <span className="admin-cell-stack">
@@ -2374,6 +2374,7 @@ export function AdminWorkspace({
                 {
                   key: "email",
                   label: "Coordonnées",
+                  width: "185px",
                   render: (row) => (
                     <span className="admin-cell-stack">
                       <span className="admin-cell-email">{row.email}</span>
@@ -2392,6 +2393,7 @@ export function AdminWorkspace({
                   key: "sessionDates",
                   label: "Session",
                   sortable: true,
+                  width: "190px",
                   sortValue: (row) => sessions.find((item) => item.id === row.sessionId)?.startDate || "",
                   render: (row) => {
                     const session = sessions.find((item) => item.id === row.sessionId);
@@ -2409,7 +2411,7 @@ export function AdminWorkspace({
                   label: "Statut",
                   sortable: true,
                   sortValue: (row) => row.status,
-                  width: "150px",
+                  width: "185px",
                   render: (row) =>
                     row.registrationId && !AUTOMATIC_REGISTRATION_STATUSES.includes(row.status) ? (
                       <select
@@ -2489,7 +2491,7 @@ export function AdminWorkspace({
               isRowActive={(row) => selectedParticipantId === row.id}
               getRowClassName={(row) => (row.status === "Pré-inscription (à qualifier)" ? "admin-data-table-row-new" : "")}
               pageSize={15}
-              className="admin-data-table-compact"
+              className="admin-data-table-compact admin-data-table-inscriptions"
             />
           </section>
 
