@@ -8255,10 +8255,14 @@ main {
 .fin-cta-green,
 .fin-cta-blue,
 .fin-support-cta,
+/* Gabarit general des boutons du site : coins a 10 px. Les boutons sans
+   .home-cta-arrow (choix de session, liens secondaires) restaient en pilule
+   et detonnaient a cote des autres. */
 .fd-head-actions .ui-button,
 .fd-local-cta,
 .fd-signup-card .ui-button,
-.session-booking-stack .ui-button {
+.session-booking-stack .ui-button,
+.session-card .ui-button {
   border-radius: 10px;
 }
 
@@ -10288,6 +10292,15 @@ a.ct-channel-value:hover {
   max-width: 620px;
   text-align: center;
   color: var(--color-muted);
+}
+
+/* Rappel du nom complet de la formation sous le titre de la section. */
+.fd-signup-formation {
+  margin: -6px auto 22px;
+  max-width: 620px;
+  text-align: center;
+  font-weight: 600;
+  color: var(--color-navy);
 }
 
 .fd-signup-sessions {

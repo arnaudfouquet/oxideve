@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import Link from "next/link";
 import type { Formation } from "../../shared/types";
 import { getCategoryTheme, indexCategoryVisuals, type CategoryVisual } from "@/lib/formation-theme";
@@ -170,6 +170,7 @@ export function FormationCatalog({
   const [sort, setSort] = useState<SortKey>("session");
   const [page, setPage] = useState(1);
   const [hydrated, setHydrated] = useState(false);
+  const layoutRef = useRef<HTMLDivElement>(null);
 
   // Restaure l'état depuis l'URL au premier rendu (lien partagé, retour arrière).
   useEffect(() => {
@@ -213,6 +214,23 @@ export function FormationCatalog({
     const query = params.toString();
     window.history.replaceState(null, "", query ? `?${query}` : window.location.pathname);
   }, [hydrated, remoteOnly, search, selectedCategories, selectedCities, selectedFunding, selectedMonths, sort]);
+
+  // Filtrer raccourcit la liste : la position de scroll d'avant peut ne plus
+  // exister, et le navigateur colle alors le visiteur en bas de page sans
+  // qu'il comprenne pourquoi. On recadre donc sur le haut du catalogue, mais
+  // seulement s'il est deja sorti de l'ecran — sinon on bougerait la page
+  // alors que le visiteur voit deja ses resultats. La recherche texte est
+  // volontairement exclue : elle sauterait a chaque caractere saisi.
+  useEffect(() => {
+    if (!hydrated) return;
+
+    const layout = layoutRef.current;
+    if (!layout) return;
+
+    if (layout.getBoundingClientRect().top >= 0) return;
+
+    layout.scrollIntoView({ behavior: "smooth", block: "start" });
+  }, [hydrated, remoteOnly, selectedCategories, selectedCities, selectedFunding, selectedMonths, sort]);
 
   function toggle<T extends string>(list: T[], setList: (next: T[]) => void, value: T) {
     setList(list.includes(value) ? list.filter((item) => item !== value) : [...list, value]);
@@ -395,7 +413,7 @@ export function FormationCatalog({
   const visibleResults = results.slice(0, currentPage * PAGE_SIZE);
 
   return (
-    <div className="cat-layout">
+    <div className="cat-layout" ref={layoutRef}>
       <aside className="cat-sidebar">
         <div className="cat-sidebar-head">
           <span className="cat-sidebar-title">

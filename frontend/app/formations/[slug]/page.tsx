@@ -356,7 +356,10 @@ export default async function FormationDetailPage({ params }: Props) {
         <Container>
           <div className="fd-card fd-signup-card">
             <span className="fd-pill fd-pill-blue">Inscription</span>
-            <h2>Préparer votre inscription à {formation.shortTitle}</h2>
+            {/* On reprend le titre complet, celui du H1 : le libelle court du
+                catalogue donnait un nom different de celui de la page. */}
+            <h2>Préparer votre inscription</h2>
+            <p className="fd-signup-formation">{formation.title}</p>
             <FormationSessionBooking formation={formation} sessions={sessions} />
           </div>
         </Container>
