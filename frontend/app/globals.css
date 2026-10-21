@@ -8923,12 +8923,14 @@ main {
 
 /* Le contenu chevauche le bas de l'en-tête, comme la barre d'ancres de la
    page Financement. */
+/* stretch (et non start) : la colonne de droite occupe toute la hauteur du
+   formulaire, les deux colonnes se terminent donc exactement au meme niveau. */
 .ct-layout {
   position: relative;
   z-index: 2;
   display: grid;
   grid-template-columns: 1.15fr 0.85fr;
-  align-items: start;
+  align-items: stretch;
   gap: 28px;
   margin-top: -56px;
 }
@@ -8968,8 +8970,12 @@ main {
   background: var(--color-green);
 }
 
+/* L'espace disponible est reparti entre les deux blocs plutot que laisse en
+   bas : les cartes restent a leur hauteur naturelle, les ecarts s'ajustent. */
 .ct-aside {
-  display: grid;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
   gap: 20px;
 }
 
