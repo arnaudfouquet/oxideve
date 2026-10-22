@@ -106,7 +106,20 @@ function drawDocumentTitle(doc, title, eyebrow, reserveDroite = 0) {
 }
 
 /** Titre de section navy souligné d'un filet vert. */
+/**
+ * Un titre de section ne doit pas rester seul en bas de page : on saute a la
+ * page suivante s'il ne reste pas la place d'afficher le titre et les
+ * premieres lignes qui le suivent.
+ */
 function drawSectionTitle(doc, title) {
+  const basUtile = doc.page.height - doc.page.margins.bottom;
+  // Titre (environ 30 pt avec son filet) et trois lignes de contenu.
+  const placeNecessaire = 30 + 3 * 14;
+
+  if (doc.y + placeNecessaire > basUtile) {
+    doc.addPage();
+  }
+
   doc.moveDown(0.8);
   doc.fillColor(NAVY).fontSize(13).font("Helvetica-Bold").text(title);
   doc.moveDown(0.25);
@@ -157,9 +170,23 @@ function drawParagraph(doc, text, options = {}) {
 function drawBulletList(doc, items) {
   if (!Array.isArray(items) || !items.length) return;
 
+  const basUtile = doc.page.height - doc.page.margins.bottom;
+
   items.forEach((item) => {
-    doc.fillColor(MUTED).fontSize(10).font("Helvetica").text(`•  ${item}`, { indent: 8, lineGap: 2 });
+    doc.fillColor(MUTED).fontSize(10).font("Helvetica");
+
+    // Une puce ne doit pas etre coupee en deux par un saut de page : si elle
+    // ne tient pas entierement, on la reporte sur la page suivante.
+    const hauteur = doc.heightOfString(`•  ${item}`, { indent: 8, lineGap: 2 });
+
+    if (doc.y + hauteur > basUtile) {
+      doc.addPage();
+      doc.fillColor(MUTED).fontSize(10).font("Helvetica");
+    }
+
+    doc.text(`•  ${item}`, { indent: 8, lineGap: 2 });
   });
+
   doc.moveDown(0.4);
 }
 

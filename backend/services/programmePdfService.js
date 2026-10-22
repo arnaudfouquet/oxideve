@@ -46,11 +46,13 @@ function generateProgrammePdf(formation) {
         largeurLogos,
       );
       drawPartnerLogos(doc, formation.partnerLogos, hautTitre);
-      drawParagraph(doc, formation.summary, { size: 10.5 });
 
+      // Le resume n'est pas repris : la section Presentation plus bas dit la
+      // meme chose en plus complet.
       drawSectionTitle(doc, "Informations pratiques");
-      drawFactRow(doc, "Durée", formation.duration);
-      drawFactRow(doc, "Durée détaillée", formation.durationDetails);
+      // Une seule ligne de duree : le detail porte deja le nombre de jours
+      // ("3 jours, soit 21 heures..."), la ligne courte faisait doublon.
+      drawFactRow(doc, "Durée", formation.durationDetails || formation.duration);
       drawFactRow(doc, "Public", formation.audience);
       drawFactRow(doc, "Lieu", formation.location);
       drawFactRow(doc, "Tarif", formation.cpfEligible ? `${formation.price} — Finançable CPF` : formation.price);
