@@ -6770,15 +6770,6 @@ main {
   pointer-events: none;
 }
 
-/* Le bandeau est trop bas pour loger le point d'interrogation dans l'angle
-   sans le couper ni le cacher derriere le bouton : il suit donc le titre. */
-.fd-local-mark {
-  display: inline;
-  margin-left: 2px;
-  color: var(--color-blue);
-  font-weight: 800;
-}
-
 .fd-local-title {
   margin: 0 0 6px;
   font-weight: 700;

@@ -216,10 +216,7 @@ export default async function FormationDetailPage({ params }: Props) {
 
           <div className="fd-local">
             <div className="fd-local-copy">
-              <p className="fd-local-title">
-                Vous souhaitez suivre cette formation près de chez vous
-                <span className="fd-local-mark">?</span>
-              </p>
+              <p className="fd-local-title">Vous souhaitez suivre cette formation près de chez vous ?</p>
               <p className="fd-local-text">Cette formation peut être organisée partout en France, selon les demandes et les possibilités.</p>
             </div>
             <svg className="fd-local-pin" viewBox="0 0 48 60" aria-hidden="true">
