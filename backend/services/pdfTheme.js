@@ -130,7 +130,15 @@ function drawDocumentTitle(doc, title, eyebrow, reserveDroite = 0) {
   }
 
   doc.fillColor(NAVY).fontSize(20).font("Helvetica-Bold").text(title, { lineGap: 2, width: largeur });
-  doc.moveDown(0.4);
+
+  // Marge calculee en corps de texte, pas en corps 20 : le moveDown suivant
+  // du titre de section suffit, sinon un blanc restait sous le titre depuis
+  // la suppression du resume.
+  doc.fontSize(10);
+  // Le titre de section suivant ouvre deja par un moveDown(0.8) : on le
+  // neutralise une fois, sinon un blanc restait sous le titre du document
+  // depuis la suppression du resume.
+  doc._sortDuTitre = true;
 }
 
 /** Titre de section navy souligné d'un filet vert. */
@@ -148,7 +156,16 @@ function drawSectionTitle(doc, title) {
     doc.addPage();
   }
 
-  doc.moveDown(0.8);
+  // Juste apres le titre du document, un espace reduit : les deux marges
+  // cumulees laissaient un blanc trop large, mais sans rien le titre de
+  // section venait se coller au titre.
+  if (doc._sortDuTitre) {
+    doc._sortDuTitre = false;
+    doc.moveDown(0.5);
+  } else {
+    doc.moveDown(0.8);
+  }
+
   doc.fillColor(NAVY).fontSize(13).font("Helvetica-Bold").text(title);
   doc.moveDown(0.25);
   const y = doc.y;
