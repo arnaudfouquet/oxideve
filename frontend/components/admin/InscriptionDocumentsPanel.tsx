@@ -74,6 +74,11 @@ export function InscriptionDocumentsPanel({
   const [search, setSearch] = useState("");
   const [filtreFormation, setFiltreFormation] = useState("");
 
+  // Edition en place : la ligne du document devient un formulaire.
+  const [editingId, setEditingId] = useState("");
+  const [editDraft, setEditDraft] = useState({ label: "", description: "", formationSlug: "" });
+  const [savingEdit, setSavingEdit] = useState(false);
+
   const [templateScope, setTemplateScope] = useState("");
   const [template, setTemplate] = useState<Template>({ subject: "", body: "", formationSlug: "" });
 
@@ -225,6 +230,47 @@ export function InscriptionDocumentsPanel({
     onFeedback("Document ajouté");
   }
 
+  function startEdit(document: Document) {
+    setEditingId(document.id);
+    setEditDraft({
+      label: document.label,
+      description: document.description,
+      formationSlug: document.formationSlug,
+    });
+  }
+
+  async function saveEdit(id: string) {
+    if (!editDraft.label.trim()) {
+      onError("L'intitulé ne peut pas être vide.");
+      return;
+    }
+
+    setSavingEdit(true);
+
+    const response = await fetch(`/api/admin/inscription-documents/${id}`, {
+      method: "PATCH",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        label: editDraft.label.trim(),
+        description: editDraft.description.trim(),
+        formationSlug: editDraft.formationSlug,
+      }),
+    });
+
+    setSavingEdit(false);
+
+    if (!response.ok) {
+      onError("Le document n'a pas pu être modifié.");
+      return;
+    }
+
+    const payload = (await response.json()) as { data: Document };
+
+    setDocuments((current) => current.map((item) => (item.id === id ? payload.data : item)));
+    setEditingId("");
+    onFeedback("Document modifié");
+  }
+
   async function togglePublished(document: Document) {
     const response = await fetch(`/api/admin/inscription-documents/${document.id}`, {
       method: "PATCH",
@@ -298,6 +344,69 @@ export function InscriptionDocumentsPanel({
   }
 
   function renderDocument(document: Document) {
+    // En edition, la ligne devient un formulaire : seul le fichier n'est pas
+    // modifiable, il faudrait en deposer un nouveau.
+    if (editingId === document.id) {
+      return (
+        <li className="admin-doc is-editing" key={document.id}>
+          <div className="admin-doc-edit">
+            <div className="form-grid">
+              <label>
+                Intitulé
+                <input
+                  className="ui-field"
+                  onChange={(event) => setEditDraft((current) => ({ ...current, label: event.target.value }))}
+                  type="text"
+                  value={editDraft.label}
+                />
+              </label>
+              <label>
+                Formation concernée
+                <select
+                  className="ui-field"
+                  onChange={(event) => setEditDraft((current) => ({ ...current, formationSlug: event.target.value }))}
+                  value={editDraft.formationSlug}
+                >
+                  <option value="">Toutes les formations</option>
+                  {formations.map((formation) => (
+                    <option key={formation.slug} value={formation.slug}>
+                      {formation.title.trim()}
+                    </option>
+                  ))}
+                </select>
+              </label>
+            </div>
+
+            <label>
+              Précision
+              <input
+                className="ui-field"
+                maxLength={400}
+                onChange={(event) => setEditDraft((current) => ({ ...current, description: event.target.value }))}
+                placeholder="à signer et à nous renvoyer"
+                type="text"
+                value={editDraft.description}
+              />
+            </label>
+
+            <small className="admin-field-hint">
+              Fichier : {document.fileName} · {formatSize(document.fileSize)} — pour le remplacer, déposez un nouveau
+              document et supprimez celui-ci.
+            </small>
+
+            <div className="admin-doc-edit-actions">
+              <Button disabled={savingEdit} onClick={() => saveEdit(document.id)} variant="primary">
+                {savingEdit ? "Enregistrement..." : "Enregistrer"}
+              </Button>
+              <Button onClick={() => setEditingId("")} variant="secondary">
+                Annuler
+              </Button>
+            </div>
+          </div>
+        </li>
+      );
+    }
+
     return (
       <li className={`admin-doc${document.published ? "" : " is-hidden"}`} key={document.id}>
         <div className="admin-doc-main">
@@ -312,6 +421,9 @@ export function InscriptionDocumentsPanel({
           </span>
         </div>
         <div className="admin-doc-actions">
+          <button className="admin-copy-button" onClick={() => startEdit(document)} type="button">
+            Modifier
+          </button>
           <button className="admin-copy-button" onClick={() => togglePublished(document)} type="button">
             {document.published ? "Masquer" : "Afficher"}
           </button>

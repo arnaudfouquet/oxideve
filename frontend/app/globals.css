@@ -8177,6 +8177,37 @@ main {
   opacity: 0.55;
 }
 
+/* En edition, la ligne s'ouvre en formulaire et occupe toute la largeur. */
+.admin-doc.is-editing {
+  display: block;
+  border-color: rgba(0, 156, 220, 0.4);
+  background: rgba(0, 156, 220, 0.04);
+}
+
+.admin-doc-edit {
+  display: grid;
+  gap: 12px;
+}
+
+.admin-doc-edit .ui-field {
+  min-height: 36px;
+  padding: 6px 12px;
+  font-size: 0.86rem;
+}
+
+.admin-doc-edit label {
+  display: grid;
+  gap: 4px;
+  font-size: 0.78rem;
+  font-weight: 700;
+  color: var(--color-navy);
+}
+
+.admin-doc-edit-actions {
+  display: flex;
+  gap: 8px;
+}
+
 .admin-doc-main {
   display: grid;
   gap: 2px;
