@@ -65,8 +65,11 @@ export default async function FormationDetailPage({ params }: Props) {
   // avant le tiret pour la mettre en avant dans le titre. Les titres sans
   // tiret (la majorite) restent affiches tels quels.
   const titleParts = (() => {
-    const separe = formation.title.trim().match(/^(.+?)\s+[-–—]\s+(.+)$/);
-    return separe ? { lead: separe[1], rest: separe[2] } : { lead: "", rest: "" };
+    // Le tiret lui-même est conservé : il appartient au titre.
+    const separe = formation.title.trim().match(/^(.+?)\s+([-–—])\s+(.+)$/);
+    return separe
+      ? { lead: separe[1], separator: separe[2], rest: separe[3] }
+      : { lead: "", separator: "", rest: "" };
   })();
 
   const sessions = await getSessionsForFormation(slug);
@@ -166,7 +169,7 @@ export default async function FormationDetailPage({ params }: Props) {
                     dispositif : c'est elle qu'on cherche, on l'accentue. */}
                 {titleParts.lead ? (
                   <>
-                    <strong>{titleParts.lead}</strong> {titleParts.rest}
+                    <strong>{titleParts.lead}</strong> {titleParts.separator} {titleParts.rest}
                   </>
                 ) : (
                   formation.title
