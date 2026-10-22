@@ -1269,9 +1269,10 @@ main {
   border: 2px solid transparent;
 }
 
+/* Bordure bleue, accordee au bouton de la carte selectionnee. */
 .session-card-selected {
-  border-color: var(--color-green);
-  box-shadow: 0 20px 48px rgba(9, 207, 101, 0.18);
+  border-color: var(--color-blue);
+  box-shadow: 0 20px 48px rgba(0, 156, 220, 0.18);
 }
 
 .formation-card-head,
@@ -6655,6 +6656,11 @@ main {
   font-weight: 700;
 }
 
+/* Le titre est en graisse 500 : la partie mise en avant ressort en 800. */
+.fd-head-copy h1 strong {
+  font-weight: 800;
+}
+
 .fd-summary {
   margin: 0 0 28px;
   max-width: 520px;
@@ -6728,8 +6734,11 @@ main {
 
 /* Bandeau "près de chez vous" : texte à gauche, pictogramme de localisation
    qui dépasse en haut au centre, CTA à droite. */
+/* overflow hidden : l'epingle deborde du bandeau et se fait rogner par ses
+   bords arrondis, ce qui la fait paraitre encastree dedans. */
 .fd-local {
   position: relative;
+  overflow: hidden;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -6745,13 +6754,27 @@ main {
   min-width: 0;
 }
 
-/* L'épingle vit dans le bandeau, entre le texte et le bouton : en position
-   absolue elle débordait au-dessus du cadre. */
+/* Grande epingle calee sur le bord droit, a cheval sur le cadre : seule la
+   partie interieure reste visible, le reste est rogne par overflow hidden.
+   Elle est decorative, donc hors du flux et sans interception du pointeur. */
 .fd-local-pin {
-  flex: 0 0 auto;
-  width: 34px;
-  height: 42px;
+  position: absolute;
+  top: 50%;
+  right: -26px;
+  transform: translateY(-50%);
+  width: 96px;
+  height: 120px;
+  opacity: 0.9;
   pointer-events: none;
+}
+
+/* Le bandeau est trop bas pour loger le point d'interrogation dans l'angle
+   sans le couper ni le cacher derriere le bouton : il suit donc le titre. */
+.fd-local-mark {
+  display: inline;
+  margin-left: 2px;
+  color: var(--color-blue);
+  font-weight: 800;
 }
 
 .fd-local-title {
@@ -10835,29 +10858,29 @@ a.ct-channel-value:hover {
   justify-content: center;
 }
 
-/* Ces boutons reprennent le vert des boutons d'action du site : le variant
-   primary est un degrade bleu, qui jurait avec la bordure verte de la carte
-   selectionnee. L'etat non choisi reste discret pour que la session retenue
-   se distingue au premier coup d'oeil. */
+/* Boutons de session en bleu : le vert est reserve aux appels a l'action
+   principaux de la page, le choix d'une session est une etape intermediaire.
+   L'etat non choisi reste discret pour que la session retenue se distingue au
+   premier coup d'oeil. */
 .session-card .session-card-select.ui-button-secondary {
   color: var(--color-navy);
   background: var(--color-white);
-  border: 1px solid rgba(9, 207, 101, 0.45);
+  border: 1px solid rgba(0, 156, 220, 0.45);
   box-shadow: none;
 }
 
 .session-card .session-card-select.ui-button-secondary:hover {
-  border-color: var(--color-green);
-  background: rgba(9, 207, 101, 0.08);
+  border-color: var(--color-blue);
+  background: rgba(0, 156, 220, 0.08);
 }
 
 .session-card .session-card-select.ui-button-primary {
-  background: var(--color-green);
+  background: var(--color-blue);
   box-shadow: none;
 }
 
 .session-card .session-card-select.ui-button-primary:hover {
-  box-shadow: 0 6px 18px rgba(9, 207, 101, 0.3);
+  box-shadow: 0 6px 18px rgba(0, 156, 220, 0.3);
 }
 
 

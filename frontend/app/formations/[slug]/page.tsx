@@ -61,6 +61,14 @@ export default async function FormationDetailPage({ params }: Props) {
     notFound();
   }
 
+  // "IRVE certifiée - Infrastructures de recharge" -> on isole la partie
+  // avant le tiret pour la mettre en avant dans le titre. Les titres sans
+  // tiret (la majorite) restent affiches tels quels.
+  const titleParts = (() => {
+    const separe = formation.title.trim().match(/^(.+?)\s+[-–—]\s+(.+)$/);
+    return separe ? { lead: separe[1], rest: separe[2] } : { lead: "", rest: "" };
+  })();
+
   const sessions = await getSessionsForFormation(slug);
   const allFormations = await getFormations();
   const relatedSlugSet = new Set((formation.relatedSlugs || []).map((link) => link.slug));
@@ -154,7 +162,15 @@ export default async function FormationDetailPage({ params }: Props) {
             <div className="fd-head-copy">
               <span className="fd-category">{formation.category}</span>
               <h1>
-                {formation.title}
+                {/* La partie avant le tiret nomme la certification ou le
+                    dispositif : c'est elle qu'on cherche, on l'accentue. */}
+                {titleParts.lead ? (
+                  <>
+                    <strong>{titleParts.lead}</strong> {titleParts.rest}
+                  </>
+                ) : (
+                  formation.title
+                )}
                 {formation.levelLabel ? <em> {formation.levelLabel}</em> : null}
               </h1>
               <p className="fd-summary">{formation.summary}</p>
@@ -197,7 +213,10 @@ export default async function FormationDetailPage({ params }: Props) {
 
           <div className="fd-local">
             <div className="fd-local-copy">
-              <p className="fd-local-title">Vous souhaitez suivre cette formation près de chez vous ?</p>
+              <p className="fd-local-title">
+                Vous souhaitez suivre cette formation près de chez vous
+                <span className="fd-local-mark">?</span>
+              </p>
               <p className="fd-local-text">Cette formation peut être organisée partout en France, selon les demandes et les possibilités.</p>
             </div>
             <svg className="fd-local-pin" viewBox="0 0 48 60" aria-hidden="true">

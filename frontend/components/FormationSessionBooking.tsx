@@ -29,9 +29,15 @@ export function FormationSessionBooking({ formation, sessions }: Props) {
   return (
     <div className="session-booking-stack">
       <p className="fd-signup-note">
-        {sessions.length
-          ? "Ceci constitue la première étape de votre inscription. Dès réception de votre demande, vous serez contactés pour valider celle-ci."
-          : "Dès réception de votre demande, notre équipe vous recontacte pour organiser une session adaptée à vos disponibilités."}
+        {sessions.length ? (
+          <>
+            Ceci constitue la première étape de votre inscription.
+            <br />
+            Dès réception de votre demande, vous serez contactés pour valider celle-ci.
+          </>
+        ) : (
+          "Dès réception de votre demande, notre équipe vous recontacte pour organiser une session adaptée à vos disponibilités."
+        )}
       </p>
 
       {/* Sans date programmée, un formulaire d'inscription classique laissait
