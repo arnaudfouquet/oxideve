@@ -1,6 +1,7 @@
 const fs = require("fs");
 const path = require("path");
 const nodemailer = require("nodemailer");
+const { createBrevoTransport } = require("./brevoTransport");
 
 const LOGO_PATH = path.join(__dirname, "..", "assets", "oxideve-logo.png");
 const LOGO_CID = "oxideve-logo";
@@ -14,7 +15,7 @@ let transporterSingleton = null;
 let warnedMissingConfig = false;
 
 function isSmtpConfigured() {
-  return Boolean(process.env.SMTP_HOST);
+  return Boolean(process.env.BREVO_API_KEY || process.env.SMTP_HOST);
 }
 
 function getTransporter() {
@@ -23,6 +24,13 @@ function getTransporter() {
   }
 
   if (transporterSingleton) {
+    return transporterSingleton;
+  }
+
+  // L'API HTTPS prime sur le SMTP : les ports SMTP sont bloques sur certains
+  // reseaux d'entreprise, le port 443 passe partout.
+  if (process.env.BREVO_API_KEY) {
+    transporterSingleton = createBrevoTransport(process.env.BREVO_API_KEY);
     return transporterSingleton;
   }
 
