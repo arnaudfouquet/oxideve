@@ -7828,10 +7828,11 @@ main {
   color: rgba(255, 255, 255, 0.82);
 }
 
-/* Deux colonnes sur grand ecran : un retour se lit vite, on en voit plus. */
+/* Quatre tuiles de front des que la largeur le permet : un retour se lit
+   vite, autant en voir le plus possible sans defiler. */
 .admin-feedback-list {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
   gap: 14px;
 }
 
@@ -7963,14 +7964,19 @@ main {
 
 /* ===================== RETOURS DE RECETTE ===================== */
 
-/* Une seule colonne : le formulaire, puis la liste de ce qui est deja signale. */
+/* Pleine largeur pour afficher quatre tuiles de retours de front. Le
+   formulaire, lui, reste etroit : des champs de 1400 px seraient illisibles. */
 .feedback-layout {
   position: relative;
   z-index: 2;
   display: grid;
   gap: 32px;
-  max-width: 860px;
   margin-top: -56px;
+}
+
+.feedback-layout > .ct-form-card {
+  width: 100%;
+  max-width: 860px;
 }
 
 .feedback-board-head {
