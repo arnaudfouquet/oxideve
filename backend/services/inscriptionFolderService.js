@@ -1,3 +1,5 @@
+const fs = require("fs");
+const path = require("path");
 const { randomBytes } = require("crypto");
 
 const { getPrismaClient } = require("./prismaClient");
@@ -91,6 +93,24 @@ async function createDocument(payload) {
   return normalizeDocument(document);
 }
 
+/**
+ * Supprime le fichier du disque. Sans incidence s'il a deja disparu : la
+ * ligne en base reste la reference, un fichier orphelin ne doit pas faire
+ * echouer l'operation.
+ */
+function removeFileFromDisk(fileUrl) {
+  if (!fileUrl) return;
+
+  const nom = path.basename(fileUrl);
+  const chemin = path.join(__dirname, "..", "uploads", "documents", nom);
+
+  try {
+    if (fs.existsSync(chemin)) fs.unlinkSync(chemin);
+  } catch (error) {
+    console.error(`[inscriptionFolder] Fichier non supprimé : ${nom}`, error.message);
+  }
+}
+
 async function updateDocument(id, payload) {
   const prisma = getPrismaClient();
   const data = {};
@@ -102,14 +122,35 @@ async function updateDocument(id, payload) {
   if (payload.position !== undefined) data.position = payload.position;
   if (payload.published !== undefined) data.published = payload.published;
 
+  // Remplacement du fichier : on ecrase les references puis on efface
+  // l'ancien, une fois la base a jour pour ne pas perdre le nouveau en cas
+  // d'echec.
+  let ancien = null;
+
+  if (payload.fileUrl) {
+    const actuel = await prisma.inscriptionDocument.findUnique({ where: { id } });
+    ancien = actuel && actuel.fileUrl !== payload.fileUrl ? actuel.fileUrl : null;
+
+    data.fileUrl = payload.fileUrl;
+    data.fileName = payload.fileName;
+    data.fileSize = payload.fileSize || 0;
+  }
+
   const document = await prisma.inscriptionDocument.update({ where: { id }, data });
+
+  if (ancien) removeFileFromDisk(ancien);
 
   return normalizeDocument(document);
 }
 
 async function deleteDocument(id) {
   const prisma = getPrismaClient();
+  const document = await prisma.inscriptionDocument.findUnique({ where: { id } });
+
   await prisma.inscriptionDocument.delete({ where: { id } });
+
+  // Le fichier n'a plus de raison d'occuper le disque.
+  if (document) removeFileFromDisk(document.fileUrl);
 }
 
 /** Modele propre a la formation, a defaut le modele general, a defaut le texte livre. */

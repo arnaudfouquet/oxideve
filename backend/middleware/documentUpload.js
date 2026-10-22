@@ -92,6 +92,12 @@ const storage = multer.diskStorage({
 const upload = multer({ storage, fileFilter, limits: { fileSize: MAX_FILE_SIZE } });
 
 function handleDocumentUpload(req, res, next) {
+  // Requete JSON : rien a televerser, on passe la main. La meme route sert
+  // ainsi aux modifications simples et au remplacement du fichier.
+  if (!String(req.headers["content-type"] || "").startsWith("multipart/form-data")) {
+    return next();
+  }
+
   upload.single("document")(req, res, (error) => {
     if (!error) {
       return rejectIfNotADocument(req, res, next);

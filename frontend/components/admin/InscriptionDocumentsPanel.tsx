@@ -87,6 +87,7 @@ export function InscriptionDocumentsPanel({
   const [apercuLoading, setApercuLoading] = useState(false);
 
   const fileRef = useRef<HTMLInputElement>(null);
+  const editFileRef = useRef<HTMLInputElement>(null);
   const bodyRef = useRef<HTMLTextAreaElement>(null);
 
   const titreParSlug = useMemo(() => {
@@ -247,15 +248,32 @@ export function InscriptionDocumentsPanel({
 
     setSavingEdit(true);
 
-    const response = await fetch(`/api/admin/inscription-documents/${id}`, {
-      method: "PATCH",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        label: editDraft.label.trim(),
-        description: editDraft.description.trim(),
-        formationSlug: editDraft.formationSlug,
-      }),
-    });
+    const nouveauFichier = editFileRef.current?.files?.[0];
+
+    // Avec un fichier, l'envoi passe en multipart ; sinon on garde le JSON,
+    // plus simple a lire cote serveur.
+    let requete: RequestInit;
+
+    if (nouveauFichier) {
+      const body = new FormData();
+      body.set("label", editDraft.label.trim());
+      body.set("description", editDraft.description.trim());
+      body.set("formationSlug", editDraft.formationSlug);
+      body.set("document", nouveauFichier);
+      requete = { method: "PATCH", body };
+    } else {
+      requete = {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          label: editDraft.label.trim(),
+          description: editDraft.description.trim(),
+          formationSlug: editDraft.formationSlug,
+        }),
+      };
+    }
+
+    const response = await fetch(`/api/admin/inscription-documents/${id}`, requete);
 
     setSavingEdit(false);
 
@@ -389,10 +407,14 @@ export function InscriptionDocumentsPanel({
               />
             </label>
 
-            <small className="admin-field-hint">
-              Fichier : {document.fileName} · {formatSize(document.fileSize)} — pour le remplacer, déposez un nouveau
-              document et supprimez celui-ci.
-            </small>
+            <label>
+              Remplacer le fichier
+              <input accept=".pdf,.doc,.docx" className="ui-field" ref={editFileRef} type="file" />
+              <small className="admin-field-hint">
+                Fichier actuel : {document.fileName} · {formatSize(document.fileSize)}. Laissez vide pour le
+                conserver ; l&apos;ancien fichier est supprimé en cas de remplacement.
+              </small>
+            </label>
 
             <div className="admin-doc-edit-actions">
               <Button disabled={savingEdit} onClick={() => saveEdit(document.id)} variant="primary">

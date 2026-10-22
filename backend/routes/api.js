@@ -1078,22 +1078,35 @@ function createApiRouter() {
     })
   );
 
+  // handleDocumentUpload passe la main quand la requete n'est pas multipart :
+  // la meme route sert donc aux modifications simples et au remplacement du
+  // fichier.
   router.patch(
     "/admin/inscription-documents/:id",
+    handleDocumentUpload,
     asyncHandler(async (req, res) => {
       const payload = z
         .object({
           label: z.string().min(1).max(160).optional(),
           description: z.string().max(400).optional(),
           formationSlug: z.string().max(160).optional(),
-          position: z.number().int().optional(),
-          published: z.boolean().optional(),
+          position: z.coerce.number().int().optional(),
+          published: z.coerce.boolean().optional(),
         })
-        .parse(req.body);
+        .parse(req.body || {});
+
+      if (req.file) {
+        payload.fileUrl = `/uploads/documents/${req.file.filename}`;
+        payload.fileName = req.file.originalname;
+        payload.fileSize = req.file.size;
+      }
 
       const document = await updateDocument(req.params.id, payload);
 
-      res.json({ data: document, message: "Document mis à jour" });
+      res.json({
+        data: document,
+        message: req.file ? "Document et fichier mis à jour" : "Document mis à jour",
+      });
     })
   );
 
