@@ -42,6 +42,8 @@ model Formation {
   seoDescription  String        @db.Text
   videoUrl        String?
   rgeBadge        Json?
+  // Logos des organismes associes (Feebat...), distincts du badge RGE.
+  partnerLogos    Json?
   priceMemberLabel String?
   priceMember     String?
   memberProgram   Json?

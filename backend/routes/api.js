@@ -679,7 +679,9 @@ function createApiRouter() {
       const pdfBuffer = await generateProgrammePdf(formation);
 
       res.set("Content-Type", "application/pdf");
-      res.set("Content-Disposition", `attachment; filename="programme-${formation.slug}.pdf"`);
+      // inline : le PDF s'ouvre dans l'onglet au lieu d'etre telecharge. Le
+      // nom de fichier reste utilise si le lecteur propose l'enregistrement.
+      res.set("Content-Disposition", `inline; filename="programme-${formation.slug}.pdf"`);
       return res.send(pdfBuffer);
     })
   );

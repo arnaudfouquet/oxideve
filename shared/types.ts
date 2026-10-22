@@ -18,6 +18,15 @@ export type RgeBadge = {
   imageUrl: string;
 };
 
+/**
+ * Logo d'un organisme associe a la formation (Feebat, etc.). Distinct du badge
+ * RGE, qui atteste la qualification : une formation peut porter les deux.
+ */
+export type PartnerLogo = {
+  label: string;
+  imageUrl: string;
+};
+
 export type FormationStats = {
   participantsLastYear?: number;
   successCount?: number;
@@ -68,6 +77,7 @@ export type Formation = {
   tilePosition?: string | null;
   videoUrl?: string | null;
   rgeBadge?: RgeBadge | null;
+  partnerLogos?: PartnerLogo[] | null;
   priceMemberLabel?: string | null;
   priceMember?: string | null;
   memberProgram?: { name: string; description: string; logoUrl?: string } | null;

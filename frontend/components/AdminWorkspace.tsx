@@ -1216,6 +1216,14 @@ export function AdminWorkspace({
         <Button variant="secondary" onClick={refreshAdminData} disabled={refreshing}>
           {refreshing ? "Actualisation..." : "Rafraîchir"}
         </Button>
+
+        {/* Le meme classeur que l'envoi automatique du vendredi, telechargeable
+            a la demande. Un lien plutot qu'un fetch : le navigateur gere le
+            telechargement du fichier. */}
+        <a className="admin-shell-v2-export" href="/api/admin/export-hebdomadaire">
+          Exporter en Excel
+          <small>Inscrits et sessions à venir</small>
+        </a>
       </nav>
 
       <div className="admin-shell-v2-main">
@@ -1634,7 +1642,7 @@ export function AdminWorkspace({
                   target="_blank"
                   rel="noreferrer"
                 >
-                  Télécharger en PDF
+                  Voir le programme en PDF
                 </a>
               ) : null}
             </nav>

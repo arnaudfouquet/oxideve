@@ -6801,7 +6801,14 @@ main {
   line-height: 1.6;
 }
 
+/* Le bloc peut porter le badge RGE et un ou plusieurs logos partenaires :
+   ils se rangent cote a cote, centres sur la meme ligne de base visuelle. */
 .fd-purpose-badges {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 20px;
   padding: 20px;
   border-radius: 16px;
   background: #ffffff;
@@ -6811,6 +6818,13 @@ main {
   display: block;
   width: 190px;
   height: auto;
+}
+
+/* Les logos partenaires sont plus hauts que larges : on les cale sur la
+   hauteur du badge plutot que sur sa largeur. */
+.fd-purpose-badges .fd-purpose-partner {
+  width: auto;
+  max-height: 120px;
 }
 
 /* Corps : description + infos pratiques */
@@ -7787,6 +7801,35 @@ main {
   margin: 4px 0 0;
   font-size: 0.8rem;
   color: var(--color-muted);
+}
+
+/* Export Excel, en pied de barre laterale : il concerne tout l'admin, pas une
+   section en particulier. */
+.admin-shell-v2-export {
+  display: grid;
+  gap: 2px;
+  margin-top: 10px;
+  padding: 10px 14px;
+  border: 1px solid rgba(9, 207, 101, 0.4);
+  border-radius: 10px;
+  background: rgba(9, 207, 101, 0.08);
+  color: var(--color-navy);
+  font-size: 0.86rem;
+  font-weight: 700;
+  text-align: center;
+  text-decoration: none;
+  transition: background-color 180ms ease, border-color 180ms ease;
+}
+
+.admin-shell-v2-export:hover {
+  border-color: var(--color-green);
+  background: rgba(9, 207, 101, 0.16);
+}
+
+.admin-shell-v2-export small {
+  color: var(--color-muted);
+  font-size: 0.74rem;
+  font-weight: 500;
 }
 
 /* ----- Admin : ecran Retours ----- */

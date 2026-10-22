@@ -2747,7 +2747,13 @@
           "slug": "initiation-pac-airh2o"
         }
       ],
-      "cpfEligible": false
+      "cpfEligible": false,
+      "partnerLogos": [
+        {
+          "label": "Feebat",
+          "imageUrl": "/assets/formations/logo-feebat.webp"
+        }
+      ]
     },
     {
       "id": "irve-niveau-1",

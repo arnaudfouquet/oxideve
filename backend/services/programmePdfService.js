@@ -8,7 +8,9 @@ const {
   drawDocumentTitle,
   drawFactRow,
   drawParagraph,
+  drawPartnerLogos,
   drawSectionTitle,
+  measurePartnerLogos,
 } = require("./pdfTheme");
 
 /**
@@ -32,11 +34,18 @@ function generateProgrammePdf(formation) {
 
       applyPageFrame(doc);
 
+      // Les logos partenaires se placent a hauteur du titre, a droite : on
+      // retient l'ordonnee avant de l'ecrire et on lui reserve la largeur.
+      const hautTitre = doc.y;
+      const largeurLogos = measurePartnerLogos(doc, formation.partnerLogos);
+
       drawDocumentTitle(
         doc,
         formation.levelLabel ? `${formation.title} — ${formation.levelLabel}` : formation.title,
         formation.category,
+        largeurLogos,
       );
+      drawPartnerLogos(doc, formation.partnerLogos, hautTitre);
       drawParagraph(doc, formation.summary, { size: 10.5 });
 
       drawSectionTitle(doc, "Informations pratiques");

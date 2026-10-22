@@ -88,13 +88,20 @@ function contentTop(doc) {
 }
 
 /** Titre de document : surtitre vert optionnel puis titre navy. */
-function drawDocumentTitle(doc, title, eyebrow) {
+/**
+ * `reserveDroite` laisse une bande libre a droite du titre, ou viennent se
+ * placer les logos partenaires : sans elle, le titre passait dessous.
+ */
+function drawDocumentTitle(doc, title, eyebrow, reserveDroite = 0) {
+  const largeur =
+    doc.page.width - doc.page.margins.left - doc.page.margins.right - (reserveDroite ? reserveDroite + 16 : 0);
+
   if (eyebrow) {
-    doc.fillColor(GREEN).fontSize(10).font("Helvetica-Bold").text(eyebrow.toUpperCase());
+    doc.fillColor(GREEN).fontSize(10).font("Helvetica-Bold").text(eyebrow.toUpperCase(), { width: largeur });
     doc.moveDown(0.3);
   }
 
-  doc.fillColor(NAVY).fontSize(20).font("Helvetica-Bold").text(title, { lineGap: 2 });
+  doc.fillColor(NAVY).fontSize(20).font("Helvetica-Bold").text(title, { lineGap: 2, width: largeur });
   doc.moveDown(0.4);
 }
 
@@ -161,6 +168,107 @@ function formatDate(value) {
   return new Intl.DateTimeFormat("fr-FR", { day: "2-digit", month: "2-digit", year: "numeric" }).format(new Date(value));
 }
 
+/**
+ * Retrouve le fichier a passer a PDFKit pour un logo du site.
+ *
+ * PDFKit ne lit que le JPEG et le PNG, alors que le site sert du WebP : on
+ * cherche d'abord une version PNG dans backend/assets, deposee a cote du
+ * logo du site. Renvoie null si aucun fichier exploitable n'existe.
+ */
+function resolveLogoFile(imageUrl) {
+  const nom = path.basename(String(imageUrl || ""));
+  if (!nom) return null;
+
+  const sansExtension = nom.replace(/\.[^.]+$/, "");
+
+  const candidats = [
+    path.join(__dirname, "..", "assets", `${sansExtension}.png`),
+    path.join(__dirname, "..", "assets", `${sansExtension}.jpg`),
+    path.join(__dirname, "..", "..", "frontend", "public", String(imageUrl).replace(/^\//, "")),
+  ];
+
+  return candidats.find((chemin) => /\.(png|jpe?g)$/i.test(chemin) && fs.existsSync(chemin)) || null;
+}
+
+/**
+ * Logos des organismes associes a la formation (Feebat...). Un logo
+ * introuvable ou illisible est ignore : un PDF sans logo vaut mieux qu'une
+ * generation en echec.
+ */
+/**
+ * Dessine les logos en haut a droite du bloc de titre, hors du flux : places
+ * dans le flux, ils laissaient un bloc flottant a gauche qui empietait sur la
+ * section suivante. `hautDepart` est l'ordonnee du haut du titre.
+ */
+const LOGO_HEIGHT = 46;
+const LOGO_GAP = 12;
+
+/**
+ * Largeur occupee par les logos, pour reserver la place a droite du titre.
+ * Renvoie 0 quand aucun logo n'est exploitable.
+ */
+function measurePartnerLogos(doc, logos) {
+  if (!Array.isArray(logos) || !logos.length) return 0;
+
+  let total = 0;
+
+  for (const logo of logos) {
+    const chemin = resolveLogoFile(logo.imageUrl);
+    if (!chemin) continue;
+
+    try {
+      const image = doc.openImage(chemin);
+      total += (image.width / image.height) * LOGO_HEIGHT + LOGO_GAP;
+    } catch (error) {
+      /* logo illisible : il ne sera pas dessine non plus */
+    }
+  }
+
+  return total ? total - LOGO_GAP : 0;
+}
+
+function drawPartnerLogos(doc, logos, hautDepart) {
+  if (!Array.isArray(logos) || !logos.length) return;
+
+  const hauteur = LOGO_HEIGHT;
+  const ecart = LOGO_GAP;
+  const droite = doc.page.width - doc.page.margins.right;
+
+  const curseurX = doc.x;
+  const curseurY = doc.y;
+
+  const haut = typeof hautDepart === "number" ? hautDepart : curseurY;
+
+  // On dessine de droite a gauche pour rester cale sur la marge droite.
+  let x = droite;
+
+  for (const logo of [...logos].reverse()) {
+    const chemin = resolveLogoFile(logo.imageUrl);
+
+    if (!chemin) {
+      console.warn(`[pdfTheme] Logo introuvable en PNG/JPEG, ignoré : ${logo.imageUrl}`);
+      continue;
+    }
+
+    try {
+      // La largeur reelle depend du ratio : on la calcule pour caler le logo
+      // sur sa droite sans deborder de la marge.
+      const image = doc.openImage(chemin);
+      const largeur = (image.width / image.height) * hauteur;
+
+      x -= largeur;
+      doc.image(chemin, x, haut, { height: hauteur });
+      x -= ecart;
+    } catch (error) {
+      console.error(`[pdfTheme] Logo illisible, ignoré : ${logo.imageUrl}`, error);
+    }
+  }
+
+  // Hors flux : le curseur est restaure, le texte suivant n'est pas decale.
+  doc.x = curseurX;
+  doc.y = curseurY;
+}
+
 module.exports = {
   NAVY,
   BLUE,
@@ -174,6 +282,8 @@ module.exports = {
   drawFactRow,
   drawPageFrame,
   drawParagraph,
+  drawPartnerLogos,
   drawSectionTitle,
+  measurePartnerLogos,
   formatDate,
 };

@@ -223,10 +223,23 @@ export default async function FormationDetailPage({ params }: Props) {
                 <h2>{formation.certification}</h2>
                 <p>{formation.description}</p>
               </div>
-              {formation.rgeBadge ? (
+              {/* Badge RGE et logos partenaires (Feebat...) cohabitent : le
+                  premier atteste la qualification, les seconds l'organisme. */}
+              {formation.rgeBadge || formation.partnerLogos?.length ? (
                 <div className="fd-purpose-badges">
-                  {/* eslint-disable-next-line @next/next/no-img-element */}
-                  <img alt={formation.rgeBadge.label} src={formation.rgeBadge.imageUrl} />
+                  {formation.rgeBadge ? (
+                    /* eslint-disable-next-line @next/next/no-img-element */
+                    <img alt={formation.rgeBadge.label} src={formation.rgeBadge.imageUrl} />
+                  ) : null}
+                  {formation.partnerLogos?.map((logo) => (
+                    /* eslint-disable-next-line @next/next/no-img-element */
+                    <img
+                      alt={logo.label}
+                      className="fd-purpose-partner"
+                      key={logo.imageUrl}
+                      src={logo.imageUrl}
+                    />
+                  ))}
                 </div>
               ) : null}
             </div>
