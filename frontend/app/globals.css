@@ -6760,12 +6760,12 @@ main {
    cadre. Decorative, donc hors du flux et sans interception du pointeur. */
 .fd-local-pin {
   position: absolute;
-  top: -34px;
-  right: 290px;
+  top: -42px;
+  right: 360px;
   transform: rotate(18deg);
   transform-origin: center;
-  width: 78px;
-  height: 98px;
+  width: 104px;
+  height: 130px;
   opacity: 0.9;
   pointer-events: none;
 }
