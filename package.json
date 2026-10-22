@@ -10,6 +10,7 @@
     "db:local": "node scripts/local-db.js",
     "db:push": "prisma db push",
     "db:seed": "node backend/scripts/seedCatalog.js",
+    "db:seed-demo": "node backend/scripts/seedDemoData.js",
     "prisma:generate": "prisma generate",
     "prisma:migrate": "prisma migrate deploy"
   },
