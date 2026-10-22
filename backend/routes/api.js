@@ -27,6 +27,20 @@ const {
   listFeedbacks,
   updateFeedbackStatus,
 } = require("../services/feedbackService");
+const { handleDocumentUpload } = require("../middleware/documentUpload");
+const {
+  createDocument,
+  deleteDocument,
+  getFolderByToken,
+  getOrCreateFolder,
+  getTemplate,
+  listDocuments,
+  listDocumentsForFormation,
+  listFoldersByRegistrations,
+  listTemplates,
+  saveTemplate,
+  updateDocument,
+} = require("../services/inscriptionFolderService");
 const { listCategoryVisuals, saveCategoryVisual } = require("../services/categoryVisualService");
 const { listReviews, createReview, updateReview, deleteReview } = require("../services/reviewService");
 const { createCompany, listCompanies, updateCompany } = require("../services/companyService");
@@ -87,6 +101,16 @@ const inscriptionSchema = z.object({
   sessionId: z.string().max(120).optional().default(""),
   message: z.string().max(1000).optional().default(""),
 });
+
+/** "2026-10-26" -> "26 octobre 2026", pour les messages envoyes aux prospects. */
+function formatDateFr(value) {
+  if (!value) return "";
+
+  const date = new Date(value);
+  if (Number.isNaN(date.getTime())) return "";
+
+  return new Intl.DateTimeFormat("fr-FR", { day: "numeric", month: "long", year: "numeric" }).format(date);
+}
 
 // Retour de recette. La capture est facultative : son URL vient de la route
 // d'upload, elle n'est donc jamais saisie a la main.
@@ -930,6 +954,176 @@ function createApiRouter() {
   // Le depot est public : les testeuses n'ont pas de compte, le lien leur est
   // simplement partage. Le limiteur et le honeypot protegent du spam.
   const handleFeedbackImageUpload = createImageUploadHandler("retours");
+
+  // --- Dossiers d'inscription -------------------------------------------
+  // Page publique consultee par le prospect : le jeton tient lieu d'adresse,
+  // on enregistre la consultation au passage.
+  router.get(
+    "/dossier/:token",
+    asyncHandler(async (req, res) => {
+      const dossier = await getFolderByToken(req.params.token, { trackView: true });
+
+      if (!dossier) {
+        return res.status(404).json({ error: "Dossier introuvable." });
+      }
+
+      const [formation, sessions, documents] = await Promise.all([
+        getFormationBySlug(dossier.formationSlug),
+        listSessions(),
+        listDocumentsForFormation(dossier.formationSlug),
+      ]);
+
+      const session = dossier.sessionId ? sessions.find((item) => item.id === dossier.sessionId) || null : null;
+
+      res.json({
+        data: {
+          formation: formation
+            ? { slug: formation.slug, title: formation.title.trim(), duration: formation.duration }
+            : null,
+          session,
+          companyName: dossier.companyName || "",
+          contactName: dossier.contactName || "",
+          contactEmail: dossier.contactEmail || "",
+          contactPhone: dossier.contactPhone || "",
+          documents,
+        },
+      });
+    })
+  );
+
+  router.get(
+    "/admin/inscription-documents",
+    asyncHandler(async (_req, res) => {
+      const documents = await listDocuments();
+      res.json({ data: documents });
+    })
+  );
+
+  router.post(
+    "/admin/inscription-documents",
+    handleDocumentUpload,
+    asyncHandler(async (req, res) => {
+      if (!req.file) {
+        return res.status(400).json({ error: "Aucun fichier reçu." });
+      }
+
+      const document = await createDocument({
+        label: (req.body.label || req.file.originalname).trim(),
+        description: (req.body.description || "").trim(),
+        formationSlug: (req.body.formationSlug || "").trim(),
+        fileUrl: `/uploads/documents/${req.file.filename}`,
+        fileName: req.file.originalname,
+        fileSize: req.file.size,
+        position: Number.parseInt(req.body.position, 10) || 0,
+      });
+
+      res.status(201).json({ data: document, message: "Document ajouté" });
+    })
+  );
+
+  router.patch(
+    "/admin/inscription-documents/:id",
+    asyncHandler(async (req, res) => {
+      const payload = z
+        .object({
+          label: z.string().min(1).max(160).optional(),
+          description: z.string().max(400).optional(),
+          formationSlug: z.string().max(160).optional(),
+          position: z.number().int().optional(),
+          published: z.boolean().optional(),
+        })
+        .parse(req.body);
+
+      const document = await updateDocument(req.params.id, payload);
+
+      res.json({ data: document, message: "Document mis à jour" });
+    })
+  );
+
+  router.delete(
+    "/admin/inscription-documents/:id",
+    asyncHandler(async (req, res) => {
+      await deleteDocument(req.params.id);
+      res.json({ message: "Document supprimé" });
+    })
+  );
+
+  router.get(
+    "/admin/inscription-templates",
+    asyncHandler(async (req, res) => {
+      const [modeles, parDefaut] = await Promise.all([listTemplates(), getTemplate(req.query.formationSlug || "")]);
+      res.json({ data: { templates: modeles, effective: parDefaut } });
+    })
+  );
+
+  router.put(
+    "/admin/inscription-templates",
+    asyncHandler(async (req, res) => {
+      const payload = z
+        .object({
+          formationSlug: z.string().max(160).optional().default(""),
+          subject: z.string().min(1).max(200),
+          body: z.string().min(1).max(8000),
+        })
+        .parse(req.body);
+
+      const modele = await saveTemplate(payload);
+
+      res.json({ data: modele, message: "Modèle enregistré" });
+    })
+  );
+
+  // Prepare l'envoi : cree le dossier si besoin et renvoie le message pret.
+  router.post(
+    "/admin/inscriptions/:id/dossier",
+    asyncHandler(async (req, res) => {
+      const payload = z
+        .object({
+          formationSlug: z.string().min(1),
+          companyName: z.string().max(160).optional().default(""),
+          contactName: z.string().max(160).optional().default(""),
+          contactEmail: z.string().max(200).optional().default(""),
+          contactPhone: z.string().max(60).optional().default(""),
+          sessionId: z.string().max(120).optional().default(""),
+        })
+        .parse(req.body);
+
+      const dossier = await getOrCreateFolder({ registrationId: req.params.id, ...payload });
+
+      const [formation, sessions, modele] = await Promise.all([
+        getFormationBySlug(payload.formationSlug),
+        listSessions(),
+        getTemplate(payload.formationSlug),
+      ]);
+
+      const session = dossier.sessionId ? sessions.find((item) => item.id === dossier.sessionId) || null : null;
+      const siteUrl = process.env.SITE_URL || `${req.protocol}://${req.get("host")}`;
+      const lien = `${siteUrl}/dossier/${dossier.token}`;
+
+      const dates = session
+        ? `${formatDateFr(session.startDate)} au ${formatDateFr(session.endDate)}`
+        : "dates à définir";
+
+      const remplace = (texte) =>
+        texte
+          .replace(/\{\{formation\}\}/g, formation ? formation.title.trim() : payload.formationSlug)
+          .replace(/\{\{ville\}\}/g, session ? session.city : "ville à définir")
+          .replace(/\{\{dates\}\}/g, dates)
+          .replace(/\{\{contact\}\}/g, payload.contactName || "")
+          .replace(/\{\{societe\}\}/g, payload.companyName || "")
+          .replace(/\{\{lien_dossier\}\}/g, lien);
+
+      res.json({
+        data: {
+          url: lien,
+          token: dossier.token,
+          subject: remplace(modele.subject),
+          body: remplace(modele.body),
+          email: payload.contactEmail,
+        },
+      });
+    })
+  );
 
   router.get("/retours/options", (_req, res) => {
     res.json({ data: { pages: FEEDBACK_PAGES, kinds: FEEDBACK_KINDS } });

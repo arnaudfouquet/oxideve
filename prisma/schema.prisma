@@ -97,6 +97,62 @@ model Feedback {
   updatedAt DateTime @updatedAt
 }
 
+// Document joint au dossier d'inscription (devis, attestation, agrément RGE...).
+// Sans formationSlug, il est commun à toutes les formations.
+model InscriptionDocument {
+  id            String   @id @default(cuid())
+  label         String
+  // Précision affichée sous le libellé, par exemple "à signer et nous renvoyer".
+  description   String?
+  fileUrl       String
+  fileName      String
+  // Taille en octets, affichée au visiteur avant téléchargement.
+  fileSize      Int      @default(0)
+  // Vide = document commun ; sinon il ne concerne que cette formation.
+  formationSlug String?
+  position      Int      @default(0)
+  published     Boolean  @default(true)
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  @@index([formationSlug])
+}
+
+// Modèle de message envoyé avec le dossier. Un modèle sans formationSlug sert
+// de texte par défaut ; un modèle propre à une formation le remplace.
+model InscriptionTemplate {
+  id            String   @id @default(cuid())
+  subject       String
+  // Corps du message, avec des variables {{formation}}, {{ville}}, {{dates}}...
+  body          String   @db.Text
+  formationSlug String?  @unique
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+}
+
+// Dossier partagé avec un prospect : une page publique regroupant le bulletin
+// et les documents. Le jeton est l'adresse, volontairement imprévisible.
+model InscriptionFolder {
+  id             String    @id @default(cuid())
+  token          String    @unique
+  registrationId String
+  formationSlug  String
+  // Coordonnées figées à la création : elles pré-remplissent le bulletin même
+  // si la fiche du prospect change ensuite.
+  companyName    String?
+  contactName    String?
+  contactEmail   String?
+  contactPhone   String?
+  sessionId      String?
+  // Première et dernière consultation, pour suivre si le dossier a été ouvert.
+  firstViewedAt  DateTime?
+  lastViewedAt   DateTime?
+  viewCount      Int       @default(0)
+  createdAt      DateTime  @default(now())
+
+  @@index([registrationId])
+}
+
 // Visuel associé à une catégorie ou à une sous-catégorie de formation.
 // `scope` vaut "category" ou "subCategory", `name` est le libellé concerné.
 // Une formation peut toujours surcharger ces valeurs.
