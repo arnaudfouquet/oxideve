@@ -6767,6 +6767,14 @@ main {
   pointer-events: none;
 }
 
+/* Purement decorative : masquee des que le bandeau se resserre, ou elle
+   viendrait chevaucher le titre (mesure : des 1024 px). */
+@media (max-width: 1100px) {
+  .fd-local-pin {
+    display: none;
+  }
+}
+
 .fd-local-title {
   margin: 0 0 6px;
   font-weight: 700;
