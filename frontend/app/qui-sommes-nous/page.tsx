@@ -131,7 +131,7 @@ export default function QuiSommesNousPage() {
       <section className="qsn-presence">
         <Container>
           <h2 className="qsn-section-title">
-            <strong>Notre présence</strong> <span>(carte)</span>
+            <strong>Notre présence</strong>
           </h2>
           <div className="home-anywhere-map">
             <FranceMap />

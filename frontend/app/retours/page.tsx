@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { Container } from "@/components/ui";
-import { FeedbackForm } from "@/components/FeedbackForm";
+import { FeedbackBoard } from "@/components/FeedbackBoard";
 import { FEEDBACK_KINDS, FEEDBACK_PAGES } from "@/lib/feedback-options";
 
 export const metadata: Metadata = {
@@ -26,12 +26,7 @@ export default function RetoursPage() {
       </section>
 
       <Container className="feedback-layout">
-        <div className="ct-form-card">
-          <h2 className="ct-card-title">
-            Décrivez <em>ce que vous avez vu</em>
-          </h2>
-          <FeedbackForm kinds={FEEDBACK_KINDS} pages={FEEDBACK_PAGES} />
-        </div>
+        <FeedbackBoard kinds={FEEDBACK_KINDS} pages={FEEDBACK_PAGES} />
       </Container>
     </main>
   );

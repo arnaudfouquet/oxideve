@@ -933,6 +933,17 @@ function createApiRouter() {
     res.json({ data: { pages: FEEDBACK_PAGES, kinds: FEEDBACK_KINDS } });
   });
 
+  // Lecture publique : pendant la recette, les testeuses voient ce qui a deja
+  // ete signale, ce qui evite les doublons. En lecture seule : changer un
+  // statut ou supprimer reste reserve a l'admin.
+  router.get(
+    "/retours",
+    asyncHandler(async (_req, res) => {
+      const feedbacks = await listFeedbacks();
+      res.json({ data: feedbacks });
+    })
+  );
+
   router.post(
     "/retours/image",
     formLimiter,

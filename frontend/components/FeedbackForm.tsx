@@ -5,9 +5,11 @@ import { FormEvent, useRef, useState } from "react";
 type Props = {
   pages: string[];
   kinds: string[];
+  /** Appele apres un envoi reussi, pour rafraichir la liste affichee dessous. */
+  onSent?: () => void;
 };
 
-export function FeedbackForm({ pages, kinds }: Props) {
+export function FeedbackForm({ pages, kinds, onSent }: Props) {
   const [status, setStatus] = useState<"idle" | "loading" | "success" | "error">("idle");
   const [message, setMessage] = useState("");
   // Horodatage attendu par honeypotGuard : un envoi trop rapide apres
@@ -22,10 +24,7 @@ export function FeedbackForm({ pages, kinds }: Props) {
    * La capture part avant le formulaire : on stocke son URL, que l'envoi
    * final transmet. Le visiteur voit donc tout de suite si elle est passée.
    */
-  async function handleFileChange(event: React.ChangeEvent<HTMLInputElement>) {
-    const file = event.target.files?.[0];
-    if (!file) return;
-
+  async function uploadImage(file: File, name: string) {
     setUploading(true);
     setMessage("");
 
@@ -45,8 +44,33 @@ export function FeedbackForm({ pages, kinds }: Props) {
     }
 
     setImageUrl(data.data.url);
-    setImageName(file.name);
+    setImageName(name);
     setStatus("idle");
+  }
+
+  function handleFileChange(event: React.ChangeEvent<HTMLInputElement>) {
+    const file = event.target.files?.[0];
+    if (!file) return;
+
+    uploadImage(file, file.name);
+  }
+
+  /**
+   * Coller une capture (Impr. écran puis Ctrl+V) evite de l'enregistrer puis
+   * de la rechercher. Le presse-papier fournit un fichier sans nom utile, on
+   * en forge donc un lisible.
+   */
+  function handlePaste(event: React.ClipboardEvent<HTMLElement>) {
+    const item = Array.from(event.clipboardData.items).find((entry) => entry.type.startsWith("image/"));
+    if (!item) return;
+
+    const file = item.getAsFile();
+    if (!file) return;
+
+    event.preventDefault();
+
+    const extension = (file.type.split("/")[1] || "png").replace("jpeg", "jpg");
+    uploadImage(file, `capture-collée.${extension}`);
   }
 
   function removeImage() {
@@ -80,6 +104,7 @@ export function FeedbackForm({ pages, kinds }: Props) {
     removeImage();
     setStatus("success");
     setMessage("Merci, votre retour a bien été envoyé. Vous pouvez en ajouter un autre.");
+    onSent?.();
   }
 
   return (
@@ -123,6 +148,7 @@ export function FeedbackForm({ pages, kinds }: Props) {
         <textarea
           className="ui-field contact-form-textarea"
           name="message"
+          onPaste={handlePaste}
           rows={5}
           required
           minLength={5}
@@ -131,8 +157,14 @@ export function FeedbackForm({ pages, kinds }: Props) {
         />
       </label>
 
-      <div className="feedback-upload">
+      {/* onPaste ici ET sur le champ de message : c'est la que le curseur se
+          trouve quand la testeuse vient de faire sa capture. */}
+      <div className="feedback-upload" onPaste={handlePaste}>
         <span className="feedback-upload-label">Capture d&apos;écran (facultatif)</span>
+        <p className="feedback-upload-paste">
+          Faites votre capture, puis collez-la ici avec <kbd>Ctrl</kbd> + <kbd>V</kbd> — inutile de
+          l&apos;enregistrer d&apos;abord. Vous pouvez aussi choisir un fichier.
+        </p>
         <input
           accept="image/jpeg,image/png,image/webp"
           className="feedback-upload-input"
