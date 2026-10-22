@@ -318,6 +318,15 @@ main {
   height: 2px;
   margin: 4px auto;
   background: var(--color-white);
+  transition: transform 240ms ease, opacity 160ms ease;
+}
+
+/* Reserves au panneau mobile : sur grand ecran, le header garde son lien
+   Contact et rien d'autre. */
+.nav-overlay,
+.nav-panel-cta,
+.nav-panel-contact {
+  display: none;
 }
 
 .nav-panel {
@@ -1883,27 +1892,124 @@ main {
     display: inline-block;
   }
 
+  /* Panneau lateral plutot qu'encart flottant : il part du bord droit, tient
+     toute la hauteur et laisse voir la page derriere lui. */
   .nav-panel {
-    position: absolute;
-    top: calc(100% + 12px);
-    left: 16px;
-    right: 16px;
-    display: none;
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: auto;
+    z-index: 60;
+    display: flex;
     flex-direction: column;
     align-items: stretch;
-    padding: 18px;
-    border-radius: var(--radius-xl);
-    background: linear-gradient(180deg, var(--color-green), var(--color-blue));
-    box-shadow: var(--shadow-card);
+    width: min(82vw, 330px);
+    padding: 88px 24px 32px;
+    border-radius: 0;
+    background: var(--color-white);
+    box-shadow: -18px 0 48px rgba(0, 32, 46, 0.18);
+    transform: translateX(100%);
+    transition: transform 260ms ease;
+    overflow-y: auto;
   }
 
   .nav-panel.is-open {
     display: flex;
+    transform: translateX(0);
+  }
+
+  /* Voile sombre : il isole le panneau et se ferme au clic. */
+  .nav-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 55;
+    display: block;
+    background: rgba(0, 32, 46, 0.45);
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 240ms ease, visibility 240ms ease;
+  }
+
+  .nav-overlay.is-open {
+    opacity: 1;
+    visibility: visible;
   }
 
   .main-nav {
     flex-direction: column;
-    align-items: flex-start;
+    align-items: stretch;
+    gap: 0;
+  }
+
+  /* Liens separes par un filet : la liste se lit d'un coup d'oeil. */
+  .nav-panel .main-nav-link {
+    padding: 15px 0;
+    border-bottom: 1px solid rgba(20, 45, 58, 0.1);
+    color: var(--color-navy);
+    font-size: 1.02rem;
+    font-weight: 700;
+  }
+
+  .nav-panel .main-nav-link::after {
+    display: none;
+  }
+
+  .nav-panel-cta {
+    display: block;
+    margin-top: 24px;
+    padding: 14px 20px;
+    border-radius: 10px;
+    background: var(--color-green);
+    color: var(--color-white);
+    font-weight: 700;
+    text-align: center;
+    text-decoration: none;
+  }
+
+  .nav-panel-contact {
+    display: grid;
+    gap: 6px;
+    margin-top: 20px;
+    font-size: 0.9rem;
+  }
+
+  .nav-panel-contact a {
+    color: var(--color-muted);
+    text-decoration: none;
+  }
+
+  /* Le bouton reste au-dessus du panneau pour servir de fermeture. Ouvert,
+     il se cale dans le coin du panneau, sur fond clair : ses barres blanches
+     y seraient invisibles, elles passent donc au bleu marine. */
+  .nav-toggle {
+    position: relative;
+    z-index: 70;
+  }
+
+  .nav-toggle.is-open {
+    position: fixed;
+    top: 18px;
+    right: 18px;
+    border-color: rgba(20, 45, 58, 0.14);
+    background: var(--color-white);
+  }
+
+  .nav-toggle.is-open span {
+    background: var(--color-navy);
+  }
+
+  /* Les trois barres deviennent une croix a l'ouverture. */
+  .nav-toggle.is-open span:nth-child(1) {
+    transform: translateY(6px) rotate(45deg);
+  }
+
+  .nav-toggle.is-open span:nth-child(2) {
+    opacity: 0;
+  }
+
+  .nav-toggle.is-open span:nth-child(3) {
+    transform: translateY(-6px) rotate(-45deg);
   }
 
    .landing-category-grid,
