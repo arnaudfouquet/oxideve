@@ -6039,14 +6039,17 @@ main {
     gap: 24px;
   }
 
+  /* Alignee a gauche sur mobile : elle se cale ainsi sur le titre et le
+     bouton, plutot que de flotter au centre. */
   .home-hero-visual {
     order: -1;
+    justify-content: flex-start;
     min-height: 0;
   }
 
   .home-hero-visual img {
     width: min(var(--hero-image-width, 74%), 340px);
-    margin: 0 auto;
+    margin: 0;
   }
 
   .home-hero {
@@ -6164,8 +6167,11 @@ main {
     gap: 18px;
   }
 
+  /* margin auto centrait l'illustration malgre justify-items: start : on la
+     cale a gauche, dans l'alignement du titre. */
   .catalog-intro-illustration {
     max-width: 180px;
+    margin: 0;
   }
 }
 
