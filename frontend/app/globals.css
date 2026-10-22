@@ -6824,7 +6824,7 @@ main {
    hauteur du badge plutot que sur sa largeur. */
 .fd-purpose-badges .fd-purpose-partner {
   width: auto;
-  max-height: 86px;
+  max-height: 120px;
 }
 
 /* Corps : description + infos pratiques */

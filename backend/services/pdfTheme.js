@@ -69,13 +69,41 @@ function drawPageFrame(doc) {
     });
   });
 
+  // Le pied de page laisse la taille a 7 pt. Le masque etant dessine AVANT le
+  // contenu d'une nouvelle page, on remet ici le corps de texte courant :
+  // sinon le premier element de la page s'affichait en 7 pt.
+  doc.fontSize(10).font("Helvetica").fillColor(MUTED);
+
   doc.x = cursorX;
   doc.y = cursorY;
   doc._frameLock = false;
 }
 
 /** Applique le masque à la première page puis à chaque page ajoutée. */
+const FONT_DIR = path.join(__dirname, "..", "assets", "fonts");
+const FONT_REGULAR = path.join(FONT_DIR, "Nunito-Regular.ttf");
+const FONT_BOLD = path.join(FONT_DIR, "Nunito-Bold.ttf");
+const hasFonts = fs.existsSync(FONT_REGULAR) && fs.existsSync(FONT_BOLD);
+
+/**
+ * Embarque Nunito, la police du site, sous les noms "Helvetica" et
+ * "Helvetica-Bold" : tous les appels existants la reprennent sans avoir a
+ * etre modifies. Sans les fichiers, PDFKit garde sa Helvetica d'origine.
+ */
+function registerFonts(doc) {
+  if (!hasFonts) return;
+
+  try {
+    doc.registerFont("Helvetica", FONT_REGULAR);
+    doc.registerFont("Helvetica-Bold", FONT_BOLD);
+    doc.font("Helvetica");
+  } catch (error) {
+    console.error("[pdfTheme] Police Nunito illisible, Helvetica conservée", error);
+  }
+}
+
 function applyPageFrame(doc) {
+  registerFonts(doc);
   drawPageFrame(doc);
   doc.on("pageAdded", () => drawPageFrame(doc));
   doc.x = doc.page.margins.left;
