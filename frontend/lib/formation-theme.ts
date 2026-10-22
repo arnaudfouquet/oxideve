@@ -48,6 +48,29 @@ const THEMES: Record<string, CategoryTheme> = {
     blurb:
       "Climatisation et fluides frigorigènes : intervenez en conformité sur les équipements de climatisation et de réfrigération.",
   },
+  // Visuels provisoires (Unsplash) : ces trois categories n'avaient pas de
+  // banniere et reprenaient celle de la securite, hors sujet.
+  Accompagnement: {
+    banner: "https://images.unsplash.com/photo-1521737604893-d14cc237f11d?auto=format&fit=crop&w=1600&q=80",
+    bannerPosition: "50% 45%",
+    tilePosition: "50% 40%",
+    blurb:
+      "Bilan de compétences, VAE, orientation : faites le point sur votre parcours et construisez la suite avec un accompagnement individuel.",
+  },
+  "Chauffage bois": {
+    banner: "https://images.unsplash.com/photo-1544984243-ec57ea16fe25?auto=format&fit=crop&w=1600&q=80",
+    bannerPosition: "50% 50%",
+    tilePosition: "50% 45%",
+    blurb:
+      "Installez et entretenez les appareils de chauffage au bois dans le respect des règles de l'art et des exigences de qualification.",
+  },
+  Commerce: {
+    banner: "https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?auto=format&fit=crop&w=1600&q=80",
+    bannerPosition: "50% 45%",
+    tilePosition: "50% 40%",
+    blurb:
+      "Développez vos techniques de vente, la relation client et la négociation pour gagner en efficacité commerciale.",
+  },
 };
 
 const FALLBACK: CategoryTheme = {
@@ -70,19 +93,35 @@ const SUBCATEGORY_BANNERS: Record<string, { url: string; banner: string; tile: s
     tile: "50% 50%",
   },
   "Travail en hauteur": {
-    url: "https://images.unsplash.com/photo-1581094794329-c8112a89af12?auto=format&fit=crop&w=1200&q=80",
+    url: "https://images.unsplash.com/photo-1503387762-592deb58ef4e?auto=format&fit=crop&w=1600&q=80",
     banner: "50% 40%",
-    tile: "50% 30%",
-  },
-  "Sauveteur secouriste du travail": {
-    url: "https://images.unsplash.com/photo-1587293852726-70cdb56c2866?auto=format&fit=crop&w=1200&q=80",
-    banner: "50% 45%",
     tile: "50% 35%",
   },
+  "Sauveteur secouriste du travail": {
+    url: "https://images.unsplash.com/photo-1612277795421-9bc7706a4a34?auto=format&fit=crop&w=1600&q=80",
+    banner: "50% 45%",
+    tile: "50% 40%",
+  },
   Incendie: {
-    url: "https://images.unsplash.com/photo-1599045118108-bf9954418b76?auto=format&fit=crop&w=1200&q=80",
+    url: "https://images.unsplash.com/photo-1582139329536-e7284fece509?auto=format&fit=crop&w=1600&q=80",
     banner: "50% 50%",
     tile: "50% 45%",
+  },
+  // Image Oxideve deja presente : inutile d'aller chercher une photo libre.
+  Climatisation: {
+    url: "/assets/formations/banner-clim.webp",
+    banner: "50% 50%",
+    tile: "50% 45%",
+  },
+  Conduite: {
+    url: "https://images.unsplash.com/photo-1578575437130-527eed3abbec?auto=format&fit=crop&w=1600&q=80",
+    banner: "50% 50%",
+    tile: "50% 45%",
+  },
+  "Gestes et postures": {
+    url: "https://images.unsplash.com/photo-1581092160562-40aa08e78837?auto=format&fit=crop&w=1600&q=80",
+    banner: "50% 45%",
+    tile: "50% 40%",
   },
 };
 
