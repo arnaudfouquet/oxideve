@@ -77,6 +77,24 @@ model Review {
   updatedAt DateTime @updatedAt
 }
 
+// Retour envoyé par une testeuse depuis la page /retours, pendant la phase de
+// recette du site. Volontairement sans compte : le lien est partagé tel quel.
+model Feedback {
+  id        String   @id @default(cuid())
+  // Page concernée, choisie dans une liste ("Fiche formation", "Admin — sessions"...).
+  page      String
+  // "Problème", "Suggestion" ou "Question".
+  kind      String   @default("Problème")
+  author    String
+  message   String   @db.Text
+  // Capture d'écran facultative, servie depuis /uploads/retours.
+  imageUrl  String?
+  // "À traiter", "En cours", "Corrigé" ou "Non retenu".
+  status    String   @default("À traiter")
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
 // Visuel associé à une catégorie ou à une sous-catégorie de formation.
 // `scope` vaut "category" ou "subCategory", `name` est le libellé concerné.
 // Une formation peut toujours surcharger ces valeurs.

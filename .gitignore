@@ -11,6 +11,8 @@ Ressources/
 backend/uploads/*
 !backend/uploads/articles
 !backend/uploads/articles/.gitkeep
+!backend/uploads/retours
+!backend/uploads/retours/.gitkeep
 frontend/tsconfig.tsbuildinfo
 
 # Base MySQL de développement local

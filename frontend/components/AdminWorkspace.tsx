@@ -7,6 +7,7 @@ import { ArticleEditor } from "@/components/admin/ArticleEditor";
 import { getArticleCover } from "@/components/NewsCard";
 import { Drawer } from "@/components/admin/Drawer";
 import { ReviewsPanel } from "@/components/admin/ReviewsPanel";
+import { FeedbackPanel } from "@/components/admin/FeedbackPanel";
 import { CategoryVisualsPanel, FormationBannerField } from "@/components/admin/VisualsPanels";
 import { ArticleSeoPanel } from "@/components/admin/ArticleSeoPanel";
 import type { ArticleDraft, FormationDraft } from "@/components/admin/types";
@@ -38,7 +39,7 @@ type Props = {
   initialParticipants: Participant[];
 };
 
-type Section = "dashboard" | "sessions" | "participants" | "clients" | "formations" | "visuels" | "editorial" | "avis" | "accounts";
+type Section = "dashboard" | "sessions" | "participants" | "clients" | "formations" | "visuels" | "editorial" | "avis" | "retours" | "accounts";
 
 
 type SessionDraft = {
@@ -181,6 +182,7 @@ const NAV_ITEMS: { value: Section; label: string; icon: string }[] = [
   { value: "visuels", label: "Visuels", icon: "◩" },
   { value: "editorial", label: "Editorial", icon: "✎" },
   { value: "avis", label: "Avis", icon: "★" },
+  { value: "retours", label: "Retours", icon: "✉" },
   { value: "accounts", label: "Comptes", icon: "◉" },
 ];
 
@@ -1815,6 +1817,8 @@ export function AdminWorkspace({
       ) : null}
 
       {section === "avis" ? <ReviewsPanel onError={setError} onFeedback={setFeedback} /> : null}
+
+      {section === "retours" ? <FeedbackPanel onError={setError} onFeedback={setFeedback} /> : null}
 
       {section === "visuels" ? (
         <CategoryVisualsPanel formations={formations} onError={setError} onFeedback={setFeedback} />

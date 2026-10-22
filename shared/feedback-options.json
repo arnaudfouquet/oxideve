@@ -1,0 +1,24 @@
+{
+  "pages": [
+    "Accueil",
+    "Liste des formations",
+    "Fiche formation",
+    "Inscription à une formation",
+    "Bulletin d'inscription",
+    "Financement",
+    "Actualités",
+    "Qui sommes-nous",
+    "Contact",
+    "Admin — tableau de bord",
+    "Admin — sessions",
+    "Admin — inscriptions",
+    "Admin — clients",
+    "Admin — formations",
+    "Admin — visuels",
+    "Admin — editorial",
+    "Admin — avis",
+    "Autre / plusieurs pages"
+  ],
+  "kinds": ["Problème", "Suggestion", "Question"],
+  "statuses": ["À traiter", "En cours", "Corrigé", "Non retenu"]
+}

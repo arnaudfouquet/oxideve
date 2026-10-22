@@ -14,7 +14,19 @@ const {
   updateSession,
 } = require("../services/catalogService");
 const { createArticle, deleteArticle, getArticleBySlug, listArticles, updateArticle } = require("../services/editorialService");
-const { handleArticleImageUpload, handleFormationImageUpload } = require("../middleware/articleImageUpload");
+const {
+  createImageUploadHandler,
+  handleArticleImageUpload,
+  handleFormationImageUpload,
+} = require("../middleware/articleImageUpload");
+const {
+  FEEDBACK_KINDS,
+  FEEDBACK_PAGES,
+  createFeedback,
+  deleteFeedback,
+  listFeedbacks,
+  updateFeedbackStatus,
+} = require("../services/feedbackService");
 const { listCategoryVisuals, saveCategoryVisual } = require("../services/categoryVisualService");
 const { listReviews, createReview, updateReview, deleteReview } = require("../services/reviewService");
 const { createCompany, listCompanies, updateCompany } = require("../services/companyService");
@@ -74,6 +86,16 @@ const inscriptionSchema = z.object({
   // Une demande sans date est légitime : l'équipe propose ensuite une session.
   sessionId: z.string().max(120).optional().default(""),
   message: z.string().max(1000).optional().default(""),
+});
+
+// Retour de recette. La capture est facultative : son URL vient de la route
+// d'upload, elle n'est donc jamais saisie a la main.
+const feedbackSchema = z.object({
+  page: z.string().min(2).max(120),
+  kind: z.string().max(40).optional().default("Problème"),
+  author: z.string().min(2).max(120),
+  message: z.string().min(5).max(2000),
+  imageUrl: z.string().max(300).optional().default(""),
 });
 
 const manualRegistrationSchema = z.object({
@@ -899,6 +921,71 @@ function createApiRouter() {
     asyncHandler(async (req, res) => {
       const session = await deleteSession(req.params.id);
       res.json({ data: session, message: "Session supprimée" });
+    })
+  );
+
+  // --- Retours des testeuses -------------------------------------------
+  // Le depot est public : les testeuses n'ont pas de compte, le lien leur est
+  // simplement partage. Le limiteur et le honeypot protegent du spam.
+  const handleFeedbackImageUpload = createImageUploadHandler("retours");
+
+  router.get("/retours/options", (_req, res) => {
+    res.json({ data: { pages: FEEDBACK_PAGES, kinds: FEEDBACK_KINDS } });
+  });
+
+  router.post(
+    "/retours/image",
+    formLimiter,
+    handleFeedbackImageUpload,
+    asyncHandler(async (req, res) => {
+      if (!req.file) {
+        return res.status(400).json({ error: "Aucun fichier reçu." });
+      }
+
+      return res.status(201).json({ data: { url: `/uploads/retours/${req.file.filename}` } });
+    })
+  );
+
+  router.post(
+    "/retours",
+    formLimiter,
+    honeypotGuard,
+    asyncHandler(async (req, res) => {
+      const payload = feedbackSchema.parse(req.body);
+
+      if (!FEEDBACK_PAGES.includes(payload.page)) {
+        return res.status(400).json({ error: "Page inconnue." });
+      }
+
+      const feedback = await createFeedback(payload);
+
+      res.status(201).json({ data: feedback, message: "Merci, votre retour a bien été envoyé." });
+    })
+  );
+
+  router.get(
+    "/admin/retours",
+    asyncHandler(async (_req, res) => {
+      const feedbacks = await listFeedbacks();
+      res.json({ data: feedbacks });
+    })
+  );
+
+  router.patch(
+    "/admin/retours/:id",
+    asyncHandler(async (req, res) => {
+      const { status } = z.object({ status: z.string().min(1).max(40) }).parse(req.body);
+      const feedback = await updateFeedbackStatus(req.params.id, status);
+
+      res.json({ data: feedback, message: "Statut mis à jour" });
+    })
+  );
+
+  router.delete(
+    "/admin/retours/:id",
+    asyncHandler(async (req, res) => {
+      await deleteFeedback(req.params.id);
+      res.json({ message: "Retour supprimé" });
     })
   );
 
