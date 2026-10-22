@@ -7974,12 +7974,65 @@ main {
   margin-top: -56px;
 }
 
-/* Cale a gauche : centre, son bord gauche ne tombait plus sur celui de la
-   liste, qui occupe toute la largeur. */
+/* Pleine largeur, comme la liste en dessous. Les champs sont disposes en
+   deux colonnes pour ne pas s'etirer sur toute la page. */
 .feedback-layout > .ct-form-card {
-  justify-self: start;
   width: 100%;
-  max-width: 860px;
+}
+
+/* Deux colonnes seulement a partir de 900 px : en dessous, des champs de
+   150 px seraient inutilisables. */
+@media (min-width: 900px) {
+  .feedback-layout .contact-form {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 16px 24px;
+    align-items: start;
+  }
+
+  /* Colonne de gauche : identite de la remarque (page, type, prenom). */
+  .feedback-layout .contact-form > .form-grid,
+  .feedback-layout .contact-form > label:not(:has(textarea)) {
+    grid-column: 1;
+  }
+
+  /* Les deux selects reviennent l'un sous l'autre dans leur demi-largeur. */
+  .feedback-layout .contact-form > .form-grid {
+    grid-template-columns: 1fr;
+  }
+
+  /* Colonne de droite, demarree en haut : sinon elle restait vide en face
+     des deux premiers champs. */
+  .feedback-layout .contact-form > label:has(textarea) {
+    grid-column: 2;
+    grid-row: 1 / span 2;
+  }
+
+  /* La zone de capture passe sous les deux colonnes : elle comble le vide
+     laisse sous le prenom et laisse respirer son texte d'explication. */
+  .feedback-layout .contact-form > .feedback-upload {
+    grid-column: 1 / -1;
+    grid-row: 3;
+  }
+
+  /* La remarque s'etire sur la hauteur des deux champs qu'elle cotoie. */
+  .feedback-layout .contact-form > label:has(textarea) {
+    display: grid;
+    grid-template-rows: auto 1fr;
+    height: 100%;
+  }
+
+  .feedback-layout .contact-form > label:has(textarea) textarea {
+    height: 100%;
+    min-height: 150px;
+  }
+
+  /* Le bouton et le message de confirmation reprennent toute la largeur. */
+  .feedback-layout .contact-form > button[type="submit"],
+  .feedback-layout .contact-form > .form-status {
+    grid-column: 1 / -1;
+    justify-self: start;
+  }
 }
 
 .feedback-board-head {
