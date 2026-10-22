@@ -219,13 +219,9 @@ export default async function FormationDetailPage({ params }: Props) {
               <p className="fd-local-title">Vous souhaitez suivre cette formation près de chez vous ?</p>
               <p className="fd-local-text">Cette formation peut être organisée partout en France, selon les demandes et les possibilités.</p>
             </div>
-            <svg className="fd-local-pin" viewBox="0 0 48 60" aria-hidden="true">
-              <path
-                d="M24 0C10.7 0 0 10.7 0 24c0 17 24 36 24 36s24-19 24-36C48 10.7 37.3 0 24 0Z"
-                fill="var(--color-navy)"
-              />
-              <circle cx="24" cy="23" r="9" fill="#ffffff" />
-            </svg>
+            {/* Visuel fourni : l'epingle est deja inclinee et rognee. */}
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img alt="" aria-hidden="true" className="fd-local-pin" src="/assets/formations/icone-lieu-bleu.png" />
             <ButtonLink href="/contact" variant="primary" className="fd-local-cta home-cta-arrow">
               Faire une demande
             </ButtonLink>

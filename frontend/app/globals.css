@@ -6755,18 +6755,15 @@ main {
   min-width: 0;
 }
 
-/* Epingle inclinee, posee a gauche du bouton et debordant vers le bas du
-   bandeau : elle est rognee par overflow hidden, ce qui l'encastre dans le
-   cadre. Decorative, donc hors du flux et sans interception du pointeur. */
+/* Epingle fournie, deja inclinee et rognee dans le fichier : aucune rotation
+   a appliquer. Calee en haut a gauche du bouton, elle deborde du bandeau et
+   se fait couper par overflow hidden. Decorative, hors du flux. */
 .fd-local-pin {
   position: absolute;
-  top: -42px;
-  right: 360px;
-  transform: rotate(18deg);
-  transform-origin: center;
-  width: 104px;
-  height: 130px;
-  opacity: 0.9;
+  top: 0;
+  right: 300px;
+  width: 112px;
+  height: auto;
   pointer-events: none;
 }
 
