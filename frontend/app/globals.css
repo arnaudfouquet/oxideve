@@ -7974,7 +7974,10 @@ main {
   margin-top: -56px;
 }
 
+/* Cale a gauche : centre, son bord gauche ne tombait plus sur celui de la
+   liste, qui occupe toute la largeur. */
 .feedback-layout > .ct-form-card {
+  justify-self: start;
   width: 100%;
   max-width: 860px;
 }
