@@ -7980,6 +7980,180 @@ main {
   margin-top: 26px;
 }
 
+/* Onglets : la liste, le modele et l'apercu ne tiennent pas sur un ecran. */
+.admin-tabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  margin-bottom: 16px;
+  border-bottom: 1px solid rgba(20, 45, 58, 0.12);
+}
+
+.admin-tab {
+  padding: 10px 18px;
+  border: 0;
+  border-bottom: 2px solid transparent;
+  background: none;
+  color: var(--color-muted);
+  font: inherit;
+  font-size: 0.88rem;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.admin-tab.is-active {
+  border-bottom-color: var(--color-blue);
+  color: var(--color-navy);
+}
+
+/* Recherche, filtre et bouton d'ajout sur une seule ligne. */
+.admin-doc-toolbar {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 260px auto;
+  gap: 10px;
+  margin-bottom: 16px;
+}
+
+.admin-doc-toolbar .ui-field {
+  min-height: 38px;
+  padding: 6px 12px;
+  font-size: 0.88rem;
+}
+
+.admin-doc-form {
+  margin-bottom: 20px;
+  padding: 18px;
+  border: 1px solid rgba(0, 156, 220, 0.25);
+  border-radius: 12px;
+  background: rgba(0, 156, 220, 0.04);
+}
+
+.admin-doc-count {
+  margin: 0 0 12px;
+  color: var(--color-muted);
+  font-size: 0.82rem;
+}
+
+/* Un groupe repliable par formation : la liste reste lisible meme avec des
+   dizaines de documents. */
+.admin-doc-group {
+  margin-bottom: 10px;
+  border: 1px solid rgba(20, 45, 58, 0.1);
+  border-radius: 10px;
+  background: var(--color-white);
+}
+
+.admin-doc-group summary {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 16px;
+  color: var(--color-navy);
+  font-weight: 700;
+  font-size: 0.9rem;
+  cursor: pointer;
+}
+
+.admin-doc-group summary span {
+  padding: 1px 9px;
+  border-radius: 999px;
+  background: var(--color-light);
+  color: var(--color-muted);
+  font-size: 0.76rem;
+}
+
+.admin-doc-group[open] summary {
+  border-bottom: 1px solid rgba(20, 45, 58, 0.08);
+}
+
+.admin-doc-group .admin-doc-list {
+  margin: 0;
+  padding: 12px;
+}
+
+.admin-doc-group .admin-doc {
+  border: 0;
+  border-bottom: 1px solid rgba(20, 45, 58, 0.07);
+  border-radius: 0;
+  padding: 10px 4px;
+}
+
+.admin-doc-group .admin-doc:last-child {
+  border-bottom: 0;
+}
+
+/* Apercu : le message a gauche, la page du dossier a droite. */
+.admin-preview {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 16px;
+  margin-top: 18px;
+}
+
+.admin-preview-mail,
+.admin-preview-folder {
+  padding: 18px;
+  border: 1px solid rgba(20, 45, 58, 0.12);
+  border-radius: 12px;
+  background: var(--color-white);
+}
+
+.admin-preview-tag {
+  display: inline-block;
+  margin-bottom: 10px;
+  padding: 3px 10px;
+  border-radius: 999px;
+  background: var(--color-light);
+  color: var(--color-muted);
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+}
+
+.admin-preview-subject {
+  margin: 0 0 10px;
+  color: var(--color-navy);
+  font-weight: 700;
+  font-size: 0.92rem;
+}
+
+.admin-preview-body {
+  margin: 0 0 10px;
+  padding: 12px;
+  border-radius: 8px;
+  background: var(--color-light);
+  color: var(--color-muted);
+  font-family: var(--font-sans), sans-serif;
+  font-size: 0.82rem;
+  line-height: 1.55;
+  white-space: pre-wrap;
+}
+
+.admin-preview-step {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 14px 0 6px;
+  color: var(--color-navy);
+  font-weight: 700;
+  font-size: 0.86rem;
+}
+
+.admin-preview-step span {
+  padding: 1px 8px;
+  border-radius: 999px;
+  background: rgba(0, 156, 220, 0.12);
+  color: var(--color-blue);
+  font-size: 0.74rem;
+}
+
+@media (max-width: 900px) {
+  .admin-doc-toolbar {
+    grid-template-columns: 1fr;
+  }
+}
+
 .admin-doc-list {
   display: grid;
   gap: 8px;

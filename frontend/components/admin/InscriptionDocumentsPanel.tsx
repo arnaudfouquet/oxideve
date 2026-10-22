@@ -23,6 +23,15 @@ type Template = {
   custom?: boolean;
 };
 
+type Preview = {
+  formation: { slug: string; title: string };
+  session: { city: string; startDate: string; endDate: string } | null;
+  documents: Document[];
+  subject: string;
+  body: string;
+  templateIsCustom: boolean;
+};
+
 /** "182400" -> "178 Ko" */
 function formatSize(octets: number) {
   if (!octets) return "";
@@ -39,9 +48,12 @@ const VARIABLES = [
   { cle: "{{lien_dossier}}", libelle: "Lien vers le dossier" },
 ];
 
+type Onglet = "documents" | "message" | "apercu";
+
 /**
- * Ecran « Dossiers » : les documents joints au dossier d'inscription et le
- * modele de message envoye aux prospects.
+ * Ecran « Dossiers » : documents joints, modele de message et apercu du
+ * dossier tel que le prospect le recevra. Organise en onglets : la liste
+ * seule devenait illisible des quelques dizaines de documents.
  */
 export function InscriptionDocumentsPanel({
   formations,
@@ -52,16 +64,31 @@ export function InscriptionDocumentsPanel({
   onError: (message: string) => void;
   onFeedback: (message: string) => void;
 }) {
+  const [onglet, setOnglet] = useState<Onglet>("documents");
   const [documents, setDocuments] = useState<Document[]>([]);
   const [loading, setLoading] = useState(true);
   const [uploading, setUploading] = useState(false);
   const [saving, setSaving] = useState(false);
+  const [showForm, setShowForm] = useState(false);
+
+  const [search, setSearch] = useState("");
+  const [filtreFormation, setFiltreFormation] = useState("");
 
   const [templateScope, setTemplateScope] = useState("");
   const [template, setTemplate] = useState<Template>({ subject: "", body: "", formationSlug: "" });
 
+  const [apercuSlug, setApercuSlug] = useState("");
+  const [apercu, setApercu] = useState<Preview | null>(null);
+  const [apercuLoading, setApercuLoading] = useState(false);
+
   const fileRef = useRef<HTMLInputElement>(null);
   const bodyRef = useRef<HTMLTextAreaElement>(null);
+
+  const titreParSlug = useMemo(() => {
+    const index: Record<string, string> = {};
+    for (const formation of formations) index[formation.slug] = formation.title.trim();
+    return index;
+  }, [formations]);
 
   async function reloadDocuments() {
     const response = await fetch("/api/admin/inscription-documents");
@@ -89,6 +116,27 @@ export function InscriptionDocumentsPanel({
     setTemplate({ ...payload.data.effective, formationSlug: slug });
   }
 
+  async function reloadApercu(slug: string) {
+    if (!slug) {
+      setApercu(null);
+      return;
+    }
+
+    setApercuLoading(true);
+
+    const response = await fetch(`/api/admin/inscription-preview?formationSlug=${encodeURIComponent(slug)}`);
+
+    setApercuLoading(false);
+
+    if (!response.ok) {
+      onError("L'aperçu n'a pas pu être chargé.");
+      return;
+    }
+
+    const payload = (await response.json()) as { data: Preview };
+    setApercu(payload.data);
+  }
+
   useEffect(() => {
     reloadDocuments();
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -99,8 +147,51 @@ export function InscriptionDocumentsPanel({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [templateScope]);
 
+  useEffect(() => {
+    reloadApercu(apercuSlug);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [apercuSlug]);
+
   const communs = useMemo(() => documents.filter((item) => !item.formationSlug), [documents]);
-  const specifiques = useMemo(() => documents.filter((item) => item.formationSlug), [documents]);
+
+  /** Documents propres a une formation, regroupes par formation. */
+  const groupes = useMemo(() => {
+    const index: Record<string, Document[]> = {};
+
+    for (const document of documents) {
+      if (!document.formationSlug) continue;
+      if (!index[document.formationSlug]) index[document.formationSlug] = [];
+      index[document.formationSlug].push(document);
+    }
+
+    return Object.entries(index).sort((left, right) =>
+      (titreParSlug[left[0]] || left[0]).localeCompare(titreParSlug[right[0]] || right[0], "fr"),
+    );
+  }, [documents, titreParSlug]);
+
+  /** Recherche et filtre appliques a une liste de documents. */
+  function filtrer(liste: Document[]) {
+    const terme = search.trim().toLowerCase();
+
+    return liste.filter((document) => {
+      if (filtreFormation === "communs" && document.formationSlug) return false;
+      if (filtreFormation && filtreFormation !== "communs" && document.formationSlug !== filtreFormation) return false;
+      if (!terme) return true;
+
+      return (
+        document.label.toLowerCase().includes(terme) ||
+        document.description.toLowerCase().includes(terme) ||
+        (titreParSlug[document.formationSlug] || "").toLowerCase().includes(terme)
+      );
+    });
+  }
+
+  const communsFiltres = filtrer(communs);
+  const groupesFiltres = groupes
+    .map(([slug, liste]) => [slug, filtrer(liste)] as [string, Document[]])
+    .filter(([, liste]) => liste.length);
+
+  const totalAffiche = communsFiltres.length + groupesFiltres.reduce((somme, [, liste]) => somme + liste.length, 0);
 
   async function handleUpload(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -129,6 +220,7 @@ export function InscriptionDocumentsPanel({
     }
 
     form.reset();
+    setShowForm(false);
     await reloadDocuments();
     onFeedback("Document ajouté");
   }
@@ -170,11 +262,7 @@ export function InscriptionDocumentsPanel({
     const response = await fetch("/api/admin/inscription-templates", {
       method: "PUT",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        formationSlug: templateScope,
-        subject: template.subject,
-        body: template.body,
-      }),
+      body: JSON.stringify({ formationSlug: templateScope, subject: template.subject, body: template.body }),
     });
 
     setSaving(false);
@@ -209,39 +297,33 @@ export function InscriptionDocumentsPanel({
     });
   }
 
-  function renderDocuments(liste: Document[]) {
+  function renderDocument(document: Document) {
     return (
-      <ul className="admin-doc-list">
-        {liste.map((document) => (
-          <li className={`admin-doc${document.published ? "" : " is-hidden"}`} key={document.id}>
-            <div className="admin-doc-main">
-              <a href={document.fileUrl} target="_blank" rel="noreferrer">
-                {document.label}
-              </a>
-              {document.description ? <span className="admin-doc-note">{document.description}</span> : null}
-              <span className="admin-doc-meta">
-                {document.fileName.split(".").pop()?.toUpperCase()}
-                {document.fileSize ? ` · ${formatSize(document.fileSize)}` : ""}
-                {document.formationSlug
-                  ? ` · ${formations.find((f) => f.slug === document.formationSlug)?.title.trim() || document.formationSlug}`
-                  : ""}
-              </span>
-            </div>
-            <div className="admin-doc-actions">
-              <button className="admin-copy-button" onClick={() => togglePublished(document)} type="button">
-                {document.published ? "Masquer" : "Afficher"}
-              </button>
-              <button
-                className="admin-copy-button admin-copy-button-danger"
-                onClick={() => removeDocument(document)}
-                type="button"
-              >
-                Supprimer
-              </button>
-            </div>
-          </li>
-        ))}
-      </ul>
+      <li className={`admin-doc${document.published ? "" : " is-hidden"}`} key={document.id}>
+        <div className="admin-doc-main">
+          <a href={document.fileUrl} target="_blank" rel="noreferrer">
+            {document.label}
+          </a>
+          {document.description ? <span className="admin-doc-note">{document.description}</span> : null}
+          <span className="admin-doc-meta">
+            {document.fileName.split(".").pop()?.toUpperCase()}
+            {document.fileSize ? ` · ${formatSize(document.fileSize)}` : ""}
+            {document.published ? "" : " · masqué"}
+          </span>
+        </div>
+        <div className="admin-doc-actions">
+          <button className="admin-copy-button" onClick={() => togglePublished(document)} type="button">
+            {document.published ? "Masquer" : "Afficher"}
+          </button>
+          <button
+            className="admin-copy-button admin-copy-button-danger"
+            onClick={() => removeDocument(document)}
+            type="button"
+          >
+            Supprimer
+          </button>
+        </div>
+      </li>
     );
   }
 
@@ -256,132 +338,274 @@ export function InscriptionDocumentsPanel({
           <h2>Dossiers d&apos;inscription</h2>
           <span>
             {documents.length} document{documents.length > 1 ? "s" : ""} · {communs.length} commun
-            {communs.length > 1 ? "s" : ""} à toutes les formations
+            {communs.length > 1 ? "s" : ""} · {groupes.length} formation{groupes.length > 1 ? "s" : ""} avec des
+            documents propres
           </span>
         </div>
       </div>
 
-      <section className="admin-shell">
-        <h3 className="admin-doc-title">Ajouter un document</h3>
-        <form className="contact-form" onSubmit={handleUpload}>
-          <div className="form-grid">
-            <label>
-              Intitulé
-              <input className="ui-field" name="label" type="text" required placeholder="Le devis à signer" />
-            </label>
-            <label>
-              Formation concernée
-              <select className="ui-field" name="formationSlug" defaultValue="">
-                <option value="">Toutes les formations</option>
-                {formations.map((formation) => (
-                  <option key={formation.slug} value={formation.slug}>
-                    {formation.title.trim()}
-                  </option>
-                ))}
-              </select>
-            </label>
+      <div className="admin-tabs">
+        {(
+          [
+            ["documents", "Documents"],
+            ["message", "Modèle de message"],
+            ["apercu", "Aperçu du dossier"],
+          ] as [Onglet, string][]
+        ).map(([valeur, libelle]) => (
+          <button
+            className={`admin-tab${onglet === valeur ? " is-active" : ""}`}
+            key={valeur}
+            onClick={() => setOnglet(valeur)}
+            type="button"
+          >
+            {libelle}
+          </button>
+        ))}
+      </div>
+
+      {onglet === "documents" ? (
+        <section className="admin-shell">
+          <div className="admin-doc-toolbar">
+            <input
+              className="ui-field"
+              onChange={(event) => setSearch(event.target.value)}
+              placeholder="Rechercher un document..."
+              type="search"
+              value={search}
+            />
+            <select
+              className="ui-field"
+              onChange={(event) => setFiltreFormation(event.target.value)}
+              value={filtreFormation}
+            >
+              <option value="">Tous les documents</option>
+              <option value="communs">Communs à toutes les formations</option>
+              {groupes.map(([slug]) => (
+                <option key={slug} value={slug}>
+                  {titreParSlug[slug] || slug}
+                </option>
+              ))}
+            </select>
+            <Button onClick={() => setShowForm((valeur) => !valeur)} variant={showForm ? "secondary" : "primary"}>
+              {showForm ? "Annuler" : "Ajouter un document"}
+            </Button>
           </div>
 
-          <label>
-            Précision (facultatif)
-            <input
-              className="ui-field"
-              name="description"
-              type="text"
-              placeholder="à signer et à nous renvoyer"
-              maxLength={400}
-            />
-          </label>
+          {showForm ? (
+            <form className="contact-form admin-doc-form" onSubmit={handleUpload}>
+              <div className="form-grid">
+                <label>
+                  Intitulé
+                  <input className="ui-field" name="label" type="text" required placeholder="Le devis à signer" />
+                </label>
+                <label>
+                  Formation concernée
+                  <select className="ui-field" name="formationSlug" defaultValue="">
+                    <option value="">Toutes les formations</option>
+                    {formations.map((formation) => (
+                      <option key={formation.slug} value={formation.slug}>
+                        {formation.title.trim()}
+                      </option>
+                    ))}
+                  </select>
+                </label>
+              </div>
 
-          <label>
-            Fichier
-            <input
-              accept=".pdf,.doc,.docx"
-              className="ui-field"
-              name="document"
-              ref={fileRef}
-              required
-              type="file"
-            />
-            <small className="admin-field-hint">PDF, DOC ou DOCX, 10 Mo maximum.</small>
-          </label>
+              <label>
+                Précision (facultatif)
+                <input
+                  className="ui-field"
+                  name="description"
+                  type="text"
+                  placeholder="à signer et à nous renvoyer"
+                  maxLength={400}
+                />
+              </label>
 
-          <Button disabled={uploading} type="submit" variant="primary">
-            {uploading ? "Envoi..." : "Ajouter le document"}
-          </Button>
-        </form>
-      </section>
+              <label>
+                Fichier
+                <input accept=".pdf,.doc,.docx" className="ui-field" name="document" ref={fileRef} required type="file" />
+                <small className="admin-field-hint">PDF, DOC ou DOCX, 10 Mo maximum.</small>
+              </label>
 
-      <section className="admin-shell">
-        <h3 className="admin-doc-title">Documents communs à toutes les formations</h3>
-        {communs.length ? (
-          renderDocuments(communs)
-        ) : (
-          <p className="admin-empty">Aucun document commun pour le moment.</p>
-        )}
+              <Button disabled={uploading} type="submit" variant="primary">
+                {uploading ? "Envoi..." : "Ajouter le document"}
+              </Button>
+            </form>
+          ) : null}
 
-        {specifiques.length ? (
-          <>
-            <h3 className="admin-doc-title">Documents propres à une formation</h3>
-            {renderDocuments(specifiques)}
-          </>
-        ) : null}
-      </section>
+          {search || filtreFormation ? (
+            <p className="admin-doc-count">
+              {totalAffiche} document{totalAffiche > 1 ? "s" : ""} affiché{totalAffiche > 1 ? "s" : ""}
+            </p>
+          ) : null}
 
-      <section className="admin-shell">
-        <h3 className="admin-doc-title">Modèle de message</h3>
+          {communsFiltres.length ? (
+            <details className="admin-doc-group" open>
+              <summary>
+                Communs à toutes les formations <span>{communsFiltres.length}</span>
+              </summary>
+              <ul className="admin-doc-list">{communsFiltres.map(renderDocument)}</ul>
+            </details>
+          ) : null}
 
-        <label>
-          S&apos;applique à
-          <select className="ui-field" onChange={(event) => setTemplateScope(event.target.value)} value={templateScope}>
-            <option value="">Toutes les formations (modèle général)</option>
-            {formations.map((formation) => (
-              <option key={formation.slug} value={formation.slug}>
-                {formation.title.trim()}
-              </option>
-            ))}
-          </select>
-          <small className="admin-field-hint">
-            {templateScope
-              ? "Ce texte remplace le modèle général pour cette formation uniquement."
-              : "Ce texte sert à toutes les formations qui n'ont pas de modèle propre."}
-          </small>
-        </label>
-
-        <label>
-          Objet du message
-          <input
-            className="ui-field"
-            onChange={(event) => setTemplate((current) => ({ ...current, subject: event.target.value }))}
-            type="text"
-            value={template.subject}
-          />
-        </label>
-
-        <label>
-          Corps du message
-          <textarea
-            className="ui-field admin-doc-body"
-            onChange={(event) => setTemplate((current) => ({ ...current, body: event.target.value }))}
-            ref={bodyRef}
-            rows={16}
-            value={template.body}
-          />
-        </label>
-
-        <div className="admin-doc-variables">
-          <span>Insérer :</span>
-          {VARIABLES.map((variable) => (
-            <button key={variable.cle} onClick={() => insertVariable(variable.cle)} title={variable.libelle} type="button">
-              {variable.cle}
-            </button>
+          {groupesFiltres.map(([slug, liste]) => (
+            <details className="admin-doc-group" key={slug}>
+              <summary>
+                {titreParSlug[slug] || slug} <span>{liste.length}</span>
+              </summary>
+              <ul className="admin-doc-list">{liste.map(renderDocument)}</ul>
+            </details>
           ))}
-        </div>
 
-        <Button disabled={saving} onClick={saveTemplate} variant="primary">
-          {saving ? "Enregistrement..." : "Enregistrer le modèle"}
-        </Button>
-      </section>
+          {!totalAffiche ? (
+            <p className="admin-empty">
+              {documents.length ? "Aucun document ne correspond à la recherche." : "Aucun document pour le moment."}
+            </p>
+          ) : null}
+        </section>
+      ) : null}
+
+      {onglet === "message" ? (
+        <section className="admin-shell">
+          <label>
+            S&apos;applique à
+            <select
+              className="ui-field"
+              onChange={(event) => setTemplateScope(event.target.value)}
+              value={templateScope}
+            >
+              <option value="">Toutes les formations (modèle général)</option>
+              {formations.map((formation) => (
+                <option key={formation.slug} value={formation.slug}>
+                  {formation.title.trim()}
+                </option>
+              ))}
+            </select>
+            <small className="admin-field-hint">
+              {templateScope
+                ? "Ce texte remplace le modèle général pour cette formation uniquement."
+                : "Ce texte sert à toutes les formations qui n'ont pas de modèle propre."}
+            </small>
+          </label>
+
+          <label>
+            Objet du message
+            <input
+              className="ui-field"
+              onChange={(event) => setTemplate((current) => ({ ...current, subject: event.target.value }))}
+              type="text"
+              value={template.subject}
+            />
+          </label>
+
+          <label>
+            Corps du message
+            <textarea
+              className="ui-field admin-doc-body"
+              onChange={(event) => setTemplate((current) => ({ ...current, body: event.target.value }))}
+              ref={bodyRef}
+              rows={16}
+              value={template.body}
+            />
+          </label>
+
+          <div className="admin-doc-variables">
+            <span>Insérer :</span>
+            {VARIABLES.map((variable) => (
+              <button
+                key={variable.cle}
+                onClick={() => insertVariable(variable.cle)}
+                title={variable.libelle}
+                type="button"
+              >
+                {variable.cle}
+              </button>
+            ))}
+          </div>
+
+          <Button disabled={saving} onClick={saveTemplate} variant="primary">
+            {saving ? "Enregistrement..." : "Enregistrer le modèle"}
+          </Button>
+        </section>
+      ) : null}
+
+      {onglet === "apercu" ? (
+        <section className="admin-shell">
+          <label>
+            Formation à prévisualiser
+            <select className="ui-field" onChange={(event) => setApercuSlug(event.target.value)} value={apercuSlug}>
+              <option value="">Choisir une formation</option>
+              {formations.map((formation) => (
+                <option key={formation.slug} value={formation.slug}>
+                  {formation.title.trim()}
+                </option>
+              ))}
+            </select>
+            <small className="admin-field-hint">
+              Montre le message et les documents que recevra un prospect inscrit à cette formation.
+            </small>
+          </label>
+
+          {apercuLoading ? <p className="admin-empty">Chargement de l&apos;aperçu...</p> : null}
+
+          {apercu && !apercuLoading ? (
+            <div className="admin-preview">
+              <div className="admin-preview-mail">
+                <span className="admin-preview-tag">Message envoyé</span>
+                <p className="admin-preview-subject">{apercu.subject}</p>
+                <pre className="admin-preview-body">{apercu.body}</pre>
+                {apercu.templateIsCustom ? (
+                  <small className="admin-field-hint">Modèle propre à cette formation.</small>
+                ) : (
+                  <small className="admin-field-hint">Modèle général, commun à toutes les formations.</small>
+                )}
+              </div>
+
+              <div className="admin-preview-folder">
+                <span className="admin-preview-tag">Page du dossier</span>
+                <p className="admin-preview-subject">{apercu.formation.title}</p>
+                {apercu.session ? (
+                  <p className="admin-doc-note">
+                    {apercu.session.city} — à partir du{" "}
+                    {new Date(apercu.session.startDate).toLocaleDateString("fr-FR")}
+                  </p>
+                ) : (
+                  <p className="admin-doc-note">Aucune session programmée</p>
+                )}
+
+                <p className="admin-preview-step">1. Remplir le bulletin d&apos;inscription</p>
+                <p className="admin-preview-step">
+                  2. Consulter les documents <span>{apercu.documents.length}</span>
+                </p>
+
+                <ul className="admin-doc-list">
+                  {apercu.documents.map((document) => (
+                    <li className="admin-doc" key={document.id}>
+                      <div className="admin-doc-main">
+                        <a href={document.fileUrl} target="_blank" rel="noreferrer">
+                          {document.label}
+                        </a>
+                        {document.description ? (
+                          <span className="admin-doc-note">{document.description}</span>
+                        ) : null}
+                        <span className="admin-doc-meta">
+                          {document.formationSlug ? "propre à cette formation" : "commun"}
+                          {document.fileSize ? ` · ${formatSize(document.fileSize)}` : ""}
+                        </span>
+                      </div>
+                    </li>
+                  ))}
+                </ul>
+
+                {!apercu.documents.length ? (
+                  <p className="admin-empty">Aucun document ne sera proposé pour cette formation.</p>
+                ) : null}
+              </div>
+            </div>
+          ) : null}
+        </section>
+      ) : null}
     </div>
   );
 }

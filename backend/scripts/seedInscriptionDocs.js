@@ -191,6 +191,204 @@ const DOCUMENTS = [
       },
     ],
   },
+
+  // Documents propres a une formation : ils illustrent le regroupement et ne
+  // s'affichent que dans le dossier de la formation concernee.
+  {
+    fichier: "exemple-materiel-qualipac.pdf",
+    label: "La liste du matériel à apporter",
+    description: "équipement personnel pour les travaux pratiques",
+    formationMatch: /qualipac/i,
+    titre: "Matériel à apporter",
+    surtitre: "QualiPAC — document d'exemple",
+    intro: "Les travaux pratiques se déroulent sur plateau technique : prévoyez l'équipement suivant.",
+    sections: [
+      {
+        titre: "Équipement personnel",
+        points: [
+          "Chaussures de sécurité",
+          "Vêtements de travail",
+          "Gants de manutention",
+          "Calculatrice et de quoi noter",
+        ],
+      },
+    ],
+  },
+  {
+    fichier: "exemple-prerequis-irve.pdf",
+    label: "Les prérequis techniques",
+    description: "connaissances attendues avant la session",
+    formationMatch: /irve-niveau-p2/i,
+    titre: "Prérequis techniques IRVE P2",
+    surtitre: "IRVE P2 — document d'exemple",
+    intro: "Le niveau P2 suppose des acquis sur lesquels la formation s'appuie dès la première journée.",
+    sections: [
+      {
+        titre: "Acquis attendus",
+        points: [
+          "Avoir suivi la formation IRVE de niveau P1",
+          "Maîtriser la conception des installations électriques",
+          "Connaître les réseaux et l'environnement informatique",
+        ],
+      },
+    ],
+  },
+  {
+    fichier: "exemple-attestation-fluides.pdf",
+    label: "L'attestation d'expérience fluides",
+    description: "à faire remplir par l'employeur",
+    formationMatch: /fluides-frigorigenes-categorie-1/i,
+    titre: "Attestation d'expérience",
+    surtitre: "Fluides frigorigènes — document d'exemple",
+    intro:
+      "L'attestation d'aptitude catégorie 1 exige une expérience pratique sur les systèmes frigorifiques.",
+    sections: [
+      {
+        titre: "À renseigner",
+        points: [
+          "Nature des interventions réalisées",
+          "Durée de l'expérience sur systèmes frigorifiques",
+          "Cachet de l'entreprise et signature",
+        ],
+      },
+    ],
+  },
+  {
+    fichier: "exemple-consignes-hauteur.pdf",
+    label: "Les consignes de sécurité en hauteur",
+    description: "à lire impérativement avant la session",
+    formationMatch: /travail-en-hauteur|hauteur/i,
+    titre: "Consignes de sécurité",
+    surtitre: "Travail en hauteur — document d'exemple",
+    intro: "La formation comporte des exercices pratiques en hauteur, encadrés par ces consignes.",
+    sections: [
+      {
+        titre: "Avant la session",
+        points: [
+          "Signaler toute contre-indication médicale",
+          "Prévoir une tenue permettant le port du harnais",
+          "Ne pas porter de bijoux ni d'écharpe",
+        ],
+      },
+    ],
+  },
+  {
+    fichier: "exemple-fiche-aptitude-hauteur.pdf",
+    label: "La fiche d'aptitude médicale",
+    description: "délivrée par la médecine du travail",
+    formationMatch: /travail-en-hauteur|hauteur/i,
+    titre: "Fiche d'aptitude médicale",
+    surtitre: "Travail en hauteur — document d'exemple",
+    intro: "Le travail en hauteur requiert une aptitude médicale en cours de validité.",
+    sections: [
+      {
+        titre: "À fournir",
+        points: [
+          "Avis d'aptitude de moins de vingt-quatre mois",
+          "Mention explicite du travail en hauteur",
+          "Copie à remettre le jour de la session",
+        ],
+      },
+    ],
+  },
+  {
+    fichier: "exemple-dossier-technique-qualipac.pdf",
+    label: "Le dossier technique à préparer",
+    description: "chantier de référence pour la qualification",
+    formationMatch: /qualipac/i,
+    titre: "Dossier technique",
+    surtitre: "QualiPAC — document d'exemple",
+    intro:
+      "La qualification QualiPAC demande une référence de chantier : ce document en précise les attendus.",
+    sections: [
+      {
+        titre: "Contenu attendu",
+        points: [
+          "Étude de dimensionnement de l'installation",
+          "Photographies avant et après travaux",
+          "Procès-verbal de mise en service",
+          "Attestation de bonne fin signée du client",
+        ],
+      },
+    ],
+  },
+  {
+    fichier: "exemple-schemas-irve.pdf",
+    label: "Les schémas de raccordement",
+    description: "support technique remis en séance",
+    formationMatch: /irve-niveau-p2/i,
+    titre: "Schémas de raccordement",
+    surtitre: "IRVE P2 — document d'exemple",
+    intro: "Les architectures de recharge de puissance supérieure étudiées pendant la formation.",
+    sections: [
+      {
+        titre: "Cas traités",
+        points: [
+          "Raccordement en courant alternatif triphasé",
+          "Supervision de plusieurs points de charge",
+          "Gestion dynamique de la puissance disponible",
+        ],
+      },
+    ],
+  },
+  {
+    fichier: "exemple-etude-cas-photovoltaique.pdf",
+    label: "L'étude de cas à préparer",
+    description: "à apporter le premier jour",
+    formationMatch: /qualipv-36/i,
+    titre: "Étude de cas",
+    surtitre: "QualiPV — document d'exemple",
+    intro: "La formation s'appuie sur un projet réel que chaque participant apporte.",
+    sections: [
+      {
+        titre: "Éléments à réunir",
+        points: [
+          "Plan de toiture avec orientation et inclinaison",
+          "Relevé de consommation annuelle",
+          "Caractéristiques du raccordement existant",
+        ],
+      },
+    ],
+  },
+  {
+    fichier: "exemple-fiche-poste-sst.pdf",
+    label: "La fiche de poste du participant",
+    description: "contexte d'intervention du salarié",
+    formationMatch: /sauveteur|sst/i,
+    titre: "Fiche de poste",
+    surtitre: "SST — document d'exemple",
+    intro:
+      "Les mises en situation sont adaptées aux risques réels du poste occupé par chaque participant.",
+    sections: [
+      {
+        titre: "À décrire",
+        points: [
+          "Nature de l'activité et environnement de travail",
+          "Risques principaux identifiés au poste",
+          "Équipements de secours présents sur site",
+        ],
+      },
+    ],
+  },
+  {
+    fichier: "exemple-attestation-formation-bureautique.pdf",
+    label: "Le questionnaire de niveau",
+    description: "à remplir avant la session",
+    formationMatch: /excel/i,
+    titre: "Questionnaire de niveau",
+    surtitre: "Bureautique — document d'exemple",
+    intro: "Ce questionnaire permet de constituer des groupes homogènes et d'adapter le rythme.",
+    sections: [
+      {
+        titre: "Points évalués",
+        points: [
+          "Aisance avec les formules de calcul",
+          "Usage des tableaux croisés dynamiques",
+          "Mise en forme et impression",
+        ],
+      },
+    ],
+  },
 ];
 
 function genererPdf(modele) {
@@ -239,6 +437,10 @@ async function run() {
 
   fs.mkdirSync(UPLOAD_DIR, { recursive: true });
 
+  // Les documents propres a une formation la designent par un motif : on le
+  // resout ici, pour ne pas figer des slugs qui pourraient changer.
+  const formations = await prisma.formation.findMany({ select: { slug: true } });
+
   let crees = 0;
   let ignores = 0;
 
@@ -248,6 +450,20 @@ async function run() {
     if (existant) {
       ignores++;
       continue;
+    }
+
+    let formationSlug = null;
+
+    if (modele.formationMatch) {
+      const trouvee = formations.find((item) => modele.formationMatch.test(item.slug));
+
+      if (!trouvee) {
+        console.warn(`[seedInscriptionDocs] Aucune formation pour « ${modele.label} », document ignoré.`);
+        ignores++;
+        continue;
+      }
+
+      formationSlug = trouvee.slug;
     }
 
     const buffer = await genererPdf(modele);
@@ -261,7 +477,7 @@ async function run() {
         fileUrl: `/uploads/documents/${modele.fichier}`,
         fileName: modele.fichier,
         fileSize: buffer.length,
-        formationSlug: null,
+        formationSlug,
         position: index,
         published: true,
       },

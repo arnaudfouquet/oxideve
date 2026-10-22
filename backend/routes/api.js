@@ -999,6 +999,63 @@ function createApiRouter() {
     })
   );
 
+  // Apercu : ce que verra le prospect pour une formation donnee, sans avoir
+  // a creer un dossier ni envoyer de message.
+  router.get(
+    "/admin/inscription-preview",
+    asyncHandler(async (req, res) => {
+      const formationSlug = String(req.query.formationSlug || "");
+
+      if (!formationSlug) {
+        return res.status(400).json({ error: "Formation manquante." });
+      }
+
+      const [formation, sessions, documents, modele] = await Promise.all([
+        getFormationBySlug(formationSlug),
+        listSessions(),
+        listDocumentsForFormation(formationSlug),
+        getTemplate(formationSlug),
+      ]);
+
+      if (!formation) {
+        return res.status(404).json({ error: "Formation introuvable." });
+      }
+
+      // Premiere session a venir, pour que l'apercu montre de vraies dates.
+      const aujourdhui = new Date().toISOString().slice(0, 10);
+      const session =
+        sessions
+          .filter((item) => item.formationSlug === formationSlug && item.endDate >= aujourdhui)
+          .sort((left, right) => left.startDate.localeCompare(right.startDate))[0] || null;
+
+      const siteUrl = process.env.SITE_URL || `${req.protocol}://${req.get("host")}`;
+
+      const dates = session
+        ? `${formatDateFr(session.startDate)} au ${formatDateFr(session.endDate)}`
+        : "dates à définir";
+
+      const remplace = (texte) =>
+        texte
+          .replace(/\{\{formation\}\}/g, formation.title.trim())
+          .replace(/\{\{ville\}\}/g, session ? session.city : "ville à définir")
+          .replace(/\{\{dates\}\}/g, dates)
+          .replace(/\{\{contact\}\}/g, "Sophie Martin")
+          .replace(/\{\{societe\}\}/g, "ENTREPRISE EXEMPLE")
+          .replace(/\{\{lien_dossier\}\}/g, `${siteUrl}/dossier/apercu`);
+
+      res.json({
+        data: {
+          formation: { slug: formation.slug, title: formation.title.trim() },
+          session,
+          documents,
+          subject: remplace(modele.subject),
+          body: remplace(modele.body),
+          templateIsCustom: Boolean(modele.custom && modele.formationSlug === formationSlug),
+        },
+      });
+    })
+  );
+
   router.post(
     "/admin/inscription-documents",
     handleDocumentUpload,
