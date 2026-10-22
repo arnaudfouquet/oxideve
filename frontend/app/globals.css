@@ -7967,6 +7967,108 @@ main {
   font-weight: 500;
 }
 
+/* ----- Admin : ecran Dossiers ----- */
+
+.admin-doc-title {
+  margin: 0 0 14px;
+  color: var(--color-navy);
+  font-weight: 800;
+  font-size: 1rem;
+}
+
+.admin-shell + .admin-shell .admin-doc-title:not(:first-child) {
+  margin-top: 26px;
+}
+
+.admin-doc-list {
+  display: grid;
+  gap: 8px;
+  margin: 0 0 18px;
+  padding: 0;
+  list-style: none;
+}
+
+.admin-doc {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 12px 14px;
+  border: 1px solid rgba(20, 45, 58, 0.1);
+  border-radius: 10px;
+  background: var(--color-white);
+}
+
+/* Un document masque reste visible dans l'admin, mais en retrait. */
+.admin-doc.is-hidden {
+  opacity: 0.55;
+}
+
+.admin-doc-main {
+  display: grid;
+  gap: 2px;
+  min-width: 0;
+  flex: 1;
+}
+
+.admin-doc-main a {
+  color: var(--color-navy);
+  font-weight: 700;
+  font-size: 0.9rem;
+  text-decoration: none;
+}
+
+.admin-doc-main a:hover {
+  color: var(--color-blue);
+}
+
+.admin-doc-note {
+  color: var(--color-muted);
+  font-size: 0.82rem;
+}
+
+.admin-doc-meta {
+  color: var(--color-muted);
+  font-size: 0.76rem;
+}
+
+.admin-doc-actions {
+  display: flex;
+  flex: 0 0 auto;
+  gap: 6px;
+}
+
+.admin-doc-body {
+  min-height: 300px;
+  font-family: var(--font-sans), sans-serif;
+  line-height: 1.6;
+}
+
+/* Variables inserables dans le modele, cliquables comme des etiquettes. */
+.admin-doc-variables {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px;
+  margin: 10px 0 18px;
+  font-size: 0.8rem;
+  color: var(--color-muted);
+}
+
+.admin-doc-variables button {
+  padding: 4px 10px;
+  border: 1px solid rgba(0, 156, 220, 0.4);
+  border-radius: 999px;
+  background: rgba(0, 156, 220, 0.07);
+  color: var(--color-blue);
+  font: inherit;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.admin-doc-variables button:hover {
+  background: rgba(0, 156, 220, 0.16);
+}
+
 /* ----- Admin : ecran Retours ----- */
 
 .admin-feedback-filters {

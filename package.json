@@ -11,6 +11,7 @@
     "db:push": "prisma db push",
     "db:seed": "node backend/scripts/seedCatalog.js",
     "db:seed-demo": "node backend/scripts/seedDemoData.js",
+    "db:seed-docs": "node backend/scripts/seedInscriptionDocs.js",
     "prisma:generate": "prisma generate",
     "prisma:migrate": "prisma migrate deploy"
   },

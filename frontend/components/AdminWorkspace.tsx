@@ -8,6 +8,7 @@ import { getArticleCover } from "@/components/NewsCard";
 import { Drawer } from "@/components/admin/Drawer";
 import { ReviewsPanel } from "@/components/admin/ReviewsPanel";
 import { FeedbackPanel } from "@/components/admin/FeedbackPanel";
+import { InscriptionDocumentsPanel } from "@/components/admin/InscriptionDocumentsPanel";
 import { CategoryVisualsPanel, FormationBannerField } from "@/components/admin/VisualsPanels";
 import { ArticleSeoPanel } from "@/components/admin/ArticleSeoPanel";
 import type { ArticleDraft, FormationDraft } from "@/components/admin/types";
@@ -39,7 +40,7 @@ type Props = {
   initialParticipants: Participant[];
 };
 
-type Section = "dashboard" | "sessions" | "participants" | "clients" | "formations" | "visuels" | "editorial" | "avis" | "retours" | "accounts";
+type Section = "dashboard" | "sessions" | "participants" | "clients" | "formations" | "visuels" | "editorial" | "avis" | "retours" | "dossiers" | "accounts";
 
 
 type SessionDraft = {
@@ -183,6 +184,7 @@ const NAV_ITEMS: { value: Section; label: string; icon: string }[] = [
   { value: "editorial", label: "Editorial", icon: "✎" },
   { value: "avis", label: "Avis", icon: "★" },
   { value: "retours", label: "Retours", icon: "✉" },
+  { value: "dossiers", label: "Dossiers", icon: "▤" },
   { value: "accounts", label: "Comptes", icon: "◉" },
 ];
 
@@ -730,6 +732,46 @@ export function AdminWorkspace({
     }
 
     setSuccess("Inscription supprimée.");
+  }
+
+  /**
+   * Prepare le dossier puis ouvre le client mail avec le message rempli.
+   * mailto ne transporte pas de pieces jointes : le message pointe vers la
+   * page du dossier, ou le prospect trouve le bulletin et les documents.
+   */
+  async function sendFolderByMail(
+    registrationId: string,
+    formationSlug: string,
+    prefill: { company?: string; fullName?: string; email?: string; phone?: string; sessionId?: string },
+  ) {
+    const response = await fetch(`/api/admin/inscriptions/${registrationId}/dossier`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        formationSlug,
+        companyName: prefill.company || "",
+        contactName: prefill.fullName || "",
+        contactEmail: prefill.email || "",
+        contactPhone: prefill.phone || "",
+        sessionId: prefill.sessionId || "",
+      }),
+    });
+
+    if (!response.ok) {
+      setError("Le dossier n'a pas pu être préparé.");
+      return;
+    }
+
+    const payload = (await response.json()) as {
+      data: { subject: string; body: string; email: string; url: string };
+    };
+
+    const lien = `mailto:${encodeURIComponent(payload.data.email || "")}?subject=${encodeURIComponent(
+      payload.data.subject,
+    )}&body=${encodeURIComponent(payload.data.body)}`;
+
+    window.location.href = lien;
+    setFeedback("Message préparé dans votre logiciel de messagerie");
   }
 
   function copyBulletinLink(
@@ -1828,6 +1870,10 @@ export function AdminWorkspace({
 
       {section === "retours" ? <FeedbackPanel onError={setError} onFeedback={setFeedback} /> : null}
 
+      {section === "dossiers" ? (
+        <InscriptionDocumentsPanel formations={formations} onError={setError} onFeedback={setFeedback} />
+      ) : null}
+
       {section === "visuels" ? (
         <CategoryVisualsPanel formations={formations} onError={setError} onFeedback={setFeedback} />
       ) : null}
@@ -2345,6 +2391,25 @@ export function AdminWorkspace({
                           type="button"
                         >
                           {copiedKey === `registration-bulletin-${row.registrationId || row.id}` ? "✓" : "⧉"}
+                        </button>
+                      ) : null}
+                      {row.status !== "Non intéressé" && row.status !== "Inscription complétée" ? (
+                        <button
+                          className="admin-icon-button"
+                          onClick={(event) => {
+                            event.stopPropagation();
+                            sendFolderByMail(row.registrationId || row.id, row.formationSlug, {
+                              company: row.company,
+                              fullName: row.fullName,
+                              email: row.email,
+                              phone: row.phone,
+                              sessionId: row.sessionId || "",
+                            });
+                          }}
+                          title="Envoyer le dossier par mail"
+                          type="button"
+                        >
+                          ✉
                         </button>
                       ) : null}
                       {row.bulletinInscriptionId ? (
