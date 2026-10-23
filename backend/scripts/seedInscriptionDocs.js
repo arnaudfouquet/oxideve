@@ -5,8 +5,9 @@
  * afin de montrer le fonctionnement aux futurs administrateurs. Le contenu
  * est volontairement marque "exemple".
  *
- * A n'utiliser qu'en developpement : le script refuse de s'executer en
- * production.
+ * En production le script ne s'execute que sur autorisation explicite,
+ * `SEED_DEMO_DOCS=true`, pour alimenter une preproduction sans risquer de
+ * deposer des documents fictifs sur le site reel.
  */
 const fs = require("fs");
 const path = require("path");
@@ -427,10 +428,17 @@ function genererPdf(modele) {
 }
 
 async function run() {
-  if (process.env.NODE_ENV === "production") {
-    console.error("[seedInscriptionDocs] Refus : ce script est réservé au développement.");
+  if (process.env.NODE_ENV === "production" && process.env.SEED_DEMO_DOCS !== "true") {
+    console.error(
+      "[seedInscriptionDocs] Refus : en production, relancez avec SEED_DEMO_DOCS=true pour confirmer " +
+        "le dépôt de documents d'exemple (ils portent la mention « aucune valeur contractuelle »).",
+    );
     process.exitCode = 1;
     return;
+  }
+
+  if (process.env.NODE_ENV === "production") {
+    console.warn("[seedInscriptionDocs] Dépôt de documents d'exemple sur un environnement de production.");
   }
 
   const prisma = getPrismaClient();
